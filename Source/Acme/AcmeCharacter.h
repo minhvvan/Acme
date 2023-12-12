@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "GlobalEnum.h"
 #include "AcmeCharacter.generated.h"
 
 
@@ -38,7 +39,7 @@ class AAcmeCharacter : public ACharacter
 	class UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* DashAction;
+	class UInputAction* SprintAction;
 
 public:
 	AAcmeCharacter();
@@ -56,7 +57,10 @@ protected:
 			
 	/** Called for Dash input */
 	UFUNCTION()
-	void Dash(const FInputActionValue& Value);
+	void StartSprint(const FInputActionValue& Value);	
+	
+	UFUNCTION()
+	void StopSprint(const FInputActionValue& Value);
 
 
 protected:
@@ -71,5 +75,21 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	float TurnRate;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	float DodgeForward;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	float DodgeRight;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	bool IsSprint;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
+	EAnimState AnimState;
 };
 

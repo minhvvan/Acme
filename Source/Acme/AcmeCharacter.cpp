@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Math/UnrealMathUtility.h"
 #include "Util.h"
 
 
@@ -40,7 +41,7 @@ AAcmeCharacter::AAcmeCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	CameraBoom->TargetArmLength = 350; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -65,6 +66,10 @@ void AAcmeCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	AnimState = EAnimState::E_Equiped;
+
+	//TODO: Attach UI
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -86,9 +91,9 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::Look);
 
 		//Dash
-		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::Dash);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopSprint);
 	}
-
 }
 
 void AAcmeCharacter::Move(const FInputActionValue& Value)
@@ -111,6 +116,9 @@ void AAcmeCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		DodgeForward = MovementVector.Y;
+		DodgeRight = MovementVector.X;
 	}
 }
 
@@ -124,21 +132,39 @@ void AAcmeCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+
+		TurnRate = FMath::Clamp(LookAxisVector.X, -1.f, 1.f);
 	}
 }
 
-void AAcmeCharacter::Dash(const FInputActionValue& Value)
+void AAcmeCharacter::StartSprint(const FInputActionValue& Value)
 {
-	//TODO: dash = skill에 따라 변경
+	auto Movement = GetCharacterMovement();
+	if (!Movement || Movement->IsCrouching()) return;
+
+	IsSprint = true;
+	Movement->MaxWalkSpeed = 700;
 
 
-	//UNDONE
-	//어떤 키가 같이 눌렸다면 그쪽으로 이동
-	auto forward = GetActorForwardVector();
-	auto CurrentPos = GetActorLocation();
-	auto CurrentRot = GetActorRotation();
+	////TODO: dash = skill에 따라 변경
 
-	CurrentPos += forward * 500; /*TODO: 이동거리 변수처리*/
 
-	TeleportTo(CurrentPos, CurrentRot, false , true);
+	////UNDONE
+	////어떤 키가 같이 눌렸다면 그쪽으로 이동
+	//auto forward = GetActorForwardVector();
+	//auto CurrentPos = GetActorLocation();
+	//auto CurrentRot = GetActorRotation();
+
+	//CurrentPos += forward * 500; /*TODO: 이동거리 변수처리*/
+
+	//TeleportTo(CurrentPos, CurrentRot, false , true);
+}
+
+void AAcmeCharacter::StopSprint(const FInputActionValue& Value)
+{
+	auto Movement = GetCharacterMovement();
+	if (!Movement || Movement->IsCrouching()) return;
+
+	IsSprint = false;
+	Movement->MaxWalkSpeed = 300;
 }
