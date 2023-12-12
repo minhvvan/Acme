@@ -37,6 +37,9 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* DashAction;
+
 public:
 	AAcmeCharacter();
 	
@@ -44,11 +47,17 @@ public:
 protected:
 
 	/** Called for movement input */
+	UFUNCTION()
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
+	UFUNCTION()
 	void Look(const FInputActionValue& Value);
 			
+	/** Called for Dash input */
+	UFUNCTION()
+	void Dash(const FInputActionValue& Value);
+
 
 protected:
 	// APawn interface

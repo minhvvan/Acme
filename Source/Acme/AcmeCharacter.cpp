@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Util.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -84,6 +85,8 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::Look);
 
+		//Dash
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::Dash);
 	}
 
 }
@@ -124,6 +127,18 @@ void AAcmeCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AAcmeCharacter::Dash(const FInputActionValue& Value)
+{
+	//TODO: dash = skill에 따라 변경
 
 
+	//UNDONE
+	//어떤 키가 같이 눌렸다면 그쪽으로 이동
+	auto forward = GetActorForwardVector();
+	auto CurrentPos = GetActorLocation();
+	auto CurrentRot = GetActorRotation();
 
+	CurrentPos += forward * 500; /*TODO: 이동거리 변수처리*/
+
+	TeleportTo(CurrentPos, CurrentRot, false , true);
+}
