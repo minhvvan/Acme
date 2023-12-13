@@ -60,13 +60,6 @@ protected:
 	/** Called for looking input */
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
-			
-	/** Called for Sprint input */
-	UFUNCTION()
-	void StartSprint();	
-	
-	UFUNCTION()
-	void StopSprint();
 
 	/** Called for Crouch input */
 	UFUNCTION()
@@ -100,13 +93,13 @@ protected:
 	float TurnRate;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
-	float DodgeForward;
+	float DashForward;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
-	float DodgeRight;
+	float DashRight;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
-	bool IsSprint;
+	bool IsDashing;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
 	bool IsCrouch;

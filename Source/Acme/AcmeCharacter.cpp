@@ -90,10 +90,6 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::Look);
 
-		//Sprint
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSprint);
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopSprint);
-
 		//Crouch
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartCrouch);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopCrouch);
@@ -125,8 +121,8 @@ void AAcmeCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 
-		DodgeForward = MovementVector.Y;
-		DodgeRight = MovementVector.X;
+		DashForward = MovementVector.Y;
+		DashRight = MovementVector.X;
 	}
 }
 
@@ -143,24 +139,6 @@ void AAcmeCharacter::Look(const FInputActionValue& Value)
 
 		TurnRate = FMath::Clamp(LookAxisVector.X, -1.f, 1.f);
 	}
-}
-
-void AAcmeCharacter::StartSprint()
-{
-	auto Movement = GetCharacterMovement();
-	if (!Movement || Movement->IsCrouching()) return;
-
-	IsSprint = true;
-	Movement->MaxWalkSpeed = 700;
-}
-
-void AAcmeCharacter::StopSprint()
-{
-	auto Movement = GetCharacterMovement();
-	if (!Movement) return;
-
-	IsSprint = false;
-	Movement->MaxWalkSpeed = 300;
 }
 
 void AAcmeCharacter::StartCrouch()
@@ -180,10 +158,38 @@ void AAcmeCharacter::StopCrouch()
 
 void AAcmeCharacter::StartDash()
 {
-	UUtil::DebugPrint("Start Dash");
+	auto Movement = GetCharacterMovement();
+	if (!Movement || IsDashing) return;
+
+	IsDashing = true;
+	//Movement->GravityScale = 0.f;
+
+	FVector Dir;
+
+	if (DashForward != 0)
+	{
+		Dir = GetActorForwardVector() * DashForward;
+	}
+	else
+	{
+		if (DashRight == 0) return;
+
+		Dir = GetActorRightVector() * DashRight;
+	}
+
+	//scale
+	Dir.X *= 1000;
+	Dir.Y *= 1000;
+
+	LaunchCharacter(Dir, false, false);
 }
 
 void AAcmeCharacter::StopDash()
 {
-	UUtil::DebugPrint("Stop Dash");
+	auto Movement = GetCharacterMovement();
+	if (!Movement) return;
+
+	IsDashing = false;
+	//Movement->GravityScale = 1.75f;
+
 }
