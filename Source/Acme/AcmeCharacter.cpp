@@ -67,7 +67,7 @@ void AAcmeCharacter::BeginPlay()
 		}
 	}
 
-	AnimState = EAnimState::E_Equiped;
+	AnimState = EAnimState::E_Unarmed;
 
 	//TODO: Attach UI
 }
