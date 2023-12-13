@@ -41,6 +41,12 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* SprintAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* CrouchAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* DashAction;
+
 public:
 	AAcmeCharacter();
 	
@@ -55,13 +61,26 @@ protected:
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
 			
-	/** Called for Dash input */
+	/** Called for Sprint input */
 	UFUNCTION()
-	void StartSprint(const FInputActionValue& Value);	
+	void StartSprint();	
 	
 	UFUNCTION()
-	void StopSprint(const FInputActionValue& Value);
+	void StopSprint();
 
+	/** Called for Crouch input */
+	UFUNCTION()
+	void StartCrouch();
+
+	UFUNCTION()
+	void StopCrouch();
+
+	/** Called for Crouch input */
+	UFUNCTION()
+	void StartDash();
+
+	UFUNCTION()
+	void StopDash();
 
 protected:
 	// APawn interface
@@ -88,6 +107,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
 	bool IsSprint;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	bool IsCrouch;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	EAnimState AnimState;

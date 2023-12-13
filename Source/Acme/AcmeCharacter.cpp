@@ -90,9 +90,17 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::Look);
 
-		//Dash
+		//Sprint
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopSprint);
+
+		//Crouch
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartCrouch);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopCrouch);
+	
+		//Crouch
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartDash);
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDash);
 	}
 }
 
@@ -137,34 +145,45 @@ void AAcmeCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AAcmeCharacter::StartSprint(const FInputActionValue& Value)
+void AAcmeCharacter::StartSprint()
 {
 	auto Movement = GetCharacterMovement();
 	if (!Movement || Movement->IsCrouching()) return;
 
 	IsSprint = true;
 	Movement->MaxWalkSpeed = 700;
-
-
-	////TODO: dash = skill에 따라 변경
-
-
-	////UNDONE
-	////어떤 키가 같이 눌렸다면 그쪽으로 이동
-	//auto forward = GetActorForwardVector();
-	//auto CurrentPos = GetActorLocation();
-	//auto CurrentRot = GetActorRotation();
-
-	//CurrentPos += forward * 500; /*TODO: 이동거리 변수처리*/
-
-	//TeleportTo(CurrentPos, CurrentRot, false , true);
 }
 
-void AAcmeCharacter::StopSprint(const FInputActionValue& Value)
+void AAcmeCharacter::StopSprint()
 {
 	auto Movement = GetCharacterMovement();
-	if (!Movement || Movement->IsCrouching()) return;
+	if (!Movement) return;
 
 	IsSprint = false;
 	Movement->MaxWalkSpeed = 300;
+}
+
+void AAcmeCharacter::StartCrouch()
+{
+	auto Movement = GetCharacterMovement();
+	if (!Movement || Movement->IsFalling()) return;
+
+	IsCrouch = true;
+	Crouch();
+}
+
+void AAcmeCharacter::StopCrouch()
+{
+	IsCrouch = false;
+	UnCrouch();
+}
+
+void AAcmeCharacter::StartDash()
+{
+	UUtil::DebugPrint("Start Dash");
+}
+
+void AAcmeCharacter::StopDash()
+{
+	UUtil::DebugPrint("Stop Dash");
 }
