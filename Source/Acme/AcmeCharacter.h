@@ -47,12 +47,20 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* DashAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* AttackAction;
+
+	//stat comp
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UAC_Stat* StatCompoenent;
+
 public:
 	AAcmeCharacter();
 	
+	UFUNCTION(BlueprintCallable)
+	void SetIsAttacking(bool flag) { IsAttacking = flag; };
 
 protected:
-
 	/** Called for movement input */
 	UFUNCTION()
 	void Move(const FInputActionValue& Value);
@@ -68,12 +76,22 @@ protected:
 	UFUNCTION()
 	void StopCrouch();
 
-	/** Called for Crouch input */
+	/** Called for Dash input */
 	UFUNCTION()
 	void StartDash();
 
 	UFUNCTION()
 	void StopDash();
+
+	UFUNCTION()
+	void CoolDownDash();
+
+	/** Called for Attack input */
+	UFUNCTION()
+	void StartAttack();
+
+	UFUNCTION()
+	void StopAttack();
 
 protected:
 	// APawn interface
@@ -103,6 +121,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
 	bool IsCrouch;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	bool CanDash;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	bool IsAttacking;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	EAnimState AnimState;

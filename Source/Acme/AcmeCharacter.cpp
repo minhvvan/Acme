@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Math/UnrealMathUtility.h"
+#include "AC_Stat.h"
+#include "AI_Main.h"
 #include "Util.h"
 
 
@@ -49,8 +51,7 @@ AAcmeCharacter::AAcmeCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	StatCompoenent = CreateDefaultSubobject<UAC_Stat>(TEXT("StatCompoenent"));
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -67,7 +68,10 @@ void AAcmeCharacter::BeginPlay()
 		}
 	}
 
+	StatCompoenent->CDDash.AddUObject(this, &AAcmeCharacter::CoolDownDash);
+
 	AnimState = EAnimState::E_Unarmed;
+	CanDash = true;
 
 	//TODO: Attach UI
 }
@@ -97,6 +101,10 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Crouch
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartDash);
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDash);
+	
+		//Attack
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartAttack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopAttack);
 	}
 }
 
@@ -159,10 +167,10 @@ void AAcmeCharacter::StopCrouch()
 void AAcmeCharacter::StartDash()
 {
 	auto Movement = GetCharacterMovement();
-	if (!Movement || IsDashing) return;
+	if (!Movement || IsDashing || IsCrouch) return;
+	if (!CanDash) return;
 
 	IsDashing = true;
-	//Movement->GravityScale = 0.f;
 
 	FVector Dir;
 
@@ -182,6 +190,9 @@ void AAcmeCharacter::StartDash()
 	Dir.Y *= 1000;
 
 	LaunchCharacter(Dir, false, false);
+
+	CanDash = false;
+	StatCompoenent->ExeDash();
 }
 
 void AAcmeCharacter::StopDash()
@@ -190,6 +201,27 @@ void AAcmeCharacter::StopDash()
 	if (!Movement) return;
 
 	IsDashing = false;
-	//Movement->GravityScale = 1.75f;
+}
 
+void AAcmeCharacter::CoolDownDash()
+{
+	CanDash = true;
+}
+
+void AAcmeCharacter::StartAttack()
+{
+	auto AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
+	if (!AnimInstance) return;
+
+	AnimInstance->PlayAttack();
+
+	IsAttacking = true;
+}
+
+void AAcmeCharacter::StopAttack()
+{
+	auto Movement = GetCharacterMovement();
+	if (!Movement) return;
+
+	//IsAttacking = false;
 }

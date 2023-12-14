@@ -24,6 +24,17 @@ enum class EMovementState : uint8
 	E_Left UMETA(DisplayName = "Left"),
 };
 
+UENUM(BlueprintType)
+enum class EElement : uint8
+{
+	E_Fire UMETA(DisplayName = "Fire"),
+	E_Water UMETA(DisplayName = "Water"),
+	E_Ground UMETA(DisplayName = "Ground"),
+	E_Air UMETA(DisplayName = "Air"),
+	E_Ice UMETA(DisplayName = "Ice"),
+	E_Thunder UMETA(DisplayName = "Thunder"),
+};
+
 
 
 class ACME_API GlobalEnum
