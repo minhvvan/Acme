@@ -4,16 +4,19 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Math/UnrealMathUtility.h"
+#include "Kismet/GameplayStatics.h"
 #include "AC_Stat.h"
 #include "AI_Main.h"
 #include "Widget_Hud.h"
 #include "Util.h"
+#include "Sound/SoundBase.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -54,6 +57,8 @@ AAcmeCharacter::AAcmeCharacter()
 
 	StatCompoenent = CreateDefaultSubobject<UAC_Stat>(TEXT("StatCompoenent"));
 	PrimaryActorTick.bCanEverTick = true;
+
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -91,7 +96,6 @@ void AAcmeCharacter::Tick(float DeltaSeconds)
 	if (IsCharging)
 	{
 		//update percent
-		//TODO: max charge time
 		ChargingTime += DeltaSeconds;
 		Hud->SetPercent(ChargingTime / 1.5f);
 
@@ -244,6 +248,9 @@ void AAcmeCharacter::StartAttack()
 	//charge Anim play
 	//AttackAction->Triggers[0]->ActuationThreshold
 
+	//TODO: charge sfx
+	AudioComp->SetSound(SFXCharge);
+	AudioComp->Play();
 }
 
 void AAcmeCharacter::ShootNoCharge()
@@ -256,6 +263,7 @@ void AAcmeCharacter::ShootNoCharge()
 	AnimInstance->PlayAttack();
 
 	//weak attack
+	AudioComp->Stop();
 }
 
 void AAcmeCharacter::ShootAttack()
@@ -268,6 +276,7 @@ void AAcmeCharacter::ShootAttack()
 	AnimInstance->PlayAttack();
 
 	//strong attack
+	AudioComp->Stop();
 }
 
 void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
@@ -279,7 +288,13 @@ bool AAcmeCharacter::FullCharged()
 {
 	Hud->SetCrosshairColor(FColor(51.f, 202.f, 255.f));
 
-	//sfx play
+	if (AudioComp->IsPlaying())
+	{
+		AudioComp->Stop();
+		AudioComp->SetSound(SFXComplete);
+		AudioComp->Play();
+	}
+
 	return true;
 }
 
@@ -288,6 +303,6 @@ void AAcmeCharacter::ResetCharge()
 	Hud->SetPercent(0.f);
 	IsCharging = false;
 	ChargingTime = 0.f;
-	Hud->SetCrosshairColor(FColor::White);
+	Hud->SetCrosshairColor(FColor(255.f, 255.f, 255.f, 100.f));
 	Ischarged = false;
 }
