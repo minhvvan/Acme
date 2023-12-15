@@ -12,6 +12,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "AC_Stat.h"
 #include "AI_Main.h"
+#include "Widget_Hud.h"
 #include "Util.h"
 
 
@@ -52,6 +53,7 @@ AAcmeCharacter::AAcmeCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	StatCompoenent = CreateDefaultSubobject<UAC_Stat>(TEXT("StatCompoenent"));
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -73,7 +75,31 @@ void AAcmeCharacter::BeginPlay()
 	AnimState = EAnimState::E_Unarmed;
 	CanDash = true;
 
-	//TODO: Attach UI
+	if (HudClass.Get() != nullptr)
+	{
+		Hud = CreateWidget<UWidget_Hud>(GetWorld(), HudClass);
+		Hud->AddToViewport();
+	}
+
+	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
+}
+
+void AAcmeCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (IsCharging)
+	{
+		//update percent
+		//TODO: max charge time
+		ChargingTime += DeltaSeconds;
+		Hud->SetPercent(ChargingTime / 1.5f);
+
+		if (ChargingTime >= 1.5f && !Ischarged)
+		{
+			Ischarged = FullCharged();
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -103,8 +129,9 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDash);
 	
 		//Attack
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartAttack);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopAttack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AAcmeCharacter::StartAttack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Canceled, this, &AAcmeCharacter::ShootNoCharge);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AAcmeCharacter::ShootAttack);
 	}
 }
 
@@ -210,18 +237,57 @@ void AAcmeCharacter::CoolDownDash()
 
 void AAcmeCharacter::StartAttack()
 {
-	auto AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
-	if (!AnimInstance) return;
-
-	AnimInstance->PlayAttack();
+	if (IsAttacking) return;
 
 	IsAttacking = true;
+	IsCharging = true;
+	//charge Anim play
+	//AttackAction->Triggers[0]->ActuationThreshold
+
 }
 
-void AAcmeCharacter::StopAttack()
+void AAcmeCharacter::ShootNoCharge()
 {
-	auto Movement = GetCharacterMovement();
-	if (!Movement) return;
+	if (!AnimInstance) return;
 
-	//IsAttacking = false;
+	ResetCharge();
+
+	AnimInstance->OnMontageEnded.AddDynamic(this, &AAcmeCharacter::EndAttack);
+	AnimInstance->PlayAttack();
+
+	//weak attack
+}
+
+void AAcmeCharacter::ShootAttack()
+{
+	if (!AnimInstance) return;
+
+	ResetCharge();
+
+	AnimInstance->OnMontageEnded.AddDynamic(this, &AAcmeCharacter::EndAttack);
+	AnimInstance->PlayAttack();
+
+	//strong attack
+}
+
+void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
+{
+	IsAttacking = false;
+}
+
+bool AAcmeCharacter::FullCharged()
+{
+	Hud->SetCrosshairColor(FColor(51.f, 202.f, 255.f));
+
+	//sfx play
+	return true;
+}
+
+void AAcmeCharacter::ResetCharge()
+{
+	Hud->SetPercent(0.f);
+	IsCharging = false;
+	ChargingTime = 0.f;
+	Hud->SetCrosshairColor(FColor::White);
+	Ischarged = false;
 }

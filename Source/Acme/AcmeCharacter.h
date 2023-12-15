@@ -88,10 +88,16 @@ protected:
 
 	/** Called for Attack input */
 	UFUNCTION()
-	void StartAttack();
+	void StartAttack();	
+	
+	UFUNCTION()
+	void ShootNoCharge();
 
 	UFUNCTION()
-	void StopAttack();
+	void ShootAttack();
+
+	UFUNCTION()
+	void EndAttack(UAnimMontage* Montage, bool bInterrupted);
 
 protected:
 	// APawn interface
@@ -99,6 +105,8 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaSeconds);
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -130,5 +138,33 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	EAnimState AnimState;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	bool IsCharging;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	float ChargingTime;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> HudClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	class UWidget_Hud* Hud;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
+	class UAI_Main* AnimInstance;
+
+protected:
+	UFUNCTION()
+	bool FullCharged();
+
+	UFUNCTION()
+	void ResetCharge();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	bool Ischarged;
+
+
 };
 

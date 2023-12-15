@@ -14,4 +14,14 @@ class ACME_API UWidget_Hud : public UUserWidget
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UWidget_Crosshair* Crosshair;
+
+public:
+	UFUNCTION()
+	void SetPercent(float percent);
+
+	UFUNCTION()
+	void SetCrosshairColor(FColor color);
 };
