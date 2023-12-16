@@ -16,6 +16,7 @@
 #include "AI_Main.h"
 #include "Widget_Hud.h"
 #include "Util.h"
+#include "ActorInteractive.h"
 #include "Sound/SoundBase.h"
 
 
@@ -305,4 +306,19 @@ void AAcmeCharacter::ResetCharge()
 	ChargingTime = 0.f;
 	Hud->SetCrosshairColor(FColor(255.f, 255.f, 255.f, 100.f));
 	Ischarged = false;
+}
+
+void AAcmeCharacter::SetOverlapActor(AActorInteractive* actor)
+{
+	if (OverlapActor == nullptr)
+	{
+		OverlapActor = actor;
+		OverlapActor->SetVisibleIndicator(true);
+		return;
+	}
+
+	OverlapActor->SetVisibleIndicator(false);
+	OverlapActor = actor;
+
+	if (OverlapActor.IsValid()) OverlapActor->SetVisibleIndicator(true);
 }

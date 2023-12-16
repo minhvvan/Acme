@@ -59,9 +59,6 @@ class AAcmeCharacter : public ACharacter
 
 public:
 	AAcmeCharacter();
-	
-	UFUNCTION(BlueprintCallable)
-	void SetIsAttacking(bool flag) { IsAttacking = flag; };
 
 protected:
 	/** Called for movement input */
@@ -174,6 +171,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
 	bool Ischarged;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	TWeakObjectPtr<class AActorInteractive> OverlapActor;
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetIsAttacking(bool flag) { IsAttacking = flag; };
+
+	UFUNCTION()
+	void SetOverlapActor(AActorInteractive* actor);
 };
 
