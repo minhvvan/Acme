@@ -37,8 +37,6 @@ void AActorInteractive::BeginPlay()
 
 void AActorInteractive::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UUtil::DebugPrint("OVerlap");
-
 	if (OtherActor != nullptr && OtherActor != this->GetOwner() && OtherComp != nullptr)
 	{
 		AAcmeCharacter* Character = Cast<AAcmeCharacter>(OtherActor);
@@ -69,7 +67,6 @@ void AActorInteractive::Tick(float DeltaTime)
 void AActorInteractive::SetVisibleIndicator(bool bVisible)
 {
 	//indicator visible set
-	UUtil::DebugPrint("SetVisibleIndicator");
 	if (!IsValid(Indicator)) return;
 
 	Indicator->SetVisibility(bVisible);

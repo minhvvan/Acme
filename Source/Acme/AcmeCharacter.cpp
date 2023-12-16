@@ -310,15 +310,14 @@ void AAcmeCharacter::ResetCharge()
 
 void AAcmeCharacter::SetOverlapActor(AActorInteractive* actor)
 {
-	if (OverlapActor == nullptr)
+	if (actor == nullptr)
 	{
-		OverlapActor = actor;
-		OverlapActor->SetVisibleIndicator(true);
+		if (OverlapActor != nullptr) OverlapActor->SetVisibleIndicator(false);
+		OverlapActor.Reset();
 		return;
 	}
 
-	OverlapActor->SetVisibleIndicator(false);
+	if (OverlapActor != nullptr) OverlapActor->SetVisibleIndicator(false);
 	OverlapActor = actor;
-
-	if (OverlapActor.IsValid()) OverlapActor->SetVisibleIndicator(true);
+	OverlapActor->SetVisibleIndicator(true);
 }
