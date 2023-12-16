@@ -18,10 +18,16 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
 	class UWidget_Crosshair* Crosshair;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UBorder* Border_Action;
+
 public:
 	UFUNCTION()
 	void SetPercent(float percent);
 
 	UFUNCTION()
 	void SetCrosshairColor(FColor color);
+
+	UFUNCTION()
+	void SetVisibleActionBorder(bool bVisible);
 };

@@ -314,10 +314,12 @@ void AAcmeCharacter::SetOverlapActor(AActorInteractive* actor)
 	{
 		if (OverlapActor != nullptr) OverlapActor->SetVisibleIndicator(false);
 		OverlapActor.Reset();
+		Hud->SetVisibleActionBorder(false);
 		return;
 	}
 
 	if (OverlapActor != nullptr) OverlapActor->SetVisibleIndicator(false);
 	OverlapActor = actor;
 	OverlapActor->SetVisibleIndicator(true);
+	Hud->SetVisibleActionBorder(true);
 }

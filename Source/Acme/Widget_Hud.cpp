@@ -3,6 +3,7 @@
 
 #include "Widget_Hud.h"
 #include "Widget_Crosshair.h"
+#include "Components/Border.h"
 
 void UWidget_Hud::SetPercent(float percent)
 {
@@ -18,4 +19,10 @@ void UWidget_Hud::SetCrosshairColor(FColor color)
 	{
 		Crosshair->SetColor(color);
 	}
+}
+
+void UWidget_Hud::SetVisibleActionBorder(bool bVisible)
+{
+	if (bVisible) Border_Action->SetVisibility(ESlateVisibility::Visible);
+	else Border_Action->SetVisibility(ESlateVisibility::Hidden);
 }
