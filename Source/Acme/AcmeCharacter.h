@@ -112,7 +112,6 @@ protected:
 	UFUNCTION()
 	void StartInteract();
 
-
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -121,6 +120,8 @@ protected:
 	virtual void BeginPlay();
 
 	virtual void Tick(float DeltaSeconds);
+
+	virtual void PostInitializeComponents();
 
 public:
 	/** Returns CameraBoom subobject **/

@@ -7,7 +7,10 @@
 #include "GlobalEnum.h"
 #include "AC_Stat.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FCoolDown)
+DECLARE_MULTICAST_DELEGATE(FCoolDown);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeHP, int, int);
+DECLARE_MULTICAST_DELEGATE_OneParam(FChangeST, int);
+
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class ACME_API UAC_Stat : public UActorComponent
@@ -29,8 +32,32 @@ public:
 	UFUNCTION()
 	void ExeDash();
 
+	UFUNCTION()
+	int GetCurrentHP() { return CurrentHP; };
+
+	UFUNCTION()
+	int GetMaxHP() { return MaxHP; };
+
+	UFUNCTION()
+	int GetCurrentST() { return CurrentSatiety; };
+
+	UFUNCTION()
+	void SetCurrentHP(int HP);
+
+	UFUNCTION()
+	void SetCurrentST(int ST);
+
+	UFUNCTION()
+	void OnAttakced(int damage);
+
+	UFUNCTION()
+	void OnConsumeSatiety(int amount);
+
 	FCoolDown CDDash;
 	FCoolDown CDSkill;
+
+	FChangeHP OnChangedHP;
+	FChangeST OnChangedST;
 
 private:
 	FTimerHandle TimerDash;
@@ -53,11 +80,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	int MaxHP;
 
+	//Æ÷¸¸°¨
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
-	int CurrentStamina;
-
-	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
-	int MaxStamina;
+	int CurrentSatiety;
 
 	//Element
 	TMap<EElement, int> Elements;

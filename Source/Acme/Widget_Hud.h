@@ -33,7 +33,24 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
 	class UWidget_Element* Element_4;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UProgressBar* PB_Health;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UProgressBar* PB_Satiety;
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* TxtCurrentHealth;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* TxtMaxHealth;
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* TxtCurrentSatiety;
+
 	void NativeOnInitialized();
+
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 
 public:
 	UFUNCTION()
@@ -44,4 +61,20 @@ public:
 
 	UFUNCTION()
 	void SetVisibleActionBorder(bool bVisible);
+
+	UFUNCTION()
+	void SetHealth(int CurrentHP, int MaxHP);
+
+	UFUNCTION()
+	void SetSatiety(int CurrentST);
+
+	UFUNCTION()
+	void BindStatus(class UAC_Stat* StatComp);
+
+private:
+	UPROPERTY()
+	float TargetHPPercent;
+
+	UPROPERTY()
+	float TargetSTPercent;
 };

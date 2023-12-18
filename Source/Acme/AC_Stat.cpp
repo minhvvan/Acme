@@ -1,18 +1,20 @@
 #include "AC_Stat.h"
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "AC_Stat.h"
 #include "Util.h"
 
-// Sets default values for this component's properties
 UAC_Stat::UAC_Stat()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	CurrentHP = 100;
+	MaxHP = 100;
+
+	CurrentSatiety = 100;
+
+	Strength = 10;
+	Dexterity = 10;
+	Intelligence = 10;
+
+	CoolTimedash = 2.f;
 }
 
 
@@ -22,15 +24,6 @@ void UAC_Stat::BeginPlay()
 	Super::BeginPlay();
 
 	//TODO: load data
-
-	CurrentHP = 100;
-	CurrentHP = 100;
-
-	Strength = 10;
-	Dexterity = 10;
-	Intelligence = 10;
-
-	CoolTimedash = 2.f;
 }
 
 
@@ -58,4 +51,32 @@ void UAC_Stat::ExeDash()
 				CDDash.Broadcast();
 			}), 
 		time, false);
+}
+
+void UAC_Stat::SetCurrentHP(int HP)
+{
+	CurrentHP = HP;
+
+	OnChangedHP.Broadcast(CurrentHP, MaxHP);
+}
+
+void UAC_Stat::SetCurrentST(int ST)
+{
+	CurrentSatiety = ST;
+
+	OnChangedST.Broadcast(CurrentSatiety);
+}
+
+void UAC_Stat::OnAttakced(int damage)
+{
+	int newHP = CurrentHP - damage;
+	if (newHP < 0) newHP = 0;
+	SetCurrentHP(newHP);
+}
+
+void UAC_Stat::OnConsumeSatiety(int amount)
+{
+	int newSatiety = CurrentSatiety - amount;
+	if (newSatiety < 0) newSatiety = 0;
+	SetCurrentST(newSatiety);
 }

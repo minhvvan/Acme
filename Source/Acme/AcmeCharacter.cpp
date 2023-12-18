@@ -85,6 +85,12 @@ void AAcmeCharacter::BeginPlay()
 	{
 		Hud = CreateWidget<UWidget_Hud>(GetWorld(), HudClass);
 		Hud->AddToViewport();
+
+		//HUD Init
+		Hud->SetHealth(StatCompoenent->GetCurrentHP(), StatCompoenent->GetMaxHP());
+		Hud->SetSatiety(StatCompoenent->GetCurrentST());
+
+		Hud->BindStatus(StatCompoenent);
 	}
 
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
@@ -105,6 +111,12 @@ void AAcmeCharacter::Tick(float DeltaSeconds)
 			Ischarged = FullCharged();
 		}
 	}
+}
+
+void AAcmeCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -294,6 +306,9 @@ void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 void AAcmeCharacter::StartSkill()
 {
 	//TODO: Current Skill execute
+	StatCompoenent->OnConsumeSatiety(10);
+
+	UUtil::DebugPrint("StartSkill");
 }
 
 void AAcmeCharacter::StartInteract()

@@ -5,6 +5,9 @@
 #include "Widget_Crosshair.h"
 #include "Widget_Element.h"
 #include "Components/Border.h"
+#include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
+#include "AC_Stat.h"
 
 void UWidget_Hud::NativeOnInitialized()
 {
@@ -21,6 +24,27 @@ void UWidget_Hud::NativeOnInitialized()
 	Element_4->SetElementImage(EElement::E_Air);
 	Element_4->SetKeyImage(4);
 	Element_4->SetTxtNum(0);
+}
+
+void UWidget_Hud::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+
+	float CurrentHPPercent = PB_Health->GetPercent();
+	if (TargetHPPercent != CurrentHPPercent)
+	{
+		//interpolate
+		float newPercent = FMath::Lerp(CurrentHPPercent, TargetHPPercent, .1);
+		PB_Health->SetPercent(newPercent);
+	}
+
+	float CurrentSTPercent = PB_Satiety->GetPercent();
+	if (TargetSTPercent != CurrentSTPercent)
+	{
+		//interpolate
+		float newPercent = FMath::Lerp(CurrentSTPercent, TargetSTPercent, .1);
+		PB_Satiety->SetPercent(newPercent);
+	}
 }
 
 void UWidget_Hud::SetPercent(float percent)
@@ -43,4 +67,32 @@ void UWidget_Hud::SetVisibleActionBorder(bool bVisible)
 {
 	if (bVisible) Border_Action->SetVisibility(ESlateVisibility::Visible);
 	else Border_Action->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UWidget_Hud::SetHealth(int CurrentHP, int MaxHP)
+{
+	if (!PB_Health || !TxtCurrentHealth || !TxtMaxHealth) return;
+
+	float percentage = float(CurrentHP) / MaxHP;
+
+
+	TargetHPPercent = percentage;
+	TxtCurrentHealth->SetText(FText::AsNumber(CurrentHP));
+	TxtMaxHealth->SetText(FText::AsNumber(MaxHP));
+}
+
+void UWidget_Hud::SetSatiety(int CurrentST)
+{
+	if (!PB_Satiety || !TxtCurrentSatiety) return;
+
+	float percentage = float(CurrentST) / 100;
+
+	TargetSTPercent = percentage;
+	TxtCurrentSatiety->SetText(FText::AsNumber(CurrentST));
+}
+
+void UWidget_Hud::BindStatus(UAC_Stat* StatComp)
+{
+	StatComp->OnChangedHP.AddUObject(this, &UWidget_Hud::SetHealth);
+	StatComp->OnChangedST.AddUObject(this, &UWidget_Hud::SetSatiety);
 }
