@@ -50,6 +50,13 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* AttackAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SkillAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InteractAction;
+
+
 	//stat comp
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UAC_Stat* StatCompoenent;
@@ -98,6 +105,13 @@ protected:
 
 	UFUNCTION()
 	void EndAttack(UAnimMontage* Montage, bool bInterrupted);
+
+	UFUNCTION()
+	void StartSkill();
+
+	UFUNCTION()
+	void StartInteract();
+
 
 protected:
 	// APawn interface

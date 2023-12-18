@@ -39,10 +39,10 @@ void AActorInteractive::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AAct
 {
 	if (OtherActor != nullptr && OtherActor != this->GetOwner() && OtherComp != nullptr)
 	{
-		AAcmeCharacter* Character = Cast<AAcmeCharacter>(OtherActor);
-		if (!Character) return;
+		OverlapedCharacter = Cast<AAcmeCharacter>(OtherActor);
+		if (!OverlapedCharacter) return;
 
-		Character->SetOverlapActor(this);
+		OverlapedCharacter->SetOverlapActor(this);
 	}
 }
 
@@ -50,10 +50,10 @@ void AActorInteractive::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, A
 {
 	if (OtherActor != nullptr && OtherActor != this->GetOwner() && OtherComp != nullptr)
 	{
-		AAcmeCharacter* Character = Cast<AAcmeCharacter>(OtherActor);
-		if (!Character) return;
+		OverlapedCharacter = Cast<AAcmeCharacter>(OtherActor);
+		if (!OverlapedCharacter) return;
 
-		Character->SetOverlapActor(nullptr);
+		OverlapedCharacter->SetOverlapActor(nullptr);
 	}
 }
 
@@ -70,4 +70,10 @@ void AActorInteractive::SetVisibleIndicator(bool bVisible)
 	if (!IsValid(Indicator)) return;
 
 	Indicator->SetVisibility(bVisible);
+}
+
+void AActorInteractive::Interact()
+{
+	//OverlapedCharacter->Do Something
+	Destroy();
 }

@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Default)
 	class UWidgetComponent* Indicator;
 
+	UPROPERTY(EditAnywhere, Category = Default)
+	class AAcmeCharacter* OverlapedCharacter;
+
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -40,4 +43,7 @@ public:
 
 	UFUNCTION()
 	void SetVisibleIndicator(bool bVisible);
+
+	UFUNCTION()
+	void Interact();
 };

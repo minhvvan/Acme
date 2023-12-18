@@ -21,6 +21,20 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UBorder* Border_Action;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UWidget_Element* Element_1;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UWidget_Element* Element_2;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UWidget_Element* Element_3;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UWidget_Element* Element_4;
+
+	void NativeOnInitialized();
+
 public:
 	UFUNCTION()
 	void SetPercent(float percent);

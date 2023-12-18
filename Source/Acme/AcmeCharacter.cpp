@@ -137,6 +137,12 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AAcmeCharacter::StartAttack);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Canceled, this, &AAcmeCharacter::ShootNoCharge);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AAcmeCharacter::ShootAttack);
+	
+		//Skill
+		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSkill);
+
+		//Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartInteract);
 	}
 }
 
@@ -283,6 +289,19 @@ void AAcmeCharacter::ShootAttack()
 void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 {
 	IsAttacking = false;
+}
+
+void AAcmeCharacter::StartSkill()
+{
+	//TODO: Current Skill execute
+}
+
+void AAcmeCharacter::StartInteract()
+{
+	//TODO: Current Overalp Actor -> Interact
+	if (!OverlapActor.IsValid()) return;
+
+	OverlapActor->Interact();
 }
 
 bool AAcmeCharacter::FullCharged()
