@@ -101,7 +101,10 @@ protected:
 	void ShootNoCharge();
 
 	UFUNCTION()
-	void ShootAttack();
+	void ShootCharge();
+
+	UFUNCTION()
+	void FireAttack(/*¼¼±â*/);
 
 	UFUNCTION()
 	void EndAttack(UAnimMontage* Montage, bool bInterrupted);
@@ -174,7 +177,10 @@ protected:
 	class USoundBase* SFXCharge;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = SFX, meta = (AllowPrivateAccess = "true"))
-	class USoundBase* SFXComplete;
+	class USoundBase* SFXComplete;	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AActor_Projectile> ProjectileClass;
 
 protected:
 	UFUNCTION()

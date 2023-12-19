@@ -15,6 +15,8 @@ UAC_Stat::UAC_Stat()
 	Intelligence = 10;
 
 	CoolTimedash = 2.f;
+	ConsumeTimeSatiety = 30.f;
+	ConsumeAmountSatiety = 1;
 }
 
 
@@ -24,6 +26,15 @@ void UAC_Stat::BeginPlay()
 	Super::BeginPlay();
 
 	//TODO: load data
+
+	//¹è°íÇÄ ¼Òºñ
+	float time = ConsumeTimeSatiety;
+
+	GetWorld()->GetTimerManager().SetTimer(TimerSatiety, 
+		FTimerDelegate::CreateLambda([this, time]() {
+			SetCurrentST(GetCurrentST() - ConsumeAmountSatiety);
+		}),
+		time, true);
 }
 
 

@@ -62,6 +62,8 @@ public:
 private:
 	FTimerHandle TimerDash;
 	FTimerHandle TimerSkill;
+	FTimerHandle TimerSatiety;
+
 
 	//stat
 	UPROPERTY(VisibleAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
@@ -90,4 +92,10 @@ private:
 	//Others
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	float CoolTimedash;
+
+	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	float ConsumeTimeSatiety;
+
+	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	int ConsumeAmountSatiety;
 };

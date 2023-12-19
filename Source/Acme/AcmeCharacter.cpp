@@ -17,6 +17,7 @@
 #include "Widget_Hud.h"
 #include "Util.h"
 #include "ActorInteractive.h"
+#include "Actor_Projectile.h"
 #include "Sound/SoundBase.h"
 
 
@@ -148,7 +149,7 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Attack
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AAcmeCharacter::StartAttack);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Canceled, this, &AAcmeCharacter::ShootNoCharge);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AAcmeCharacter::ShootAttack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AAcmeCharacter::ShootCharge);
 	
 		//Skill
 		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSkill);
@@ -282,10 +283,12 @@ void AAcmeCharacter::ShootNoCharge()
 	AnimInstance->PlayAttack();
 
 	//weak attack
+	FireAttack();
+
 	AudioComp->Stop();
 }
 
-void AAcmeCharacter::ShootAttack()
+void AAcmeCharacter::ShootCharge()
 {
 	if (!AnimInstance) return;
 
@@ -295,7 +298,29 @@ void AAcmeCharacter::ShootAttack()
 	AnimInstance->PlayAttack();
 
 	//strong attack
+	FireAttack();
+
 	AudioComp->Stop();
+}
+
+void AAcmeCharacter::FireAttack()
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	UCameraComponent* Cam = GetFollowCamera();
+	FVector CamLoc = Cam->GetComponentLocation();
+	FVector CamForward = Cam->GetForwardVector();
+
+	FVector loc = GetMesh()->GetSocketLocation(FName(TEXT("Attack_Socket")));
+	loc += CamForward * 100;
+	
+	FRotator rot = CamForward.Rotation();
+	rot.Pitch += 10;
+
+	AActor_Projectile* Projectile = GetWorld()->SpawnActor<AActor_Projectile>(ProjectileClass, loc, rot, SpawnParams);
 }
 
 void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
