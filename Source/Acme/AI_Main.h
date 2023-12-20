@@ -15,7 +15,22 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMAttack;
 
+	UPROPERTY(EditAnywhere, Category = "Attack", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMEquip;
+
+	UPROPERTY(EditAnywhere, Category = "Attack", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMDismantle;
+
 public:
 	UFUNCTION()
-	void PlayAttack();
+	void PlayAttack(int idx);
+
+	UFUNCTION()
+	void PlayEquip();
+
+	UFUNCTION()
+	void PlayDisMantle();
+
+	UFUNCTION()
+	FName GetAttackMontageName(int idx);
 };

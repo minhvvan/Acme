@@ -61,6 +61,13 @@ AAcmeCharacter::AAcmeCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
+
+	ComboTime = .5f;
+	ComboIdx = 1;
+
+	CanAttack = true;
+
+	AttackCoolTime = 1.f;
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -95,23 +102,12 @@ void AAcmeCharacter::BeginPlay()
 	}
 
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
+	AnimInstance->OnMontageEnded.AddDynamic(this, &AAcmeCharacter::EndAttack);
 }
 
 void AAcmeCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	if (IsCharging)
-	{
-		//update percent
-		ChargingTime += DeltaSeconds;
-		Hud->SetPercent(ChargingTime / 1.5f);
-
-		if (ChargingTime >= 1.5f && !Ischarged)
-		{
-			Ischarged = FullCharged();
-		}
-	}
 }
 
 void AAcmeCharacter::PostInitializeComponents()
@@ -147,20 +143,23 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDash);
 	
 		//Attack
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AAcmeCharacter::StartAttack);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Canceled, this, &AAcmeCharacter::ShootNoCharge);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AAcmeCharacter::ShootCharge);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartAttack);
 	
 		//Skill
 		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSkill);
 
 		//Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartInteract);
+			
+		//Interact
+		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::ChangeEquip);
 	}
 }
 
 void AAcmeCharacter::Move(const FInputActionValue& Value)
 {
+	if (IsAttacking) return;
+
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -261,46 +260,54 @@ void AAcmeCharacter::CoolDownDash()
 
 void AAcmeCharacter::StartAttack()
 {
-	if (IsAttacking) return;
+	if (AnimState == EAnimState::E_Unarmed) return;
+	if (!CanAttack) return;
+
+	if (IsCombo)
+	{
+		//combo
+		GetWorldTimerManager().ClearTimer(ComboTimer);
+		GetWorldTimerManager().SetTimer(ComboTimer,
+			FTimerDelegate::CreateLambda([this]() {
+				IsCombo = false;
+				ComboIdx = 1;
+				}),
+			ComboTime, false);
+
+		ComboIdx++;
+
+		if (ComboIdx > 3)
+		{
+			//°ø°Ý ÄðÅ¸ÀÓ
+			CanAttack = false;
+			GetWorldTimerManager().SetTimer(AttackTimer, FTimerDelegate::CreateLambda([this]() {
+					CanAttack = true;
+				}),
+				AttackCoolTime, true);
+			return;
+		}
+
+		AttackQueue.Enqueue(ComboIdx);
+		
+		return;
+	}
+
+	GetWorldTimerManager().SetTimer(ComboTimer,
+		FTimerDelegate::CreateLambda([this]() {
+			IsCombo = false;
+			ComboIdx = 1;
+			}),
+		ComboTime, false);
 
 	IsAttacking = true;
-	IsCharging = true;
-	//charge Anim play
-	//AttackAction->Triggers[0]->ActuationThreshold
+	IsCombo = true;
+
+	AttackQueue.Enqueue(ComboIdx);
+	FlushQueue();
 
 	//TODO: charge sfx
 	AudioComp->SetSound(SFXCharge);
 	AudioComp->Play();
-}
-
-void AAcmeCharacter::ShootNoCharge()
-{
-	if (!AnimInstance) return;
-
-	ResetCharge();
-
-	AnimInstance->OnMontageEnded.AddDynamic(this, &AAcmeCharacter::EndAttack);
-	AnimInstance->PlayAttack();
-
-	//weak attack
-	FireAttack();
-
-	AudioComp->Stop();
-}
-
-void AAcmeCharacter::ShootCharge()
-{
-	if (!AnimInstance) return;
-
-	ResetCharge();
-
-	AnimInstance->OnMontageEnded.AddDynamic(this, &AAcmeCharacter::EndAttack);
-	AnimInstance->PlayAttack();
-
-	//strong attack
-	FireAttack();
-
-	AudioComp->Stop();
 }
 
 void AAcmeCharacter::FireAttack()
@@ -325,15 +332,19 @@ void AAcmeCharacter::FireAttack()
 
 void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 {
-	IsAttacking = false;
+	if (!AttackQueue.IsEmpty())
+	{
+		FlushQueue();
+	}
+	else
+	{
+		IsAttacking = false;
+	}
 }
 
 void AAcmeCharacter::StartSkill()
 {
 	//TODO: Current Skill execute
-	StatCompoenent->OnConsumeSatiety(10);
-
-	UUtil::DebugPrint("StartSkill");
 }
 
 void AAcmeCharacter::StartInteract()
@@ -342,6 +353,25 @@ void AAcmeCharacter::StartInteract()
 	if (!OverlapActor.IsValid()) return;
 
 	OverlapActor->Interact();
+}
+
+void AAcmeCharacter::ChangeEquip()
+{
+	if (AnimState == EAnimState::E_Unarmed)
+	{
+		AnimState = EAnimState::E_Equiped;
+
+		if (!AnimInstance) return;
+		AnimInstance->PlayEquip();
+	}
+	else
+	{
+		AnimState = EAnimState::E_Unarmed;
+
+		if (!AnimInstance) return;
+
+		AnimInstance->PlayDisMantle();
+	}
 }
 
 bool AAcmeCharacter::FullCharged()
@@ -361,10 +391,19 @@ bool AAcmeCharacter::FullCharged()
 void AAcmeCharacter::ResetCharge()
 {
 	Hud->SetPercent(0.f);
-	IsCharging = false;
-	ChargingTime = 0.f;
 	Hud->SetCrosshairColor(FColor(255.f, 255.f, 255.f, 100.f));
 	Ischarged = false;
+}
+
+void AAcmeCharacter::FlushQueue()
+{
+	if (!AttackQueue.IsEmpty())
+	{
+		int idx = *AttackQueue.Peek();
+		AttackQueue.Pop();
+
+		AnimInstance->PlayAttack(idx);
+	}
 }
 
 void AAcmeCharacter::SetOverlapActor(AActorInteractive* actor)

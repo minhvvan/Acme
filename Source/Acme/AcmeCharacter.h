@@ -56,6 +56,8 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* EquipAction;
 
 	//stat comp
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -96,12 +98,6 @@ protected:
 	/** Called for Attack input */
 	UFUNCTION()
 	void StartAttack();	
-	
-	UFUNCTION()
-	void ShootNoCharge();
-
-	UFUNCTION()
-	void ShootCharge();
 
 	UFUNCTION()
 	void FireAttack(/*¼¼±â*/);
@@ -113,7 +109,10 @@ protected:
 	void StartSkill();
 
 	UFUNCTION()
-	void StartInteract();
+	void StartInteract();	
+	
+	UFUNCTION()
+	void ChangeEquip();
 
 protected:
 	// APawn interface
@@ -154,14 +153,29 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
 	bool IsAttacking;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	bool CanAttack;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	float AttackCoolTime;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	EAnimState AnimState;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
-	bool IsCharging;
+	float ComboTime;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
-	float ChargingTime;
+	bool IsCombo;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	int ComboIdx;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	FTimerHandle ComboTimer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	FTimerHandle AttackTimer;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
@@ -194,6 +208,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
 	TWeakObjectPtr<class AActorInteractive> OverlapActor;
+
+	TQueue<int> AttackQueue;
+
+	UFUNCTION()
+	void FlushQueue();
 
 public:
 	UFUNCTION(BlueprintCallable)

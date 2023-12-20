@@ -5,10 +5,32 @@
 #include "Animation/AnimMontage.h"
 #include "Util.h"
 
-void UAI_Main::PlayAttack()
+void UAI_Main::PlayAttack(int idx)
 {
-	if (!Montage_IsPlaying(AMAttack))
+	if (!Montage_IsPlaying(AMAttack)) Montage_Play(AMAttack);
+	Montage_JumpToSection(GetAttackMontageName(idx), AMAttack);
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Current Section is %s"), *(Montage_GetCurrentSection(AMAttack).ToString())));
+
+}
+
+void UAI_Main::PlayEquip()
+{
+	if (!Montage_IsPlaying(AMEquip))
 	{
-		Montage_Play(AMAttack);
+		Montage_Play(AMEquip);
 	}
+}
+
+void UAI_Main::PlayDisMantle()
+{
+	if (!Montage_IsPlaying(AMDismantle))
+	{
+		Montage_Play(AMDismantle);
+	}
+}
+
+FName UAI_Main::GetAttackMontageName(int idx)
+{
+	return FName(FString::Printf(TEXT("Attack%d"), idx));
 }
