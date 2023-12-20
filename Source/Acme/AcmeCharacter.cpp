@@ -62,12 +62,7 @@ AAcmeCharacter::AAcmeCharacter()
 
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
 
-	ComboTime = .5f;
-	ComboIdx = 1;
-
-	CanAttack = true;
-
-	AttackCoolTime = 1.f;
+	ComboIdx = 0;
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -102,7 +97,7 @@ void AAcmeCharacter::BeginPlay()
 	}
 
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
-	AnimInstance->OnMontageEnded.AddDynamic(this, &AAcmeCharacter::EndAttack);
+	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &AAcmeCharacter::EndAttack);
 }
 
 void AAcmeCharacter::Tick(float DeltaSeconds)
@@ -261,53 +256,22 @@ void AAcmeCharacter::CoolDownDash()
 void AAcmeCharacter::StartAttack()
 {
 	if (AnimState == EAnimState::E_Unarmed) return;
-	if (!CanAttack) return;
 
 	if (IsCombo)
 	{
 		//combo
-		GetWorldTimerManager().ClearTimer(ComboTimer);
-		GetWorldTimerManager().SetTimer(ComboTimer,
-			FTimerDelegate::CreateLambda([this]() {
-				IsCombo = false;
-				ComboIdx = 1;
-				}),
-			ComboTime, false);
-
-		ComboIdx++;
-
-		if (ComboIdx > 3)
-		{
-			//°ø°Ý ÄðÅ¸ÀÓ
-			CanAttack = false;
-			GetWorldTimerManager().SetTimer(AttackTimer, FTimerDelegate::CreateLambda([this]() {
-					CanAttack = true;
-				}),
-				AttackCoolTime, true);
-			return;
-		}
-
+		ComboIdx = (ComboIdx + 1) % 3;
 		AttackQueue.Enqueue(ComboIdx);
+		//TODO: Consume Stamina
 		
 		return;
 	}
-
-	GetWorldTimerManager().SetTimer(ComboTimer,
-		FTimerDelegate::CreateLambda([this]() {
-			IsCombo = false;
-			ComboIdx = 1;
-			}),
-		ComboTime, false);
 
 	IsAttacking = true;
 	IsCombo = true;
 
 	AttackQueue.Enqueue(ComboIdx);
 	FlushQueue();
-
-	//TODO: charge sfx
-	AudioComp->SetSound(SFXCharge);
-	AudioComp->Play();
 }
 
 void AAcmeCharacter::FireAttack()
@@ -338,7 +302,9 @@ void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 	}
 	else
 	{
+		IsCombo = false;
 		IsAttacking = false;
+		ComboIdx = 0;
 	}
 }
 
@@ -403,6 +369,10 @@ void AAcmeCharacter::FlushQueue()
 		AttackQueue.Pop();
 
 		AnimInstance->PlayAttack(idx);
+
+		//TODO: Notify·Î ¿Å°Ü¾ßµÊ
+		AudioComp->SetSound(SFXCharge);
+		AudioComp->Play();
 	}
 }
 

@@ -9,9 +9,6 @@ void UAI_Main::PlayAttack(int idx)
 {
 	if (!Montage_IsPlaying(AMAttack)) Montage_Play(AMAttack);
 	Montage_JumpToSection(GetAttackMontageName(idx), AMAttack);
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Current Section is %s"), *(Montage_GetCurrentSection(AMAttack).ToString())));
-
 }
 
 void UAI_Main::PlayEquip()
