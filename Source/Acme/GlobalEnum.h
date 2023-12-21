@@ -33,6 +33,7 @@ enum class EElement : uint8
 	E_Air UMETA(DisplayName = "Air"),
 	E_Ice UMETA(DisplayName = "Ice"),
 	E_Thunder UMETA(DisplayName = "Thunder"),
+	E_Normal UMETA(DisplayName = "Normal"),
 };
 
 

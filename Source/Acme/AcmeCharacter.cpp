@@ -4,7 +4,6 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
-#include "Components/AudioComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -61,7 +60,6 @@ AAcmeCharacter::AAcmeCharacter()
 	StatCompoenent = CreateDefaultSubobject<UAC_Stat>(TEXT("StatCompoenent"));
 	PrimaryActorTick.bCanEverTick = true;
 
-	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
 
 	ComboIdx = 0;
 }
@@ -372,13 +370,6 @@ bool AAcmeCharacter::FullCharged()
 {
 	Hud->SetCrosshairColor(FColor(51.f, 202.f, 255.f));
 
-	if (AudioComp->IsPlaying())
-	{
-		AudioComp->Stop();
-		AudioComp->SetSound(SFXComplete);
-		AudioComp->Play();
-	}
-
 	return true;
 }
 
@@ -397,10 +388,6 @@ void AAcmeCharacter::FlushQueue()
 		AttackQueue.Pop();
 
 		AnimInstance->PlayAttack(idx);
-
-		//TODO: Notify·Î ¿Å°Ü¾ßµÊ
-		AudioComp->SetSound(SFXCharge);
-		AudioComp->Play();
 	}
 }
 

@@ -63,9 +63,6 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	class UAC_Stat* StatCompoenent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sound, meta = (AllowPrivateAccess = "true"))
-	class UAudioComponent* AudioComp;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	class AActor_Weapon* Weapon;
 
@@ -124,7 +121,7 @@ protected:
 	void EquipWeapon();
 
 	UFUNCTION()
-	void DismantleWeapon();
+	void DismantleWeapon();	
 
 protected:
 	// APawn interface
@@ -187,12 +184,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	class UAI_Main* AnimInstance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = SFX, meta = (AllowPrivateAccess = "true"))
-	class USoundBase* SFXCharge;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = SFX, meta = (AllowPrivateAccess = "true"))
-	class USoundBase* SFXComplete;	
-	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AActor_Projectile> ProjectileClass;
 

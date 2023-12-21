@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GlobalEnum.h"
 #include "Actor_Weapon.generated.h"
 
 UCLASS()
@@ -22,11 +23,20 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sound, meta = (AllowPrivateAccess = "true"))
+	class UAudioComponent* AudioComp;
+
 	UPROPERTY(EditAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
 	FName HandSocket;
 
 	UPROPERTY(EditAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
 	FName BackSocket;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = SFX, meta = (AllowPrivateAccess = "true"))
+	TMap<EElement, class USoundBase*> SFXList;
+
+	UPROPERTY()
+	EElement CurrentType;
 
 public:	
 	// Called every frame
@@ -37,4 +47,7 @@ public:
 
 	UFUNCTION()
 	void Dismantle();
+
+	UFUNCTION()
+	void PlaySound();
 };
