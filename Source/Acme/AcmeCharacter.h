@@ -60,11 +60,17 @@ class AAcmeCharacter : public ACharacter
 	class UInputAction* EquipAction;
 
 	//stat comp
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	class UAC_Stat* StatCompoenent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sound, meta = (AllowPrivateAccess = "true"))
 	class UAudioComponent* AudioComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	class AActor_Weapon* Weapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor_Weapon> WeaponClass;
 
 public:
 	AAcmeCharacter();
@@ -113,6 +119,12 @@ protected:
 	
 	UFUNCTION()
 	void ChangeEquip();
+
+	UFUNCTION()
+	void EquipWeapon();
+
+	UFUNCTION()
+	void DismantleWeapon();
 
 protected:
 	// APawn interface

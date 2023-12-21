@@ -19,6 +19,7 @@
 #include "ActorInteractive.h"
 #include "Actor_Projectile.h"
 #include "Sound/SoundBase.h"
+#include "Actor_Weapon.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -98,6 +99,21 @@ void AAcmeCharacter::BeginPlay()
 
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
 	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &AAcmeCharacter::EndAttack);
+	AnimInstance->OnEquip.AddUObject(this, &AAcmeCharacter::EquipWeapon);
+	AnimInstance->OnDismantle.AddUObject(this, &AAcmeCharacter::DismantleWeapon);
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	FRotator rotator;
+	FVector  SpawnLocation = GetActorLocation();
+	SpawnLocation.Z += 100;
+
+	Weapon = GetWorld()->SpawnActor<AActor_Weapon>(WeaponClass, SpawnLocation, rotator, SpawnParams);
+	if (Weapon)
+	{
+		Weapon->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		Weapon->Dismantle();
+	}
 }
 
 void AAcmeCharacter::Tick(float DeltaSeconds)
@@ -338,6 +354,18 @@ void AAcmeCharacter::ChangeEquip()
 
 		AnimInstance->PlayDisMantle();
 	}
+}
+
+void AAcmeCharacter::EquipWeapon()
+{
+	if (!Weapon) return;
+	Weapon->Equip();
+}
+
+void AAcmeCharacter::DismantleWeapon()
+{
+	if (!Weapon) return;
+	Weapon->Dismantle();
 }
 
 bool AAcmeCharacter::FullCharged()

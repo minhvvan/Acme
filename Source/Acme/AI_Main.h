@@ -6,6 +6,9 @@
 #include "Animation/AnimInstance.h"
 #include "AI_Main.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnEquip);
+DECLARE_MULTICAST_DELEGATE(FOnDismantle);
+
 UCLASS()
 class ACME_API UAI_Main : public UAnimInstance
 {
@@ -33,4 +36,14 @@ public:
 
 	UFUNCTION()
 	FName GetAttackMontageName(int idx);
+
+	FOnEquip OnEquip;
+	FOnDismantle OnDismantle;
+
+private:
+	UFUNCTION()
+	void AnimNotify_AttachHand();
+
+	UFUNCTION()
+	void AnimNotify_AttachBack();
 };

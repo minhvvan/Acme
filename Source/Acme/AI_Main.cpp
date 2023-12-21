@@ -31,3 +31,13 @@ FName UAI_Main::GetAttackMontageName(int idx)
 {
 	return FName(FString::Printf(TEXT("Attack%d"), idx));
 }
+
+void UAI_Main::AnimNotify_AttachHand()
+{
+	OnEquip.Broadcast();
+}
+
+void UAI_Main::AnimNotify_AttachBack()
+{
+	OnDismantle.Broadcast();
+}
