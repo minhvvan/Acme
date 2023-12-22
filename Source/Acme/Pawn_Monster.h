@@ -26,6 +26,12 @@ protected:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UCapsuleComponent> CapsuleComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UAC_Stat> StatCompoenent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UWidgetComponent> HPBar;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -33,4 +39,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION()
+	void OnAttacked(int damage);
+
+protected:
+	UFUNCTION()
+	void InitState();
+
+	UFUNCTION()
+	void Die();
 };

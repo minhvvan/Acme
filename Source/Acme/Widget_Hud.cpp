@@ -13,6 +13,10 @@ void UWidget_Hud::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
+	Element_1->SetElementImage(EElement::E_Fire);
+	Element_1->SetKeyImage(1);
+	Element_1->SetTxtNum(0);
+
 	Element_2->SetElementImage(EElement::E_Water);
 	Element_2->SetKeyImage(2);
 	Element_2->SetTxtNum(0);

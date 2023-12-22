@@ -64,7 +64,6 @@ private:
 	FTimerHandle TimerSkill;
 	FTimerHandle TimerSatiety;
 
-
 	//stat
 	UPROPERTY(VisibleAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	int Strength;
