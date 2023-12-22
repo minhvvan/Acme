@@ -11,6 +11,11 @@ void UAI_Main::PlayAttack(int idx)
 	Montage_JumpToSection(GetAttackMontageName(idx), AMAttack);
 }
 
+void UAI_Main::PlayJumpDashAttack()
+{
+	if (!Montage_IsPlaying(AMJDAttack)) Montage_Play(AMJDAttack);
+}
+
 void UAI_Main::PlayEquip()
 {
 	if (!Montage_IsPlaying(AMEquip))
@@ -40,4 +45,14 @@ void UAI_Main::AnimNotify_AttachHand()
 void UAI_Main::AnimNotify_AttachBack()
 {
 	OnDismantle.Broadcast();
+}
+
+void UAI_Main::AnimNotify_AttackStart()
+{
+	OnAttackStart.Broadcast();
+}
+
+void UAI_Main::AnimNotify_AttackEnd()
+{
+	OnAttackEnd.Broadcast();
 }

@@ -59,6 +59,9 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* EquipAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* JumpDashAttack;
+
 	//stat comp
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	class UAC_Stat* StatCompoenent;
@@ -80,6 +83,9 @@ protected:
 	/** Called for looking input */
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
+
+	/** Called for Jump input */
+	virtual void Jump();
 
 	/** Called for Crouch input */
 	UFUNCTION()
@@ -109,6 +115,9 @@ protected:
 	void EndAttack(UAnimMontage* Montage, bool bInterrupted);
 
 	UFUNCTION()
+	void StartJampDashAttack();
+
+	UFUNCTION()
 	void StartSkill();
 
 	UFUNCTION()
@@ -121,7 +130,16 @@ protected:
 	void EquipWeapon();
 
 	UFUNCTION()
-	void DismantleWeapon();	
+	void DismantleWeapon();			
+	
+	UFUNCTION()
+	void AttackStart();	
+	
+	UFUNCTION()
+	void AttackEnd();
+
+	UFUNCTION()
+	void AttackCheck();
 
 protected:
 	// APawn interface
@@ -174,6 +192,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
 	int ComboIdx;
 
+	UPROPERTY()
+	FTimerHandle AttackTimer;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> HudClass;
@@ -202,6 +223,9 @@ protected:
 
 	TQueue<int> AttackQueue;
 
+	UPROPERTY()
+	TSet<AActor*> VictimSet;
+
 	UFUNCTION()
 	void FlushQueue();
 
@@ -211,5 +235,7 @@ public:
 
 	UFUNCTION()
 	void SetOverlapActor(AActorInteractive* actor);
+
+
 };
 

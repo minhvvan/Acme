@@ -38,6 +38,12 @@ protected:
 	UPROPERTY()
 	EElement CurrentType;
 
+	UPROPERTY(EditAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	FName WeaponTopName;
+
+	UPROPERTY(EditAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	FName WeaponEndName;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -50,4 +56,13 @@ public:
 
 	UFUNCTION()
 	void PlaySound();
+
+	UFUNCTION()
+	FVector GetWeponTopPos();
+
+	UFUNCTION()
+	FVector GetWeponEndPos();
+
+	UFUNCTION()
+	UStaticMeshComponent* GetMesh() { return Mesh; };
 };

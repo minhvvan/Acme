@@ -17,6 +17,9 @@ AActor_Weapon::AActor_Weapon()
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
 
 	CurrentType = EElement::E_Normal;
+
+	WeaponTopName = FName(TEXT("WeaponTop"));
+	WeaponEndName = FName(TEXT("WeaponEnd"));
 }
 
 // Called when the game starts or when spawned
@@ -53,4 +56,14 @@ void AActor_Weapon::PlaySound()
 {
 	AudioComp->SetSound(SFXList[CurrentType]);
 	AudioComp->Play();
+}
+
+FVector AActor_Weapon::GetWeponTopPos()
+{
+	return Mesh->GetSocketLocation(WeaponTopName);
+}
+
+FVector AActor_Weapon::GetWeponEndPos()
+{
+	return Mesh->GetSocketLocation(WeaponEndName);
 }

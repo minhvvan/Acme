@@ -60,7 +60,6 @@ AAcmeCharacter::AAcmeCharacter()
 	StatCompoenent = CreateDefaultSubobject<UAC_Stat>(TEXT("StatCompoenent"));
 	PrimaryActorTick.bCanEverTick = true;
 
-
 	ComboIdx = 0;
 }
 
@@ -99,6 +98,8 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &AAcmeCharacter::EndAttack);
 	AnimInstance->OnEquip.AddUObject(this, &AAcmeCharacter::EquipWeapon);
 	AnimInstance->OnDismantle.AddUObject(this, &AAcmeCharacter::DismantleWeapon);
+	AnimInstance->OnAttackStart.AddUObject(this, &AAcmeCharacter::AttackStart);
+	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::AttackEnd);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
@@ -134,7 +135,7 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		//Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		//Moving
@@ -160,8 +161,10 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartInteract);
 			
-		//Interact
+		//Equip
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::ChangeEquip);
+	
+		EnhancedInputComponent->BindAction(JumpDashAttack, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartJampDashAttack);
 	}
 }
 
@@ -206,6 +209,13 @@ void AAcmeCharacter::Look(const FInputActionValue& Value)
 
 		TurnRate = FMath::Clamp(LookAxisVector.X, -1.f, 1.f);
 	}
+}
+
+void AAcmeCharacter::Jump()
+{
+	if (IsAttacking) return;
+
+	Super::Jump();
 }
 
 void AAcmeCharacter::StartCrouch()
@@ -322,6 +332,15 @@ void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 	}
 }
 
+void AAcmeCharacter::StartJampDashAttack()
+{
+	if (AnimState == EAnimState::E_Unarmed) return;
+	IsAttacking = true;
+
+	StartDash();
+	AnimInstance->PlayJumpDashAttack();
+}
+
 void AAcmeCharacter::StartSkill()
 {
 	//TODO: Current Skill execute
@@ -364,6 +383,45 @@ void AAcmeCharacter::DismantleWeapon()
 {
 	if (!Weapon) return;
 	Weapon->Dismantle();
+}
+
+void AAcmeCharacter::AttackStart()
+{
+	GetWorldTimerManager().SetTimer(OUT AttackTimer, this, &AAcmeCharacter::AttackCheck, .01f, true);
+}
+
+void AAcmeCharacter::AttackEnd()
+{
+	GetWorldTimerManager().ClearTimer(AttackTimer);
+
+	for (AActor* Victim : VictimSet)
+	{
+		//Damage 계산(Victim쪽에서)
+	}
+
+	VictimSet.Empty();
+}
+
+void AAcmeCharacter::AttackCheck()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Query;
+
+	Query.AddIgnoredActor(this);
+
+	FVector StartPos = Weapon->GetWeponTopPos();
+	FVector EndPos = Weapon->GetWeponEndPos();
+
+	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
+	{
+		for (auto Result : HitResults)
+		{
+			AActor* Victim = Result.GetActor();
+
+			VictimSet.Add(Victim);
+		}
+	}
+	//DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, (StartPos - EndPos).Length() / 2, 10, FRotationMatrix::MakeFromZ(Weapon->GetMesh()->GetRightVector()).ToQuat(), FColor::Red, false, 10.f, 0, 1.f);
 }
 
 bool AAcmeCharacter::FullCharged()

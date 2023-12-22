@@ -8,6 +8,9 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnEquip);
 DECLARE_MULTICAST_DELEGATE(FOnDismantle);
+DECLARE_MULTICAST_DELEGATE(FOnAttackStart);
+DECLARE_MULTICAST_DELEGATE(FOnAttackEnd);
+
 
 UCLASS()
 class ACME_API UAI_Main : public UAnimInstance
@@ -22,11 +25,17 @@ protected:
 	class UAnimMontage* AMEquip;
 
 	UPROPERTY(EditAnywhere, Category = "Equip", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* AMDismantle;
+	class UAnimMontage* AMDismantle;	
+	
+	UPROPERTY(EditAnywhere, Category = "Equip", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMJDAttack;
 
 public:
 	UFUNCTION()
 	void PlayAttack(int idx);
+	
+	UFUNCTION()
+	void PlayJumpDashAttack();
 
 	UFUNCTION()
 	void PlayEquip();
@@ -39,11 +48,19 @@ public:
 
 	FOnEquip OnEquip;
 	FOnDismantle OnDismantle;
+	FOnAttackStart OnAttackStart;
+	FOnAttackEnd OnAttackEnd;
 
 private:
 	UFUNCTION()
 	void AnimNotify_AttachHand();
 
 	UFUNCTION()
-	void AnimNotify_AttachBack();
+	void AnimNotify_AttachBack();	
+	
+	UFUNCTION()
+	void AnimNotify_AttackStart();
+
+	UFUNCTION()
+	void AnimNotify_AttackEnd();
 };
