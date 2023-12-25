@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "MonsterSpawner.generated.h"
 
-class APawn_Monster;
+class ACharacterMonster;
 
 UCLASS()
 class ACME_API AMonsterSpawner : public AActor
@@ -17,10 +17,10 @@ class ACME_API AMonsterSpawner : public AActor
 	class UBoxComponent* Area;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Monster, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<APawn_Monster> MonsterClass;
+	TSubclassOf<ACharacterMonster> MonsterClass;
 
 	UPROPERTY(VisibleAnywhere, Category = Monster)
-	TArray<APawn_Monster*> Monsters;
+	TArray<ACharacterMonster*> Monsters;
 
 public:	
 	// Sets default values for this actor's properties

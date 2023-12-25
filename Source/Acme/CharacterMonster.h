@@ -3,36 +3,30 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "Pawn_Monster.generated.h"
+#include "GameFramework/Character.h"
+#include "CharacterMonster.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnDie);
 
 UCLASS()
-class ACME_API APawn_Monster : public APawn
+class ACME_API ACharacterMonster : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-	APawn_Monster();
+	// Sets default values for this character's properties
+	ACharacterMonster();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<USkeletalMeshComponent> Mesh;
-
-	/** The CapsuleComponent being used for movement collision (by CharacterMovement). Always treated as being vertically aligned in simple collision check functions. */
-	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UCapsuleComponent> CapsuleComponent;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UAC_Stat> StatCompoenent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UWidgetComponent> HPBar;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 public:	
 	// Called every frame

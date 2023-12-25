@@ -4,7 +4,7 @@
 #include "MonsterSpawner.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Pawn_Monster.h"
+#include "CharacterMonster.h"
 #include "Util.h"
 
 // Sets default values
@@ -40,14 +40,13 @@ void AMonsterSpawner::Respawn()
 		if (GetWorld()->LineTraceSingleByChannel(Result, Pos, Pos - (0, 0, 1000), ECollisionChannel::ECC_Visibility))
 		{
 			FVector SpawnPos = Result.Location;
-			SpawnPos = SpawnPos + (0, 0, 100);
 
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Pos: %s"), *SpawnPos.ToString()));
 
 			FActorSpawnParameters SpawnParam;
 			SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-			APawn_Monster* Monster = GetWorld()->SpawnActor<APawn_Monster>(MonsterClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+			ACharacterMonster* Monster = GetWorld()->SpawnActor<ACharacterMonster>(MonsterClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
 			
 			Monster->OnDied.AddLambda([this, Monster]() { Monsters.Remove(Monster); });
 			Monsters.Add(Monster);

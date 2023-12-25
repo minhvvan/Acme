@@ -19,7 +19,7 @@
 #include "Actor_Projectile.h"
 #include "Sound/SoundBase.h"
 #include "Actor_Weapon.h"
-#include "Pawn_Monster.h"
+#include "CharacterMonster.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -398,7 +398,7 @@ void AAcmeCharacter::AttackEnd()
 	for (AActor* Victim : VictimSet)
 	{
 		//Damage 계산(Victim쪽에서)
-		auto Monster = Cast<APawn_Monster>(Victim);
+		auto Monster = Cast<ACharacterMonster>(Victim);
 		if (!Monster) continue;
 
 		Monster->OnAttacked(10);
