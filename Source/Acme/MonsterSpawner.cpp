@@ -1,0 +1,73 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "MonsterSpawner.h"
+#include "Components/BoxComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Pawn_Monster.h"
+#include "Util.h"
+
+// Sets default values
+AMonsterSpawner::AMonsterSpawner()
+{
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	Area = CreateDefaultSubobject<UBoxComponent>(TEXT("Area"));
+
+	SetRootComponent(Area);
+
+	MaxPopulation = 10;
+	RespawnInterval = 30.f;
+}
+
+void AMonsterSpawner::Respawn()
+{
+	if (Monsters.Num() == MaxPopulation) return;
+	if (!Area) return;
+
+	while (Monsters.Num() != MaxPopulation)
+	{
+		//Spawn
+		FVector Loc = GetActorLocation();
+		FVector Extand = Area->GetScaledBoxExtent();
+
+		FVector Pos = UKismetMathLibrary::RandomPointInBoundingBox(Loc, Extand);
+
+		Pos.Z += 100;
+
+		FHitResult Result;
+		if (GetWorld()->LineTraceSingleByChannel(Result, Pos, Pos - (0, 0, 1000), ECollisionChannel::ECC_Visibility))
+		{
+			FVector SpawnPos = Result.Location;
+			SpawnPos = SpawnPos + (0, 0, 100);
+
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Pos: %s"), *SpawnPos.ToString()));
+
+			FActorSpawnParameters SpawnParam;
+			SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+			APawn_Monster* Monster = GetWorld()->SpawnActor<APawn_Monster>(MonsterClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+			
+			Monster->OnDied.AddLambda([this, Monster]() { Monsters.Remove(Monster); });
+			Monsters.Add(Monster);
+		}
+	}
+}
+
+// Called when the game starts or when spawned
+void AMonsterSpawner::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	Respawn();
+	GetWorldTimerManager().SetTimer(RespawnHandle, this, &AMonsterSpawner::Respawn, RespawnInterval, true);
+}
+
+// Called every frame
+void AMonsterSpawner::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+

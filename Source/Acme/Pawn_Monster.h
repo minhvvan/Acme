@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "Pawn_Monster.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnDie);
+
 UCLASS()
 class ACME_API APawn_Monster : public APawn
 {
@@ -41,6 +43,8 @@ public:
 
 	UFUNCTION()
 	void OnAttacked(int damage);
+
+	FOnDie OnDied;
 
 protected:
 	UFUNCTION()

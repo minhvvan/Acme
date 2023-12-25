@@ -398,7 +398,10 @@ void AAcmeCharacter::AttackEnd()
 	for (AActor* Victim : VictimSet)
 	{
 		//Damage 계산(Victim쪽에서)
-		Cast<APawn_Monster>(Victim)->OnAttacked(10);
+		auto Monster = Cast<APawn_Monster>(Victim);
+		if (!Monster) continue;
+
+		Monster->OnAttacked(10);
 	}
 
 	VictimSet.Empty();

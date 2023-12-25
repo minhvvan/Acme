@@ -61,12 +61,10 @@ void APawn_Monster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void APawn_Monster::OnAttacked(int damage)
 {
-	if (!StatCompoenent) return;
-
 	int CurrentHP = StatCompoenent->GetCurrentHP();
 	int newHP = CurrentHP - damage;
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("newHP: %d"), newHP));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("newHP: %d"), newHP));
 
 	if (newHP < 0)
 	{
@@ -91,5 +89,7 @@ void APawn_Monster::Die()
 {
 	//Play Die Montage -> ³¡³ª¸é Destroy()
 	Destroy();
+
+	OnDied.Broadcast();
 }
 
