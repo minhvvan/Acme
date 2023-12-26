@@ -14,4 +14,11 @@ class ACME_API UAI_Monster : public UAnimInstance
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(EditAnywhere, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMDeath;
+
+public:
+	UFUNCTION()
+	void PlayDeath();
 };

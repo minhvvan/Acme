@@ -62,6 +62,7 @@ AAcmeCharacter::AAcmeCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ComboIdx = 0;
+	CanAttack = true;
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -91,8 +92,11 @@ void AAcmeCharacter::BeginPlay()
 		//HUD Init
 		Hud->SetHealth(StatCompoenent->GetCurrentHP(), StatCompoenent->GetMaxHP());
 		Hud->SetSatiety(StatCompoenent->GetCurrentST());
+		Hud->SetStamina(StatCompoenent->GetCurrentStamina());
 
 		Hud->BindStatus(StatCompoenent);
+
+		StatCompoenent->OnChangedStamina.AddUObject(this, &AAcmeCharacter::StaminaCheck);
 	}
 
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
@@ -281,14 +285,21 @@ void AAcmeCharacter::CoolDownDash()
 void AAcmeCharacter::StartAttack()
 {
 	if (AnimState == EAnimState::E_Unarmed) return;
+	if (!CanAttack) return;
+
+	GetWorldTimerManager().ClearTimer(StaminaRecoveryTimer);
+	GetWorldTimerManager().SetTimer(StaminaRecoveryTimer,
+		FTimerDelegate::CreateLambda([this]() {
+			StatCompoenent->RecoveryStamina(100);
+			}),
+		5.f, true);
 
 	if (IsCombo)
 	{
 		//combo
 		ComboIdx = (ComboIdx + 1) % 3;
 		AttackQueue.Enqueue(ComboIdx);
-		//TODO: Consume Stamina
-		
+
 		return;
 	}
 
@@ -321,6 +332,8 @@ void AAcmeCharacter::FireAttack()
 
 void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 {
+	FString MontageName = Montage->GetName();
+
 	if (!AttackQueue.IsEmpty())
 	{
 		FlushQueue();
@@ -330,6 +343,18 @@ void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 		IsCombo = false;
 		IsAttacking = false;
 		ComboIdx = 0;
+	}
+
+	if (MontageName == TEXT("AM_Attack") || MontageName == TEXT("AM_JDAttack"))
+	{
+		StatCompoenent->ComsumeStamina(10/*TODO:var*/);
+	}
+
+	if (MontageName == TEXT("AM_Exhaust"))
+	{
+		//stamina recovery
+		StatCompoenent->RecoveryStamina(100);
+		CanAttack = true;
 	}
 }
 
@@ -344,12 +369,10 @@ void AAcmeCharacter::StartJampDashAttack()
 
 void AAcmeCharacter::StartSkill()
 {
-	//TODO: Current Skill execute
 }
 
 void AAcmeCharacter::StartInteract()
 {
-	//TODO: Current Overalp Actor -> Interact
 	if (!OverlapActor.IsValid()) return;
 
 	OverlapActor->Interact();
@@ -429,18 +452,15 @@ void AAcmeCharacter::AttackCheck()
 	//DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, (StartPos - EndPos).Length() / 2, 10, FRotationMatrix::MakeFromZ(Weapon->GetMesh()->GetRightVector()).ToQuat(), FColor::Red, false, 10.f, 0, 1.f);
 }
 
-bool AAcmeCharacter::FullCharged()
+void AAcmeCharacter::StaminaCheck(int Stamina)
 {
-	Hud->SetCrosshairColor(FColor(51.f, 202.f, 255.f));
+	if (Stamina == 0)
+	{
+		AnimInstance->PlayExhaust();
 
-	return true;
-}
-
-void AAcmeCharacter::ResetCharge()
-{
-	Hud->SetPercent(0.f);
-	Hud->SetCrosshairColor(FColor(255.f, 255.f, 255.f, 100.f));
-	Ischarged = false;
+		//TODO: 이동속도 저하, 행동불가
+		CanAttack = false;
+	}
 }
 
 void AAcmeCharacter::FlushQueue()

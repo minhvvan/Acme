@@ -32,6 +32,15 @@ void UAI_Main::PlayDisMantle()
 	}
 }
 
+void UAI_Main::PlayExhaust()
+{
+	if (!Montage_IsPlaying(AMExhaust))
+	{
+		UUtil::DebugPrint("PlayEx");
+		Montage_Play(AMExhaust);
+	}
+}
+
 FName UAI_Main::GetAttackMontageName(int idx)
 {
 	return FName(FString::Printf(TEXT("Attack%d"), idx));

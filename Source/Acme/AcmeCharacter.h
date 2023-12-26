@@ -141,6 +141,9 @@ protected:
 	UFUNCTION()
 	void AttackCheck();
 
+	UFUNCTION()
+	void StaminaCheck(int Stamina);
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -195,6 +198,9 @@ protected:
 	UPROPERTY()
 	FTimerHandle AttackTimer;
 
+	UPROPERTY()
+	FTimerHandle StaminaRecoveryTimer;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> HudClass;
@@ -209,15 +215,6 @@ protected:
 	TSubclassOf<class AActor_Projectile> ProjectileClass;
 
 protected:
-	UFUNCTION()
-	bool FullCharged();
-
-	UFUNCTION()
-	void ResetCharge();
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
-	bool Ischarged;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
 	TWeakObjectPtr<class AActorInteractive> OverlapActor;
 
@@ -235,7 +232,5 @@ public:
 
 	UFUNCTION()
 	void SetOverlapActor(AActorInteractive* actor);
-
-
 };
 

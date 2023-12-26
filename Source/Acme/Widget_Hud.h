@@ -54,12 +54,6 @@ protected:
 
 public:
 	UFUNCTION()
-	void SetPercent(float percent);
-
-	UFUNCTION()
-	void SetCrosshairColor(FColor color);
-
-	UFUNCTION()
 	void SetVisibleActionBorder(bool bVisible);
 
 	UFUNCTION()
@@ -67,6 +61,9 @@ public:
 
 	UFUNCTION()
 	void SetSatiety(int CurrentST);
+
+	UFUNCTION()
+	void SetStamina(int CurrentStamina);
 
 	UFUNCTION()
 	void BindStatus(class UAC_Stat* StatComp);
@@ -77,4 +74,10 @@ private:
 
 	UPROPERTY()
 	float TargetSTPercent;
+
+	UPROPERTY()
+	float TargetStaminaPercent;
+
+	UPROPERTY()
+	float CurrentStaminaPercent;
 };

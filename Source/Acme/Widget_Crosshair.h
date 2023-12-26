@@ -16,7 +16,7 @@ class ACME_API UWidget_Crosshair : public UUserWidget
 	
 protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* PB_Charge;
+	class UImage* PB_Stamina;
 
 	UPROPERTY(EditAnywhere, Category = Progress)
 	UMaterialInstance* PercentMaterial;

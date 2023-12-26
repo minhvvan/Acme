@@ -7,6 +7,7 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "AC_Stat.h"
 #include "Widget_HPBar.h"
+#include "AI_Monster.h"
 
 
 // Sets default values
@@ -28,6 +29,8 @@ void ACharacterMonster::BeginPlay()
 	
 	InitState();
 
+	AnimInstance = Cast<UAI_Monster>(GetMesh()->GetAnimInstance());
+	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &ACharacterMonster::OnMontageEnd);
 }
 
 // Called every frame
@@ -70,9 +73,11 @@ void ACharacterMonster::InitState()
 
 void ACharacterMonster::Die()
 {
-	//Play Die Montage -> ³¡³ª¸é Destroy()
-	Destroy();
-
-	OnDied.Broadcast();
+	AnimInstance->PlayDeath();
 }
 
+void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	Destroy();
+	OnDied.Broadcast();
+}

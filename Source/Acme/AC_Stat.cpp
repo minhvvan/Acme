@@ -8,6 +8,9 @@ UAC_Stat::UAC_Stat()
 	CurrentHP = 100;
 	MaxHP = 100;
 
+	CurrentStamina = 100;
+	MaxStamina = 100;
+
 	CurrentSatiety = 100;
 
 	Strength = 10;
@@ -28,13 +31,14 @@ void UAC_Stat::BeginPlay()
 	//TODO: load data
 
 	//¹è°íÇÄ ¼Òºñ
-	float time = ConsumeTimeSatiety;
-
 	GetWorld()->GetTimerManager().SetTimer(TimerSatiety, 
-		FTimerDelegate::CreateLambda([this, time]() {
+		FTimerDelegate::CreateLambda([this]() {
 			SetCurrentST(GetCurrentST() - ConsumeAmountSatiety);
 		}),
-		time, true);
+		ConsumeTimeSatiety, true);
+
+	//Recovery
+
 }
 
 
@@ -43,7 +47,6 @@ void UAC_Stat::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
 void UAC_Stat::ExeDash()
@@ -67,15 +70,19 @@ void UAC_Stat::ExeDash()
 void UAC_Stat::SetCurrentHP(int HP)
 {
 	CurrentHP = HP;
-
 	OnChangedHP.Broadcast(CurrentHP, MaxHP);
 }
 
 void UAC_Stat::SetCurrentST(int ST)
 {
 	CurrentSatiety = ST;
-
 	OnChangedST.Broadcast(CurrentSatiety);
+}
+
+void UAC_Stat::SetCurrentStamina(int Stamina)
+{
+	CurrentStamina = Stamina;
+	OnChangedStamina.Broadcast(CurrentStamina);
 }
 
 void UAC_Stat::OnAttakced(int damage)
@@ -88,6 +95,22 @@ void UAC_Stat::OnAttakced(int damage)
 void UAC_Stat::OnConsumeSatiety(int amount)
 {
 	int newSatiety = CurrentSatiety - amount;
-	if (newSatiety < 0) newSatiety = 0;
+	if (newSatiety <= 0) newSatiety = 0;
 	SetCurrentST(newSatiety);
+}
+
+void UAC_Stat::ComsumeStamina(int amount)
+{
+	int newCurrentStamina = CurrentStamina - amount;
+	if (newCurrentStamina < 0) newCurrentStamina = 0;
+
+	SetCurrentStamina(newCurrentStamina);
+}
+
+void UAC_Stat::RecoveryStamina(int amount)
+{
+	int newCurrentStamina = CurrentStamina + amount;
+	if (newCurrentStamina > 100) newCurrentStamina = 100;
+
+	SetCurrentStamina(newCurrentStamina);
 }

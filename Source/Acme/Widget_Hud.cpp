@@ -8,6 +8,7 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "AC_Stat.h"
+#include "Util.h"
 
 void UWidget_Hud::NativeOnInitialized()
 {
@@ -49,21 +50,13 @@ void UWidget_Hud::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		float newPercent = FMath::Lerp(CurrentSTPercent, TargetSTPercent, .1);
 		PB_Satiety->SetPercent(newPercent);
 	}
-}
 
-void UWidget_Hud::SetPercent(float percent)
-{
-	if (Crosshair)
+	if (TargetStaminaPercent != CurrentStaminaPercent)
 	{
-		Crosshair->SetPercent(percent);
-	}
-}
-
-void UWidget_Hud::SetCrosshairColor(FColor color)
-{
-	if (Crosshair)
-	{
-		Crosshair->SetColor(color);
+		//interpolate
+		float newPercent = FMath::Lerp(CurrentStaminaPercent, TargetStaminaPercent, .1);
+		Crosshair->SetPercent(newPercent);
+		CurrentStaminaPercent = newPercent;
 	}
 }
 
@@ -78,7 +71,6 @@ void UWidget_Hud::SetHealth(int CurrentHP, int MaxHP)
 	if (!PB_Health || !TxtCurrentHealth || !TxtMaxHealth) return;
 
 	float percentage = float(CurrentHP) / MaxHP;
-
 
 	TargetHPPercent = percentage;
 	TxtCurrentHealth->SetText(FText::AsNumber(CurrentHP));
@@ -95,8 +87,17 @@ void UWidget_Hud::SetSatiety(int CurrentST)
 	TxtCurrentSatiety->SetText(FText::AsNumber(CurrentST));
 }
 
+void UWidget_Hud::SetStamina(int CurrentStamina)
+{
+	if (!Crosshair) return;
+
+	float percentage = float(CurrentStamina) / 100;
+	TargetStaminaPercent = percentage;
+}
+
 void UWidget_Hud::BindStatus(UAC_Stat* StatComp)
 {
 	StatComp->OnChangedHP.AddUObject(this, &UWidget_Hud::SetHealth);
 	StatComp->OnChangedST.AddUObject(this, &UWidget_Hud::SetSatiety);
+	StatComp->OnChangedStamina.AddUObject(this, &UWidget_Hud::SetStamina);
 }

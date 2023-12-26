@@ -10,6 +10,7 @@
 DECLARE_MULTICAST_DELEGATE(FCoolDown);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeHP, int, int);
 DECLARE_MULTICAST_DELEGATE_OneParam(FChangeST, int);
+DECLARE_MULTICAST_DELEGATE_OneParam(FChangeStamina, int);
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -42,10 +43,16 @@ public:
 	int GetCurrentST() { return CurrentSatiety; };
 
 	UFUNCTION()
+	int GetCurrentStamina() { return CurrentStamina; };
+
+	UFUNCTION()
 	void SetCurrentHP(int HP);
 
 	UFUNCTION()
 	void SetCurrentST(int ST);
+
+	UFUNCTION()
+	void SetCurrentStamina(int Stamina);
 
 	UFUNCTION()
 	void OnAttakced(int damage);
@@ -53,11 +60,18 @@ public:
 	UFUNCTION()
 	void OnConsumeSatiety(int amount);
 
+	UFUNCTION()
+	void ComsumeStamina(int amount);
+
+	UFUNCTION()
+	void RecoveryStamina(int amount);
+
 	FCoolDown CDDash;
 	FCoolDown CDSkill;
 
 	FChangeHP OnChangedHP;
 	FChangeST OnChangedST;
+	FChangeStamina OnChangedStamina;
 
 private:
 	FTimerHandle TimerDash;
@@ -80,6 +94,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	int MaxHP;
+
+	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	int CurrentStamina;
+
+	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	int MaxStamina;
 
 	//Æ÷¸¸°¨
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))

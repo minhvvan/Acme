@@ -20,6 +20,9 @@ class ACME_API UAI_Main : public UAnimInstance
 protected:
 	UPROPERTY(EditAnywhere, Category = "Attack", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMAttack;
+	
+	UPROPERTY(EditAnywhere, Category = "Attack", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMJDAttack;	
 
 	UPROPERTY(EditAnywhere, Category = "Equip", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMEquip;
@@ -27,8 +30,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Equip", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMDismantle;	
 	
-	UPROPERTY(EditAnywhere, Category = "Equip", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* AMJDAttack;
+	UPROPERTY(EditAnywhere, Category = "Move", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMExhaust;
 
 public:
 	UFUNCTION()
@@ -41,7 +44,10 @@ public:
 	void PlayEquip();
 
 	UFUNCTION()
-	void PlayDisMantle();
+	void PlayDisMantle();	
+	
+	UFUNCTION()
+	void PlayExhaust();
 
 	UFUNCTION()
 	FName GetAttackMontageName(int idx);

@@ -41,8 +41,6 @@ void AMonsterSpawner::Respawn()
 		{
 			FVector SpawnPos = Result.Location;
 
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Pos: %s"), *SpawnPos.ToString()));
-
 			FActorSpawnParameters SpawnParam;
 			SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 

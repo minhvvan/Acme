@@ -3,3 +3,7 @@
 
 #include "AI_Monster.h"
 
+void UAI_Monster::PlayDeath()
+{
+	if (!Montage_IsPlaying(AMDeath)) Montage_Play(AMDeath);
+}
