@@ -232,5 +232,9 @@ public:
 
 	UFUNCTION()
 	void SetOverlapActor(AActorInteractive* actor);
+
+public:
+	UFUNCTION()
+	void AddElement(EElement element);
 };
 

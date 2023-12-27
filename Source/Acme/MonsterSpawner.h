@@ -4,18 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "DefaultSpawner.h"
 #include "MonsterSpawner.generated.h"
 
 class ACharacterMonster;
 
 UCLASS()
-class ACME_API AMonsterSpawner : public AActor
+class ACME_API AMonsterSpawner : public ADefaultSpawner
 {
 	GENERATED_BODY()
 	
-	UPROPERTY(EditAnywhere, Category = Monster)
-	class UBoxComponent* Area;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Monster, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ACharacterMonster> MonsterClass;
 
@@ -26,8 +24,7 @@ public:
 	// Sets default values for this actor's properties
 	AMonsterSpawner();
 
-	UFUNCTION()
-	void Respawn();
+	virtual void Respawn() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -36,14 +33,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-protected:
-	UPROPERTY(EditAnywhere, Category = Setting, meta = (AllowPrivateAccess = "true"))
-	int MaxPopulation;
-
-	UPROPERTY(EditAnywhere, Category = Setting, meta = (AllowPrivateAccess = "true"))
-	float RespawnInterval;
-
-private:
-	FTimerHandle RespawnHandle;
 };

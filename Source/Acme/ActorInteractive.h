@@ -45,5 +45,5 @@ public:
 	void SetVisibleIndicator(bool bVisible);
 
 	UFUNCTION()
-	void Interact();
+	virtual void Interact();
 };

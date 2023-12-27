@@ -489,3 +489,10 @@ void AAcmeCharacter::SetOverlapActor(AActorInteractive* actor)
 	OverlapActor->SetVisibleIndicator(true);
 	Hud->SetVisibleActionBorder(true);
 }
+
+void AAcmeCharacter::AddElement(EElement element)
+{
+	if (!StatCompoenent) return;
+
+	StatCompoenent->AddElement(element);
+}

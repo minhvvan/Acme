@@ -37,8 +37,6 @@ void UAC_Stat::BeginPlay()
 		}),
 		ConsumeTimeSatiety, true);
 
-	//Recovery
-
 }
 
 
@@ -113,4 +111,45 @@ void UAC_Stat::RecoveryStamina(int amount)
 	if (newCurrentStamina > 100) newCurrentStamina = 100;
 
 	SetCurrentStamina(newCurrentStamina);
+}
+
+void UAC_Stat::AddElement(EElement element)
+{
+	if (Elements.Contains(element))
+	{
+		Elements[element]++;
+	}
+	else
+	{
+		Elements.Add({ element, 1 });
+	}
+
+
+	for (auto e : Elements)
+	{
+		switch (e.Key)
+		{
+		case EElement::E_Fire:
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Fire: %d"), e.Value));
+			break;
+		case EElement::E_Water:
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Water: %d"), e.Value));
+			break;
+		case EElement::E_Earth:
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Earth: %d"), e.Value));
+			break;
+		case EElement::E_Air:
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Air: %d"), e.Value));
+			break;
+		case EElement::E_Ice:
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Ice: %d"), e.Value));
+			break;
+		case EElement::E_Thunder:
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Thunder: %d"), e.Value));
+			break;
+		case EElement::E_Normal:
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Normal: %d"), e.Value));
+			break;
+		}
+	}
 }

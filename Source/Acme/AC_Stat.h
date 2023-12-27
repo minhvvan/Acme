@@ -117,4 +117,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	int ConsumeAmountSatiety;
+
+public:
+	UFUNCTION()
+	void AddElement(EElement element);
 };

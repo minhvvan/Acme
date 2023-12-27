@@ -2,20 +2,15 @@
 
 
 #include "MonsterSpawner.h"
+#include "CharacterMonster.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "CharacterMonster.h"
-#include "Util.h"
 
 // Sets default values
 AMonsterSpawner::AMonsterSpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	Area = CreateDefaultSubobject<UBoxComponent>(TEXT("Area"));
-
-	SetRootComponent(Area);
 
 	MaxPopulation = 10;
 	RespawnInterval = 30.f;

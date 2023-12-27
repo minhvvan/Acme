@@ -36,7 +36,6 @@ void UAI_Main::PlayExhaust()
 {
 	if (!Montage_IsPlaying(AMExhaust))
 	{
-		UUtil::DebugPrint("PlayEx");
 		Montage_Play(AMExhaust);
 	}
 }

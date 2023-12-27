@@ -35,7 +35,7 @@ enum class EElement : uint8
 	E_Thunder UMETA(DisplayName = "Thunder"),
 	E_Normal UMETA(DisplayName = "Normal"),
 };
-
+ENUM_RANGE_BY_COUNT(EElement, EElement::E_Normal);
 
 
 class ACME_API GlobalEnum
