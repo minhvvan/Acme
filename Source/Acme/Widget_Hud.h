@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "GlobalEnum.h"
 #include "Widget_Hud.generated.h"
 
 /**
@@ -63,7 +64,10 @@ public:
 	void SetSatiety(int CurrentST);
 
 	UFUNCTION()
-	void SetStamina(int CurrentStamina);
+	void SetStamina(int CurrentStamina);	
+	
+	UFUNCTION()
+	void ChangeElement(EElement element, int amount);
 
 	UFUNCTION()
 	void BindStatus(class UAC_Stat* StatComp);

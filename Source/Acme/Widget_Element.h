@@ -34,7 +34,13 @@ public:
 	void SetKeyImage(int Key);
 
 	UFUNCTION()
-	void SetTxtNum(int num);
+	void SetTxtNum(int num);	
+	
+	UFUNCTION()
+	int GetTxtNum();
+
+	UFUNCTION()
+	EElement GetCurrentElement();
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -42,4 +48,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TMap<int, UTexture2D*> KeyImages;
+
+	UPROPERTY(VisibleAnywhere)
+	EElement CurrentElement;
+
+	UPROPERTY(VisibleAnywhere)
+	int CurrentAmount;
 };

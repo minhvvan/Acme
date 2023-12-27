@@ -95,9 +95,35 @@ void UWidget_Hud::SetStamina(int CurrentStamina)
 	TargetStaminaPercent = percentage;
 }
 
+void UWidget_Hud::ChangeElement(EElement element, int amount)
+{
+	//1234중 하나에 있다면 change
+
+	if (Element_1->GetCurrentElement() == element)
+	{
+		Element_1->SetTxtNum(Element_1->GetTxtNum() + 1);
+	}
+
+	if (Element_2->GetCurrentElement() == element)
+	{
+		Element_2->SetTxtNum(Element_2->GetTxtNum() + 1);
+	}
+
+	if (Element_3->GetCurrentElement() == element)
+	{
+		Element_3->SetTxtNum(Element_3->GetTxtNum() + 1);
+	}
+
+	if (Element_4->GetCurrentElement() == element)
+	{
+		Element_4->SetTxtNum(Element_4->GetTxtNum() + 1);
+	}
+}
+
 void UWidget_Hud::BindStatus(UAC_Stat* StatComp)
 {
 	StatComp->OnChangedHP.AddUObject(this, &UWidget_Hud::SetHealth);
 	StatComp->OnChangedST.AddUObject(this, &UWidget_Hud::SetSatiety);
 	StatComp->OnChangedStamina.AddUObject(this, &UWidget_Hud::SetStamina);
+	StatComp->OnChangedElements.AddUObject(this, &UWidget_Hud::ChangeElement);
 }

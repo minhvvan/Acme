@@ -6,9 +6,6 @@
 #include "UObject/NoExportTypes.h"
 #include "Util.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class ACME_API UUtil : public UObject
 {

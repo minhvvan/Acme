@@ -123,4 +123,6 @@ void UAC_Stat::AddElement(EElement element)
 	{
 		Elements.Add({ element, 1 });
 	}
+
+	OnChangedElements.Broadcast(element, 1);
 }

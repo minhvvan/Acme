@@ -8,6 +8,7 @@
 void UWidget_Element::SetElementImage(EElement element)
 {
 	ImgElement->SetBrushFromTexture(ElementImages[element]);
+	CurrentElement = element;
 }
 
 void UWidget_Element::SetKeyImage(int Key)
@@ -18,4 +19,15 @@ void UWidget_Element::SetKeyImage(int Key)
 void UWidget_Element::SetTxtNum(int num)
 {
 	TxtNum->SetText(FText::AsNumber(num));
+	CurrentAmount = num;
+}
+
+int UWidget_Element::GetTxtNum()
+{
+	return 0;
+}
+
+EElement UWidget_Element::GetCurrentElement()
+{
+	return CurrentElement;
 }

@@ -11,6 +11,7 @@ DECLARE_MULTICAST_DELEGATE(FCoolDown);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeHP, int, int);
 DECLARE_MULTICAST_DELEGATE_OneParam(FChangeST, int);
 DECLARE_MULTICAST_DELEGATE_OneParam(FChangeStamina, int);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeElement, EElement, int);
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -72,6 +73,7 @@ public:
 	FChangeHP OnChangedHP;
 	FChangeST OnChangedST;
 	FChangeStamina OnChangedStamina;
+	FChangeElement OnChangedElements;
 
 private:
 	FTimerHandle TimerDash;
