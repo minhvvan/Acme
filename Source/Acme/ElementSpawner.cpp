@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "InteractiveElement.h"
+#include "GlobalConst.h"
 
 AElementSpawner::AElementSpawner()
 {
@@ -36,6 +37,28 @@ void AElementSpawner::Respawn()
 
 			AInteractiveElement* Element = GetWorld()->SpawnActor<AInteractiveElement>(ElementClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
 			Element->SetElementType(ElementType);
+
+			switch (ElementType)
+			{
+			case EElement::E_Fire:
+				Element->SetName(GlobalConst::FireElementName);
+				break;
+			case EElement::E_Water:
+				Element->SetName(GlobalConst::WaterElementName);
+				break;
+			case EElement::E_Earth:
+				Element->SetName(GlobalConst::EarthElementName);
+				break;
+			case EElement::E_Air:
+				Element->SetName(GlobalConst::AirElementName);
+				break;
+			case EElement::E_Ice:
+				Element->SetName(GlobalConst::IceElementName);
+				break;
+			case EElement::E_Thunder:
+				Element->SetName(GlobalConst::ThunderElementName);
+				break;
+			}
 
 			Elements.Add(Element);
 		}

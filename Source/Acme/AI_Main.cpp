@@ -40,6 +40,14 @@ void UAI_Main::PlayExhaust()
 	}
 }
 
+void UAI_Main::PlayInteract()
+{
+	if (!Montage_IsPlaying(AMInteract))
+	{
+		Montage_Play(AMInteract);
+	}
+}
+
 FName UAI_Main::GetAttackMontageName(int idx)
 {
 	return FName(FString::Printf(TEXT("Attack%d"), idx));
@@ -63,4 +71,9 @@ void UAI_Main::AnimNotify_AttackStart()
 void UAI_Main::AnimNotify_AttackEnd()
 {
 	OnAttackEnd.Broadcast();
+}
+
+void UAI_Main::AnimNotify_Interact()
+{
+	OnInteract.Broadcast();
 }

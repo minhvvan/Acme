@@ -139,7 +139,10 @@ protected:
 	void AttackEnd();
 
 	UFUNCTION()
-	void AttackCheck();
+	void AttackCheck();	
+	
+	UFUNCTION()
+	void Interact();
 
 	UFUNCTION()
 	void StaminaCheck(int Stamina);

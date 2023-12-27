@@ -29,7 +29,7 @@ enum class EElement : uint8
 {
 	E_Fire UMETA(DisplayName = "Fire"),
 	E_Water UMETA(DisplayName = "Water"),
-	E_Earth UMETA(DisplayName = "Ground"),
+	E_Earth UMETA(DisplayName = "Earth"),
 	E_Air UMETA(DisplayName = "Air"),
 	E_Ice UMETA(DisplayName = "Ice"),
 	E_Thunder UMETA(DisplayName = "Thunder"),

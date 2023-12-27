@@ -3,6 +3,8 @@
 
 #include "InteractiveElement.h"
 #include "AcmeCharacter.h"
+#include "WidgetIndicator.h"
+#include "Components/WidgetComponent.h"
 
 AInteractiveElement::AInteractiveElement()
 {

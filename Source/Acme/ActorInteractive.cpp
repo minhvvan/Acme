@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "AcmeCharacter.h"
+#include "WidgetIndicator.h"
 #include "Util.h"
 
 
@@ -24,12 +25,19 @@ AActorInteractive::AActorInteractive()
 
 	Indicator = CreateDefaultSubobject<UWidgetComponent>(TEXT("Indicator"));
 	Indicator->SetupAttachment(RootComponent);
+
+	Name = TEXT("Name");
 }
 
 // Called when the game starts or when spawned
 void AActorInteractive::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (UWidgetIndicator* IndicatorWidget = Cast<UWidgetIndicator>(Indicator->GetWidget()))
+	{
+		IndicatorWidget->SetName(Name);
+	}
 	
 	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &AActorInteractive::OnBeginOverlap);
 	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &AActorInteractive::OnEndOverlap);
@@ -76,4 +84,13 @@ void AActorInteractive::Interact()
 {
 	//OverlapedCharacter->Do Something
 	Destroy();
+}
+
+void AActorInteractive::SetName(FString newName)
+{
+	Name = newName;
+	if (UWidgetIndicator* IndicatorWidget = Cast<UWidgetIndicator>(Indicator->GetWidget()))
+	{
+		IndicatorWidget->SetName(newName);
+	}
 }

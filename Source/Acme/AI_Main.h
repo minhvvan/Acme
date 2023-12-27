@@ -10,6 +10,7 @@ DECLARE_MULTICAST_DELEGATE(FOnEquip);
 DECLARE_MULTICAST_DELEGATE(FOnDismantle);
 DECLARE_MULTICAST_DELEGATE(FOnAttackStart);
 DECLARE_MULTICAST_DELEGATE(FOnAttackEnd);
+DECLARE_MULTICAST_DELEGATE(FOnInteract);
 
 
 UCLASS()
@@ -31,7 +32,10 @@ protected:
 	class UAnimMontage* AMDismantle;	
 	
 	UPROPERTY(EditAnywhere, Category = "Move", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* AMExhaust;
+	class UAnimMontage* AMExhaust;	
+	
+	UPROPERTY(EditAnywhere, Category = "Move", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMInteract;
 
 public:
 	UFUNCTION()
@@ -47,7 +51,10 @@ public:
 	void PlayDisMantle();	
 	
 	UFUNCTION()
-	void PlayExhaust();
+	void PlayExhaust();	
+	
+	UFUNCTION()
+	void PlayInteract();
 
 	UFUNCTION()
 	FName GetAttackMontageName(int idx);
@@ -56,6 +63,7 @@ public:
 	FOnDismantle OnDismantle;
 	FOnAttackStart OnAttackStart;
 	FOnAttackEnd OnAttackEnd;
+	FOnInteract OnInteract;
 
 private:
 	UFUNCTION()
@@ -69,4 +77,7 @@ private:
 
 	UFUNCTION()
 	void AnimNotify_AttackEnd();
+
+	UFUNCTION()
+	void AnimNotify_Interact();
 };

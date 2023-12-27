@@ -37,6 +37,9 @@ protected:
 	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UPROPERTY(EditAnywhere, Category = Default)
+	FString Name;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -46,4 +49,7 @@ public:
 
 	UFUNCTION()
 	virtual void Interact();
+
+	UFUNCTION()
+	void SetName(FString newName);
 };

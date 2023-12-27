@@ -105,6 +105,7 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnDismantle.AddUObject(this, &AAcmeCharacter::DismantleWeapon);
 	AnimInstance->OnAttackStart.AddUObject(this, &AAcmeCharacter::AttackStart);
 	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::AttackEnd);
+	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
@@ -175,7 +176,10 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 void AAcmeCharacter::Move(const FInputActionValue& Value)
 {
-	if (IsAttacking) return;
+	if (IsAttacking)
+	{
+		AnimInstance->StopAllMontages(-1.f);
+	}
 
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -347,7 +351,10 @@ void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 
 	if (MontageName == TEXT("AM_Attack") || MontageName == TEXT("AM_JDAttack"))
 	{
-		StatCompoenent->ComsumeStamina(10/*TODO:var*/);
+		if (!bInterrupted)
+		{
+			StatCompoenent->ComsumeStamina(10/*TODO:var*/);
+		}
 	}
 
 	if (MontageName == TEXT("AM_Exhaust"))
@@ -374,8 +381,9 @@ void AAcmeCharacter::StartSkill()
 void AAcmeCharacter::StartInteract()
 {
 	if (!OverlapActor.IsValid()) return;
+	if (!AnimInstance) return;
 
-	OverlapActor->Interact();
+	AnimInstance->PlayInteract();
 }
 
 void AAcmeCharacter::ChangeEquip()
@@ -450,6 +458,12 @@ void AAcmeCharacter::AttackCheck()
 		}
 	}
 	//DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, (StartPos - EndPos).Length() / 2, 10, FRotationMatrix::MakeFromZ(Weapon->GetMesh()->GetRightVector()).ToQuat(), FColor::Red, false, 10.f, 0, 1.f);
+}
+
+void AAcmeCharacter::Interact()
+{
+	if (!OverlapActor.Get()) return;
+	OverlapActor->Interact();
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)
