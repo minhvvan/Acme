@@ -254,7 +254,6 @@ void AAcmeCharacter::StartDash()
 	if (!CanDash) return;
 
 	IsDashing = true;
-
 	FVector Dir;
 
 	if (DashForward != 0)

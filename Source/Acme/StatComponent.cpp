@@ -52,21 +52,6 @@ void UStatComponent::BeginPlay()
 void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	float time = CoolTimedash - (Dexterity * .01);
-
-	if (time <= 0)
-	{
-		CDDash.Broadcast();
-		return;
-	}
-
-	GetWorld()->GetTimerManager().SetTimer(
-		TimerDash,
-		FTimerDelegate::CreateLambda([this, time]() {
-			CDDash.Broadcast();
-			}),
-		time, false);
 }
 
 
@@ -80,12 +65,12 @@ void UStatComponent::ExeDash()
 		return;
 	}
 
-	GetWorld()->GetTimerManager().SetTimer(
-		TimerDash,
-		FTimerDelegate::CreateLambda([this, time]() {
-			CDDash.Broadcast();
-			}),
-		time, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerDash, FTimerDelegate::CreateLambda(
+		[this]()->void
+		{
+			this->CDDash.Broadcast();
+		}
+	), time, false);
 }
 
 
