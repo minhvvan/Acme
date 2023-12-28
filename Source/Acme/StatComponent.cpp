@@ -1,11 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AC_Stat.h"
+#include "StatComponent.h"
 #include "Util.h"
 
-UAC_Stat::UAC_Stat()
+// Sets default values for this component's properties
+UStatComponent::UStatComponent()
 {
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
 	CurrentHP = 100;
@@ -27,34 +30,48 @@ UAC_Stat::UAC_Stat()
 
 
 // Called when the game starts
-void UAC_Stat::BeginPlay()
+void UStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//TODO: load data
-
 	//¹è°íÇÄ ¼Òºñ
-	GetWorld()->GetTimerManager().SetTimer(TimerSatiety, 
+	GetWorld()->GetTimerManager().SetTimer(TimerSatiety,
 		FTimerDelegate::CreateLambda([this]() {
 			SetCurrentST(GetCurrentST() - ConsumeAmountSatiety);
-		}),
+			}),
 		ConsumeTimeSatiety, true);
 
 	//CurrentElements.Add({ EElement::E_Fire, 0 });
 	//CurrentElements.Add({ EElement::E_Water, 0 });
 	//CurrentElements.Add({ EElement::E_Earth, 0 });
 	//CurrentElements.Add({ EElement::E_Air, 0 });
+	
 }
 
 
 // Called every frame
-void UAC_Stat::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	float time = CoolTimedash - (Dexterity * .01);
+
+	if (time <= 0)
+	{
+		CDDash.Broadcast();
+		return;
+	}
+
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerDash,
+		FTimerDelegate::CreateLambda([this, time]() {
+			CDDash.Broadcast();
+			}),
+		time, false);
 }
 
-void UAC_Stat::ExeDash()
+
+void UStatComponent::ExeDash()
 {
 	float time = CoolTimedash - (Dexterity * .01);
 
@@ -67,44 +84,45 @@ void UAC_Stat::ExeDash()
 	GetWorld()->GetTimerManager().SetTimer(
 		TimerDash,
 		FTimerDelegate::CreateLambda([this, time]() {
-				CDDash.Broadcast();
-			}), 
+			CDDash.Broadcast();
+			}),
 		time, false);
 }
 
-void UAC_Stat::SetCurrentHP(int HP)
+
+void UStatComponent::SetCurrentHP(int HP)
 {
 	CurrentHP = HP;
 	OnChangedHP.Broadcast(CurrentHP, MaxHP);
 }
 
-void UAC_Stat::SetCurrentST(int ST)
+void UStatComponent::SetCurrentST(int ST)
 {
 	CurrentSatiety = ST;
 	OnChangedST.Broadcast(CurrentSatiety);
 }
 
-void UAC_Stat::SetCurrentStamina(int Stamina)
+void UStatComponent::SetCurrentStamina(int Stamina)
 {
 	CurrentStamina = Stamina;
 	OnChangedStamina.Broadcast(CurrentStamina);
 }
 
-void UAC_Stat::OnAttakced(int damage)
+void UStatComponent::OnAttakced(int damage)
 {
 	int newHP = CurrentHP - damage;
 	if (newHP < 0) newHP = 0;
 	SetCurrentHP(newHP);
 }
 
-void UAC_Stat::OnConsumeSatiety(int amount)
+void UStatComponent::OnConsumeSatiety(int amount)
 {
 	int newSatiety = CurrentSatiety - amount;
 	if (newSatiety <= 0) newSatiety = 0;
 	SetCurrentST(newSatiety);
 }
 
-void UAC_Stat::ComsumeStamina(int amount)
+void UStatComponent::ComsumeStamina(int amount)
 {
 	int newCurrentStamina = CurrentStamina - amount;
 	if (newCurrentStamina < 0) newCurrentStamina = 0;
@@ -112,7 +130,7 @@ void UAC_Stat::ComsumeStamina(int amount)
 	SetCurrentStamina(newCurrentStamina);
 }
 
-void UAC_Stat::RecoveryStamina(int amount)
+void UStatComponent::RecoveryStamina(int amount)
 {
 	int newCurrentStamina = CurrentStamina + amount;
 	if (newCurrentStamina > 100) newCurrentStamina = 100;
@@ -120,7 +138,7 @@ void UAC_Stat::RecoveryStamina(int amount)
 	SetCurrentStamina(newCurrentStamina);
 }
 
-EElement UAC_Stat::GetElementByNum(int num)
+EElement UStatComponent::GetElementByNum(int num)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("num: %d"), num));
 
@@ -132,7 +150,7 @@ EElement UAC_Stat::GetElementByNum(int num)
 	return EElement::E_Normal;
 }
 
-void UAC_Stat::AddElement(EElement element)
+void UStatComponent::AddElement(EElement element)
 {
 	if (Elements.Contains(element))
 	{
@@ -146,7 +164,7 @@ void UAC_Stat::AddElement(EElement element)
 	OnChangedElements.Broadcast(element, 1);
 }
 
-void UAC_Stat::ConsumeElement(EElement element)
+void UStatComponent::ConsumeElement(EElement element)
 {
 	if (Elements.Find(element)) Elements[element]--;
 }

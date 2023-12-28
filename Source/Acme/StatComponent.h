@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "GlobalEnum.h"
-#include "AC_Stat.generated.h"
+#include "StatComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeHP, int, int);
 DECLARE_MULTICAST_DELEGATE_OneParam(FChangeST, int);
@@ -13,21 +13,20 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FChangeStamina, int);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeElement, EElement, int);
 DECLARE_MULTICAST_DELEGATE(FCoolDown);
 
-
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class ACME_API UAC_Stat : public UActorComponent
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class ACME_API UStatComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
+public:	
 	// Sets default values for this component's properties
-	UAC_Stat();
+	UStatComponent();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -132,4 +131,5 @@ public:
 
 	UFUNCTION()
 	void ConsumeElement(EElement element);
+		
 };

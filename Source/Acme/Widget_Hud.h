@@ -70,7 +70,7 @@ public:
 	void ChangeElement(EElement element, int amount);
 
 	UFUNCTION()
-	void BindStatus(class UAC_Stat* StatComp);
+	void BindStatus(class UStatComponent* StatComp);
 
 private:
 	UPROPERTY()

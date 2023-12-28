@@ -62,9 +62,21 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* JumpDashAttack;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Element1Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Element2Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Element3Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Element4Action;
+
 	//stat comp
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
-	class UAC_Stat* StatCompoenent;
+	class UStatComponent* StatCompoenent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	class AActor_Weapon* Weapon;
@@ -147,16 +159,17 @@ protected:
 	UFUNCTION()
 	void StaminaCheck(int Stamina);
 
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	// To add mapping context
-	virtual void BeginPlay();
+	UFUNCTION()
+	void SetActiveElementOne();
 
-	virtual void Tick(float DeltaSeconds);
+	UFUNCTION()
+	void SetActiveElementTwo();
 
-	virtual void PostInitializeComponents();
+	UFUNCTION()
+	void SetActiveElementThree();
+
+	UFUNCTION()
+	void SetActiveElementFour();
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -198,6 +211,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
 	int ComboIdx;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
+	EElement ActiveElement;
+
 	UPROPERTY()
 	FTimerHandle AttackTimer;
 
@@ -236,8 +252,23 @@ public:
 	UFUNCTION()
 	void SetOverlapActor(AActorInteractive* actor);
 
+	UFUNCTION()
+	void ChangeWalkSpeed(float amount);
+
+
 public:
 	UFUNCTION()
 	void AddElement(EElement element);
+
+protected:
+	// APawn interface
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	// To add mapping context
+	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaSeconds);
+
+	virtual void PostInitializeComponents();
 };
 

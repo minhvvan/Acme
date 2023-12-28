@@ -7,7 +7,7 @@
 #include "Components/Border.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-#include "AC_Stat.h"
+#include "StatComponent.h"
 #include "Util.h"
 
 void UWidget_Hud::NativeOnInitialized()
@@ -120,7 +120,7 @@ void UWidget_Hud::ChangeElement(EElement element, int amount)
 	}
 }
 
-void UWidget_Hud::BindStatus(UAC_Stat* StatComp)
+void UWidget_Hud::BindStatus(UStatComponent* StatComp)
 {
 	StatComp->OnChangedHP.AddUObject(this, &UWidget_Hud::SetHealth);
 	StatComp->OnChangedST.AddUObject(this, &UWidget_Hud::SetSatiety);

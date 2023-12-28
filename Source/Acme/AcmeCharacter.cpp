@@ -11,7 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
-#include "AC_Stat.h"
+#include "StatComponent.h"
 #include "AI_Main.h"
 #include "Widget_Hud.h"
 #include "Util.h"
@@ -58,7 +58,7 @@ AAcmeCharacter::AAcmeCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	StatCompoenent = CreateDefaultSubobject<UAC_Stat>(TEXT("StatCompoenent"));
+	StatCompoenent = CreateDefaultSubobject<UStatComponent>(TEXT("StatCompoenent"));
 	PrimaryActorTick.bCanEverTick = true;
 
 	ComboIdx = 0;
@@ -160,6 +160,7 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	
 		//Attack
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartAttack);
+		EnhancedInputComponent->BindAction(JumpDashAttack, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartJampDashAttack);
 	
 		//Skill
 		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSkill);
@@ -170,7 +171,11 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Equip
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::ChangeEquip);
 	
-		EnhancedInputComponent->BindAction(JumpDashAttack, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartJampDashAttack);
+		//Element
+		EnhancedInputComponent->BindAction(Element1Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementOne);
+		EnhancedInputComponent->BindAction(Element2Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementTwo);
+		EnhancedInputComponent->BindAction(Element3Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementThree);
+		EnhancedInputComponent->BindAction(Element4Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementFour);
 	}
 }
 
@@ -362,6 +367,7 @@ void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 		//stamina recovery
 		StatCompoenent->RecoveryStamina(100);
 		CanAttack = true;
+		ChangeWalkSpeed(100);
 	}
 }
 
@@ -472,9 +478,35 @@ void AAcmeCharacter::StaminaCheck(int Stamina)
 	{
 		AnimInstance->PlayExhaust();
 
-		//TODO: 이동속도 저하, 행동불가
 		CanAttack = false;
+		ChangeWalkSpeed(-100 /*TODO: Var*/);
 	}
+}
+
+void AAcmeCharacter::SetActiveElementOne()
+{
+	if (!StatCompoenent) return;
+	ActiveElement = StatCompoenent->GetElementByNum(1);
+	
+	//TODO: fx
+}
+
+void AAcmeCharacter::SetActiveElementTwo()
+{
+	if (!StatCompoenent) return;
+	ActiveElement = StatCompoenent->GetElementByNum(2);
+}
+
+void AAcmeCharacter::SetActiveElementThree()
+{
+	if (!StatCompoenent) return;
+	ActiveElement = StatCompoenent->GetElementByNum(3);
+}
+
+void AAcmeCharacter::SetActiveElementFour()
+{
+	if (!StatCompoenent) return;
+	ActiveElement = StatCompoenent->GetElementByNum(4);
 }
 
 void AAcmeCharacter::FlushQueue()
@@ -494,14 +526,22 @@ void AAcmeCharacter::SetOverlapActor(AActorInteractive* actor)
 	{
 		if (OverlapActor != nullptr) OverlapActor->SetVisibleIndicator(false);
 		OverlapActor.Reset();
-		Hud->SetVisibleActionBorder(false);
+		if (Hud) Hud->SetVisibleActionBorder(false);
 		return;
 	}
 
 	if (OverlapActor != nullptr) OverlapActor->SetVisibleIndicator(false);
 	OverlapActor = actor;
 	OverlapActor->SetVisibleIndicator(true);
-	Hud->SetVisibleActionBorder(true);
+	if(Hud) Hud->SetVisibleActionBorder(true);
+}
+
+void AAcmeCharacter::ChangeWalkSpeed(float amount)
+{
+	UCharacterMovementComponent* Movement = GetCharacterMovement();
+	if (!Movement) return;
+
+	Movement->MaxWalkSpeed += amount;
 }
 
 void AAcmeCharacter::AddElement(EElement element)
