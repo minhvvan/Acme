@@ -41,11 +41,10 @@ void UStatComponent::BeginPlay()
 			}),
 		ConsumeTimeSatiety, true);
 
-	//CurrentElements.Add({ EElement::E_Fire, 0 });
-	//CurrentElements.Add({ EElement::E_Water, 0 });
-	//CurrentElements.Add({ EElement::E_Earth, 0 });
-	//CurrentElements.Add({ EElement::E_Air, 0 });
-	
+	CurrentElements.Add(EElement::E_Fire);
+	CurrentElements.Add(EElement::E_Water);
+	CurrentElements.Add(EElement::E_Earth);
+	CurrentElements.Add(EElement::E_Air);
 }
 
 
@@ -140,13 +139,15 @@ void UStatComponent::RecoveryStamina(int amount)
 
 EElement UStatComponent::GetElementByNum(int num)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("num: %d"), num));
+	auto ElementType = CurrentElements[num - 1];
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Size: %d"), ElementType));
 
-	//auto Element = CurrentElements[num - 1];
-	//if (Element.Value == 0) return EElement::E_Normal;
+	if (!Elements.Find(ElementType)) return EElement::E_Normal;
+	if (Elements[ElementType] == 0) return EElement::E_Normal;
 
-	//ConsumeElement(Element.Key);
-	//return Element.Key;
+	ConsumeElement(ElementType);
+	//return ElementType;
+
 	return EElement::E_Normal;
 }
 
@@ -167,4 +168,6 @@ void UStatComponent::AddElement(EElement element)
 void UStatComponent::ConsumeElement(EElement element)
 {
 	if (Elements.Find(element)) Elements[element]--;
+
+	OnChangedElements.Broadcast(element, -1);
 }

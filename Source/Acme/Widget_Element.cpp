@@ -24,7 +24,7 @@ void UWidget_Element::SetTxtNum(int num)
 
 int UWidget_Element::GetTxtNum()
 {
-	return 0;
+	return CurrentAmount;
 }
 
 EElement UWidget_Element::GetCurrentElement()

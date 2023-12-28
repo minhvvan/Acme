@@ -113,7 +113,8 @@ private:
 	UPROPERTY()
 	TMap<EElement, int> Elements;
 
-	TArray<TPair<EElement, int>> CurrentElements;
+	UPROPERTY()
+	TArray<EElement> CurrentElements;
 
 	//Others
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
