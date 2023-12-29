@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "GlobalEnum.h"
 #include "Widget_HPBar.generated.h"
 
 /**
@@ -16,8 +17,10 @@ class ACME_API UWidget_HPBar : public UUserWidget
 	
 protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UProgressBar* PB_HP;
-
+	class UProgressBar* PB_HP;	
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTileView* TV_Element;
 
 public:
 	UFUNCTION()
@@ -25,6 +28,9 @@ public:
 
 	UFUNCTION()
 	void BindDelegate(class UMonsterStatComponent* StatComp);
+
+	UFUNCTION()
+	void AddElement(EElement element);
 
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);

@@ -3,7 +3,10 @@
 
 #include "Widget_HPBar.h"
 #include "Components/ProgressBar.h"
+#include "Components/TileView.h"
 #include "MonsterStatComponent.h"
+#include "ElementData.h"
+#include "Util.h"
 
 void UWidget_HPBar::SetHPPercent(int CurrentHP, int MaxHP)
 {
@@ -15,6 +18,14 @@ void UWidget_HPBar::SetHPPercent(int CurrentHP, int MaxHP)
 void UWidget_HPBar::BindDelegate(UMonsterStatComponent* StatComp)
 {
 	StatComp->OnChangedHP.AddUObject(this, &UWidget_HPBar::SetHPPercent);
+}
+
+void UWidget_HPBar::AddElement(EElement element)
+{
+	UElementData* Data = NewObject<UElementData>();
+	Data->SetElement(element);
+
+	TV_Element->AddItem(Data);
 }
 
 void UWidget_HPBar::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

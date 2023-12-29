@@ -56,7 +56,11 @@ void ACharacterMonster::OnAttacked(int damage, EElement ElementType)
 	IsCombat = true;
 	HPBar->SetVisibility(true);
 
-	ElementReaction(ElementType);
+	if (ElementType != EElement::E_Normal)
+	{
+		Cast<UWidget_HPBar>(HPBar->GetWidget())->AddElement(ElementType);
+		ElementReaction(ElementType);
+	}
 
 	GetWorldTimerManager().SetTimer(CombatTimer, FTimerDelegate::CreateLambda(
 		[this]() {

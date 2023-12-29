@@ -63,6 +63,8 @@ AAcmeCharacter::AAcmeCharacter()
 
 	ComboIdx = 0;
 	CanAttack = true;
+
+	ActiveElement = EElement::E_Normal;
 }
 
 void AAcmeCharacter::BeginPlay()
