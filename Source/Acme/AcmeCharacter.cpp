@@ -357,7 +357,7 @@ void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
 	{
 		if (!bInterrupted)
 		{
-			StatCompoenent->ComsumeStamina(10/*TODO:var*/);
+			StatCompoenent->ConsumeStamina(10/*TODO:var*/);
 		}
 	}
 
@@ -437,7 +437,7 @@ void AAcmeCharacter::AttackEnd()
 		auto Monster = Cast<ACharacterMonster>(Victim);
 		if (!Monster) continue;
 
-		Monster->OnAttacked(10);
+		Monster->OnAttacked(10, ActiveElement);
 	}
 
 	VictimSet.Empty();

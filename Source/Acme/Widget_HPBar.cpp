@@ -3,7 +3,7 @@
 
 #include "Widget_HPBar.h"
 #include "Components/ProgressBar.h"
-#include "AC_Stat.h"
+#include "MonsterStatComponent.h"
 
 void UWidget_HPBar::SetHPPercent(int CurrentHP, int MaxHP)
 {
@@ -12,7 +12,7 @@ void UWidget_HPBar::SetHPPercent(int CurrentHP, int MaxHP)
 	TargetPercent = percent;
 }
 
-void UWidget_HPBar::BindDelegate(UAC_Stat* StatComp)
+void UWidget_HPBar::BindDelegate(UMonsterStatComponent* StatComp)
 {
 	StatComp->OnChangedHP.AddUObject(this, &UWidget_HPBar::SetHPPercent);
 }

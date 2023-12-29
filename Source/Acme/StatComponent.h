@@ -61,7 +61,7 @@ public:
 	void OnConsumeSatiety(int amount);
 
 	UFUNCTION()
-	void ComsumeStamina(int amount);
+	void ConsumeStamina(int amount);
 
 	UFUNCTION()
 	void RecoveryStamina(int amount);
@@ -132,5 +132,4 @@ public:
 
 	UFUNCTION()
 	void ConsumeElement(EElement element);
-		
 };

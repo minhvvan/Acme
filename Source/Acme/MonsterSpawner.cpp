@@ -20,6 +20,7 @@ void AMonsterSpawner::Respawn()
 {
 	if (Monsters.Num() == MaxPopulation) return;
 	if (!Area) return;
+	if (!MonsterClass.Get()) return;
 
 	while (Monsters.Num() != MaxPopulation)
 	{

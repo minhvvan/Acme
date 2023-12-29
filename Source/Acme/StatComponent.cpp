@@ -106,7 +106,7 @@ void UStatComponent::OnConsumeSatiety(int amount)
 	SetCurrentST(newSatiety);
 }
 
-void UStatComponent::ComsumeStamina(int amount)
+void UStatComponent::ConsumeStamina(int amount)
 {
 	int newCurrentStamina = CurrentStamina - amount;
 	if (newCurrentStamina < 0) newCurrentStamina = 0;
@@ -125,7 +125,6 @@ void UStatComponent::RecoveryStamina(int amount)
 EElement UStatComponent::GetElementByNum(int num)
 {
 	auto ElementType = CurrentElements[num - 1];
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Size: %d"), ElementType));
 
 	if (!Elements.Find(ElementType)) return EElement::E_Normal;
 	if (Elements[ElementType] == 0) return EElement::E_Normal;
@@ -133,7 +132,7 @@ EElement UStatComponent::GetElementByNum(int num)
 	ConsumeElement(ElementType);
 	//return ElementType;
 
-	return EElement::E_Normal;
+	return ElementType;
 }
 
 void UStatComponent::AddElement(EElement element)

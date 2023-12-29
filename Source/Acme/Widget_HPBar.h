@@ -24,7 +24,7 @@ public:
 	void SetHPPercent(int CurrentHP, int MaxHP);
 
 	UFUNCTION()
-	void BindDelegate(class UAC_Stat* StatComp);
+	void BindDelegate(class UMonsterStatComponent* StatComp);
 
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
