@@ -11,33 +11,21 @@ void UElementItemWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 	UElementData* Data = Cast<UElementData>(ListItemObject);
 	EElement element = Data->GetElement();
 
-
-	switch (element)
-	{
-	case EElement::E_Fire:
-		UUtil::DebugPrint("Fire");
-		break;
-	case EElement::E_Water:
-		UUtil::DebugPrint("Water");
-		break;
-	case EElement::E_Earth:
-		UUtil::DebugPrint("Earth");
-		break;
-	case EElement::E_Air:
-		UUtil::DebugPrint("Air");
-		break;
-	case EElement::E_Ice:
-		UUtil::DebugPrint("Ice");
-		break;
-	case EElement::E_Thunder:
-		UUtil::DebugPrint("Thunder");
-		break;
-	case EElement::E_Normal:
-		UUtil::DebugPrint("Normal");
-		break;
-	}
-
-
 	if (!ElementImg[element]) return;
 	ImgElement->SetBrushFromTexture(ElementImg[element]);
+}
+
+void UElementItemWidget::PlayReactionAnim()
+{
+	//if (!ElementReactionAnim) return;
+	OnReactionAnimEnd.Clear();
+	OnReactionAnimEnd.BindDynamic(this, &UElementItemWidget::OnRecationAnimEnd);
+
+	BindToAnimationFinished(ElementReactionAnim, OnReactionAnimEnd);
+	PlayAnimation(ElementReactionAnim);
+}
+
+void UElementItemWidget::OnRecationAnimEnd()
+{
+	OnAnimEnd.Broadcast();
 }

@@ -32,9 +32,17 @@ public:
 	UFUNCTION()
 	void AddElement(EElement element);
 
+	UFUNCTION()
+	void PopTwoElement();
+
+	UFUNCTION()
+	void RemoveLastItem();
+
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 
 	UPROPERTY(VisibleAnywhere)
 	float TargetPercent;
+
+
 };

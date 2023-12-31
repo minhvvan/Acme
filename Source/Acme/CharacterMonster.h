@@ -65,6 +65,7 @@ protected:
 	float CombatSustainTime;
 
 	FTimerHandle CombatTimer;
+	FTimerHandle ElementTimer;
 
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	TArray<EElement> Elements;

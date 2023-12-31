@@ -65,7 +65,7 @@ void ACharacterMonster::OnAttacked(int damage, EElement ElementType)
 	GetWorldTimerManager().SetTimer(CombatTimer, FTimerDelegate::CreateLambda(
 		[this]() {
 			IsCombat = false;
-			HPBar->SetVisibility(false);
+			//HPBar->SetVisibility(false);
 			//TODO: 전투 종료, 제자리로 돌아가게
 		}), CombatSustainTime, false);
 
@@ -151,7 +151,6 @@ void ACharacterMonster::ElementReaction(EElement element)
 	//Reaction
 	while (FlushElements())
 	{
-		//TODO: UI Update
 	}
 }
 
@@ -172,6 +171,11 @@ bool ACharacterMonster::FlushElements()
 	}
 
 	(this->* (ElementReactions[First][Second]))();
+
+	GetWorldTimerManager().SetTimer(ElementTimer, FTimerDelegate::CreateLambda([this]()
+		{
+			Cast<UWidget_HPBar>(HPBar->GetWidget())->PopTwoElement();
+		}), .1f, false);
 
 	if (Elements.Num() < 2) return false;
 	return true;
