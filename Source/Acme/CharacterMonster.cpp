@@ -97,6 +97,8 @@ void ACharacterMonster::InitState()
 	HpBar->BindDelegate(StatCompoenent);
 	HpBar->SetHPPercent(100, 100);
 
+	HpBar->OnAnimEnd.AddUObject(this, &ACharacterMonster::ExecuteElementReaction);
+
 	HPBar->SetVisibility(false);
 
 	ElementReactions[(int)EElement::E_Fire][(int)EElement::E_Water] = &ACharacterMonster::Evaporation;
@@ -140,45 +142,49 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 
 void ACharacterMonster::ElementReaction(EElement element)
 {
-	if (Elements.IsEmpty())
-	{
-		Elements.Push(element);
-		return;
-	}
-
 	Elements.Push(element);
-
-	//Reaction
-	while (FlushElements())
+	
+	if (CheckElementReaction())
 	{
+		PlayElementWidgetAnim();
 	}
 }
 
-bool ACharacterMonster::FlushElements()
+bool ACharacterMonster::CheckElementReaction()
+{
+	if (Elements.Num() < 2) return false;
+
+	int First = (int)Elements[Elements.Num() - 1];
+	int Second = (int)Elements[Elements.Num() - 2];
+
+	if (ElementReactions[First][Second] == nullptr) return false;
+
+	return true;
+}
+
+void ACharacterMonster::PlayElementWidgetAnim()
+{
+	//Reaction chain
+	GetWorldTimerManager().SetTimer(ElementTimer, FTimerDelegate::CreateLambda([this]()
+		{
+			Cast<UWidget_HPBar>(HPBar->GetWidget())->PopTwoElement();
+		}), .1f, false);
+}
+
+void ACharacterMonster::ExecuteElementReaction()
 {
 	int Second = (int)Elements.Last();
 	Elements.Pop();
 
 	int First = (int)Elements.Last();
 	Elements.Pop();
-
-	if (ElementReactions[First][Second] == nullptr)
-	{
-		Elements.Push(static_cast<EElement>(First));
-		Elements.Push(static_cast<EElement>(Second));
-
-		return false;
-	}
-
+	
 	(this->* (ElementReactions[First][Second]))();
 
-	GetWorldTimerManager().SetTimer(ElementTimer, FTimerDelegate::CreateLambda([this]()
-		{
-			Cast<UWidget_HPBar>(HPBar->GetWidget())->PopTwoElement();
-		}), .1f, false);
-
-	if (Elements.Num() < 2) return false;
-	return true;
+	if (CheckElementReaction())
+	{
+		PlayElementWidgetAnim();
+	}
 }
 
 void ACharacterMonster::Evaporation()
@@ -187,12 +193,15 @@ void ACharacterMonster::Evaporation()
 	//수증기 폭발 -> Damage + 밀려나게
 
 	UUtil::DebugPrint("Evaporation");
+	Elements.Push(EElement::E_Air);
+	Cast<UWidget_HPBar>(HPBar->GetWidget())->AddElement(EElement::E_Air);
 }
 
 void ACharacterMonster::Combustion()
 {
 	//fire + Air
 	//연소 -> 화상 -> 이미 화상이면 2배(시간은 리셋)
+	UUtil::DebugPrint("Combustion");
 }
 
 void ACharacterMonster::Melting()

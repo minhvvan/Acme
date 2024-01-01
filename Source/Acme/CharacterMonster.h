@@ -77,7 +77,13 @@ protected:
 	void ElementReaction(EElement element);
 
 	UFUNCTION()
-	bool FlushElements();
+	bool CheckElementReaction();
+
+	UFUNCTION()
+	void PlayElementWidgetAnim();
+
+	UFUNCTION()
+	void ExecuteElementReaction();
 
 	//Fire
 	UFUNCTION()

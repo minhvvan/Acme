@@ -7,9 +7,9 @@
 #include "GlobalEnum.h"
 #include "Widget_HPBar.generated.h"
 
-/**
- * 
- */
+
+DECLARE_MULTICAST_DELEGATE(FWidgetAnimEnd);
+
 UCLASS()
 class ACME_API UWidget_HPBar : public UUserWidget
 {
@@ -37,6 +37,8 @@ public:
 
 	UFUNCTION()
 	void RemoveLastItem();
+
+	FWidgetAnimEnd OnAnimEnd;
 
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
