@@ -13,9 +13,50 @@ UCLASS()
 class ACME_API UInventoryWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
+	class UHorizontalBox* HBCategory;
+
+	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
+	class UButton* BtnLeft;
+
+	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
+	class UButton* BtnRight;
 	
 protected:
 	virtual void NativeConstruct();
 
 	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent);
+
+	UPROPERTY(VisibleAnyWhere, meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* LeftHoverAnim;
+
+	UPROPERTY(VisibleAnyWhere, meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* RightHoverAnim;
+
+	UFUNCTION()
+	void OnLeftHoverd();	
+	
+	UFUNCTION()
+	void OnLeftLeaved();
+
+	UFUNCTION()
+	void OnLeftClicked();
+
+	UFUNCTION()
+	void OnRightHoverd();	
+	
+	UFUNCTION()
+	void OnRightLeaved();
+
+	UFUNCTION()
+	void OnRightClicked();
+
+	UFUNCTION()
+	void ChangeCurrentView(int change);
+
+private:
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	int Idx;
 };
