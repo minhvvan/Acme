@@ -20,7 +20,8 @@
 #include "Sound/SoundBase.h"
 #include "Actor_Weapon.h"
 #include "CharacterMonster.h"
-
+#include "Kismet/GameplayStatics.h"
+#include "InventoryWidget.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -65,6 +66,8 @@ AAcmeCharacter::AAcmeCharacter()
 	CanAttack = true;
 
 	ActiveElement = EElement::E_Normal;
+
+	IsOpenInven = false;
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -178,6 +181,9 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(Element2Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementTwo);
 		EnhancedInputComponent->BindAction(Element3Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementThree);
 		EnhancedInputComponent->BindAction(Element4Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementFour);
+
+		//Equip
+		EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::OpenInventory);
 	}
 }
 
@@ -511,6 +517,28 @@ void AAcmeCharacter::SetActiveElementFour()
 	ActiveElement = StatCompoenent->GetElementByNum(4);
 }
 
+void AAcmeCharacter::OpenInventory()
+{
+	if (!IsOpenInven)
+	{
+		//open
+		auto PC = Cast<APlayerController>(GetController());
+		if (!PC) return;
+
+		PC->SetInputMode(FInputModeUIOnly());
+		PC->SetPause(true);
+		PC->bShowMouseCursor = true;
+
+		if (InventoryWidget == nullptr)
+		{
+			InventoryWidget = Cast<UInventoryWidget>(CreateWidget(GetWorld(), InventoryClass));
+		}
+
+		InventoryWidget->AddToViewport();
+		IsOpenInven = true;
+	}
+}
+
 void AAcmeCharacter::FlushQueue()
 {
 	if (!AttackQueue.IsEmpty())
@@ -544,6 +572,19 @@ void AAcmeCharacter::ChangeWalkSpeed(float amount)
 	if (!Movement) return;
 
 	Movement->MaxWalkSpeed += amount;
+}
+
+void AAcmeCharacter::CloseInventory()
+{
+	auto PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeGameOnly());
+	PC->SetPause(false);
+	PC->bShowMouseCursor = false;
+
+	InventoryWidget->RemoveFromViewport();
+	IsOpenInven = false;
 }
 
 void AAcmeCharacter::AddElement(EElement element)

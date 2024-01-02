@@ -74,6 +74,9 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Element4Action;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* TabAction;
+
 	//stat comp
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	class UStatComponent* StatCompoenent;
@@ -169,7 +172,10 @@ protected:
 	void SetActiveElementThree();
 
 	UFUNCTION()
-	void SetActiveElementFour();
+	void SetActiveElementFour();	
+	
+	UFUNCTION()
+	void OpenInventory();
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -211,6 +217,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
 	int ComboIdx;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	bool IsOpenInven;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
 	EElement ActiveElement;
 
@@ -226,6 +235,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UWidget_Hud* Hud;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> InventoryClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	class UInventoryWidget* InventoryWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	class UAI_Main* AnimInstance;
@@ -255,16 +270,16 @@ public:
 	UFUNCTION()
 	void ChangeWalkSpeed(float amount);
 
+	UFUNCTION()
+	void CloseInventory();
 
 public:
 	UFUNCTION()
 	void AddElement(EElement element);
 
 protected:
-	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// To add mapping context
 	virtual void BeginPlay();
 
 	virtual void Tick(float DeltaSeconds);
