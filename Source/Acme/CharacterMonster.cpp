@@ -4,10 +4,12 @@
 #include "CharacterMonster.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "MonsterStatComponent.h"
 #include "Widget_HPBar.h"
 #include "AI_Monster.h"
+#include "AcmeCharacter.h"
+#include "InteractiveItem.h"
 #include "Util.h"
 
 
@@ -56,32 +58,14 @@ void ACharacterMonster::OnAttacked(int damage, EElement ElementType)
 	IsCombat = true;
 	HPBar->SetVisibility(true);
 
-	if (ElementType != EElement::E_Normal)
-	{
-		Cast<UWidget_HPBar>(HPBar->GetWidget())->AddElement(ElementType);
-		ElementReaction(ElementType);
-	}
-
 	GetWorldTimerManager().SetTimer(CombatTimer, FTimerDelegate::CreateLambda(
 		[this]() {
 			IsCombat = false;
-			//HPBar->SetVisibility(false);
+			HPBar->SetVisibility(false);
 			//TODO: 전투 종료, 제자리로 돌아가게
 		}), CombatSustainTime, false);
 
-	int CurrentHP = StatCompoenent->GetCurrentHP();
-	int newHP = CurrentHP - damage;
-
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("newHP: %d"), newHP));
-
-	if (newHP < 0)
-	{
-		newHP = 0;
-	}
-
-	StatCompoenent->SetCurrentHP(newHP);
-
-	if (newHP == 0) Die();
+	TakeDamage(damage);
 }
 
 void ACharacterMonster::Attack()
@@ -97,36 +81,7 @@ void ACharacterMonster::InitState()
 	HpBar->BindDelegate(StatCompoenent);
 	HpBar->SetHPPercent(100, 100);
 
-	HpBar->OnAnimEnd.AddUObject(this, &ACharacterMonster::ExecuteElementReaction);
-
 	HPBar->SetVisibility(false);
-
-	ElementReactions[(int)EElement::E_Fire][(int)EElement::E_Water] = &ACharacterMonster::Evaporation;
-	ElementReactions[(int)EElement::E_Fire][(int)EElement::E_Air] = &ACharacterMonster::Combustion;
-	ElementReactions[(int)EElement::E_Fire][(int)EElement::E_Ice] = &ACharacterMonster::Melting;
-	ElementReactions[(int)EElement::E_Fire][(int)EElement::E_Thunder] = &ACharacterMonster::Spread;	
-	
-	ElementReactions[(int)EElement::E_Water][(int)EElement::E_Fire] = &ACharacterMonster::Evaporation;
-	ElementReactions[(int)EElement::E_Air][(int)EElement::E_Fire] = &ACharacterMonster::Combustion;
-	ElementReactions[(int)EElement::E_Ice][(int)EElement::E_Fire] = &ACharacterMonster::Melting;
-	ElementReactions[(int)EElement::E_Thunder][(int)EElement::E_Fire] = &ACharacterMonster::Spread;
-
-
-	ElementReactions[(int)EElement::E_Water][(int)EElement::E_Ice] = &ACharacterMonster::Frozen;
-	ElementReactions[(int)EElement::E_Water][(int)EElement::E_Thunder] = &ACharacterMonster::Stunned;	
-	
-	ElementReactions[(int)EElement::E_Ice][(int)EElement::E_Water] = &ACharacterMonster::Frozen;
-	ElementReactions[(int)EElement::E_Thunder][(int)EElement::E_Water] = &ACharacterMonster::Stunned;
-	
-
-	ElementReactions[(int)EElement::E_Earth][(int)EElement::E_Air] = &ACharacterMonster::Weathered;
-	ElementReactions[(int)EElement::E_Earth][(int)EElement::E_Water] = &ACharacterMonster::Swamp;
-
-	ElementReactions[(int)EElement::E_Air][(int)EElement::E_Earth] = &ACharacterMonster::Weathered;
-	ElementReactions[(int)EElement::E_Water][(int)EElement::E_Earth] = &ACharacterMonster::Swamp;
-
-
-	ElementReactions[(int)EElement::E_Ice][(int)EElement::E_Ice] = &ACharacterMonster::OnFrozen;
 }
 
 void ACharacterMonster::Die()
@@ -138,108 +93,34 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	Destroy();
 	OnDied.Broadcast();
+
+	//TODO: fx,Item Drop
+	if (ItemClass == nullptr) return;
+
+	FVector SpawnPos = GetActorLocation();
+	SpawnPos.Z += 10;
+
+	FActorSpawnParameters SpawnParam;
+	SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+	DropItem->Init(EItem::E_Cube);
 }
 
-void ACharacterMonster::ElementReaction(EElement element)
+void ACharacterMonster::SetTarget(AAcmeCharacter* target)
 {
-	Elements.Push(element);
-	
-	if (CheckElementReaction())
-	{
-		PlayElementWidgetAnim();
-	}
+	TargetCharacter = target;
 }
 
-bool ACharacterMonster::CheckElementReaction()
+void ACharacterMonster::TakeDamage(int damage)
 {
-	if (Elements.Num() < 2) return false;
+	int CurrentHP = StatCompoenent->GetCurrentHP();
+	int newHP = CurrentHP - damage;
 
-	int First = (int)Elements[Elements.Num() - 1];
-	int Second = (int)Elements[Elements.Num() - 2];
+	if (newHP < 0) newHP = 0;
+	StatCompoenent->SetCurrentHP(newHP);
 
-	if (ElementReactions[First][Second] == nullptr) return false;
-
-	return true;
-}
-
-void ACharacterMonster::PlayElementWidgetAnim()
-{
-	//Reaction chain
-	GetWorldTimerManager().SetTimer(ElementTimer, FTimerDelegate::CreateLambda([this]()
-		{
-			Cast<UWidget_HPBar>(HPBar->GetWidget())->PopTwoElement();
-		}), .1f, false);
-}
-
-void ACharacterMonster::ExecuteElementReaction()
-{
-	int Second = (int)Elements.Last();
-	Elements.Pop();
-
-	int First = (int)Elements.Last();
-	Elements.Pop();
-	
-	(this->* (ElementReactions[First][Second]))();
-
-	if (CheckElementReaction())
-	{
-		PlayElementWidgetAnim();
-	}
-}
-
-void ACharacterMonster::Evaporation()
-{
-	//fire + water = Air
-	//수증기 폭발 -> Damage + 밀려나게
-
-	UUtil::DebugPrint("Evaporation");
-	Elements.Push(EElement::E_Air);
-	Cast<UWidget_HPBar>(HPBar->GetWidget())->AddElement(EElement::E_Air);
-}
-
-void ACharacterMonster::Combustion()
-{
-	//fire + Air
-	//연소 -> 화상 -> 이미 화상이면 2배(시간은 리셋)
-	UUtil::DebugPrint("Combustion");
-}
-
-void ACharacterMonster::Melting()
-{
-	//fire + Ice = Water
-	//융해 -> 에너지 뺏김 -> Damage or Groggy
-
-}
-
-void ACharacterMonster::Spread()
-{
-	//fire + Thunder = Thunder가 주변으로 퍼짐
-
-}
-
-void ACharacterMonster::Frozen()
-{
-	//Water + Ice = 연속된 물원소 모두 얼음으로 변경
-
-}
-
-void ACharacterMonster::Stunned()
-{
-	//Water + Thunder = 무조건 스턴(CC)
-	OnElectricShock();
-}
-
-
-void ACharacterMonster::Weathered()
-{
-	//earth + Air
-	//풍화 -> 방어력 감소
-}
-
-void ACharacterMonster::Swamp()
-{
-	//water + earth
-	//습지 -> Slow
+	if (newHP == 0) Die();
 }
 
 void ACharacterMonster::OnFrozen()
@@ -250,4 +131,21 @@ void ACharacterMonster::OnFrozen()
 void ACharacterMonster::OnElectricShock()
 {
 	//감전상태에서 붙으면 감전
+}
+
+void ACharacterMonster::OnBurn()
+{
+	//n초간 지속적인 피해 
+}
+
+void ACharacterMonster::KnockBack(float dist)
+{
+	//dist만큼 넉백
+	if (TargetCharacter == nullptr) return;
+
+	FVector CurrentPos = GetActorLocation();
+	FVector TargetPos = TargetCharacter.Get()->GetActorLocation();
+
+	FVector Dir = (CurrentPos - TargetPos);
+	LaunchCharacter(Dir * dist, false, false);
 }

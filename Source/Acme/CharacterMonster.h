@@ -30,6 +30,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	class UAI_Monster* AnimInstance;
 
+	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class AAcmeCharacter> TargetCharacter;
+
+	UPROPERTY(EditAnywhere, Category = Item, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AInteractiveItem> ItemClass;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,6 +45,7 @@ protected:
 
 	UFUNCTION()
 	void Die();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -57,6 +64,9 @@ public:
 
 	FOnDie OnDied;
 
+	UFUNCTION()
+	void SetTarget(AAcmeCharacter* target);
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsCombat;
@@ -67,51 +77,8 @@ protected:
 	FTimerHandle CombatTimer;
 	FTimerHandle ElementTimer;
 
-	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
-	TArray<EElement> Elements;
-
-	//! --------------------- Element Reactions
-	CallBackFunction ElementReactions[7][7];
-
 	UFUNCTION()
-	void ElementReaction(EElement element);
-
-	UFUNCTION()
-	bool CheckElementReaction();
-
-	UFUNCTION()
-	void PlayElementWidgetAnim();
-
-	UFUNCTION()
-	void ExecuteElementReaction();
-
-	//Fire
-	UFUNCTION()
-	void Evaporation();
-
-	UFUNCTION()
-	void Combustion();
-
-	UFUNCTION()
-	void Melting();
-
-	UFUNCTION()
-	void Spread();
-
-	//Water
-	UFUNCTION()
-	void Frozen();
-
-	UFUNCTION()
-	void Stunned();
-
-	//Earth
-	UFUNCTION()
-	void Weathered();
-
-	UFUNCTION()
-	void Swamp();	
-	
+	void TakeDamage(int damage);
 
 	//! --------------------- CC
 	UFUNCTION()
@@ -119,4 +86,10 @@ protected:
 
 	UFUNCTION()
 	void OnElectricShock();
+
+	UFUNCTION()
+	void OnBurn();
+
+	UFUNCTION()
+	void KnockBack(float dist);
 };

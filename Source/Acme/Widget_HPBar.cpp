@@ -21,36 +21,6 @@ void UWidget_HPBar::BindDelegate(UMonsterStatComponent* StatComp)
 	StatComp->OnChangedHP.AddUObject(this, &UWidget_HPBar::SetHPPercent);
 }
 
-void UWidget_HPBar::AddElement(EElement element)
-{
-	UElementData* Data = NewObject<UElementData>();
-	Data->SetElement(element);
-
-	TV_Element->AddItem(Data);
-}
-
-void UWidget_HPBar::PopTwoElement()
-{
-	auto LastItemWidget = Cast<UElementItemWidget>(TV_Element->GetEntryWidgetFromItem(TV_Element->GetItemAt(TV_Element->GetNumItems() - 1)));
-	auto SecondItemWidget = Cast<UElementItemWidget>(TV_Element->GetEntryWidgetFromItem(TV_Element->GetItemAt(TV_Element->GetNumItems() - 2)));
-
-	SecondItemWidget->OnAnimEnd.AddUObject(this, &UWidget_HPBar::RemoveLastItem);
-	
-	LastItemWidget->PlayReactionAnim();	
-	SecondItemWidget->PlayReactionAnim();
-}
-
-void UWidget_HPBar::RemoveLastItem()
-{
-	auto SecondItemWidget = Cast<UElementItemWidget>(TV_Element->GetEntryWidgetFromItem(TV_Element->GetItemAt(TV_Element->GetNumItems() - 2)));
-	SecondItemWidget->OnAnimEnd.RemoveAll(this);
-
-	TV_Element->RemoveItem(TV_Element->GetItemAt(TV_Element->GetNumItems() - 1));
-	TV_Element->RemoveItem(TV_Element->GetItemAt(TV_Element->GetNumItems() - 1));
-
-	OnAnimEnd.Broadcast();
-}
-
 void UWidget_HPBar::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	if (PB_HP->GetPercent() != TargetPercent)

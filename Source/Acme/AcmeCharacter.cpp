@@ -439,6 +439,7 @@ void AAcmeCharacter::AttackEnd()
 		auto Monster = Cast<ACharacterMonster>(Victim);
 		if (!Monster) continue;
 
+		Monster->SetTarget(this);
 		Monster->OnAttacked(10, ActiveElement);
 	}
 

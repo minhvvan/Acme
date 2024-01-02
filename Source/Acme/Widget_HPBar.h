@@ -19,24 +19,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UProgressBar* PB_HP;	
 	
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UTileView* TV_Element;
-
 public:
 	UFUNCTION()
 	void SetHPPercent(int CurrentHP, int MaxHP);
 
 	UFUNCTION()
 	void BindDelegate(class UMonsterStatComponent* StatComp);
-
-	UFUNCTION()
-	void AddElement(EElement element);
-
-	UFUNCTION()
-	void PopTwoElement();
-
-	UFUNCTION()
-	void RemoveLastItem();
 
 	FWidgetAnimEnd OnAnimEnd;
 

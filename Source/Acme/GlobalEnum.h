@@ -38,6 +38,13 @@ enum class EElement : uint8
 ENUM_RANGE_BY_COUNT(EElement, EElement::E_Normal);
 
 
+UENUM(BlueprintType)
+enum class EItem : uint8
+{
+	E_Cube UMETA(DisplayName = "Cube"),
+	E_SPhere UMETA(DisplayName = "Sphere"),
+};
+
 class ACME_API GlobalEnum
 {
 public:
