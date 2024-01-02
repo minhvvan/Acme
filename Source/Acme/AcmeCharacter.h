@@ -277,6 +277,9 @@ public:
 	UFUNCTION()
 	void AddElement(EElement element);
 
+	UFUNCTION()
+	TArray<EElement> GetElements();
+
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

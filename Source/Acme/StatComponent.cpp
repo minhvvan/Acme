@@ -155,3 +155,8 @@ void UStatComponent::ConsumeElement(EElement element)
 
 	OnChangedElements.Broadcast(element, -1);
 }
+
+TArray<EElement> UStatComponent::GetCurrentElements()
+{
+	return CurrentElements;
+}

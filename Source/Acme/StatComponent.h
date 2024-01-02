@@ -132,4 +132,7 @@ public:
 
 	UFUNCTION()
 	void ConsumeElement(EElement element);
+
+	UFUNCTION()
+	TArray<EElement> GetCurrentElements();
 };

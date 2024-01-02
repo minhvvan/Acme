@@ -23,6 +23,9 @@ protected:
 
 	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
 	class UButton* BtnRight;
+
+	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
+	class UWidgetSwitcher* WSInven;
 	
 protected:
 	virtual void NativeConstruct();

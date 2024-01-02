@@ -7,6 +7,8 @@
 #include "Components/HorizontalBox.h"
 #include "Components/ScaleBox.h"
 #include "Components/Image.h"
+#include "Components/WidgetSwitcher.h"
+#include "InventoryInnerWidget.h"
 #include "Util.h"
 
 void UInventoryWidget::NativeConstruct()
@@ -24,7 +26,9 @@ void UInventoryWidget::NativeConstruct()
 
 	BtnRight->OnHovered.AddDynamic(this, &UInventoryWidget::OnRightHoverd);	
 	BtnRight->OnUnhovered.AddDynamic(this, &UInventoryWidget::OnRightLeaved);
-	BtnRight->OnUnhovered.AddDynamic(this, &UInventoryWidget::OnRightClicked);
+	BtnRight->OnClicked.AddDynamic(this, &UInventoryWidget::OnRightClicked);
+
+	ChangeCurrentView(0);
 }
 
 FReply UInventoryWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
@@ -99,4 +103,10 @@ void UInventoryWidget::ChangeCurrentView(int change)
 
 	UImage* NextImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(Idx))->GetChildAt(0));
 	NextImage->SetColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 1.f));
+
+	WSInven->SetActiveWidgetIndex(Idx);
+	auto InnerWidget = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(Idx));
+	
+	if (!InnerWidget) return;
+	InnerWidget->UpdateInfo();
 }

@@ -593,3 +593,10 @@ void AAcmeCharacter::AddElement(EElement element)
 
 	StatCompoenent->AddElement(element);
 }
+
+TArray<EElement> AAcmeCharacter::GetElements()
+{
+	if (!StatCompoenent) return TArray<EElement>();
+
+	return StatCompoenent->GetCurrentElements();
+}
