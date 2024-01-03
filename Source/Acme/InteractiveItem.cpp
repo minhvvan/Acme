@@ -3,9 +3,8 @@
 
 #include "InteractiveItem.h"
 
-void AInteractiveItem::Init(EItem itemKey)
+void AInteractiveItem::Init(EItemName itemKey)
 {
 	//Info Setting
 	Mesh->SetStaticMesh(Meshes[itemKey]);
-
 }

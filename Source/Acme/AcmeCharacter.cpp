@@ -600,3 +600,10 @@ TArray<EElement> AAcmeCharacter::GetElements()
 
 	return StatCompoenent->GetCurrentElements();
 }
+
+TMap<EElement, int> AAcmeCharacter::GetAllElements()
+{
+	if (!StatCompoenent) return TMap<EElement, int>();
+
+	return StatCompoenent->GetAllElements();
+}

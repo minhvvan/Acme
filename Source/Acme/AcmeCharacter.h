@@ -278,7 +278,10 @@ public:
 	void AddElement(EElement element);
 
 	UFUNCTION()
-	TArray<EElement> GetElements();
+	TArray<EElement> GetElements();	
+	
+	UFUNCTION()
+	TMap<EElement, int> GetAllElements();
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

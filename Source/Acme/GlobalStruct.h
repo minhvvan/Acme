@@ -3,10 +3,32 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UObject/NoExportTypes.h"
+#include "GlobalEnum.h"
+#include "GlobalStruct.generated.h"
 
-class ACME_API GlobalStruct
+USTRUCT(Atomic, BlueprintType)
+struct FItem
 {
+	GENERATED_USTRUCT_BODY()
+
 public:
-	GlobalStruct();
-	~GlobalStruct();
+	UPROPERTY()
+	EItemName Name;
+
+	UPROPERTY()
+	int Num;
+
+	UPROPERTY()
+	bool Equiped;
+
+	UPROPERTY()
+	EItemCategory Category;
+};
+
+UCLASS()
+class ACME_API UGlobalStruct : public UObject
+{
+	GENERATED_BODY()
+	
 };

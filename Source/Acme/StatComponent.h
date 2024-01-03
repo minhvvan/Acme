@@ -135,4 +135,7 @@ public:
 
 	UFUNCTION()
 	TArray<EElement> GetCurrentElements();
+	
+	UFUNCTION()
+	TMap<EElement, int> GetAllElements();
 };

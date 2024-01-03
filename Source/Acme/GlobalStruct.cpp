@@ -2,11 +2,3 @@
 
 
 #include "GlobalStruct.h"
-
-GlobalStruct::GlobalStruct()
-{
-}
-
-GlobalStruct::~GlobalStruct()
-{
-}

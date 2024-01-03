@@ -160,3 +160,8 @@ TArray<EElement> UStatComponent::GetCurrentElements()
 {
 	return CurrentElements;
 }
+
+TMap<EElement, int> UStatComponent::GetAllElements()
+{
+	return Elements;
+}

@@ -17,10 +17,10 @@ class ACME_API AInteractiveItem : public AActorInteractive
 	
 public:
 	UFUNCTION()
-	void Init(EItem itemKey);
+	void Init(EItemName itemKey);
 
 protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TMap<EItem, UStaticMesh*> Meshes;
+	TMap<EItemName, UStaticMesh*> Meshes;
 
 };

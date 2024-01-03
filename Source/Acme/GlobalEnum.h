@@ -37,12 +37,28 @@ enum class EElement : uint8
 };
 ENUM_RANGE_BY_COUNT(EElement, EElement::E_Normal);
 
-
 UENUM(BlueprintType)
-enum class EItem : uint8
+enum class EItemName : uint8
 {
+	E_Fire UMETA(DisplayName = "Fire"),
+	E_Water UMETA(DisplayName = "Water"),
+	E_Air UMETA(DisplayName = "Air"),
+	E_Earth UMETA(DisplayName = "Earth"),
+	E_Ice UMETA(DisplayName = "Ice"),
+	E_Thunder UMETA(DisplayName = "Thunder"),
 	E_Cube UMETA(DisplayName = "Cube"),
 	E_SPhere UMETA(DisplayName = "Sphere"),
+};
+
+UENUM(BlueprintType)
+enum class EItemCategory : uint8
+{
+	E_Element UMETA(DisplayName = "Weapon"),
+	E_Weapon UMETA(DisplayName = "Weapon"),
+	E_Armor UMETA(DisplayName = "Armor"),
+	E_Potion UMETA(DisplayName = "Potion"),
+	E_Food UMETA(DisplayName = "Food"),
+	E_Material UMETA(DisplayName = "Material"),
 };
 
 class ACME_API GlobalEnum

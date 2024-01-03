@@ -29,10 +29,17 @@ protected:
 	class UImage* ImgElement4;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgCurrentElement;
+	class UImage* ImgCurrentElement;	
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTileView* TVElement;
 
 	UPROPERTY(EditAnywhere)
 	TMap<EElement, UTexture2D*> ElementImages;
+
+	UPROPERTY(VisibleAnywhere)
+	class AAcmeCharacter* OwnerCharacter;
+
 
 protected:
 	virtual void NativeConstruct();
