@@ -607,3 +607,25 @@ TMap<EElement, int> AAcmeCharacter::GetAllElements()
 
 	return StatCompoenent->GetAllElements();
 }
+
+TArray<FItem> AAcmeCharacter::GetItems(EItemCategory category)
+{
+	//TODO: Item Component에서 Get해서 return
+
+	TArray<FItem> Temp;
+
+	Temp.Add({ EItemName::E_Empty, 0, false, category });
+	Temp.Add({ EItemName::E_Empty, 0, false, category });
+	Temp.Add({ EItemName::E_Cube, 1, false, category });
+	Temp.Add({ EItemName::E_Cube, 2, false, category });
+	Temp.Add({ EItemName::E_Empty, 0, false, category });
+
+	Temp.Add({ EItemName::E_Empty, 0, false, category });
+	Temp.Add({ EItemName::E_Empty, 0, false, category });
+	Temp.Add({ EItemName::E_Cube, 3, false, category });
+	Temp.Add({ EItemName::E_Cube, 4, false, category });
+	Temp.Add({ EItemName::E_Empty, 0, false, category });
+	Temp.Add({ EItemName::E_Empty, 0, false, category });
+
+	return Temp;
+}

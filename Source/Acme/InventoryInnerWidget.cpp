@@ -3,3 +3,7 @@
 
 #include "InventoryInnerWidget.h"
 
+void UInventoryInnerWidget::SetCategory(EItemCategory c)
+{
+	Category = c;
+}

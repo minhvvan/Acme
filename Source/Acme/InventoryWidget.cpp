@@ -108,5 +108,7 @@ void UInventoryWidget::ChangeCurrentView(int change)
 	auto InnerWidget = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(Idx));
 	
 	if (!InnerWidget) return;
+
+	InnerWidget->SetCategory((EItemCategory)Idx);
 	InnerWidget->UpdateInfo();
 }

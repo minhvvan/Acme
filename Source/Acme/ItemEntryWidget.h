@@ -23,6 +23,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UTextBlock* TxtAmount;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* TxtX;
+
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 	
 	UPROPERTY(EditAnywhere)

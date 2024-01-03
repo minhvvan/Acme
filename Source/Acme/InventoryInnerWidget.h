@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "GlobalEnum.h"
 #include "InventoryInnerWidget.generated.h"
 
 /**
@@ -14,7 +15,14 @@ class ACME_API UInventoryInnerWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+	EItemCategory Category;
+
 public:
 	UFUNCTION()
 	virtual void UpdateInfo() {};
+
+	UFUNCTION()
+	void SetCategory(EItemCategory c);
 };

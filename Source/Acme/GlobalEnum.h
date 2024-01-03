@@ -48,6 +48,7 @@ enum class EItemName : uint8
 	E_Thunder UMETA(DisplayName = "Thunder"),
 	E_Cube UMETA(DisplayName = "Cube"),
 	E_SPhere UMETA(DisplayName = "Sphere"),
+	E_Empty UMETA(DisplayName = "Empty"),
 };
 
 UENUM(BlueprintType)

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "GlobalEnum.h"
+#include "GlobalStruct.h"
 #include "AcmeCharacter.generated.h"
 
 
@@ -281,7 +282,10 @@ public:
 	TArray<EElement> GetElements();	
 	
 	UFUNCTION()
-	TMap<EElement, int> GetAllElements();
+	TMap<EElement, int> GetAllElements();	
+	
+	UFUNCTION()
+	TArray<FItem> GetItems(EItemCategory category);
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
