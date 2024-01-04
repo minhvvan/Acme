@@ -5,12 +5,12 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "MonsterStatComponent.h"
-#include "Widget_HPBar.h"
-#include "AI_Monster.h"
+#include "Acme/Component/MonsterStatComponent.h"
+#include "Acme/Widget/Widget_HPBar.h"
+#include "Acme/Animation/AI_Monster.h"
 #include "AcmeCharacter.h"
 #include "InteractiveItem.h"
-#include "Util.h"
+#include "Acme/Utils/Util.h"
 
 
 // Sets default values

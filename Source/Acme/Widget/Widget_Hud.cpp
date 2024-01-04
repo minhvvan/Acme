@@ -7,8 +7,8 @@
 #include "Components/Border.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-#include "StatComponent.h"
-#include "Util.h"
+#include "Acme/Component/StatComponent.h"
+#include "Acme/Utils/Util.h"
 
 void UWidget_Hud::NativeOnInitialized()
 {

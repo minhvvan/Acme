@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "GlobalStruct.h"
+#include "Acme/Utils/GlobalStruct.h"
 #include "ItemData.generated.h"
 
 /**

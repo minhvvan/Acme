@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "GlobalEnum.h"
-#include "GlobalStruct.h"
+#include "Acme/Utils/GlobalEnum.h"
+#include "Acme/Utils/GlobalStruct.h"
 #include "AcmeCharacter.generated.h"
 
 

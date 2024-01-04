@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "GlobalEnum.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "CharacterMonster.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnDie);

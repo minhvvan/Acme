@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GlobalEnum.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "Actor_Weapon.generated.h"
 
 UCLASS()

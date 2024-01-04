@@ -5,7 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "InteractiveElement.h"
-#include "GlobalConst.h"
+#include "Acme/Utils/GlobalConst.h"
 
 AElementSpawner::AElementSpawner()
 {

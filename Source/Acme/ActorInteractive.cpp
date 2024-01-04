@@ -6,8 +6,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "AcmeCharacter.h"
-#include "WidgetIndicator.h"
-#include "Util.h"
+#include "Acme/Widget/WidgetIndicator.h"
+#include "Acme/Utils/Util.h"
 
 
 // Sets default values

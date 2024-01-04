@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DefaultSpawner.h"
-#include "GlobalEnum.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "ElementSpawner.generated.h"
 
 class AInteractiveElement;

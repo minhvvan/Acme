@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InventoryInnerWidget.h"
-#include "GlobalEnum.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "TileInventoryWidget.generated.h"
 
 /**

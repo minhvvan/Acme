@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/IUserObjectListEntry.h"
-#include "GlobalEnum.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "ElementItemWidget.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FEndAnimation);

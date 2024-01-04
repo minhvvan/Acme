@@ -2,11 +2,12 @@
 
 
 #include "ElementInventoryWidget.h"
-#include "AcmeCharacter.h"
+#include "Acme/AcmeCharacter.h"
 #include "Components/Image.h"
 #include "Components/TileView.h"
-#include "ItemData.h"
-#include "Util.h"
+#include "Acme/Data/ItemData.h"
+#include "Acme/Utils/Util.h"
+#include "Acme/Utils/GlobalStruct.h"
 
 void UElementInventoryWidget::NativeConstruct()
 {

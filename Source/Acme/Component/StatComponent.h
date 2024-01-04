@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "GlobalEnum.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "StatComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeHP, int, int);

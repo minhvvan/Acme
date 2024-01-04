@@ -4,10 +4,10 @@
 #include "Widget_HPBar.h"
 #include "Components/ProgressBar.h"
 #include "Components/TileView.h"
-#include "MonsterStatComponent.h"
-#include "ElementData.h"
+#include "Acme/Component/MonsterStatComponent.h"
+#include "Acme/Data/ElementData.h"
 #include "ElementItemWidget.h"
-#include "Util.h"
+#include "Acme/Utils/Util.h"
 
 void UWidget_HPBar::SetHPPercent(int CurrentHP, int MaxHP)
 {

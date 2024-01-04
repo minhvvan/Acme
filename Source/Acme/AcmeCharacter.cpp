@@ -11,17 +11,17 @@
 #include "EnhancedInputSubsystems.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
-#include "StatComponent.h"
-#include "AI_Main.h"
-#include "Widget_Hud.h"
-#include "Util.h"
+#include "Acme/Component/StatComponent.h"
+#include "Acme/Animation/AI_Main.h"
+#include "Acme/Widget/Widget_Hud.h"
+#include "Acme/Utils/Util.h"
 #include "ActorInteractive.h"
 #include "Actor_Projectile.h"
 #include "Sound/SoundBase.h"
 #include "Actor_Weapon.h"
 #include "CharacterMonster.h"
 #include "Kismet/GameplayStatics.h"
-#include "InventoryWidget.h"
+#include "Acme/Widget/InventoryWidget.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter

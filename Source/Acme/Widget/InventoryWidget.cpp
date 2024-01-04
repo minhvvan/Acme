@@ -2,14 +2,14 @@
 
 
 #include "InventoryWidget.h"
-#include "AcmeCharacter.h"
+#include "Acme/AcmeCharacter.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Components/ScaleBox.h"
 #include "Components/Image.h"
 #include "Components/WidgetSwitcher.h"
 #include "InventoryInnerWidget.h"
-#include "Util.h"
+#include "Acme/Utils/Util.h"
 
 void UInventoryWidget::NativeConstruct()
 {

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ActorInteractive.h"
-#include "GlobalEnum.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "InteractiveItem.generated.h"
 
 /**

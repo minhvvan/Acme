@@ -4,7 +4,7 @@
 #include "ItemEntryWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
-#include "ItemData.h"
+#include "Acme/Data/ItemData.h"
 
 void UItemEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 {

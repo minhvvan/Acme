@@ -3,9 +3,9 @@
 
 #include "SCInteraction.h"
 #include "Components/SphereComponent.h"
-#include "AcmeCharacter.h"
-#include "Util.h"
-#include "ActorInteractive.h"
+#include "Acme/AcmeCharacter.h"
+#include "Acme/Utils/Util.h"
+#include "Acme/ActorInteractive.h"
 
 // Sets default values for this component's properties
 USCInteraction::USCInteraction()

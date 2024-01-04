@@ -2,10 +2,10 @@
 
 
 #include "TileInventoryWidget.h"
-#include "AcmeCharacter.h"
+#include "Acme/AcmeCharacter.h"
 #include "Components/TileView.h"
-#include "ItemData.h"
-#include "Util.h"
+#include "Acme/Data/ItemData.h"
+#include "Acme/Utils/Util.h"
 
 FReply UTileInventoryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
