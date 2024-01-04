@@ -20,14 +20,21 @@ void UInventoryWidget::NativeConstruct()
 
 	Idx = 0;
 
-	BtnLeft->OnHovered.AddDynamic(this, &UInventoryWidget::OnLeftHoverd);
-	BtnLeft->OnUnhovered.AddDynamic(this, &UInventoryWidget::OnLeftLeaved);
-	BtnLeft->OnClicked.AddDynamic(this, &UInventoryWidget::OnLeftClicked);
+	if (!BtnLeft->OnHovered.IsBound())
+	{
+		BtnLeft->OnHovered.AddDynamic(this, &UInventoryWidget::OnLeftHoverd);
+		BtnLeft->OnUnhovered.AddDynamic(this, &UInventoryWidget::OnLeftLeaved);
+		BtnLeft->OnClicked.AddDynamic(this, &UInventoryWidget::OnLeftClicked);
+	}
 
-	BtnRight->OnHovered.AddDynamic(this, &UInventoryWidget::OnRightHoverd);	
-	BtnRight->OnUnhovered.AddDynamic(this, &UInventoryWidget::OnRightLeaved);
-	BtnRight->OnClicked.AddDynamic(this, &UInventoryWidget::OnRightClicked);
+	if (!BtnRight->OnHovered.IsBound())
+	{
+		BtnRight->OnHovered.AddDynamic(this, &UInventoryWidget::OnRightHoverd);
+		BtnRight->OnUnhovered.AddDynamic(this, &UInventoryWidget::OnRightLeaved);
+		BtnRight->OnClicked.AddDynamic(this, &UInventoryWidget::OnRightClicked);
+	}
 
+	ClearAllCategory();
 	ChangeCurrentView(0);
 }
 
@@ -111,4 +118,15 @@ void UInventoryWidget::ChangeCurrentView(int change)
 
 	InnerWidget->SetCategory((EItemCategory)Idx);
 	InnerWidget->UpdateInfo();
+}
+
+void UInventoryWidget::ClearAllCategory()
+{
+	for (int i = 0; i < 6; i++)
+	{
+		UImage* CurrentImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(i))->GetChildAt(0));
+
+		if (!CurrentImage) continue;
+		CurrentImage->SetColorAndOpacity(FLinearColor(.2f, .2f, .2f, .2f));
+	}
 }

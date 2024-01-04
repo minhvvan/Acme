@@ -59,6 +59,9 @@ protected:
 	UFUNCTION()
 	void ChangeCurrentView(int change);
 
+	UFUNCTION()
+	void ClearAllCategory();
+
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	int Idx;
