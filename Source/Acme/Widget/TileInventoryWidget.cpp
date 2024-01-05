@@ -3,9 +3,10 @@
 
 #include "TileInventoryWidget.h"
 #include "Acme/AcmeCharacter.h"
-#include "Components/TileView.h"
+#include "Components/GridPanel.h"
 #include "Acme/Data/ItemData.h"
 #include "Acme/Utils/Util.h"
+#include "ItemEntryWidget.h"
 
 FReply UTileInventoryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
@@ -21,28 +22,22 @@ void UTileInventoryWidget::NativeOnDragDetected(const FGeometry& InGeometry, con
 
 void UTileInventoryWidget::UpdateInfo()
 {
-	//TODO: 용량 제한 생각해봐야함
-	TVItem->ClearListItems();
+	ItemGrid->ClearChildren();
 
 	if (!OwnerCharacter)
 	{
 		OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 	}
 
-	auto Items = OwnerCharacter->GetItems(Category);
+	TArray<FItem> Items = OwnerCharacter->GetItems(Category).Get();
 	for (int i = 0; i < Items.Num(); i++)
 	{
 		FItem item = Items[i];
 
-		auto Data = NewObject<UItemData>();
-		FItem ItemInfo = FItem();
+		UItemEntryWidget* Entry = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), ItemEntryClass));
+		Entry->SetItemInfo(item);
+		Entry->AddToViewport();
 
-		ItemInfo.Name = item.Name;
-		ItemInfo.Num = item.Num;
-		ItemInfo.Equiped = false;
-		ItemInfo.Category = item.Category;
-
-		Data->SetItem(ItemInfo);
-		TVItem->AddItem(Data);
+		ItemGrid->AddChildToGrid(Entry, i/5, i%5);
 	}
 }

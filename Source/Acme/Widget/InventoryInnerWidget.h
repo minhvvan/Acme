@@ -16,7 +16,7 @@ class ACME_API UInventoryInnerWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	EItemCategory Category;
 
 public:

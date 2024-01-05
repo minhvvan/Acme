@@ -83,7 +83,6 @@ void AActorInteractive::SetVisibleIndicator(bool bVisible)
 void AActorInteractive::Interact()
 {
 	//OverlapedCharacter->Do Something
-	Destroy();
 }
 
 void AActorInteractive::SetName(FString newName)

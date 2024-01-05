@@ -33,9 +33,9 @@ enum class EElement : uint8
 	E_Air UMETA(DisplayName = "Air"),
 	E_Ice UMETA(DisplayName = "Ice"),
 	E_Thunder UMETA(DisplayName = "Thunder"),
-	E_Normal UMETA(DisplayName = "Normal"),
+	E_End UMETA(DisplayName = "Normal"),
 };
-ENUM_RANGE_BY_COUNT(EElement, EElement::E_Normal);
+ENUM_RANGE_BY_COUNT(EElement, EElement::E_End);
 
 UENUM(BlueprintType)
 enum class EItemName : uint8
@@ -60,7 +60,10 @@ enum class EItemCategory : uint8
 	E_Potion UMETA(DisplayName = "Potion"),
 	E_Food UMETA(DisplayName = "Food"),
 	E_Material UMETA(DisplayName = "Material"),
+	E_End UMETA(DisplayName = "End"),
 };
+ENUM_RANGE_BY_COUNT(EItemCategory, EItemCategory::E_End);
+
 
 class ACME_API GlobalEnum
 {

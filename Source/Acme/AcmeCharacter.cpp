@@ -12,6 +12,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
 #include "Acme/Component/StatComponent.h"
+#include "Acme/Component/InventoryComponent.h"
 #include "Acme/Animation/AI_Main.h"
 #include "Acme/Widget/Widget_Hud.h"
 #include "Acme/Utils/Util.h"
@@ -60,12 +61,14 @@ AAcmeCharacter::AAcmeCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	StatCompoenent = CreateDefaultSubobject<UStatComponent>(TEXT("StatCompoenent"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryCompoenent"));
+
 	PrimaryActorTick.bCanEverTick = true;
 
 	ComboIdx = 0;
 	CanAttack = true;
 
-	ActiveElement = EElement::E_Normal;
+	ActiveElement = EElement::E_End;
 
 	IsOpenInven = false;
 }
@@ -608,24 +611,16 @@ TMap<EElement, int> AAcmeCharacter::GetAllElements()
 	return StatCompoenent->GetAllElements();
 }
 
-TArray<FItem> AAcmeCharacter::GetItems(EItemCategory category)
+FItemList AAcmeCharacter::GetItems(EItemCategory category)
 {
-	//TODO: Item Component에서 Get해서 return
+	if (!InventoryComponent) return FItemList();
 
-	TArray<FItem> Temp;
+	return InventoryComponent->GetItemList(category);
+}
 
-	Temp.Add({ EItemName::E_Empty, 0, false, category });
-	Temp.Add({ EItemName::E_Empty, 0, false, category });
-	Temp.Add({ EItemName::E_Cube, 1, false, category });
-	Temp.Add({ EItemName::E_Cube, 2, false, category });
-	Temp.Add({ EItemName::E_Empty, 0, false, category });
+bool AAcmeCharacter::AddItem(FItem item)
+{
+	if (!InventoryComponent) return false;
 
-	Temp.Add({ EItemName::E_Empty, 0, false, category });
-	Temp.Add({ EItemName::E_Empty, 0, false, category });
-	Temp.Add({ EItemName::E_Cube, 3, false, category });
-	Temp.Add({ EItemName::E_Cube, 4, false, category });
-	Temp.Add({ EItemName::E_Empty, 0, false, category });
-	Temp.Add({ EItemName::E_Empty, 0, false, category });
-
-	return Temp;
+	return InventoryComponent->AddItem(item);
 }

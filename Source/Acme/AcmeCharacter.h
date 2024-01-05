@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "Acme/Utils/GlobalEnum.h"
-#include "Acme/Utils/GlobalStruct.h"
+#include "Acme/Utils/GlobalContainer.h"
 #include "AcmeCharacter.generated.h"
 
 
@@ -87,6 +87,9 @@ class AAcmeCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor_Weapon> WeaponClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	class UInventoryComponent* InventoryComponent;
 
 public:
 	AAcmeCharacter();
@@ -285,7 +288,10 @@ public:
 	TMap<EElement, int> GetAllElements();	
 	
 	UFUNCTION()
-	TArray<FItem> GetItems(EItemCategory category);
+	FItemList GetItems(EItemCategory category);
+
+	UFUNCTION()
+	bool AddItem(FItem item);
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

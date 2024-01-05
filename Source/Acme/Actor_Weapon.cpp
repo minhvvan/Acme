@@ -16,7 +16,7 @@ AActor_Weapon::AActor_Weapon()
 
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
 
-	CurrentType = EElement::E_Normal;
+	CurrentType = EElement::E_End;
 
 	WeaponTopName = FName(TEXT("WeaponTop"));
 	WeaponEndName = FName(TEXT("WeaponEnd"));

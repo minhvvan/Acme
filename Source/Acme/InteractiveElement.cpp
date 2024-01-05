@@ -8,7 +8,7 @@
 
 AInteractiveElement::AInteractiveElement()
 {
-	ElementType = EElement::E_Normal;
+	ElementType = EElement::E_End;
 }
 
 void AInteractiveElement::SetElementType(EElement element)

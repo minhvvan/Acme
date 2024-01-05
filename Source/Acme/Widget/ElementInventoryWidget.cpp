@@ -4,10 +4,11 @@
 #include "ElementInventoryWidget.h"
 #include "Acme/AcmeCharacter.h"
 #include "Components/Image.h"
-#include "Components/TileView.h"
+#include "Components/GridPanel.h"
 #include "Acme/Data/ItemData.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Utils/GlobalStruct.h"
+#include "ItemEntryWidget.h"
 
 void UElementInventoryWidget::NativeConstruct()
 {
@@ -29,41 +30,32 @@ void UElementInventoryWidget::UpdateInfo()
 	ImgElement3->SetBrushFromTexture(ElementImages[CurrentElements[2]]);
 	ImgElement4->SetBrushFromTexture(ElementImages[CurrentElements[3]]);
 
-	TVElement->ClearListItems();
+	ElementGrid->ClearChildren();
 
-	auto AllElements = OwnerCharacter->GetAllElements();
-	for (auto Element : AllElements)
+	for (int i = 0; i < 10; i++)
 	{
-		auto Data = NewObject<UItemData>();
 		FItem ItemInfo = FItem();
-		switch (Element.Key)
-		{
-		case EElement::E_Fire:
-			ItemInfo.Name = EItemName::E_Fire;
-			break;		
-		case EElement::E_Water:
-			ItemInfo.Name = EItemName::E_Water;
-			break;
-		case EElement::E_Earth:
-			ItemInfo.Name = EItemName::E_Earth;
-			break;
-		case EElement::E_Air:
-			ItemInfo.Name = EItemName::E_Air;
-			break;
-		case EElement::E_Ice:
-			ItemInfo.Name = EItemName::E_Ice;
-			break;
-		case EElement::E_Thunder:
-			ItemInfo.Name = EItemName::E_Thunder;
-			break;
-		}
-
-		ItemInfo.Num = Element.Value;
+		ItemInfo.Name = EItemName::E_Empty;
+		ItemInfo.Num = 0;
 		ItemInfo.Equiped = false;
 		ItemInfo.Category = EItemCategory::E_Element;
 
-		Data->SetItem(ItemInfo);
+		UItemEntryWidget* Entry = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), ItemEntryClass));
+		Entry->SetItemInfo(ItemInfo);
+		Entry->AddToViewport();
 
-		TVElement->AddItem(Data);
+		ElementGrid->AddChildToGrid(Entry, i / 5, i % 5);
+	}
+
+	auto AllElements = OwnerCharacter->GetAllElements();
+	int idx = 0;
+
+	for (auto Element : AllElements)
+	{
+		UItemEntryWidget* Entry = Cast<UItemEntryWidget>(ElementGrid->GetChildAt(idx));
+
+		int temp = (int)Element.Key;
+		Entry->SetThumbnailImg(EItemName(temp));
+		Entry->SetAmountTxt(Element.Value);
 	}
 }

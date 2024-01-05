@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ActorInteractive.h"
 #include "Acme/Utils/GlobalEnum.h"
+#include "Acme/Utils/GlobalStruct.h"
 #include "InteractiveItem.generated.h"
 
 /**
@@ -23,4 +24,8 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TMap<EItemName, UStaticMesh*> Meshes;
 
+	virtual void Interact() override;
+
+	UPROPERTY(EditAnywhere);
+	FItem ItemInfo;
 };

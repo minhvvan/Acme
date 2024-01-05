@@ -126,8 +126,8 @@ EElement UStatComponent::GetElementByNum(int num)
 {
 	auto ElementType = CurrentElements[num - 1];
 
-	if (!Elements.Find(ElementType)) return EElement::E_Normal;
-	if (Elements[ElementType] == 0) return EElement::E_Normal;
+	if (!Elements.Find(ElementType)) return EElement::E_End;
+	if (Elements[ElementType] == 0) return EElement::E_End;
 
 	ConsumeElement(ElementType);
 	//return ElementType;

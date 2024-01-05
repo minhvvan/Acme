@@ -4,32 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "GlobalEnum.h"
-#include "GlobalStruct.generated.h"
+#include "GlobalStruct.h"
+#include "GlobalContainer.generated.h"
 
 USTRUCT(Atomic, BlueprintType)
-struct FItem
+struct FItemList
 {
 	GENERATED_USTRUCT_BODY()
 
 public:
-	FItem();
+	TArray<FItem> ImteList;
 
-	UPROPERTY()
-	EItemName Name;
+	void SetNum(int n);
 
-	UPROPERTY()
-	int Num;
+	TArray<FItem>& Get();
 
-	UPROPERTY()
-	bool Equiped;
-
-	UPROPERTY()
-	EItemCategory Category;
+	int Num();
 };
 
+
 UCLASS()
-class ACME_API UGlobalStruct : public UObject
+class ACME_API UGlobalContainer : public UObject
 {
 	GENERATED_BODY()
 	

@@ -32,7 +32,7 @@ protected:
 	class UImage* ImgCurrentElement;	
 	
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UTileView* TVElement;
+	class UGridPanel* ElementGrid;
 
 	UPROPERTY(EditAnywhere)
 	TMap<EElement, UTexture2D*> ElementImages;
@@ -40,6 +40,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* OwnerCharacter;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> ItemEntryClass;
 
 protected:
 	virtual void NativeConstruct();
