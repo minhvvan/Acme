@@ -4,21 +4,10 @@
 #include "TileInventoryWidget.h"
 #include "Acme/AcmeCharacter.h"
 #include "Components/GridPanel.h"
+#include "Components/Button.h"
 #include "Acme/Data/ItemData.h"
 #include "Acme/Utils/Util.h"
 #include "ItemEntryWidget.h"
-
-FReply UTileInventoryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
-{
-	return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
-}
-
-void UTileInventoryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
-{
-	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
-
-	UUtil::DebugPrint("Drag");
-}
 
 void UTileInventoryWidget::UpdateInfo()
 {
@@ -36,7 +25,10 @@ void UTileInventoryWidget::UpdateInfo()
 
 		UItemEntryWidget* Entry = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), ItemEntryClass));
 		Entry->SetItemInfo(item);
+		Entry->SetIndex(i);
 		Entry->AddToViewport();
+
+		Entry->OnDragCancle.AddUObject(this, &UTileInventoryWidget::UpdateInfo);
 
 		ItemGrid->AddChildToGrid(Entry, i/5, i%5);
 	}

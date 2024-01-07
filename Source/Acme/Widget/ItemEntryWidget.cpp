@@ -8,12 +8,23 @@
 #include "Acme/Utils/Util.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Acme/Widget/ItemDDOP.h"
-#include "Acme/Widget/DraggedItemWidget.h"
+#include "DraggedItemWidget.h"
+#include "TileInventoryWidget.h"
+#include "TileInventoryWidget.h"
+#include "Components/PanelWidget.h"
+#include "Acme/AcmeCharacter.h"
 
 void UItemEntryWidget::SetItemInfo(FItem info)
 {
+	ItemInfo = info;
+
 	SetThumbnailImg(info.Name);
 	SetAmountTxt(info.Num);
+}
+
+void UItemEntryWidget::SetIndex(int idx)
+{
+	Index = idx;
 }
 
 void UItemEntryWidget::SetThumbnailImg(EItemName name)
@@ -40,31 +51,39 @@ void UItemEntryWidget::SetAmountTxt(int amount)
 	}
 }
 
+void UItemEntryWidget::SetEmpty()
+{
+	SetThumbnailImg(EItemName::E_Empty);
+	SetAmountTxt(0);
+}
+
 FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
-	UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
+	FEventReply reply;
+	reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
-	return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+	reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
+
+	return reply.NativeReply;
 }
 
 void UItemEntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
-	if (IsEmpty) return;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Drag: %s"), *GetName()));
-
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
 	 
+	if (IsEmpty) return;
+
+	SetEmpty();
+
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDDOP::StaticClass()));
+	DragWidget->Index = Index;
+	DragWidget->ItemInfo = ItemInfo;
 
-	DragWidget->WidgetRef = this;
-	DragWidget->DragOffset = InGeometry.AbsoluteToLocal(InMouseEvent.GetScreenSpacePosition());
+	UItemEntryWidget* DragVisual = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), DragWidgetClass));
+	DragVisual->SetItemInfo(ItemInfo);
 
-	//TODO: Same ref-> strange 
-	DragWidget->DefaultDragVisual = this;
-	SetVisibility(ESlateVisibility::HitTestInvisible);
-
-	DragWidget->Pivot = EDragPivot::MouseDown;
-	DragWidget->Payload = this;
+	DragWidget->DefaultDragVisual = DragVisual;
+	DragWidget->Pivot = EDragPivot::CenterCenter;
 
 	OutOperation = DragWidget;
 }
@@ -100,18 +119,28 @@ void UItemEntryWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
 	Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Drop: %s"), *GetName()));
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
-
 	if (!IsValid(DragWidget)) return false;
 
-	const FVector2D DragWindowOffset = InGeometry.AbsoluteToLocal(InDragDropEvent.GetScreenSpacePosition());
-	const FVector2D DragWindowOffsetResult = DragWindowOffset - DragWidget->DragOffset;
+	//ÇÕÄ¡±â
+	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	if (!Player) return false;
 
-	DragWidget->WidgetRef->AddToViewport();
-	DragWidget->WidgetRef->SetVisibility(ESlateVisibility::Visible);
-	DragWidget->WidgetRef->SetPositionInViewport(DragWindowOffsetResult, false);
+	Player->MoveItems(ItemInfo.Category, DragWidget->Index, Index);
+
+	//switch
+	SetItemInfo(DragWidget->ItemInfo);
 
 	return true;
+}
+
+void UItemEntryWidget::NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
+{
+	Super::NativeOnDragCancelled(InDragDropEvent, InOperation);
+
+	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
+	if (!IsValid(DragWidget)) return;
+
+	OnDragCancle.Broadcast();
 }

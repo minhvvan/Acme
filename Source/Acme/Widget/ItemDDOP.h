@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/DragDropOperation.h"
+#include "Acme/Utils/GlobalStruct.h"
 #include "ItemDDOP.generated.h"
 
 /**
@@ -15,9 +16,9 @@ class ACME_API UItemDDOP : public UDragDropOperation
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UUserWidget* WidgetRef;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int Index;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector2D DragOffset;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FItem ItemInfo;
 };

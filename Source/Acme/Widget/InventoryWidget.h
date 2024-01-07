@@ -65,4 +65,11 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	int Idx;
+
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	class UInventoryInnerWidget* CurrentCategoryView;
+
+public:
+	UFUNCTION()
+	void UpdateWidgetByCategory();
 };

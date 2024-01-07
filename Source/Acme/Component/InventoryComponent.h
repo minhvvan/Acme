@@ -32,6 +32,12 @@ public:
 	UFUNCTION()
 	FItemList GetItemList(EItemCategory category);
 
+	UFUNCTION()
+	int GetMaxQuantity();
+
+	UFUNCTION()
+	void MoveItems(EItemCategory Category, int from, int to);
+
 private:
 	UPROPERTY()
 	TMap<EItemCategory, FItemList> Items;

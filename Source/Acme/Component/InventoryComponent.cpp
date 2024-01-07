@@ -4,6 +4,7 @@
 #include "Acme/Component/InventoryComponent.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Utils/GlobalEnum.h"
+#include "Acme/AcmeCharacter.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -89,4 +90,45 @@ FItemList UInventoryComponent::GetItemList(EItemCategory category)
 	}
 
 	return FItemList();
+}
+
+int UInventoryComponent::GetMaxQuantity()
+{
+	return maxQuantity;
+}
+
+void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
+{
+	TArray<FItem>& ItemList = Items[Category].Get();
+
+	if (ItemList[to].Name == ItemList[from].Name)
+	{
+		int amount = maxQuantity - ItemList[to].Num;
+
+		ItemList[from].Num -= amount;
+		if (ItemList[from].Num <= 0)
+		{
+			//set empty
+			ItemList[from].Name = EItemName::E_Empty;
+			ItemList[from].Num = 0;
+			ItemList[from].Equiped = false;
+		}
+
+		ItemList[from].Num += amount;
+	}
+	else
+	{
+		FItem temp = ItemList[to];
+		ItemList[to].Name = ItemList[from].Name;
+		ItemList[to].Num = ItemList[from].Num;
+		ItemList[to].Equiped = ItemList[from].Equiped;
+
+		ItemList[from] = temp;
+	}
+
+	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwner());
+	if (Player)
+	{
+		Player->UpdateInventoryWidget();
+	}
 }

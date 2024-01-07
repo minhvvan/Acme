@@ -293,6 +293,12 @@ public:
 	UFUNCTION()
 	bool AddItem(FItem item);
 
+	UFUNCTION()
+	void MoveItems(EItemCategory Category, int from, int to);
+
+	UFUNCTION()
+	void UpdateInventoryWidget();
+
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

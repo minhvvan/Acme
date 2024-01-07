@@ -624,3 +624,17 @@ bool AAcmeCharacter::AddItem(FItem item)
 
 	return InventoryComponent->AddItem(item);
 }
+
+void AAcmeCharacter::MoveItems(EItemCategory Category, int from, int to)
+{
+	if (!InventoryComponent) return;
+
+	InventoryComponent->MoveItems(Category, from, to);
+}
+
+void AAcmeCharacter::UpdateInventoryWidget()
+{
+	if (!InventoryWidget) return;
+
+	InventoryWidget->UpdateWidgetByCategory();
+}

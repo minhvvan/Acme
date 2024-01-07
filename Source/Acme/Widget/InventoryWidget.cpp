@@ -112,12 +112,12 @@ void UInventoryWidget::ChangeCurrentView(int change)
 	NextImage->SetColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 1.f));
 
 	WSInven->SetActiveWidgetIndex(Idx);
-	auto InnerWidget = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(Idx));
+	CurrentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(Idx));
 	
-	if (!InnerWidget) return;
+	if (!CurrentCategoryView) return;
 
-	InnerWidget->SetCategory((EItemCategory)Idx);
-	InnerWidget->UpdateInfo();
+	CurrentCategoryView->SetCategory((EItemCategory)Idx);
+	CurrentCategoryView->UpdateInfo();
 }
 
 void UInventoryWidget::ClearAllCategory()
@@ -129,4 +129,10 @@ void UInventoryWidget::ClearAllCategory()
 		if (!CurrentImage) continue;
 		CurrentImage->SetColorAndOpacity(FLinearColor(.2f, .2f, .2f, .2f));
 	}
+}
+
+void UInventoryWidget::UpdateWidgetByCategory()
+{
+	if (!CurrentCategoryView) return;
+	CurrentCategoryView->UpdateInfo();
 }

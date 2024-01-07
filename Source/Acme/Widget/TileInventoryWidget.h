@@ -22,10 +22,6 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* OwnerCharacter;
 
-	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
-
-	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation);
-
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> ItemEntryClass;
 

@@ -9,9 +9,8 @@
 #include "Acme/Utils/GlobalStruct.h"
 #include "ItemEntryWidget.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE(FOnDragCanceled)
+
 UCLASS()
 class ACME_API UItemEntryWidget : public UUserWidget
 {
@@ -27,9 +26,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UTextBlock* TxtX;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> DragWidgetClass;
+
 public:
 	UFUNCTION()
 	void SetItemInfo(FItem info);
+
+	UFUNCTION()
+	void SetIndex(int idx);
 
 	UFUNCTION()
 	void SetThumbnailImg(EItemName name);
@@ -37,6 +42,10 @@ public:
 	UFUNCTION()
 	void SetAmountTxt(int amount);
 
+	UFUNCTION()
+	void SetEmpty();
+
+	FOnDragCanceled OnDragCancle;
 protected:
 	UPROPERTY(EditAnywhere)
 	TMap<EItemName, UTexture2D*> ItemImages;
@@ -46,6 +55,9 @@ protected:
 
 	UPROPERTY()
 	FItem ItemInfo;
+
+	UPROPERTY()
+	int Index;
 
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
@@ -60,4 +72,6 @@ protected:
 	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent);
 
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation);
+
+	virtual void NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation);
 };
