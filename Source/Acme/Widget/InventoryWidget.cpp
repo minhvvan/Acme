@@ -99,7 +99,6 @@ void UInventoryWidget::OnRightClicked()
 
 void UInventoryWidget::ChangeCurrentView(int change)
 {
-	//TODO: Idx
 	UImage* CurrentImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(Idx))->GetChildAt(0));
 	CurrentImage->SetColorAndOpacity(FLinearColor(.2f, .2f, .2f, .2f));
 

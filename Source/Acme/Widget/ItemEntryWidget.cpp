@@ -29,7 +29,10 @@ void UItemEntryWidget::SetIndex(int idx)
 
 void UItemEntryWidget::SetThumbnailImg(EItemName name)
 {
-	ImgItem->SetBrushFromTexture(ItemImages[name]);
+	if (ItemImages[name])
+	{
+		ImgItem->SetBrushFromTexture(ItemImages[name]);
+	}
 }
 
 void UItemEntryWidget::SetAmountTxt(int amount)
@@ -128,9 +131,6 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	if (!Player) return false;
 
 	Player->MoveItems(ItemInfo.Category, DragWidget->Index, Index);
-
-	//switch
-	SetItemInfo(DragWidget->ItemInfo);
 
 	return true;
 }

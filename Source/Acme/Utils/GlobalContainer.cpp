@@ -3,13 +3,13 @@
 
 #include "Acme/Utils/GlobalContainer.h"
 
-void FItemList::SetNum(int n)
+void FItemList::SetNum(int n, EItemCategory category)
 {
 	ImteList.SetNum(n);
 
 	for (int i = 0; i < n; i++)
 	{
-		ImteList[i] = FItem();
+		ImteList[i] = FItem(category);
 	}
 }
 

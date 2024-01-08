@@ -127,6 +127,21 @@ void AAcmeCharacter::BeginPlay()
 		Weapon->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		Weapon->Dismantle();
 	}
+
+	FItem temp1;
+	temp1.Name = EItemName::E_SPhere;
+	temp1.Num = 1;
+	temp1.Equiped = false;
+	temp1.Category = EItemCategory::E_Weapon;
+
+	FItem temp2;
+	temp2.Name = EItemName::E_Cube;
+	temp2.Num = 1;
+	temp2.Equiped = false;
+	temp2.Category = EItemCategory::E_Weapon;
+
+	InventoryComponent->AddItem(temp1);
+	InventoryComponent->AddItem(temp2);
 }
 
 void AAcmeCharacter::Tick(float DeltaSeconds)

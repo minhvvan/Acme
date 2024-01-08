@@ -18,9 +18,9 @@ UInventoryComponent::UInventoryComponent()
 	for (auto category : TEnumRange<EItemCategory>())
 	{
 		FItemList List = FItemList();
-		List.SetNum(30);
+		List.SetNum(30, category);
 
-		Items.Add({ category, List});
+		Items.Add({ category, List });
 	}
 }
 
@@ -49,7 +49,7 @@ bool UInventoryComponent::AddItem(FItem newItem)
 
 	//find
 	bool bCanAdd = false;
-	for (auto Item : ItemList)
+	for (auto& Item : ItemList)
 	{
 		if (Item.Name == newItem.Name)
 		{
@@ -103,9 +103,10 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 
 	if (ItemList[to].Name == ItemList[from].Name)
 	{
-		int amount = maxQuantity - ItemList[to].Num;
+		int movableAmount = maxQuantity - ItemList[to].Num;
+		int moveAmount = movableAmount < ItemList[from].Num ? movableAmount : ItemList[from].Num;
 
-		ItemList[from].Num -= amount;
+		ItemList[from].Num -= moveAmount;
 		if (ItemList[from].Num <= 0)
 		{
 			//set empty
@@ -114,7 +115,7 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 			ItemList[from].Equiped = false;
 		}
 
-		ItemList[from].Num += amount;
+		ItemList[to].Num += moveAmount;
 	}
 	else
 	{

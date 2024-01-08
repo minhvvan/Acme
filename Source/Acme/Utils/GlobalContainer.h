@@ -15,7 +15,7 @@ struct FItemList
 public:
 	TArray<FItem> ImteList;
 
-	void SetNum(int n);
+	void SetNum(int n, EItemCategory category);
 
 	TArray<FItem>& Get();
 

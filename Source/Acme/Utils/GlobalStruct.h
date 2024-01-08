@@ -15,6 +15,8 @@ struct FItem
 public:
 	FItem();
 
+	FItem(EItemCategory cate);
+
 	UPROPERTY()
 	EItemName Name;
 
