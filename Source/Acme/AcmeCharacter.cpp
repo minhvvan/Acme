@@ -654,4 +654,8 @@ void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 	if (!InventoryComponent) return;
 
 	InventoryComponent->SetQuickSlot(item, idx);
+
+	//HUD Update
+	if (!Hud) return;
+	Hud->SetQuickSlots(GetQuickSlots());
 }

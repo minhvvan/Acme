@@ -97,8 +97,8 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 	if (!Player) return false;
 
-	Player->SetQuickSlot(ItemInfo, Index);
 	SetItemInfo(DragWidget->ItemInfo);
+	Player->SetQuickSlot(ItemInfo, Index);
 
 	return result;
 }

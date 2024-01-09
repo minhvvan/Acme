@@ -148,7 +148,4 @@ TArray<FItem>& UInventoryComponent::GetQuickSlots()
 void UInventoryComponent::SetQuickSlot(FItem item, int idx)
 {
 	QuickSlots[idx] = item;
-
-	//Widget Update
-
 }
