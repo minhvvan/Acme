@@ -74,10 +74,15 @@ void UQuickSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	UQuickSlotWidget* DragVisual = Cast<UQuickSlotWidget>(CreateWidget(GetWorld(), DragWidgetClass));
 	DragVisual->SetItemInfo(ItemInfo);
 
-	SetEmpty();
-
 	DragWidget->DefaultDragVisual = DragVisual;
 	DragWidget->Pivot = EDragPivot::CenterCenter;
+
+	SetEmpty();
+	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	if (!Player) return;
+
+	FItem EmptyItem = FItem();
+	Player->SetQuickSlot(EmptyItem, Index);
 
 	OutOperation = DragWidget;
 }
@@ -100,4 +105,7 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
 void UQuickSlotWidget::NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
+	Super::NativeOnDragCancelled(InDragDropEvent, InOperation);
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Cancel")));
 }

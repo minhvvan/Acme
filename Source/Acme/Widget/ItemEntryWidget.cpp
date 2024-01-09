@@ -135,8 +135,11 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 	if (!Player) return false;
 
-	DragWidget->WidgetRef->SetEmpty();
-	Player->MoveItems(ItemInfo.Category, DragWidget->Index, Index);
+	if (DragWidget->WidgetRef)
+	{
+		DragWidget->WidgetRef->SetEmpty();
+		Player->MoveItems(ItemInfo.Category, DragWidget->Index, Index);
+	}
 
 	return true;
 }
