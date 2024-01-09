@@ -16,17 +16,17 @@ class ACME_API UElementInventoryWidget : public UInventoryInnerWidget
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgElement1;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UElementSlotWidget* ImgElement1;
 
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgElement2;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UElementSlotWidget* ImgElement2;
 
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgElement3;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UElementSlotWidget* ImgElement3;
 
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgElement4;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UElementSlotWidget* ImgElement4;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UImage* ImgCurrentElement;	

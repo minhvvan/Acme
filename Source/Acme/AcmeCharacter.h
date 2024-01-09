@@ -167,18 +167,6 @@ protected:
 	void StaminaCheck(int Stamina);
 
 	UFUNCTION()
-	void SetActiveElementOne();
-
-	UFUNCTION()
-	void SetActiveElementTwo();
-
-	UFUNCTION()
-	void SetActiveElementThree();
-
-	UFUNCTION()
-	void SetActiveElementFour();	
-	
-	UFUNCTION()
 	void OpenInventory();
 
 public:
@@ -280,12 +268,6 @@ public:
 public:
 	UFUNCTION()
 	void AddElement(EElement element);
-
-	UFUNCTION()
-	TArray<EElement> GetElements();	
-	
-	UFUNCTION()
-	TMap<EElement, int> GetAllElements();	
 	
 	UFUNCTION()
 	FItemList GetItems(EItemCategory category);
@@ -298,6 +280,12 @@ public:
 
 	UFUNCTION()
 	void UpdateInventoryWidget();
+
+	UFUNCTION()
+	TArray<FItem> GetQuickSlots();
+
+	UFUNCTION()
+	void SetQuickSlot(FItem item, int idx);
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

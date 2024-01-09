@@ -101,8 +101,9 @@ void AAcmeCharacter::BeginPlay()
 		Hud->SetHealth(StatCompoenent->GetCurrentHP(), StatCompoenent->GetMaxHP());
 		Hud->SetSatiety(StatCompoenent->GetCurrentST());
 		Hud->SetStamina(StatCompoenent->GetCurrentStamina());
-
 		Hud->BindStatus(StatCompoenent);
+
+		Hud->SetQuickSlots(InventoryComponent->GetQuickSlots());
 
 		StatCompoenent->OnChangedStamina.AddUObject(this, &AAcmeCharacter::StaminaCheck);
 	}
@@ -195,10 +196,10 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::ChangeEquip);
 	
 		//Element
-		EnhancedInputComponent->BindAction(Element1Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementOne);
-		EnhancedInputComponent->BindAction(Element2Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementTwo);
-		EnhancedInputComponent->BindAction(Element3Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementThree);
-		EnhancedInputComponent->BindAction(Element4Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementFour);
+		//EnhancedInputComponent->BindAction(Element1Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementOne);
+		//EnhancedInputComponent->BindAction(Element2Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementTwo);
+		//EnhancedInputComponent->BindAction(Element3Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementThree);
+		//EnhancedInputComponent->BindAction(Element4Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementFour);
 
 		//Equip
 		EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::OpenInventory);
@@ -509,32 +510,6 @@ void AAcmeCharacter::StaminaCheck(int Stamina)
 	}
 }
 
-void AAcmeCharacter::SetActiveElementOne()
-{
-	if (!StatCompoenent) return;
-	ActiveElement = StatCompoenent->GetElementByNum(1);
-	
-	//TODO: fx
-}
-
-void AAcmeCharacter::SetActiveElementTwo()
-{
-	if (!StatCompoenent) return;
-	ActiveElement = StatCompoenent->GetElementByNum(2);
-}
-
-void AAcmeCharacter::SetActiveElementThree()
-{
-	if (!StatCompoenent) return;
-	ActiveElement = StatCompoenent->GetElementByNum(3);
-}
-
-void AAcmeCharacter::SetActiveElementFour()
-{
-	if (!StatCompoenent) return;
-	ActiveElement = StatCompoenent->GetElementByNum(4);
-}
-
 void AAcmeCharacter::OpenInventory()
 {
 	if (!IsOpenInven)
@@ -607,23 +582,36 @@ void AAcmeCharacter::CloseInventory()
 
 void AAcmeCharacter::AddElement(EElement element)
 {
-	if (!StatCompoenent) return;
+	if (!InventoryComponent) return;
 
-	StatCompoenent->AddElement(element);
-}
+	FItem Item;
+	Item.Category = EItemCategory::E_Element;
+	Item.Equiped = false;
+	Item.Num = 1;
 
-TArray<EElement> AAcmeCharacter::GetElements()
-{
-	if (!StatCompoenent) return TArray<EElement>();
+	switch (element)
+	{
+	case EElement::E_Fire:
+		Item.Name = EItemName::E_Fire;
+		break;
+	case EElement::E_Water:
+		Item.Name = EItemName::E_Water;
+		break;
+	case EElement::E_Earth:
+		Item.Name = EItemName::E_Earth;
+		break;
+	case EElement::E_Air:
+		Item.Name = EItemName::E_Air;
+		break;
+	case EElement::E_Ice:
+		Item.Name = EItemName::E_Ice;
+		break;
+	case EElement::E_Thunder:
+		Item.Name = EItemName::E_Thunder;
+		break;
+	}
 
-	return StatCompoenent->GetCurrentElements();
-}
-
-TMap<EElement, int> AAcmeCharacter::GetAllElements()
-{
-	if (!StatCompoenent) return TMap<EElement, int>();
-
-	return StatCompoenent->GetAllElements();
+	InventoryComponent->AddItem(Item);
 }
 
 FItemList AAcmeCharacter::GetItems(EItemCategory category)
@@ -652,4 +640,18 @@ void AAcmeCharacter::UpdateInventoryWidget()
 	if (!InventoryWidget) return;
 
 	InventoryWidget->UpdateWidgetByCategory();
+}
+
+TArray<FItem> AAcmeCharacter::GetQuickSlots()
+{
+	if (!InventoryComponent) return TArray<FItem>();
+
+	return InventoryComponent->GetQuickSlots();
+}
+
+void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
+{
+	if (!InventoryComponent) return;
+
+	InventoryComponent->SetQuickSlot(item, idx);
 }

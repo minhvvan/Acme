@@ -40,11 +40,6 @@ void UStatComponent::BeginPlay()
 			SetCurrentST(GetCurrentST() - ConsumeAmountSatiety);
 			}),
 		ConsumeTimeSatiety, true);
-
-	CurrentElements.Add(EElement::E_Fire);
-	CurrentElements.Add(EElement::E_Water);
-	CurrentElements.Add(EElement::E_Earth);
-	CurrentElements.Add(EElement::E_Air);
 }
 
 
@@ -120,48 +115,4 @@ void UStatComponent::RecoveryStamina(int amount)
 	if (newCurrentStamina > 100) newCurrentStamina = 100;
 
 	SetCurrentStamina(newCurrentStamina);
-}
-
-EElement UStatComponent::GetElementByNum(int num)
-{
-	auto ElementType = CurrentElements[num - 1];
-
-	if (!Elements.Find(ElementType)) return EElement::E_End;
-	if (Elements[ElementType] == 0) return EElement::E_End;
-
-	ConsumeElement(ElementType);
-	//return ElementType;
-
-	return ElementType;
-}
-
-void UStatComponent::AddElement(EElement element)
-{
-	if (Elements.Contains(element))
-	{
-		Elements[element]++;
-	}
-	else
-	{
-		Elements.Add({ element, 1 });
-	}
-
-	OnChangedElements.Broadcast(element, 1);
-}
-
-void UStatComponent::ConsumeElement(EElement element)
-{
-	if (Elements.Find(element)) Elements[element]--;
-
-	OnChangedElements.Broadcast(element, -1);
-}
-
-TArray<EElement> UStatComponent::GetCurrentElements()
-{
-	return CurrentElements;
-}
-
-TMap<EElement, int> UStatComponent::GetAllElements()
-{
-	return Elements;
 }

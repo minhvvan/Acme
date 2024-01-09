@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ActorInteractive.h"
 #include "Acme/Utils/GlobalEnum.h"
+#include "Acme/Utils/GlobalStruct.h"
 #include "InteractiveElement.generated.h"
 
 /**
@@ -23,6 +24,8 @@ public:
 
 protected:
 	EElement ElementType;
+
+	FItem ItemInfo;
 
 public:
 	virtual void Interact() override;

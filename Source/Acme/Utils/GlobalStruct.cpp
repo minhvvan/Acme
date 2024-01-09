@@ -3,7 +3,7 @@
 
 #include "GlobalStruct.h"
 
-FItem::FItem(): Name(EItemName::E_Empty), Num(0), Equiped(false), Category(EItemCategory::E_Armor)
+FItem::FItem(): Name(EItemName::E_Empty), Num(0), Equiped(false), Category(EItemCategory::E_End)
 {
 }
 

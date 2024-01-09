@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Acme/Utils/GlobalEnum.h"
+#include "Acme/Utils/GlobalStruct.h"
 #include "Widget_Hud.generated.h"
 
 /**
@@ -23,16 +24,28 @@ protected:
 	class UBorder* Border_Action;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
-	class UWidget_Element* Element_1;
+	class UQuickSlotWidget* WBP_QuickSlot1;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
-	class UWidget_Element* Element_2;
+	class UQuickSlotWidget* WBP_QuickSlot2;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
-	class UWidget_Element* Element_3;
+	class UQuickSlotWidget* WBP_QuickSlot3;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
-	class UWidget_Element* Element_4;
+	class UQuickSlotWidget* WBP_QuickSlot4;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot5;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot6;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot7;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot8;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UProgressBar* PB_Health;
@@ -67,7 +80,7 @@ public:
 	void SetStamina(int CurrentStamina);	
 	
 	UFUNCTION()
-	void ChangeElement(EElement element, int amount);
+	void SetQuickSlots(TArray<FItem> QuickSlots);
 
 	UFUNCTION()
 	void BindStatus(class UStatComponent* StatComp);

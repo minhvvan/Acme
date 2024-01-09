@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/DragDropOperation.h"
 #include "Acme/Utils/GlobalStruct.h"
+#include "ItemEntryWidget.h"
 #include "ItemDDOP.generated.h"
 
 /**
@@ -21,4 +22,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FItem ItemInfo;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UItemEntryWidget* WidgetRef;
+
 };

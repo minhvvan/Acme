@@ -8,7 +8,6 @@
 #include "Acme/Utils/Util.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Acme/Widget/ItemDDOP.h"
-#include "DraggedItemWidget.h"
 #include "TileInventoryWidget.h"
 #include "TileInventoryWidget.h"
 #include "Components/PanelWidget.h"
@@ -63,9 +62,17 @@ void UItemEntryWidget::SetEmpty()
 FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply reply;
-	reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
-	reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
+	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
+	{
+		reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+		reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
+	}
+	
+	if(InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton))
+	{
+		//TODO: Another Action
+	}
 
 	return reply.NativeReply;
 }
@@ -76,11 +83,10 @@ void UItemEntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	 
 	if (IsEmpty) return;
 
-	SetEmpty();
-
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDDOP::StaticClass()));
 	DragWidget->Index = Index;
 	DragWidget->ItemInfo = ItemInfo;
+	DragWidget->WidgetRef = this;
 
 	UItemEntryWidget* DragVisual = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), DragWidgetClass));
 	DragVisual->SetItemInfo(ItemInfo);
@@ -126,10 +132,10 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
 	if (!IsValid(DragWidget)) return false;
 
-	//ÇÕÄ¡±â
 	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 	if (!Player) return false;
 
+	DragWidget->WidgetRef->SetEmpty();
 	Player->MoveItems(ItemInfo.Category, DragWidget->Index, Index);
 
 	return true;

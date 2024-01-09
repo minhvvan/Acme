@@ -10,7 +10,6 @@
 DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeHP, int, int);
 DECLARE_MULTICAST_DELEGATE_OneParam(FChangeST, int);
 DECLARE_MULTICAST_DELEGATE_OneParam(FChangeStamina, int);
-DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeElement, EElement, int);
 DECLARE_MULTICAST_DELEGATE(FCoolDown);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -66,16 +65,12 @@ public:
 	UFUNCTION()
 	void RecoveryStamina(int amount);
 
-	UFUNCTION()
-	EElement GetElementByNum(int num);
-
 	FCoolDown CDDash;
 	FCoolDown CDSkill;
 
 	FChangeHP OnChangedHP;
 	FChangeST OnChangedST;
 	FChangeStamina OnChangedStamina;
-	FChangeElement OnChangedElements;
 
 private:
 	FTimerHandle TimerDash;
@@ -109,13 +104,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	int CurrentSatiety;
 
-	//Element
-	UPROPERTY()
-	TMap<EElement, int> Elements;
-
-	UPROPERTY()
-	TArray<EElement> CurrentElements;
-
 	//Others
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	float CoolTimedash;
@@ -125,17 +113,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	int ConsumeAmountSatiety;
-
-public:
-	UFUNCTION()
-	void AddElement(EElement element);
-
-	UFUNCTION()
-	void ConsumeElement(EElement element);
-
-	UFUNCTION()
-	TArray<EElement> GetCurrentElements();
-	
-	UFUNCTION()
-	TMap<EElement, int> GetAllElements();
 };

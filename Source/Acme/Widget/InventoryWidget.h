@@ -26,6 +26,30 @@ protected:
 
 	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
 	class UWidgetSwitcher* WSInven;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot1;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot2;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot3;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot4;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot5;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot6;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot7;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UQuickSlotWidget* WBP_QuickSlot8;
 	
 protected:
 	virtual void NativeConstruct();
@@ -61,6 +85,9 @@ protected:
 
 	UFUNCTION()
 	void ClearAllCategory();
+
+	UFUNCTION()
+	void SetQuickSlots();
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))

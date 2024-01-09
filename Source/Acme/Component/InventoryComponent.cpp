@@ -22,6 +22,12 @@ UInventoryComponent::UInventoryComponent()
 
 		Items.Add({ category, List });
 	}
+
+	for (int i = 0; i < 8; i++)
+	{
+		FItem item = FItem();
+		QuickSlots.Add(item);
+	}
 }
 
 
@@ -132,4 +138,17 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 	{
 		Player->UpdateInventoryWidget();
 	}
+}
+
+TArray<FItem>& UInventoryComponent::GetQuickSlots()
+{
+	return QuickSlots;
+}
+
+void UInventoryComponent::SetQuickSlot(FItem item, int idx)
+{
+	QuickSlots[idx] = item;
+
+	//Widget Update
+
 }

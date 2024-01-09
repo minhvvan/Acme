@@ -38,10 +38,19 @@ public:
 	UFUNCTION()
 	void MoveItems(EItemCategory Category, int from, int to);
 
+	UFUNCTION()
+	TArray<FItem>& GetQuickSlots();
+
+	UFUNCTION()
+	void SetQuickSlot(FItem item, int idx);
+
 private:
 	UPROPERTY()
 	TMap<EItemCategory, FItemList> Items;
 		
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	int maxQuantity;
+
+	UPROPERTY()
+	TArray<FItem> QuickSlots;
 };

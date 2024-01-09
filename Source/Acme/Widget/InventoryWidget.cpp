@@ -10,6 +10,7 @@
 #include "Components/WidgetSwitcher.h"
 #include "InventoryInnerWidget.h"
 #include "Acme/Utils/Util.h"
+#include "QuickSlotWidget.h"
 
 void UInventoryWidget::NativeConstruct()
 {
@@ -36,6 +37,7 @@ void UInventoryWidget::NativeConstruct()
 
 	ClearAllCategory();
 	ChangeCurrentView(0);
+	SetQuickSlots();
 }
 
 FReply UInventoryWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
@@ -102,10 +104,7 @@ void UInventoryWidget::ChangeCurrentView(int change)
 	UImage* CurrentImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(Idx))->GetChildAt(0));
 	CurrentImage->SetColorAndOpacity(FLinearColor(.2f, .2f, .2f, .2f));
 
-	Idx += change;
-
-	if (Idx < 0) Idx = 0;
-	if (Idx > 5) Idx = 5;
+	Idx = (Idx + change + 6) % 6;
 
 	UImage* NextImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(Idx))->GetChildAt(0));
 	NextImage->SetColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 1.f));
@@ -128,6 +127,33 @@ void UInventoryWidget::ClearAllCategory()
 		if (!CurrentImage) continue;
 		CurrentImage->SetColorAndOpacity(FLinearColor(.2f, .2f, .2f, .2f));
 	}
+}
+
+void UInventoryWidget::SetQuickSlots()
+{
+	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	if (!Player) return;
+
+	auto QuickSlots = Player->GetQuickSlots();
+	if (QuickSlots.Num() != 8) return;
+
+	WBP_QuickSlot1->SetItemInfo(QuickSlots[0]);
+	WBP_QuickSlot2->SetItemInfo(QuickSlots[1]);
+	WBP_QuickSlot3->SetItemInfo(QuickSlots[2]);
+	WBP_QuickSlot4->SetItemInfo(QuickSlots[3]);
+	WBP_QuickSlot5->SetItemInfo(QuickSlots[4]);
+	WBP_QuickSlot6->SetItemInfo(QuickSlots[5]);
+	WBP_QuickSlot7->SetItemInfo(QuickSlots[6]);
+	WBP_QuickSlot8->SetItemInfo(QuickSlots[7]);
+
+	WBP_QuickSlot1->SetIndex(0);
+	WBP_QuickSlot2->SetIndex(1);
+	WBP_QuickSlot3->SetIndex(2);
+	WBP_QuickSlot4->SetIndex(3);
+	WBP_QuickSlot5->SetIndex(4);
+	WBP_QuickSlot6->SetIndex(5);
+	WBP_QuickSlot7->SetIndex(6);
+	WBP_QuickSlot8->SetIndex(7);
 }
 
 void UInventoryWidget::UpdateWidgetByCategory()

@@ -8,27 +8,13 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Acme/Component/StatComponent.h"
+#include "Acme/Widget/QuickSlotWidget.h"
 #include "Acme/Utils/Util.h"
 
 void UWidget_Hud::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	Element_1->SetElementImage(EElement::E_Fire);
-	Element_1->SetKeyImage(1);
-	Element_1->SetTxtNum(0);
-
-	Element_2->SetElementImage(EElement::E_Water);
-	Element_2->SetKeyImage(2);
-	Element_2->SetTxtNum(0);
-
-	Element_3->SetElementImage(EElement::E_Earth);
-	Element_3->SetKeyImage(3);
-	Element_3->SetTxtNum(0);
-
-	Element_4->SetElementImage(EElement::E_Air);
-	Element_4->SetKeyImage(4);
-	Element_4->SetTxtNum(0);
 }
 
 void UWidget_Hud::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -95,29 +81,18 @@ void UWidget_Hud::SetStamina(int CurrentStamina)
 	TargetStaminaPercent = percentage;
 }
 
-void UWidget_Hud::ChangeElement(EElement element, int amount)
+void UWidget_Hud::SetQuickSlots(TArray<FItem> QuickSlots)
 {
-	//1234중 하나에 있다면 change
+	if (QuickSlots.Num() != 8) return;
 
-	if (Element_1->GetCurrentElement() == element)
-	{
-		Element_1->SetTxtNum(Element_1->GetTxtNum() + amount);
-	}
-
-	if (Element_2->GetCurrentElement() == element)
-	{
-		Element_2->SetTxtNum(Element_2->GetTxtNum() + amount);
-	}
-
-	if (Element_3->GetCurrentElement() == element)
-	{
-		Element_3->SetTxtNum(Element_3->GetTxtNum() + amount);
-	}
-
-	if (Element_4->GetCurrentElement() == element)
-	{
-		Element_4->SetTxtNum(Element_4->GetTxtNum() + amount);
-	}
+	WBP_QuickSlot1->SetItemInfo(QuickSlots[0]);
+	WBP_QuickSlot2->SetItemInfo(QuickSlots[1]);
+	WBP_QuickSlot3->SetItemInfo(QuickSlots[2]);
+	WBP_QuickSlot4->SetItemInfo(QuickSlots[3]);
+	WBP_QuickSlot5->SetItemInfo(QuickSlots[4]);
+	WBP_QuickSlot6->SetItemInfo(QuickSlots[5]);
+	WBP_QuickSlot7->SetItemInfo(QuickSlots[6]);
+	WBP_QuickSlot8->SetItemInfo(QuickSlots[7]);
 }
 
 void UWidget_Hud::BindStatus(UStatComponent* StatComp)
@@ -125,5 +100,4 @@ void UWidget_Hud::BindStatus(UStatComponent* StatComp)
 	StatComp->OnChangedHP.AddUObject(this, &UWidget_Hud::SetHealth);
 	StatComp->OnChangedST.AddUObject(this, &UWidget_Hud::SetSatiety);
 	StatComp->OnChangedStamina.AddUObject(this, &UWidget_Hud::SetStamina);
-	StatComp->OnChangedElements.AddUObject(this, &UWidget_Hud::ChangeElement);
 }
