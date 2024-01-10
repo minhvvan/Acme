@@ -33,3 +33,15 @@ void UTileInventoryWidget::UpdateInfo()
 		ItemGrid->AddChildToGrid(Entry, i/5, i%5);
 	}
 }
+
+void UTileInventoryWidget::CloseDetailWidget()
+{
+	if (!ShownDetailWidget) return;
+
+	ShownDetailWidget->RemoveFromViewport();
+}
+
+void UTileInventoryWidget::SetDetailWidget(UUserWidget* widget)
+{
+	ShownDetailWidget = widget;
+}

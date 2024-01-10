@@ -64,16 +64,28 @@ class AAcmeCharacter : public ACharacter
 	class UInputAction* JumpDashAttack;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* Element1Action;
+	class UInputAction* Slot1Action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* Element2Action;
+	class UInputAction* Slot2Action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* Element3Action;
+	class UInputAction* Slot3Action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* Element4Action;
+	class UInputAction* Slot4Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Slot5Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Slot6Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Slot7Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Slot8Action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* TabAction;
@@ -168,6 +180,30 @@ protected:
 
 	UFUNCTION()
 	void OpenInventory();
+
+	UFUNCTION()
+	void QuickSlot1Start();
+
+	UFUNCTION()
+	void QuickSlot2Start();
+
+	UFUNCTION()
+	void QuickSlot3Start();
+
+	UFUNCTION()
+	void QuickSlot4Start();
+
+	UFUNCTION()
+	void QuickSlot5Start();
+
+	UFUNCTION()
+	void QuickSlot6Start();
+
+	UFUNCTION()
+	void QuickSlot7Start();
+
+	UFUNCTION()
+	void QuickSlot8Start();
 
 public:
 	/** Returns CameraBoom subobject **/

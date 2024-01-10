@@ -29,6 +29,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> DragWidgetClass;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> DetailWidgetClass;
+
 public:
 	UFUNCTION()
 	void SetItemInfo(FItem info);
@@ -46,6 +49,7 @@ public:
 	void SetEmpty();
 
 	FOnDragCanceled OnDragCancle;
+
 protected:
 	UPROPERTY(EditAnywhere)
 	TMap<EItemName, UTexture2D*> ItemImages;

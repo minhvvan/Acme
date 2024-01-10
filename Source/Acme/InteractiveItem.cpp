@@ -14,7 +14,7 @@ void AInteractiveItem::Init(EItemName itemKey)
 	ItemInfo.Equiped = false;
 
 	//TODO: Change
-	ItemInfo.Category = EItemCategory::E_Armor;
+	ItemInfo.Category = EItemCategory::E_Tool;
 }
 
 void AInteractiveItem::Interact()

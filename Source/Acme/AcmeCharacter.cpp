@@ -133,13 +133,13 @@ void AAcmeCharacter::BeginPlay()
 	temp1.Name = EItemName::E_SPhere;
 	temp1.Num = 1;
 	temp1.Equiped = false;
-	temp1.Category = EItemCategory::E_Weapon;
+	temp1.Category = EItemCategory::E_Equipment;
 
 	FItem temp2;
 	temp2.Name = EItemName::E_Cube;
 	temp2.Num = 1;
 	temp2.Equiped = false;
-	temp2.Category = EItemCategory::E_Weapon;
+	temp2.Category = EItemCategory::E_Equipment;
 
 	InventoryComponent->AddItem(temp1);
 	InventoryComponent->AddItem(temp2);
@@ -195,11 +195,15 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Equip
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::ChangeEquip);
 	
-		//Element
-		//EnhancedInputComponent->BindAction(Element1Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementOne);
-		//EnhancedInputComponent->BindAction(Element2Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementTwo);
-		//EnhancedInputComponent->BindAction(Element3Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementThree);
-		//EnhancedInputComponent->BindAction(Element4Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::SetActiveElementFour);
+		//QuickSlot
+		EnhancedInputComponent->BindAction(Slot1Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot1Start);
+		EnhancedInputComponent->BindAction(Slot2Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot2Start);
+		EnhancedInputComponent->BindAction(Slot3Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot3Start);
+		EnhancedInputComponent->BindAction(Slot4Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot4Start);
+		EnhancedInputComponent->BindAction(Slot5Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot5Start);
+		EnhancedInputComponent->BindAction(Slot6Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot6Start);
+		EnhancedInputComponent->BindAction(Slot7Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot7Start);
+		EnhancedInputComponent->BindAction(Slot8Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot8Start);
 
 		//Equip
 		EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::OpenInventory);
@@ -530,6 +534,39 @@ void AAcmeCharacter::OpenInventory()
 		InventoryWidget->AddToViewport();
 		IsOpenInven = true;
 	}
+}
+
+void AAcmeCharacter::QuickSlot1Start()
+{
+	//Attach Hand
+}
+
+void AAcmeCharacter::QuickSlot2Start()
+{
+}
+
+void AAcmeCharacter::QuickSlot3Start()
+{
+}
+
+void AAcmeCharacter::QuickSlot4Start()
+{
+}
+
+void AAcmeCharacter::QuickSlot5Start()
+{
+}
+
+void AAcmeCharacter::QuickSlot6Start()
+{
+}
+
+void AAcmeCharacter::QuickSlot7Start()
+{
+}
+
+void AAcmeCharacter::QuickSlot8Start()
+{
 }
 
 void AAcmeCharacter::FlushQueue()

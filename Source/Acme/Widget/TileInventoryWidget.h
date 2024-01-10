@@ -25,6 +25,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> ItemEntryClass;
 
+	TObjectPtr<UUserWidget> ShownDetailWidget;
+
 public:
 	virtual void UpdateInfo() override;
+
+	UFUNCTION()
+	void CloseDetailWidget();
+
+	UFUNCTION()
+	void SetDetailWidget(UUserWidget* widget);
 };

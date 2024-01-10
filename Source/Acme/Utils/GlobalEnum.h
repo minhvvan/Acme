@@ -55,8 +55,8 @@ UENUM(BlueprintType)
 enum class EItemCategory : uint8
 {
 	E_Element UMETA(DisplayName = "Element"),
-	E_Weapon UMETA(DisplayName = "Weapon"),
-	E_Armor UMETA(DisplayName = "Armor"),
+	E_Equipment UMETA(DisplayName = "Weapon"),
+	E_Tool UMETA(DisplayName = "Armor"),
 	E_Potion UMETA(DisplayName = "Potion"),
 	E_Food UMETA(DisplayName = "Food"),
 	E_Material UMETA(DisplayName = "Material"),
@@ -64,6 +64,17 @@ enum class EItemCategory : uint8
 };
 ENUM_RANGE_BY_COUNT(EItemCategory, EItemCategory::E_End);
 
+
+UENUM(BlueprintType)
+enum class EDetailAction : uint8
+{
+	E_Equip UMETA(DisplayName = "Equip"),
+	E_Dismantle UMETA(DisplayName = "Dismantle"),
+	E_Install UMETA(DisplayName = "Install"),
+	E_Consume UMETA(DisplayName = "Consume"),
+	E_Dump UMETA(DisplayName = "Dump"),
+	E_End UMETA(DisplayName = "End"),
+};
 
 class ACME_API GlobalEnum
 {

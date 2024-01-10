@@ -9,9 +9,11 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Acme/Widget/ItemDDOP.h"
 #include "TileInventoryWidget.h"
-#include "TileInventoryWidget.h"
 #include "Components/PanelWidget.h"
 #include "Acme/AcmeCharacter.h"
+#include "InventoryInnerWidget.h"
+#include "DetailActionWidget.h"
+#include "DetailActionInnerWidget.h"
 
 void UItemEntryWidget::SetItemInfo(FItem info)
 {
@@ -62,7 +64,10 @@ void UItemEntryWidget::SetEmpty()
 FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply reply;
-
+	
+	UTileInventoryWidget* ParentWidget = Cast<UTileInventoryWidget>(GetParent()->GetOuter()->GetOuter());
+	ParentWidget->CloseDetailWidget();
+	
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
 		reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
@@ -72,6 +77,13 @@ FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	if(InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton))
 	{
 		//TODO: Another Action
+		UDetailActionWidget* Detail = Cast<UDetailActionWidget>(CreateWidget(GetWorld(), DetailWidgetClass));
+		Detail->AddToViewport();
+		Detail->SetPositionInViewport(InMouseEvent.GetScreenSpacePosition());
+
+		//TODO: Sub 생성 -> 설정 + Add
+		Detail->SetInnerWidget(ItemInfo.Category);
+		ParentWidget->SetDetailWidget(Detail);
 	}
 
 	return reply.NativeReply;
