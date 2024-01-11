@@ -82,7 +82,7 @@ FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 		Detail->SetPositionInViewport(InMouseEvent.GetScreenSpacePosition());
 
 		//TODO: Sub 생성 -> 설정 + Add
-		Detail->SetInnerWidget(ItemInfo.Category);
+		Detail->SetInnerWidget(ItemInfo.Category, Index);
 		ParentWidget->SetDetailWidget(Detail);
 	}
 

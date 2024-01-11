@@ -116,33 +116,13 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::AttackEnd);
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
 
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-	FRotator rotator;
-	FVector  SpawnLocation = GetActorLocation();
-	SpawnLocation.Z += 100;
-
-	Weapon = GetWorld()->SpawnActor<AActor_Weapon>(WeaponClass, SpawnLocation, rotator, SpawnParams);
-	if (Weapon)
-	{
-		Weapon->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		Weapon->Dismantle();
-	}
-
 	FItem temp1;
-	temp1.Name = EItemName::E_SPhere;
+	temp1.Name = EItemName::E_Sword;
 	temp1.Num = 1;
 	temp1.Equiped = false;
 	temp1.Category = EItemCategory::E_Equipment;
 
-	FItem temp2;
-	temp2.Name = EItemName::E_Cube;
-	temp2.Num = 1;
-	temp2.Equiped = false;
-	temp2.Category = EItemCategory::E_Equipment;
-
 	InventoryComponent->AddItem(temp1);
-	InventoryComponent->AddItem(temp2);
 }
 
 void AAcmeCharacter::Tick(float DeltaSeconds)
@@ -695,4 +675,20 @@ void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 	//HUD Update
 	if (!Hud) return;
 	Hud->SetQuickSlots(GetQuickSlots());
+}
+
+void AAcmeCharacter::Equip(int idx)
+{
+	if (!InventoryComponent) return;
+
+	//TODO: Equip
+
+	InventoryComponent->Equip(idx);
+}
+
+void AAcmeCharacter::SetWeapon(AActor_Weapon* newWeapon)
+{
+	//TODO: ÇØÁ¦
+	//Weapon.Get()->Dismantle();
+	Weapon = newWeapon;
 }

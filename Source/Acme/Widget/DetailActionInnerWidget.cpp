@@ -4,6 +4,7 @@
 #include "Acme/Widget/DetailActionInnerWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+#include "Acme/AcmeCharacter.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Utils/GlobalConst.h"
 
@@ -14,11 +15,10 @@ void UDetailActionInnerWidget::NativeOnInitialized()
 
 void UDetailActionInnerWidget::OnClicked()
 {
-	//TODO: 함수로 뺴자
 	switch (DetailAction)
 	{
 	case EDetailAction::E_Equip:
-		UUtil::DebugPrint("Equip");
+		Equip();
 		break;
 	case EDetailAction::E_Dismantle:
 		UUtil::DebugPrint("E_Dismantle");
@@ -34,9 +34,23 @@ void UDetailActionInnerWidget::OnClicked()
 	DelegateOnClicked.Broadcast();
 }
 
-void UDetailActionInnerWidget::Init(EDetailAction action)
+void UDetailActionInnerWidget::Equip()
+{
+	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	if (!Player)
+	{
+		UUtil::DebugPrint("no player");
+		return;
+	}
+
+	Player->Equip(Index);
+}
+
+void UDetailActionInnerWidget::Init(EDetailAction action, EItemCategory category, int idx)
 {
 	DetailAction = action;
+	ItemCategory = category;
+	Index = idx;
 
 	switch (action)
 	{

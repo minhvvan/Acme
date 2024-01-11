@@ -10,6 +10,8 @@
 #include "AcmeCharacter.generated.h"
 
 
+class AActor_Weapon;
+
 UCLASS(config=Game)
 class AAcmeCharacter : public ACharacter
 {
@@ -95,10 +97,10 @@ class AAcmeCharacter : public ACharacter
 	class UStatComponent* StatCompoenent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	class AActor_Weapon* Weapon;
+	TObjectPtr<AActor_Weapon> Weapon;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor_Weapon> WeaponClass;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	//TSubclassOf<AActor_Weapon> WeaponClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	class UInventoryComponent* InventoryComponent;
@@ -322,6 +324,12 @@ public:
 
 	UFUNCTION()
 	void SetQuickSlot(FItem item, int idx);
+
+	UFUNCTION()
+	void Equip(int idx);
+
+	UFUNCTION()
+	void SetWeapon(AActor_Weapon* newWeapon);
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

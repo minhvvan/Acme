@@ -155,10 +155,15 @@ void UInventoryComponent::Equip(int idx)
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
 	FItem Item = ItemList[idx];
-	if (Item.Name == EItemName::E_Empty) return;
+	if (Item.Name == EItemName::E_Empty)
+	{
+		UUtil::DebugPrint("Empty");
+		return;
+	}
 
 	if (Item.Name == EItemName::E_Sword)
 	{
+		UUtil::DebugPrint("Sword");
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = Player;
 		FRotator rotator;

@@ -22,9 +22,15 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> DetailInnerWidgetClass;
 
+	UPROPERTY()
+	EItemCategory ItemCategory;
+
+	UPROPERTY()
+	int Index;
+
 public:
 	UFUNCTION()
-	void SetInnerWidget(EItemCategory category);
+	void SetInnerWidget(EItemCategory category, int idx);
 
 	UFUNCTION()
 	void CreateEquip();

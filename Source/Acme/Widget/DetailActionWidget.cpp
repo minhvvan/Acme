@@ -5,8 +5,11 @@
 #include "Components/VerticalBox.h"
 #include "Acme/Widget/DetailActionInnerWidget.h"
 
-void UDetailActionWidget::SetInnerWidget(EItemCategory category)
+void UDetailActionWidget::SetInnerWidget(EItemCategory category, int idx)
 {
+	ItemCategory = category;
+	Index = idx;
+
 	switch (category)
 	{
 	case EItemCategory::E_Element:
@@ -39,7 +42,7 @@ void UDetailActionWidget::CreateEquip()
 	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
 	if (!Detail) return;
 	
-	Detail->Init(EDetailAction::E_Equip);
+	Detail->Init(EDetailAction::E_Equip, ItemCategory, Index);
 	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
 	VertAction->AddChild(Detail);
 }
@@ -49,7 +52,7 @@ void UDetailActionWidget::CreateDismantle()
 	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
 	if (!Detail) return;
 
-	Detail->Init(EDetailAction::E_Dismantle);
+	Detail->Init(EDetailAction::E_Dismantle, ItemCategory, Index);
 	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
 	VertAction->AddChild(Detail);
 }
@@ -59,7 +62,7 @@ void UDetailActionWidget::CreateConsume()
 	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
 	if (!Detail) return;
 
-	Detail->Init(EDetailAction::E_Consume);
+	Detail->Init(EDetailAction::E_Consume, ItemCategory, Index);
 	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
 	VertAction->AddChild(Detail);
 }
@@ -69,7 +72,7 @@ void UDetailActionWidget::CreateDump()
 	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
 	if (!Detail) return;
 
-	Detail->Init(EDetailAction::E_Dump);
+	Detail->Init(EDetailAction::E_Dump, ItemCategory, Index);
 	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
 	VertAction->AddChild(Detail);
 }
@@ -79,7 +82,7 @@ void UDetailActionWidget::CreateInstall()
 	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
 	if (!Detail) return;
 	
-	Detail->Init(EDetailAction::E_Install);
+	Detail->Init(EDetailAction::E_Install, ItemCategory, Index);
 	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
 	VertAction->AddChild(Detail);
 }

@@ -29,9 +29,18 @@ protected:
 	UPROPERTY()
 	EDetailAction DetailAction;
 
+	UPROPERTY()
+	EItemCategory ItemCategory;
+
+	UPROPERTY()
+	int Index;
+
+	UFUNCTION()
+	void Equip();
+
 public:
 	UFUNCTION()
-	void Init(EDetailAction action);
+	void Init(EDetailAction action, EItemCategory category, int idx);
 
 	FOnClick DelegateOnClicked;
 };

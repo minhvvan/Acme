@@ -47,7 +47,11 @@ enum class EItemName : uint8
 	E_Ice UMETA(DisplayName = "Ice"),
 	E_Thunder UMETA(DisplayName = "Thunder"),
 	E_Cube UMETA(DisplayName = "Cube"),
-	E_SPhere UMETA(DisplayName = "Sphere"),
+	E_Sphere UMETA(DisplayName = "Sphere"),
+	E_Sword UMETA(DisplayName = "Sword"),
+
+
+
 	E_Empty UMETA(DisplayName = "Empty"),
 };
 
