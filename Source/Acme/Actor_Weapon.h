@@ -49,10 +49,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void Equip();
+	void AttachHand();
 
 	UFUNCTION()
-	void Dismantle();
+	void AttachBack();
 
 	UFUNCTION()
 	void PlaySound();

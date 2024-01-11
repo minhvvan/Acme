@@ -35,4 +35,6 @@ public:
 
 	UFUNCTION()
 	void SetDetailWidget(UUserWidget* widget);
+
+	virtual void SetEuquipBorder(int idx) override;
 };

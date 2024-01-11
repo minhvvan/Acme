@@ -155,27 +155,20 @@ void UInventoryComponent::Equip(int idx)
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
 	FItem Item = ItemList[idx];
-	if (Item.Name == EItemName::E_Empty)
-	{
-		UUtil::DebugPrint("Empty");
-		return;
-	}
+	if (Item.Name == EItemName::E_Empty) return;
 
-	if (Item.Name == EItemName::E_Sword)
-	{
-		UUtil::DebugPrint("Sword");
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = Player;
-		FRotator rotator;
-		FVector  SpawnLocation = Player->GetActorLocation();
-		SpawnLocation.Z += 100;
+	Item.Equiped = true;
+	Player->SetWeapon(Item);
+}
 
-		AActor_Weapon* Weapon = GetWorld()->SpawnActor<AActor_Weapon>(WeaponClass, SpawnLocation, rotator, SpawnParams);
-		if (Weapon)
-		{
-			Player->SetWeapon(Weapon);
-			Weapon->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
-			Weapon->Dismantle();
-		}
-	}
+void UInventoryComponent::Unequip(int idx)
+{
+	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+
+	FItem Item = ItemList[idx];
+	if (Item.Equiped == false) return;
+
+	Item.Equiped = false;
+	//Player->ClearEquipment();
 }

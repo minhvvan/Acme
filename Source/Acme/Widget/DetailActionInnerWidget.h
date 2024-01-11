@@ -38,6 +38,18 @@ protected:
 	UFUNCTION()
 	void Equip();
 
+	UFUNCTION()
+	void Dismantle();
+
+	UFUNCTION()
+	void Consume();
+
+	UFUNCTION()
+	void Dump();
+
+	UPROPERTY()
+	class AAcmeCharacter* Player;
+
 public:
 	UFUNCTION()
 	void Init(EDetailAction action, EItemCategory category, int idx);

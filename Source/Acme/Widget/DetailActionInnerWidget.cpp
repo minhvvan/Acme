@@ -20,14 +20,14 @@ void UDetailActionInnerWidget::OnClicked()
 	case EDetailAction::E_Equip:
 		Equip();
 		break;
-	case EDetailAction::E_Dismantle:
-		UUtil::DebugPrint("E_Dismantle");
+	case EDetailAction::E_Unequip:
+		Dismantle();
 		break;
 	case EDetailAction::E_Consume:
-		UUtil::DebugPrint("E_Consume");
+		Consume();
 		break;
 	case EDetailAction::E_Dump:
-		UUtil::DebugPrint("E_Dump");
+		Dump();
 		break;
 	}
 
@@ -36,14 +36,30 @@ void UDetailActionInnerWidget::OnClicked()
 
 void UDetailActionInnerWidget::Equip()
 {
-	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-	if (!Player)
-	{
-		UUtil::DebugPrint("no player");
-		return;
-	}
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
 	Player->Equip(Index);
+}
+
+void UDetailActionInnerWidget::Dismantle()
+{
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+
+	//Player->Dismantle(Index);
+}
+
+void UDetailActionInnerWidget::Consume()
+{
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+
+	//Player->Consume(Index);
+}
+
+void UDetailActionInnerWidget::Dump()
+{
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+
+	//Player->Dump(ItemCategory, Index);
 }
 
 void UDetailActionInnerWidget::Init(EDetailAction action, EItemCategory category, int idx)
@@ -57,7 +73,7 @@ void UDetailActionInnerWidget::Init(EDetailAction action, EItemCategory category
 	case EDetailAction::E_Equip:
 		TxtAction->SetText(FText::FromString(GlobalConst::EquipActionName));
 		break;
-	case EDetailAction::E_Dismantle:
+	case EDetailAction::E_Unequip:
 		TxtAction->SetText(FText::FromString(GlobalConst::DismantleActionName));
 		break;
 	case EDetailAction::E_Install:

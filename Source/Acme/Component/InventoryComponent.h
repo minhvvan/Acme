@@ -45,7 +45,10 @@ public:
 	void SetQuickSlot(FItem item, int idx);	
 
 	UFUNCTION()
-	void Equip(int idx);
+	void Equip(int idx);	
+	
+	UFUNCTION()
+	void Unequip(int idx);
 	
 private:
 	UPROPERTY()
@@ -56,9 +59,6 @@ private:
 
 	UPROPERTY()
 	TArray<FItem> QuickSlots;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AActor_Weapon> WeaponClass;
 
 	UPROPERTY()
 	class AAcmeCharacter* Player;

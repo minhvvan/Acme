@@ -45,3 +45,12 @@ void UTileInventoryWidget::SetDetailWidget(UUserWidget* widget)
 {
 	ShownDetailWidget = widget;
 }
+
+void UTileInventoryWidget::SetEuquipBorder(int idx)
+{
+	UItemEntryWidget* Entry = Cast<UItemEntryWidget>(ItemGrid->GetChildAt(idx));
+	if (!Entry) return;
+
+	//TODO: 보더 설정
+	Entry->SetEquipBorder();
+}

@@ -91,7 +91,7 @@ protected:
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
-	int Idx;
+	int Index;
 
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UInventoryInnerWidget* CurrentCategoryView;
@@ -99,4 +99,7 @@ private:
 public:
 	UFUNCTION()
 	void UpdateWidgetByCategory();
+
+	UFUNCTION()
+	void UpdateEquipBorder(int idx);
 };

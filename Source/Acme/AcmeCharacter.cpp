@@ -23,6 +23,7 @@
 #include "CharacterMonster.h"
 #include "Kismet/GameplayStatics.h"
 #include "Acme/Widget/InventoryWidget.h"
+#include "Acme/Component/EquipmentComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -62,6 +63,7 @@ AAcmeCharacter::AAcmeCharacter()
 
 	StatCompoenent = CreateDefaultSubobject<UStatComponent>(TEXT("StatCompoenent"));
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryCompoenent"));
+	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentCompoenent"));
 
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -110,8 +112,8 @@ void AAcmeCharacter::BeginPlay()
 
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
 	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &AAcmeCharacter::EndAttack);
-	AnimInstance->OnEquip.AddUObject(this, &AAcmeCharacter::EquipWeapon);
-	AnimInstance->OnDismantle.AddUObject(this, &AAcmeCharacter::DismantleWeapon);
+	AnimInstance->OnEquip.AddUObject(this, &AAcmeCharacter::AttachWeaponToHand);
+	AnimInstance->OnDismantle.AddUObject(this, &AAcmeCharacter::AttachWeaponToBack);
 	AnimInstance->OnAttackStart.AddUObject(this, &AAcmeCharacter::AttackStart);
 	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::AttackEnd);
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
@@ -421,16 +423,17 @@ void AAcmeCharacter::ChangeEquip()
 	}
 }
 
-void AAcmeCharacter::EquipWeapon()
+void AAcmeCharacter::AttachWeaponToHand()
 {
-	if (!Weapon) return;
-	Weapon->Equip();
+	if (!EquipmentComponent) return;
+
+	EquipmentComponent->EquipCurrentWeapon();
 }
 
-void AAcmeCharacter::DismantleWeapon()
+void AAcmeCharacter::AttachWeaponToBack()
 {
-	if (!Weapon) return;
-	Weapon->Dismantle();
+	if (!EquipmentComponent) return;
+	EquipmentComponent->DismantleCurrentWeapon();
 }
 
 void AAcmeCharacter::AttackStart()
@@ -457,13 +460,16 @@ void AAcmeCharacter::AttackEnd()
 
 void AAcmeCharacter::AttackCheck()
 {
+	if (!EquipmentComponent) return;
+
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Query;
 
 	Query.AddIgnoredActor(this);
 
-	FVector StartPos = Weapon->GetWeponTopPos();
-	FVector EndPos = Weapon->GetWeponEndPos();
+	//TODO: Comp로 빼야될지도 (전투시스템)
+	FVector StartPos = EquipmentComponent->GetCurrentWeapon()->GetWeponTopPos();
+	FVector EndPos = EquipmentComponent->GetCurrentWeapon()->GetWeponEndPos();
 
 	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
 	{
@@ -679,16 +685,25 @@ void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 
 void AAcmeCharacter::Equip(int idx)
 {
+	//Spawn Weapon
 	if (!InventoryComponent) return;
-
-	//TODO: Equip
-
 	InventoryComponent->Equip(idx);
+
+	//TODO:UI Update
+	if (!InventoryWidget) return;
+	InventoryWidget->UpdateEquipBorder(idx);
 }
 
-void AAcmeCharacter::SetWeapon(AActor_Weapon* newWeapon)
+void AAcmeCharacter::Unequip(int idx)
 {
-	//TODO: 해제
-	//Weapon.Get()->Dismantle();
-	Weapon = newWeapon;
+	if (!InventoryComponent) return;
+
+	InventoryComponent->Unequip(idx);
+}
+
+void AAcmeCharacter::SetWeapon(FItem item)
+{
+	if (!EquipmentComponent) return;
+
+	EquipmentComponent->SetCurrentWeapon(item);
 }

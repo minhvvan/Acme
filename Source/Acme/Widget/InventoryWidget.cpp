@@ -19,7 +19,7 @@ void UInventoryWidget::NativeConstruct()
 	bIsFocusable = true;
 	SetKeyboardFocus();
 
-	Idx = 0;
+	Index = 0;
 
 	if (!BtnLeft->OnHovered.IsBound())
 	{
@@ -101,20 +101,20 @@ void UInventoryWidget::OnRightClicked()
 
 void UInventoryWidget::ChangeCurrentView(int change)
 {
-	UImage* CurrentImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(Idx))->GetChildAt(0));
+	UImage* CurrentImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(Index))->GetChildAt(0));
 	CurrentImage->SetColorAndOpacity(FLinearColor(.2f, .2f, .2f, .2f));
 
-	Idx = (Idx + change + 6) % 6;
+	Index = (Index + change + 6) % 6;
 
-	UImage* NextImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(Idx))->GetChildAt(0));
+	UImage* NextImage = Cast<UImage>(Cast<UScaleBox>(HBCategory->GetChildAt(Index))->GetChildAt(0));
 	NextImage->SetColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 1.f));
 
-	WSInven->SetActiveWidgetIndex(Idx);
-	CurrentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(Idx));
+	WSInven->SetActiveWidgetIndex(Index);
+	CurrentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(Index));
 	
 	if (!CurrentCategoryView) return;
 
-	CurrentCategoryView->SetCategory((EItemCategory)Idx);
+	CurrentCategoryView->SetCategory((EItemCategory)Index);
 	CurrentCategoryView->UpdateInfo();
 }
 
@@ -160,4 +160,12 @@ void UInventoryWidget::UpdateWidgetByCategory()
 {
 	if (!CurrentCategoryView) return;
 	CurrentCategoryView->UpdateInfo();
+}
+
+void UInventoryWidget::UpdateEquipBorder(int idx)
+{
+	UInventoryInnerWidget* EquipmentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(1));
+	if (!EquipmentCategoryView) return;
+
+	EquipmentCategoryView->SetEuquipBorder(idx);
 }

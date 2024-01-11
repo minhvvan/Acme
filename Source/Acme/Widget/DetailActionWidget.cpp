@@ -52,7 +52,7 @@ void UDetailActionWidget::CreateDismantle()
 	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
 	if (!Detail) return;
 
-	Detail->Init(EDetailAction::E_Dismantle, ItemCategory, Index);
+	Detail->Init(EDetailAction::E_Unequip, ItemCategory, Index);
 	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
 	VertAction->AddChild(Detail);
 }

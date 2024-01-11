@@ -25,4 +25,7 @@ public:
 
 	UFUNCTION()
 	void SetCategory(EItemCategory c);
+
+	UFUNCTION()
+	virtual void SetEuquipBorder(int idx) {};
 };

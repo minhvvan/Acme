@@ -4,6 +4,7 @@
 #include "ItemEntryWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Components/Border.h"
 #include "Acme/Data/ItemData.h"
 #include "Acme/Utils/Util.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
@@ -59,6 +60,13 @@ void UItemEntryWidget::SetEmpty()
 {
 	SetThumbnailImg(EItemName::E_Empty);
 	SetAmountTxt(0);
+}
+
+void UItemEntryWidget::SetEquipBorder()
+{
+	if (!EquipBorderMat) return;
+
+	BorderItem->SetBrushFromMaterial(EquipBorderMat);
 }
 
 FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

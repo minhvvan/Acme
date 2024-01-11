@@ -36,7 +36,7 @@ void AActor_Weapon::Tick(float DeltaTime)
 
 }
 
-void AActor_Weapon::Equip()
+void AActor_Weapon::AttachHand()
 {
 	AAcmeCharacter* Character = Cast<AAcmeCharacter>(GetOwner());
 	if (!Character) return;
@@ -44,7 +44,7 @@ void AActor_Weapon::Equip()
 	Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, HandSocket);
 }
 
-void AActor_Weapon::Dismantle()
+void AActor_Weapon::AttachBack()
 {
 	AAcmeCharacter* Character = Cast<AAcmeCharacter>(GetOwner());
 	if (!Character) return;

@@ -73,7 +73,7 @@ UENUM(BlueprintType)
 enum class EDetailAction : uint8
 {
 	E_Equip UMETA(DisplayName = "Equip"),
-	E_Dismantle UMETA(DisplayName = "Dismantle"),
+	E_Unequip UMETA(DisplayName = "Unequip"),
 	E_Install UMETA(DisplayName = "Install"),
 	E_Consume UMETA(DisplayName = "Consume"),
 	E_Dump UMETA(DisplayName = "Dump"),

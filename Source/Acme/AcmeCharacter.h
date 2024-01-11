@@ -10,7 +10,6 @@
 #include "AcmeCharacter.generated.h"
 
 
-class AActor_Weapon;
 
 UCLASS(config=Game)
 class AAcmeCharacter : public ACharacter
@@ -96,14 +95,11 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	class UStatComponent* StatCompoenent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<AActor_Weapon> Weapon;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	//TSubclassOf<AActor_Weapon> WeaponClass;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	class UInventoryComponent* InventoryComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Equipment, meta = (AllowPrivateAccess = "true"))
+	class UEquipmentComponent* EquipmentComponent;
 
 public:
 	AAcmeCharacter();
@@ -160,10 +156,10 @@ protected:
 	void ChangeEquip();
 
 	UFUNCTION()
-	void EquipWeapon();
+	void AttachWeaponToHand();
 
 	UFUNCTION()
-	void DismantleWeapon();			
+	void AttachWeaponToBack();			
 	
 	UFUNCTION()
 	void AttackStart();	
@@ -329,7 +325,10 @@ public:
 	void Equip(int idx);
 
 	UFUNCTION()
-	void SetWeapon(AActor_Weapon* newWeapon);
+	void Unequip(int idx);
+
+	UFUNCTION()
+	void SetWeapon(FItem item);
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
