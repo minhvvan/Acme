@@ -4,6 +4,7 @@
 #include "Acme/Component/InventoryComponent.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Utils/GlobalEnum.h"
+#include "Acme/Actor_Weapon.h"
 #include "Acme/AcmeCharacter.h"
 
 // Sets default values for this component's properties
@@ -133,11 +134,9 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 		ItemList[from] = temp;
 	}
 
-	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwner());
-	if (Player)
-	{
-		Player->UpdateInventoryWidget();
-	}
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+	
+	Player->UpdateInventoryWidget();
 }
 
 TArray<FItem>& UInventoryComponent::GetQuickSlots()
@@ -148,4 +147,30 @@ TArray<FItem>& UInventoryComponent::GetQuickSlots()
 void UInventoryComponent::SetQuickSlot(FItem item, int idx)
 {
 	QuickSlots[idx] = item;
+}
+
+void UInventoryComponent::Equip(int idx)
+{
+	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+
+	FItem Item = ItemList[idx];
+	if (Item.Name == EItemName::E_Empty) return;
+
+	if (Item.Name == EItemName::E_Sword)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = Player;
+		FRotator rotator;
+		FVector  SpawnLocation = Player->GetActorLocation();
+		SpawnLocation.Z += 100;
+
+		AActor_Weapon* Weapon = GetWorld()->SpawnActor<AActor_Weapon>(WeaponClass, SpawnLocation, rotator, SpawnParams);
+		if (Weapon)
+		{
+			Player->SetWeapon(Weapon);
+			Weapon->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			Weapon->Dismantle();
+		}
+	}
 }
