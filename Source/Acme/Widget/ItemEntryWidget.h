@@ -37,7 +37,7 @@ protected:
 
 public:
 	UFUNCTION()
-	void SetItemInfo(FItem info);
+	void SetItemInfo(FItem& info);
 
 	UFUNCTION()
 	void SetIndex(int idx);
@@ -54,6 +54,9 @@ public:
 	UFUNCTION()
 	void SetEquipBorder();
 
+	UFUNCTION()
+	void SetNormalBorder();
+
 	FOnDragCanceled OnDragCancle;
 
 protected:
@@ -64,7 +67,10 @@ protected:
 	bool IsEmpty;
 
 	UPROPERTY()
-	FItem ItemInfo;
+	class AAcmeCharacter* Player;
+
+	UPROPERTY()
+	EItemCategory Category;
 
 	UPROPERTY()
 	int Index;

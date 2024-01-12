@@ -37,4 +37,6 @@ public:
 	void SetDetailWidget(UUserWidget* widget);
 
 	virtual void SetEuquipBorder(int idx) override;
+
+	virtual void SetNormalBorder(int idx) override;
 };

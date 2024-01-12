@@ -28,4 +28,7 @@ public:
 
 	UFUNCTION()
 	virtual void SetEuquipBorder(int idx) {};
+
+	UFUNCTION()
+	virtual void SetNormalBorder(int idx) {};
 };

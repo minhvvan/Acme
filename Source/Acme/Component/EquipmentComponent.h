@@ -49,4 +49,6 @@ public:
 	UFUNCTION()
 	void SetCurrentWeapon(FItem item);
 
+	UFUNCTION()
+	void RemoveCurrentWeapon();
 };

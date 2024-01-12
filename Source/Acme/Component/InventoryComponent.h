@@ -30,7 +30,10 @@ public:
 	bool AddItem(FItem newItem);
 
 	UFUNCTION()
-	FItemList GetItemList(EItemCategory category);
+	FItemList& GetItemList(EItemCategory category);
+
+	UFUNCTION()
+	FItem GetItem(EItemCategory category, int idx);
 
 	UFUNCTION()
 	int GetMaxQuantity();

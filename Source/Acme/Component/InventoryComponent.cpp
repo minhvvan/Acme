@@ -89,14 +89,15 @@ bool UInventoryComponent::AddItem(FItem newItem)
 	return false;
 }
 
-FItemList UInventoryComponent::GetItemList(EItemCategory category)
+FItemList& UInventoryComponent::GetItemList(EItemCategory category)
 {
-	if (Items.Find(category))
-	{
-		return Items[category];
-	}
+	//TODO: 예외처리해야 되는데....
+	return Items[category];
+}
 
-	return FItemList();
+FItem UInventoryComponent::GetItem(EItemCategory category, int idx)
+{
+	return Items[category].Get()[idx];
 }
 
 int UInventoryComponent::GetMaxQuantity()
@@ -154,7 +155,7 @@ void UInventoryComponent::Equip(int idx)
 	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
-	FItem Item = ItemList[idx];
+	FItem& Item = ItemList[idx];
 	if (Item.Name == EItemName::E_Empty) return;
 
 	Item.Equiped = true;
@@ -166,9 +167,9 @@ void UInventoryComponent::Unequip(int idx)
 	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
-	FItem Item = ItemList[idx];
+	FItem& Item = ItemList[idx];
 	if (Item.Equiped == false) return;
 
 	Item.Equiped = false;
-	//Player->ClearEquipment();
+	Player->RemoveWeapon();
 }

@@ -8,20 +8,23 @@
 #include "Acme/Data/ItemData.h"
 #include "Acme/Utils/Util.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
-#include "Acme/Widget/ItemDDOP.h"
 #include "TileInventoryWidget.h"
 #include "Components/PanelWidget.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/Widget/ItemDDOP.h"
 #include "InventoryInnerWidget.h"
 #include "DetailActionWidget.h"
 #include "DetailActionInnerWidget.h"
 
-void UItemEntryWidget::SetItemInfo(FItem info)
+void UItemEntryWidget::SetItemInfo(FItem& info)
 {
-	ItemInfo = info;
+	Category = info.Category;
 
 	SetThumbnailImg(info.Name);
 	SetAmountTxt(info.Num);
+
+	if (info.Equiped) SetEquipBorder();
+	else SetNormalBorder();
 }
 
 void UItemEntryWidget::SetIndex(int idx)
@@ -60,6 +63,7 @@ void UItemEntryWidget::SetEmpty()
 {
 	SetThumbnailImg(EItemName::E_Empty);
 	SetAmountTxt(0);
+	SetNormalBorder();
 }
 
 void UItemEntryWidget::SetEquipBorder()
@@ -67,6 +71,13 @@ void UItemEntryWidget::SetEquipBorder()
 	if (!EquipBorderMat) return;
 
 	BorderItem->SetBrushFromMaterial(EquipBorderMat);
+}
+
+void UItemEntryWidget::SetNormalBorder()
+{
+	if (!NormalBorderMat) return;
+
+	BorderItem->SetBrushFromMaterial(NormalBorderMat);
 }
 
 FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -84,13 +95,14 @@ FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	
 	if(InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton))
 	{
-		//TODO: Another Action
+		if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+
 		UDetailActionWidget* Detail = Cast<UDetailActionWidget>(CreateWidget(GetWorld(), DetailWidgetClass));
 		Detail->AddToViewport();
 		Detail->SetPositionInViewport(InMouseEvent.GetScreenSpacePosition());
 
-		//TODO: Sub 생성 -> 설정 + Add
-		Detail->SetInnerWidget(ItemInfo.Category, Index);
+		FItem itemInfo = Player->GetItem(Category, Index);
+		Detail->SetInnerWidget(itemInfo, Index);
 		ParentWidget->SetDetailWidget(Detail);
 	}
 
@@ -102,14 +114,16 @@ void UItemEntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
 	 
 	if (IsEmpty) return;
+	if(!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	FItem itemInfo = Player->GetItem(Category, Index);
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDDOP::StaticClass()));
 	DragWidget->Index = Index;
-	DragWidget->ItemInfo = ItemInfo;
+	DragWidget->ItemInfo = itemInfo;
 	DragWidget->WidgetRef = this;
 
 	UItemEntryWidget* DragVisual = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), DragWidgetClass));
-	DragVisual->SetItemInfo(ItemInfo);
+	DragVisual->SetItemInfo(itemInfo);
 
 	DragWidget->DefaultDragVisual = DragVisual;
 	DragWidget->Pivot = EDragPivot::CenterCenter;
@@ -151,14 +165,14 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
 	if (!IsValid(DragWidget)) return false;
+	if (DragWidget->Index == Index) return false;
 
-	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-	if (!Player) return false;
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
 	if (DragWidget->WidgetRef)
 	{
 		DragWidget->WidgetRef->SetEmpty();
-		Player->MoveItems(ItemInfo.Category, DragWidget->Index, Index);
+		Player->MoveItems(DragWidget->ItemInfo.Category, DragWidget->Index, Index);
 	}
 
 	return true;

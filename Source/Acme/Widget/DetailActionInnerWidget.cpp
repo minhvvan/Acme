@@ -21,7 +21,7 @@ void UDetailActionInnerWidget::OnClicked()
 		Equip();
 		break;
 	case EDetailAction::E_Unequip:
-		Dismantle();
+		Unequip();
 		break;
 	case EDetailAction::E_Consume:
 		Consume();
@@ -41,11 +41,11 @@ void UDetailActionInnerWidget::Equip()
 	Player->Equip(Index);
 }
 
-void UDetailActionInnerWidget::Dismantle()
+void UDetailActionInnerWidget::Unequip()
 {
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
-	//Player->Dismantle(Index);
+	Player->Unequip(Index);
 }
 
 void UDetailActionInnerWidget::Consume()

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Acme/Utils/GlobalEnum.h"
+#include "Acme/Utils/GlobalStruct.h"
 #include "DetailActionWidget.generated.h"
 
 /**
@@ -23,20 +24,20 @@ protected:
 	TSubclassOf<UUserWidget> DetailInnerWidgetClass;
 
 	UPROPERTY()
-	EItemCategory ItemCategory;
+	FItem ItemInfo;
 
 	UPROPERTY()
 	int Index;
 
 public:
 	UFUNCTION()
-	void SetInnerWidget(EItemCategory category, int idx);
+	void SetInnerWidget(FItem& item, int idx);
 
 	UFUNCTION()
 	void CreateEquip();
 
 	UFUNCTION()
-	void CreateDismantle();
+	void CreateUnEquip();
 
 	UFUNCTION()
 	void CreateConsume();

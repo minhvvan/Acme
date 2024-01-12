@@ -304,7 +304,10 @@ public:
 	void AddElement(EElement element);
 	
 	UFUNCTION()
-	FItemList GetItems(EItemCategory category);
+	FItemList& GetItems(EItemCategory category);
+
+	UFUNCTION()
+	FItem GetItem(EItemCategory category, int idx);
 
 	UFUNCTION()
 	bool AddItem(FItem item);
@@ -329,6 +332,9 @@ public:
 
 	UFUNCTION()
 	void SetWeapon(FItem item);
+
+	UFUNCTION()
+	void RemoveWeapon();
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

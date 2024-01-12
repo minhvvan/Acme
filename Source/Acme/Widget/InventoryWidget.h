@@ -101,5 +101,8 @@ public:
 	void UpdateWidgetByCategory();
 
 	UFUNCTION()
-	void UpdateEquipBorder(int idx);
+	void UpdateBorderToEquip(int idx);
+
+	UFUNCTION()
+	void UpdateBorderToNoraml(int idx);
 };

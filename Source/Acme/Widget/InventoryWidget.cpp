@@ -162,10 +162,18 @@ void UInventoryWidget::UpdateWidgetByCategory()
 	CurrentCategoryView->UpdateInfo();
 }
 
-void UInventoryWidget::UpdateEquipBorder(int idx)
+void UInventoryWidget::UpdateBorderToEquip(int idx)
 {
 	UInventoryInnerWidget* EquipmentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(1));
 	if (!EquipmentCategoryView) return;
 
 	EquipmentCategoryView->SetEuquipBorder(idx);
+}
+
+void UInventoryWidget::UpdateBorderToNoraml(int idx)
+{
+	UInventoryInnerWidget* EquipmentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(1));
+	if (!EquipmentCategoryView) return;
+
+	EquipmentCategoryView->SetNormalBorder(idx);
 }

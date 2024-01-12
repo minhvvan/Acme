@@ -637,11 +637,19 @@ void AAcmeCharacter::AddElement(EElement element)
 	InventoryComponent->AddItem(Item);
 }
 
-FItemList AAcmeCharacter::GetItems(EItemCategory category)
+FItemList& AAcmeCharacter::GetItems(EItemCategory category)
 {
-	if (!InventoryComponent) return FItemList();
+	FItemList temp = FItemList();
+	if (!InventoryComponent) return temp;
 
 	return InventoryComponent->GetItemList(category);
+}
+
+FItem AAcmeCharacter::GetItem(EItemCategory category, int idx)
+{
+	if (!InventoryComponent) return FItem();
+
+	return InventoryComponent->GetItem(category, idx);
 }
 
 bool AAcmeCharacter::AddItem(FItem item)
@@ -691,14 +699,16 @@ void AAcmeCharacter::Equip(int idx)
 
 	//TODO:UI Update
 	if (!InventoryWidget) return;
-	InventoryWidget->UpdateEquipBorder(idx);
+	InventoryWidget->UpdateBorderToEquip(idx);
 }
 
 void AAcmeCharacter::Unequip(int idx)
 {
 	if (!InventoryComponent) return;
-
 	InventoryComponent->Unequip(idx);
+
+	if (!InventoryWidget) return;
+	InventoryWidget->UpdateBorderToNoraml(idx);
 }
 
 void AAcmeCharacter::SetWeapon(FItem item)
@@ -706,4 +716,11 @@ void AAcmeCharacter::SetWeapon(FItem item)
 	if (!EquipmentComponent) return;
 
 	EquipmentComponent->SetCurrentWeapon(item);
+}
+
+void AAcmeCharacter::RemoveWeapon()
+{
+	if (!EquipmentComponent) return;
+
+	EquipmentComponent->RemoveCurrentWeapon();
 }

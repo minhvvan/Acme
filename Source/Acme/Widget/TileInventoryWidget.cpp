@@ -18,10 +18,10 @@ void UTileInventoryWidget::UpdateInfo()
 		OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 	}
 
-	TArray<FItem> Items = OwnerCharacter->GetItems(Category).Get();
+	TArray<FItem>& Items = OwnerCharacter->GetItems(Category).Get();
 	for (int i = 0; i < Items.Num(); i++)
 	{
-		FItem item = Items[i];
+		FItem& item = Items[i];
 
 		UItemEntryWidget* Entry = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), ItemEntryClass));
 		Entry->SetItemInfo(item);
@@ -51,6 +51,13 @@ void UTileInventoryWidget::SetEuquipBorder(int idx)
 	UItemEntryWidget* Entry = Cast<UItemEntryWidget>(ItemGrid->GetChildAt(idx));
 	if (!Entry) return;
 
-	//TODO: 보더 설정
 	Entry->SetEquipBorder();
+}
+
+void UTileInventoryWidget::SetNormalBorder(int idx)
+{
+	UItemEntryWidget* Entry = Cast<UItemEntryWidget>(ItemGrid->GetChildAt(idx));
+	if (!Entry) return;
+
+	Entry->SetNormalBorder();
 }

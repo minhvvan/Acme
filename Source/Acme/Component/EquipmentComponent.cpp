@@ -51,7 +51,6 @@ AActor_Weapon* UEquipmentComponent::GetCurrentWeapon()
 
 void UEquipmentComponent::SetCurrentWeapon(FItem item)
 {
-	//TODO: 이전 Weapon 빼야함
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
 	//Spawn
@@ -71,4 +70,10 @@ void UEquipmentComponent::SetCurrentWeapon(FItem item)
 			CurrentWeapon->AttachBack();
 		}
 	}
+}
+
+void UEquipmentComponent::RemoveCurrentWeapon()
+{
+	CurrentWeapon->Destroy();
+	CurrentWeapon = nullptr;
 }

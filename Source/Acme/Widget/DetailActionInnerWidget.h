@@ -39,7 +39,7 @@ protected:
 	void Equip();
 
 	UFUNCTION()
-	void Dismantle();
+	void Unequip();
 
 	UFUNCTION()
 	void Consume();
