@@ -31,4 +31,7 @@ public:
 
 	UFUNCTION()
 	virtual void SetNormalBorder(int idx) {};
+
+	UFUNCTION()
+	virtual void SetEmpty(int idx) {};
 };

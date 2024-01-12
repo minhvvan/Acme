@@ -59,7 +59,7 @@ void UDetailActionInnerWidget::Dump()
 {
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
-	//Player->Dump(ItemCategory, Index);
+	Player->DumpItem(ItemCategory, Index);
 }
 
 void UDetailActionInnerWidget::Init(EDetailAction action, EItemCategory category, int idx)

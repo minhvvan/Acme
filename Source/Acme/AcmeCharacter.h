@@ -336,6 +336,9 @@ public:
 	UFUNCTION()
 	void RemoveWeapon();
 
+	UFUNCTION()
+	void DumpItem(EItemCategory Category, int idx);
+
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

@@ -61,3 +61,11 @@ void UTileInventoryWidget::SetNormalBorder(int idx)
 
 	Entry->SetNormalBorder();
 }
+
+void UTileInventoryWidget::SetEmpty(int idx)
+{
+	UItemEntryWidget* Entry = Cast<UItemEntryWidget>(ItemGrid->GetChildAt(idx));
+	if (!Entry) return;
+
+	Entry->SetEmpty();
+}

@@ -102,8 +102,12 @@ FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 		Detail->SetPositionInViewport(InMouseEvent.GetScreenSpacePosition());
 
 		FItem itemInfo = Player->GetItem(Category, Index);
-		Detail->SetInnerWidget(itemInfo, Index);
-		ParentWidget->SetDetailWidget(Detail);
+
+		if (itemInfo.Name != EItemName::E_Empty)
+		{
+			Detail->SetInnerWidget(itemInfo, Index);
+			ParentWidget->SetDetailWidget(Detail);
+		}
 	}
 
 	return reply.NativeReply;

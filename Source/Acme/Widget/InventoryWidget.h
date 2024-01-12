@@ -105,4 +105,7 @@ public:
 
 	UFUNCTION()
 	void UpdateBorderToNoraml(int idx);
+
+	UFUNCTION()
+	void EmptyEntry(EItemCategory Category, int idx);
 };

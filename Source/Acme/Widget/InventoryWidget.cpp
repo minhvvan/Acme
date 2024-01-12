@@ -177,3 +177,11 @@ void UInventoryWidget::UpdateBorderToNoraml(int idx)
 
 	EquipmentCategoryView->SetNormalBorder(idx);
 }
+
+void UInventoryWidget::EmptyEntry(EItemCategory Category, int idx)
+{
+	UInventoryInnerWidget* EquipmentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex((int)Category));
+	if (!EquipmentCategoryView) return;
+
+	EquipmentCategoryView->SetEmpty(idx);
+}

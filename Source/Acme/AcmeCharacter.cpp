@@ -724,3 +724,12 @@ void AAcmeCharacter::RemoveWeapon()
 
 	EquipmentComponent->RemoveCurrentWeapon();
 }
+
+void AAcmeCharacter::DumpItem(EItemCategory Category, int idx)
+{
+	if (!InventoryComponent) return;
+	InventoryComponent->Dump(Category, idx);
+
+	if (!InventoryWidget) return;
+	InventoryWidget->EmptyEntry(Category, idx);
+}

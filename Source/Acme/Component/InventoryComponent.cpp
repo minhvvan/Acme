@@ -117,10 +117,7 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 		ItemList[from].Num -= moveAmount;
 		if (ItemList[from].Num <= 0)
 		{
-			//set empty
-			ItemList[from].Name = EItemName::E_Empty;
-			ItemList[from].Num = 0;
-			ItemList[from].Equiped = false;
+			SetEmpty(ItemList[from]);
 		}
 
 		ItemList[to].Num += moveAmount;
@@ -138,6 +135,13 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 	
 	Player->UpdateInventoryWidget();
+}
+
+void UInventoryComponent::SetEmpty(FItem& item)
+{
+	item.Equiped = false;
+	item.Name = EItemName::E_Empty;
+	item.Num = 0;
 }
 
 TArray<FItem>& UInventoryComponent::GetQuickSlots()
@@ -172,4 +176,26 @@ void UInventoryComponent::Unequip(int idx)
 
 	Item.Equiped = false;
 	Player->RemoveWeapon();
+}
+
+void UInventoryComponent::Dump(EItemCategory Category, int idx)
+{
+	TArray<FItem>& ItemList = Items[Category].Get();
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+
+	FItem& Item = ItemList[idx];
+
+	//spawn 
+	//TODO: Item Class·Î ¹­¾î¾ßÇÔ
+	TSubclassOf<AActor_Weapon> SpawnClass = ItemClass[Item.Name];
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = Player;
+	FRotator rotator;
+	FVector  SpawnLocation = Player->GetActorLocation() + Player->GetActorForwardVector() * 100;
+
+	if (!SpawnClass) return;
+	auto DropItem = GetWorld()->SpawnActor<AActor_Weapon>(SpawnClass, SpawnLocation, rotator, SpawnParams);
+	DropItem->GetMesh()->SetSimulatePhysics(true);
+
+	SetEmpty(Item);
 }

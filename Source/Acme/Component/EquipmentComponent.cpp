@@ -4,6 +4,7 @@
 #include "Acme/Component/EquipmentComponent.h"
 #include "Acme/Actor_Weapon.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/Utils/Util.h"
 
 // Sets default values for this component's properties
 UEquipmentComponent::UEquipmentComponent()
@@ -68,6 +69,8 @@ void UEquipmentComponent::SetCurrentWeapon(FItem item)
 		{
 			CurrentWeapon->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
 			CurrentWeapon->AttachBack();
+
+			UUtil::DebugPrint("Equip");
 		}
 	}
 }

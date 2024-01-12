@@ -42,6 +42,9 @@ public:
 	void MoveItems(EItemCategory Category, int from, int to);
 
 	UFUNCTION()
+	void SetEmpty(FItem& item);
+
+	UFUNCTION()
 	TArray<FItem>& GetQuickSlots();
 
 	UFUNCTION()
@@ -53,6 +56,9 @@ public:
 	UFUNCTION()
 	void Unequip(int idx);
 	
+	UFUNCTION()
+	void Dump(EItemCategory Category, int idx);
+
 private:
 	UPROPERTY()
 	TMap<EItemCategory, FItemList> Items;
@@ -65,4 +71,7 @@ private:
 
 	UPROPERTY()
 	class AAcmeCharacter* Player;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TMap<EItemName, TSubclassOf<class AActor_Weapon>> ItemClass;
 };
