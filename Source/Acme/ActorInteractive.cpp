@@ -26,7 +26,7 @@ AActorInteractive::AActorInteractive()
 	Indicator = CreateDefaultSubobject<UWidgetComponent>(TEXT("Indicator"));
 	Indicator->SetupAttachment(RootComponent);
 
-	Name = TEXT("Name");
+	Name = EItemName::E_Empty;
 
 	bCanInteract = false;
 }
@@ -38,32 +38,36 @@ void AActorInteractive::BeginPlay()
 
 	if (UWidgetIndicator* IndicatorWidget = Cast<UWidgetIndicator>(Indicator->GetWidget()))
 	{
-		IndicatorWidget->SetName(Name);
+		IndicatorWidget->SetName(NameStrings[Name]);
 	}
-	
+
 	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &AActorInteractive::OnBeginOverlap);
 	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &AActorInteractive::OnEndOverlap);
 }
 
 void AActorInteractive::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor != nullptr && OtherActor != this->GetOwner() && OtherComp != nullptr)
+	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		OverlapedCharacter = Cast<AAcmeCharacter>(OtherActor);
 		if (!OverlapedCharacter) return;
 
-		OverlapedCharacter->SetOverlapActor(this);
+		bCanInteract = true;
+		SetVisibleIndicator(true);
+		OverlapedCharacter->ShowOverlapInfo(true);
 	}
 }
 
 void AActorInteractive::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (OtherActor != nullptr && OtherActor != this->GetOwner() && OtherComp != nullptr)
+	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		OverlapedCharacter = Cast<AAcmeCharacter>(OtherActor);
 		if (!OverlapedCharacter) return;
 
-		OverlapedCharacter->SetOverlapActor(nullptr);
+		bCanInteract = false;
+		SetVisibleIndicator(false);
+		OverlapedCharacter->ShowOverlapInfo(false);
 	}
 }
 
@@ -87,12 +91,12 @@ void AActorInteractive::Interact()
 	//OverlapedCharacter->Do Something
 }
 
-void AActorInteractive::SetName(FString newName)
+void AActorInteractive::SetName(EItemName newName)
 {
 	Name = newName;
 	if (UWidgetIndicator* IndicatorWidget = Cast<UWidgetIndicator>(Indicator->GetWidget()))
 	{
-		IndicatorWidget->SetName(newName);
+		IndicatorWidget->SetName(NameStrings[newName]);
 	}
 }
 

@@ -398,10 +398,35 @@ void AAcmeCharacter::StartSkill()
 
 void AAcmeCharacter::StartInteract()
 {
-	if (!OverlapActor.IsValid()) return;
-	if (!AnimInstance) return;
+	//trace 가장 가까운 item -> Interact
 
-	AnimInstance->PlayInteract();
+	FHitResult HitResult;
+	FCollisionQueryParams Query;
+
+	FVector StartLocation = GetActorLocation();
+	FVector EndLocation = GetActorLocation();
+	EndLocation.Z += 100;
+
+	ECollisionChannel ECC = ECollisionChannel::ECC_GameTraceChannel2;
+
+	FCollisionShape CollisionShape;
+	CollisionShape.ShapeType = ECollisionShape::Sphere;
+	CollisionShape.SetSphere(250);
+
+	Query.AddIgnoredActor(this);
+	if (GetWorld()->SweepSingleByChannel(HitResult, StartLocation, EndLocation, FQuat::Identity, ECC, CollisionShape, Query))
+	{
+		AActorInteractive* Item = Cast<AActorInteractive>(HitResult.GetActor());
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Name:%s"), *HitResult.GetActor()->GetName()));
+		if (!Item) return;
+
+		Item->Interact();
+	}
+
+	FVector CenterOfSphere = ((EndLocation - StartLocation) / 2) + StartLocation;
+
+	/*Draw the sphere in the viewport*/
+	DrawDebugSphere(GetWorld(), CenterOfSphere, CollisionShape.GetSphereRadius(), 10, FColor::Green, true);
 }
 
 void AAcmeCharacter::ChangeEquip()
@@ -566,20 +591,12 @@ void AAcmeCharacter::FlushQueue()
 	}
 }
 
-void AAcmeCharacter::SetOverlapActor(AActorInteractive* actor)
+void AAcmeCharacter::ShowOverlapInfo(bool bShow)
 {
-	if (actor == nullptr)
-	{
-		if (OverlapActor != nullptr) OverlapActor->SetVisibleIndicator(false);
-		OverlapActor.Reset();
-		if (Hud) Hud->SetVisibleActionBorder(false);
-		return;
-	}
+	if (!Hud) return;
 
-	if (OverlapActor != nullptr) OverlapActor->SetVisibleIndicator(false);
-	OverlapActor = actor;
-	OverlapActor->SetVisibleIndicator(true);
-	if(Hud) Hud->SetVisibleActionBorder(true);
+	if (!bShow) Hud->SetVisibleActionBorder(false);
+	else Hud->SetVisibleActionBorder(true);
 }
 
 void AAcmeCharacter::ChangeWalkSpeed(float amount)
@@ -656,6 +673,7 @@ bool AAcmeCharacter::AddItem(FItem item)
 {
 	if (!InventoryComponent) return false;
 
+	UUtil::DebugPrint("Add");
 	return InventoryComponent->AddItem(item);
 }
 

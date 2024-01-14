@@ -291,7 +291,7 @@ public:
 	void SetIsAttacking(bool flag) { IsAttacking = flag; };
 
 	UFUNCTION()
-	void SetOverlapActor(AActorInteractive* actor);
+	void ShowOverlapInfo(bool bShow);
 
 	UFUNCTION()
 	void ChangeWalkSpeed(float amount);

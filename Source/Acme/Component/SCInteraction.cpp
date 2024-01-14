@@ -39,7 +39,7 @@ void USCInteraction::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor*
 		AAcmeCharacter* Character = Cast<AAcmeCharacter>(OtherActor);
 		if (!Character) return;
 
-		Character->SetOverlapActor(Cast<AActorInteractive>(this->GetOwner()));
+		Character->ShowOverlapInfo(true);
 	}
 }
 

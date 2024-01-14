@@ -6,6 +6,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "InteractiveElement.h"
 #include "Acme/Utils/GlobalConst.h"
+#include "Acme/Utils/Util.h"
 
 AElementSpawner::AElementSpawner()
 {
@@ -16,6 +17,7 @@ void AElementSpawner::Respawn()
 {
 	if (Elements.Num() == MaxPopulation) return;
 	if (!Area) return;
+	if (!ElementClass) return;
 
 	while (Elements.Num() != MaxPopulation)
 	{
@@ -27,41 +29,35 @@ void AElementSpawner::Respawn()
 
 		Pos.Z += 100;
 
-		FHitResult Result;
-		if (GetWorld()->LineTraceSingleByChannel(Result, Pos, Pos - (0, 0, 1000), ECollisionChannel::ECC_Visibility))
+		FActorSpawnParameters SpawnParam;
+		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		AInteractiveElement* Element = GetWorld()->SpawnActor<AInteractiveElement>(ElementClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
+		Element->SetElementType(ElementType);
+
+		switch (ElementType)
 		{
-			FVector SpawnPos = Result.Location;
-
-			FActorSpawnParameters SpawnParam;
-			SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-			AInteractiveElement* Element = GetWorld()->SpawnActor<AInteractiveElement>(ElementClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
-			Element->SetElementType(ElementType);
-
-			switch (ElementType)
-			{
-			case EElement::E_Fire:
-				Element->SetName(GlobalConst::FireElementName);
-				break;
-			case EElement::E_Water:
-				Element->SetName(GlobalConst::WaterElementName);
-				break;
-			case EElement::E_Earth:
-				Element->SetName(GlobalConst::EarthElementName);
-				break;
-			case EElement::E_Air:
-				Element->SetName(GlobalConst::AirElementName);
-				break;
-			case EElement::E_Ice:
-				Element->SetName(GlobalConst::IceElementName);
-				break;
-			case EElement::E_Thunder:
-				Element->SetName(GlobalConst::ThunderElementName);
-				break;
-			}
-
-			Elements.Add(Element);
+		case EElement::E_Fire:
+			Element->SetName(EItemName::E_Fire);
+			break;
+		case EElement::E_Water:
+			Element->SetName(EItemName::E_Water);
+			break;
+		case EElement::E_Earth:
+			Element->SetName(EItemName::E_Earth);
+			break;
+		case EElement::E_Air:
+			Element->SetName(EItemName::E_Air);
+			break;
+		case EElement::E_Ice:
+			Element->SetName(EItemName::E_Ice);
+			break;
+		case EElement::E_Thunder:
+			Element->SetName(EItemName::E_Thunder);
+			break;
 		}
+
+		Elements.Add(Element);
 	}
 }
 

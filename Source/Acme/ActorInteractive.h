@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "ActorInteractive.generated.h"
 
 UCLASS()
@@ -38,10 +39,13 @@ protected:
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UPROPERTY(EditAnywhere, Category = Default)
-	FString Name;
+	EItemName Name;
 
 	UPROPERTY(VisibleAnywhere, Category = Default)
 	bool bCanInteract;
+
+	UPROPERTY(EditAnywhere, Category = Default)
+	TMap<EItemName, FString> NameStrings;
 
 public:	
 	// Called every frame
@@ -54,7 +58,7 @@ public:
 	virtual void Interact();
 
 	UFUNCTION()
-	void SetName(FString newName);
+	void SetName(EItemName newName);
 
 	UFUNCTION()
 	bool GetbCanInteract();

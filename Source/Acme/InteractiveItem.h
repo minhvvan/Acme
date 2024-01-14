@@ -17,8 +17,10 @@ class ACME_API AInteractiveItem : public AActorInteractive
 	GENERATED_BODY()
 	
 public:
+	AInteractiveItem();
+
 	UFUNCTION()
-	void Init(EItemName itemKey);
+	void Init(EItemName itemKey, EItemCategory category);
 
 protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))

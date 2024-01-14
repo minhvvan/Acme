@@ -41,6 +41,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	FName WeaponEndName;
 
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

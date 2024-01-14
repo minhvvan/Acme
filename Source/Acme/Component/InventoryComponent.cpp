@@ -53,6 +53,7 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 bool UInventoryComponent::AddItem(FItem newItem)
 {
+	if (newItem.Category == EItemCategory::E_End || newItem.Name == EItemName::E_Empty) return false;
 	TArray<FItem>& ItemList = Items[newItem.Category].Get();
 
 	//find
@@ -195,6 +196,7 @@ void UInventoryComponent::Dump(EItemCategory Category, int idx)
 	if (!SpawnClass) return;
 	auto DropItem = GetWorld()->SpawnActor<AInteractiveItem>(SpawnClass, SpawnLocation, rotator, SpawnParams);
 	DropItem->GetMesh()->SetSimulatePhysics(true);
+	DropItem->Init(Item.Name, Item.Category);
 
 	SetEmpty(Item);
 }

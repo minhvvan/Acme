@@ -104,7 +104,7 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 	SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
-	DropItem->Init(EItemName::E_Cube);
+	DropItem->Init(EItemName::E_Cube, EItemCategory::E_Material);
 	DropItem->SetbCanInteract(true);
 }
 
