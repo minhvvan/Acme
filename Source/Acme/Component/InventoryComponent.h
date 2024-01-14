@@ -73,5 +73,5 @@ private:
 	class AAcmeCharacter* Player;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TMap<EItemName, TSubclassOf<class AActor_Weapon>> ItemClass;
+	TMap<EItemName, TSubclassOf<class AInteractiveItem>> ItemClass;
 };

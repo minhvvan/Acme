@@ -20,6 +20,7 @@ void AInteractiveItem::Init(EItemName itemKey)
 void AInteractiveItem::Interact()
 {
 	if (!OverlapedCharacter) return;
+	if (!bCanInteract) return;
 
 	if (OverlapedCharacter->AddItem(ItemInfo))
 	{

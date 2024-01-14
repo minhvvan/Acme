@@ -5,6 +5,7 @@
 #include "Acme/Utils/Util.h"
 #include "Acme/Utils/GlobalEnum.h"
 #include "Acme/Actor_Weapon.h"
+#include "Acme/InteractiveItem.h"
 #include "Acme/AcmeCharacter.h"
 
 // Sets default values for this component's properties
@@ -185,16 +186,14 @@ void UInventoryComponent::Dump(EItemCategory Category, int idx)
 
 	FItem& Item = ItemList[idx];
 
-	//spawn 
-	//TODO: Item Class·Î ¹­¾î¾ßÇÔ
-	TSubclassOf<AActor_Weapon> SpawnClass = ItemClass[Item.Name];
+	TSubclassOf<AInteractiveItem> SpawnClass = ItemClass[Item.Name];
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = Player;
 	FRotator rotator;
 	FVector  SpawnLocation = Player->GetActorLocation() + Player->GetActorForwardVector() * 100;
 
 	if (!SpawnClass) return;
-	auto DropItem = GetWorld()->SpawnActor<AActor_Weapon>(SpawnClass, SpawnLocation, rotator, SpawnParams);
+	auto DropItem = GetWorld()->SpawnActor<AInteractiveItem>(SpawnClass, SpawnLocation, rotator, SpawnParams);
 	DropItem->GetMesh()->SetSimulatePhysics(true);
 
 	SetEmpty(Item);

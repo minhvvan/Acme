@@ -40,6 +40,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Default)
 	FString Name;
 
+	UPROPERTY(VisibleAnywhere, Category = Default)
+	bool bCanInteract;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -52,4 +55,10 @@ public:
 
 	UFUNCTION()
 	void SetName(FString newName);
+
+	UFUNCTION()
+	bool GetbCanInteract();
+
+	UFUNCTION()
+	void SetbCanInteract(bool canInteract);
 };

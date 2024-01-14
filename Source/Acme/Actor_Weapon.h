@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "InteractiveItem.h"
 #include "Acme/Utils/GlobalEnum.h"
 #include "Actor_Weapon.generated.h"
 
 UCLASS()
-class ACME_API AActor_Weapon : public AActor
+class ACME_API AActor_Weapon : public AInteractiveItem
 {
 	GENERATED_BODY()
 	
@@ -19,9 +19,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sound, meta = (AllowPrivateAccess = "true"))
 	class UAudioComponent* AudioComp;
@@ -62,7 +59,4 @@ public:
 
 	UFUNCTION()
 	FVector GetWeponEndPos();
-
-	UFUNCTION()
-	UStaticMeshComponent* GetMesh() { return Mesh; };
 };

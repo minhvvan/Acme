@@ -69,8 +69,6 @@ void UEquipmentComponent::SetCurrentWeapon(FItem item)
 		{
 			CurrentWeapon->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
 			CurrentWeapon->AttachBack();
-
-			UUtil::DebugPrint("Equip");
 		}
 	}
 }

@@ -27,6 +27,8 @@ AActorInteractive::AActorInteractive()
 	Indicator->SetupAttachment(RootComponent);
 
 	Name = TEXT("Name");
+
+	bCanInteract = false;
 }
 
 // Called when the game starts or when spawned
@@ -92,4 +94,14 @@ void AActorInteractive::SetName(FString newName)
 	{
 		IndicatorWidget->SetName(newName);
 	}
+}
+
+bool AActorInteractive::GetbCanInteract()
+{
+	return bCanInteract;
+}
+
+void AActorInteractive::SetbCanInteract(bool canInteract)
+{
+	bCanInteract = canInteract;
 }

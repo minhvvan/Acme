@@ -28,4 +28,9 @@ protected:
 
 	UPROPERTY(EditAnywhere);
 	FItem ItemInfo;
+
+
+public:
+	UFUNCTION()
+	UStaticMeshComponent* GetMesh() { return Mesh; };
 };

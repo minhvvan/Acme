@@ -105,6 +105,7 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 
 	AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
 	DropItem->Init(EItemName::E_Cube);
+	DropItem->SetbCanInteract(true);
 }
 
 void ACharacterMonster::SetTarget(AAcmeCharacter* target)
