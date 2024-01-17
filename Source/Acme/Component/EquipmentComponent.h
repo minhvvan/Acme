@@ -51,4 +51,7 @@ public:
 
 	UFUNCTION()
 	void RemoveCurrentWeapon();
+
+	UFUNCTION()
+	bool IsValidCurrnetWeapon();
 };

@@ -7,3 +7,8 @@ void UAI_Monster::PlayDeath()
 {
 	if (!Montage_IsPlaying(AMDeath)) Montage_Play(AMDeath);
 }
+
+void UAI_Monster::PlayAttacked()
+{
+	if (!Montage_IsPlaying(AMAttakced)) Montage_Play(AMAttakced);
+}

@@ -44,6 +44,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Default)
 	bool bCanInteract;
 
+	UPROPERTY(VisibleAnywhere, Category = Default)
+	bool bCanOverlap;
+
 	UPROPERTY(EditAnywhere, Category = Default)
 	TMap<EItemName, FString> NameStrings;
 
@@ -65,4 +68,7 @@ public:
 
 	UFUNCTION()
 	void SetbCanInteract(bool canInteract);
+
+	UFUNCTION()
+	void SetbCanOverlap(bool canOverlap);
 };

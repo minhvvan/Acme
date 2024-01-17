@@ -431,6 +431,9 @@ void AAcmeCharacter::StartInteract()
 
 void AAcmeCharacter::ChangeEquip()
 {
+	if (!EquipmentComponent) return;
+	if (!EquipmentComponent->IsValidCurrnetWeapon()) return;
+
 	if (AnimState == EAnimState::E_Unarmed)
 	{
 		AnimState = EAnimState::E_Equiped;

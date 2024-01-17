@@ -18,7 +18,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMDeath;
 
+	UPROPERTY(EditAnywhere, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMAttakced;
+
 public:
 	UFUNCTION()
 	void PlayDeath();
+
+	UFUNCTION()
+	void PlayAttacked();
 };

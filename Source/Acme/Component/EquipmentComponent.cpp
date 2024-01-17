@@ -78,3 +78,8 @@ void UEquipmentComponent::RemoveCurrentWeapon()
 	CurrentWeapon->Destroy();
 	CurrentWeapon = nullptr;
 }
+
+bool UEquipmentComponent::IsValidCurrnetWeapon()
+{
+	return CurrentWeapon != nullptr;
+}

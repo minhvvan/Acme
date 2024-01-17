@@ -67,12 +67,21 @@ public:
 	UFUNCTION()
 	void SetTarget(AAcmeCharacter* target);
 
+	UFUNCTION(BlueprintCallable)
+	bool GetIsAttack();
+
+	UFUNCTION()
+	void SetIsAttack(bool bIsAttack);
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsCombat;
 
 	UPROPERTY(EditAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	float CombatSustainTime;
+
+	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	bool IsAttacked;
 
 	FTimerHandle CombatTimer;
 	FTimerHandle ElementTimer;

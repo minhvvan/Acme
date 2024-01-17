@@ -55,8 +55,13 @@ void ACharacterMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void ACharacterMonster::OnAttacked(int damage, EElement ElementType)
 {
+	if (!HPBar) return;
+	if (!AnimInstance) return;
+
 	IsCombat = true;
 	HPBar->SetVisibility(true);
+
+	AnimInstance->PlayAttacked();
 
 	GetWorldTimerManager().SetTimer(CombatTimer, FTimerDelegate::CreateLambda(
 		[this]() {
@@ -91,26 +96,45 @@ void ACharacterMonster::Die()
 
 void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 {
-	Destroy();
-	OnDied.Broadcast();
+	FString MontageName = Montage->GetName();
 
-	//TODO: fx,Item Drop
-	if (ItemClass == nullptr) return;
+	if (MontageName == TEXT("AM_Attacked"))
+	{
 
-	FVector SpawnPos = GetActorLocation();
-	SpawnPos.Z += 10;
+	}
+	else if (MontageName == TEXT("AM_Death_Monster"))
+	{
+		Destroy();
+		OnDied.Broadcast();
 
-	FActorSpawnParameters SpawnParam;
-	SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		//TODO: fx,Item Drop
+		if (ItemClass == nullptr) return;
 
-	AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
-	DropItem->Init(EItemName::E_Cube, EItemCategory::E_Material);
-	DropItem->SetbCanInteract(true);
+		FVector SpawnPos = GetActorLocation();
+		SpawnPos.Z += 10;
+
+		FActorSpawnParameters SpawnParam;
+		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+		DropItem->Init(EItemName::E_Cube, EItemCategory::E_Material);
+		DropItem->SetbCanOverlap(true);
+	}
 }
 
 void ACharacterMonster::SetTarget(AAcmeCharacter* target)
 {
 	TargetCharacter = target;
+}
+
+bool ACharacterMonster::GetIsAttack()
+{
+	return IsAttacked;
+}
+
+void ACharacterMonster::SetIsAttack(bool bIsAttack)
+{
+	IsAttacked = bIsAttack;
 }
 
 void ACharacterMonster::TakeDamage(int damage)

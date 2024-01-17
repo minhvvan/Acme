@@ -34,7 +34,7 @@ void AInteractiveItem::Init(EItemName itemKey, EItemCategory category)
 
 void AInteractiveItem::Interact()
 {
-	if (!OverlapedCharacter)
+	if (!OverlapedCharacter) 
 	{
 		UUtil::DebugPrint("No OverlapedCharacter");
 		return;
