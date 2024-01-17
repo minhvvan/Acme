@@ -20,7 +20,7 @@
 #include "Actor_Projectile.h"
 #include "Sound/SoundBase.h"
 #include "Actor_Weapon.h"
-#include "CharacterMonster.h"
+#include "Acme/Monster/CharacterMonster.h"
 #include "Kismet/GameplayStatics.h"
 #include "Acme/Widget/InventoryWidget.h"
 #include "Acme/Component/EquipmentComponent.h"

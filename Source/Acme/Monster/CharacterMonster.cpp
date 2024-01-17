@@ -1,16 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterMonster.h"
+#include "Acme/Monster/CharacterMonster.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Acme/Component/MonsterStatComponent.h"
 #include "Acme/Widget/Widget_HPBar.h"
 #include "Acme/Animation/AI_Monster.h"
-#include "AcmeCharacter.h"
-#include "InteractiveItem.h"
+#include "Acme/AcmeCharacter.h"
+#include "Acme/InteractiveItem.h"
 #include "Acme/Utils/Util.h"
+#include "MonsterAIController.h"
 
 
 // Sets default values
@@ -26,6 +27,9 @@ ACharacterMonster::ACharacterMonster()
 
 	IsCombat = false;
 	CombatSustainTime = 5.f;
+
+	AIControllerClass = AMonsterAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
