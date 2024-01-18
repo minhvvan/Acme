@@ -32,7 +32,6 @@ void AMonsterAIController::OnPossess(APawn* InPawn)
 	{
 		if (RunBehaviorTree(BehaviorTree))
 		{
-			UUtil::DebugPrint("RunBT");
 		}
 	}
 

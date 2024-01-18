@@ -2,7 +2,6 @@
 
 
 #include "Acme/Monster/BTTask_FindPatrolPos.h"
-#include "BTTask_FindPatrolPos.h"
 #include "Acme/Monster/CharacterMonster.h"
 #include "Acme/Monster/MonsterAIController.h"
 #include "Blueprint//AIBlueprintHelperLibrary.h"

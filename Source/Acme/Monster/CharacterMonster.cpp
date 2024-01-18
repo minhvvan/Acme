@@ -12,7 +12,8 @@
 #include "Acme/InteractiveItem.h"
 #include "Acme/Utils/Util.h"
 #include "MonsterAIController.h"
-
+#include "Debug/DebugDrawComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 // Sets default values
 ACharacterMonster::ACharacterMonster()
@@ -30,6 +31,8 @@ ACharacterMonster::ACharacterMonster()
 
 	AIControllerClass = AMonsterAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	AttackRange = 200.f;
 }
 
 // Called when the game starts or when spawned
@@ -61,18 +64,18 @@ void ACharacterMonster::OnAttacked(int damage, EElement ElementType)
 {
 	if (!HPBar) return;
 	if (!AnimInstance) return;
+	if (!TargetCharacter) return;
 
 	IsCombat = true;
 	HPBar->SetVisibility(true);
 
 	AnimInstance->PlayAttacked();
 
-	GetWorldTimerManager().SetTimer(CombatTimer, FTimerDelegate::CreateLambda(
-		[this]() {
-			IsCombat = false;
-			HPBar->SetVisibility(false);
-			//TODO: 전투 종료, 제자리로 돌아가게
-		}), CombatSustainTime, false);
+	if (!AIController) AIController = Cast<AMonsterAIController>(GetController());
+	AIController->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), TargetCharacter);
+
+	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
+	GetWorldTimerManager().SetTimer(CombatTimer, this, &ACharacterMonster::FinishCombat, CombatSustainTime, false);
 
 	TakeDamage(damage);
 }
@@ -82,6 +85,28 @@ void ACharacterMonster::Attack()
 	IsCombat = true;
 	HPBar->SetVisibility(true);
 
+	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
+	GetWorldTimerManager().SetTimer(CombatTimer, this, &ACharacterMonster::FinishCombat, CombatSustainTime, false);
+
+	FVector Forward = TargetCharacter->GetActorForwardVector();
+	Forward *= -1;
+
+	SetActorRotation(Forward.Rotation());
+
+	if (!AnimInstance) return;
+	AnimInstance->PlayAttack();
+
+	//Attack Check
+	TArray<FHitResult> HitResults;
+	FVector StartPos = GetActorLocation();
+	FVector EndPos = StartPos + GetActorForwardVector() * AttackRange;
+	FCollisionQueryParams Query;
+	Query.AddIgnoredActor(this);
+
+	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
+	{
+		DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, AttackRange / 2, 10, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), FColor::Red, false, 10.f);
+	}
 }
 
 void ACharacterMonster::InitState()
@@ -102,9 +127,14 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	FString MontageName = Montage->GetName();
 
-	if (MontageName == TEXT("AM_Attacked"))
+	if (MontageName == TEXT("AM_AttackMonster"))
 	{
+		OnAttackEnd.Broadcast();
 
+		UUtil::DebugPrint("Attack End");
+	}
+	else if (MontageName == TEXT("AM_Attacked"))
+	{
 	}
 	else if (MontageName == TEXT("AM_Death_Monster"))
 	{
@@ -139,6 +169,20 @@ bool ACharacterMonster::GetIsAttack()
 void ACharacterMonster::SetIsAttack(bool bIsAttack)
 {
 	IsAttacked = bIsAttack;
+}
+
+void ACharacterMonster::FinishCombat()
+{
+	IsCombat = false;
+	HPBar->SetVisibility(false);
+	TargetCharacter = nullptr;
+	AIController->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
+	CombatTimer.Invalidate();
+}
+
+AAcmeCharacter* ACharacterMonster::GetTarget()
+{
+	return TargetCharacter.Get();
 }
 
 void ACharacterMonster::TakeDamage(int damage)

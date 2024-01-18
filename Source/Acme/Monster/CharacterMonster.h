@@ -8,6 +8,7 @@
 #include "CharacterMonster.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnDie);
+DECLARE_MULTICAST_DELEGATE(FOnAttackEnd);
 
 UCLASS()
 class ACME_API ACharacterMonster : public ACharacter
@@ -36,6 +37,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Item, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AInteractiveItem> ItemClass;
 
+	UPROPERTY()
+	class AMonsterAIController* AIController;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -63,6 +67,7 @@ public:
 	void OnMontageEnd(UAnimMontage* Montage, bool bInterrupted);
 
 	FOnDie OnDied;
+	FOnAttackEnd OnAttackEnd;
 
 	UFUNCTION()
 	void SetTarget(AAcmeCharacter* target);
@@ -73,6 +78,12 @@ public:
 	UFUNCTION()
 	void SetIsAttack(bool bIsAttack);
 
+	UFUNCTION()
+	void FinishCombat();
+
+	UFUNCTION()
+	AAcmeCharacter* GetTarget();
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsCombat;
@@ -82,6 +93,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsAttacked;
+
+	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	float AttackRange;
 
 	FTimerHandle CombatTimer;
 	FTimerHandle ElementTimer;
