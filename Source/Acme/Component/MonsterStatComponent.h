@@ -35,6 +35,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	int Strength;
 
+	UPROPERTY(EditAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
+	float WalkSpeed;
+
 public:
 	UFUNCTION()
 	int GetCurrentHP();
@@ -44,6 +47,9 @@ public:
 
 	UFUNCTION()
 	int GetStrength();
+
+	UFUNCTION()
+	float GetWalkSpeed();
 
 public:
 	FChangeHP OnChangedHP;

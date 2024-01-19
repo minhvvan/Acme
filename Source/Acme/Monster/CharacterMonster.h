@@ -76,10 +76,16 @@ public:
 	void SetTarget(AAcmeCharacter* target);
 
 	UFUNCTION(BlueprintCallable)
-	bool GetIsAttack();
+	bool GetIsAttacked();
 
 	UFUNCTION()
-	void SetIsAttack(bool bIsAttack);
+	void SetIsAttacked(bool bIsAttack);
+
+	UFUNCTION(BlueprintCallable)
+	bool GetIsMoving();
+
+	UFUNCTION()
+	void SetIsMoving(bool bIsMoving);
 
 	UFUNCTION()
 	void FinishCombat();
@@ -108,6 +114,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsAttacked;
+
+	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	bool IsMoving;
 
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	float AttackRange;

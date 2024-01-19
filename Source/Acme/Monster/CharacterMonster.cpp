@@ -108,6 +108,10 @@ void ACharacterMonster::InitState()
 	HpBar->SetHPPercent(100, 100);
 
 	HPBar->SetVisibility(false);
+
+	if (!StatCompoenent) return;
+	float Speed = StatCompoenent->GetWalkSpeed();
+	GetCharacterMovement()->MaxWalkSpeed = Speed;
 }
 
 void ACharacterMonster::Die()
@@ -175,14 +179,24 @@ void ACharacterMonster::SetTarget(AAcmeCharacter* target)
 	TargetCharacter = target;
 }
 
-bool ACharacterMonster::GetIsAttack()
+bool ACharacterMonster::GetIsAttacked()
 {
 	return IsAttacked;
 }
 
-void ACharacterMonster::SetIsAttack(bool bIsAttack)
+void ACharacterMonster::SetIsAttacked(bool bIsAttack)
 {
 	IsAttacked = bIsAttack;
+}
+
+bool ACharacterMonster::GetIsMoving()
+{
+	return IsMoving;
+}
+
+void ACharacterMonster::SetIsMoving(bool bIsMoving)
+{
+	IsMoving = bIsMoving;
 }
 
 void ACharacterMonster::FinishCombat()
