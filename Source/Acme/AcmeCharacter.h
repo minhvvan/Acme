@@ -297,9 +297,15 @@ public:
 	void ChangeWalkSpeed(float amount);
 
 	UFUNCTION()
-	void CloseInventory();
+	void OnAttacked(int damage);
+
+	UFUNCTION()
+	void TakeDamage(int damage);
 
 public:
+	UFUNCTION()
+	void CloseInventory();
+	
 	UFUNCTION()
 	void AddElement(EElement element);
 	

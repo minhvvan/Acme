@@ -32,12 +32,18 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	int MaxHP;
 
+	UPROPERTY(EditAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
+	int Strength;
+
 public:
 	UFUNCTION()
 	int GetCurrentHP();
 
 	UFUNCTION()
 	void SetCurrentHP(int HP);
+
+	UFUNCTION()
+	int GetStrength();
 
 public:
 	FChangeHP OnChangedHP;

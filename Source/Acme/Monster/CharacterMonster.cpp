@@ -43,7 +43,8 @@ void ACharacterMonster::BeginPlay()
 	InitState();
 
 	AnimInstance = Cast<UAI_Monster>(GetMesh()->GetAnimInstance());
-	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &ACharacterMonster::OnMontageEnd);
+	AnimInstance->OnMontageEnded.AddDynamic(this, &ACharacterMonster::OnMontageEnd);
+	AnimInstance->OnAttack.AddUObject(this, &ACharacterMonster::AttackCheck);
 }
 
 // Called every frame
@@ -82,6 +83,9 @@ void ACharacterMonster::OnAttacked(int damage, EElement ElementType)
 
 void ACharacterMonster::Attack()
 {
+	if (IsAttacking) return;
+
+	IsAttacking = true;
 	IsCombat = true;
 	HPBar->SetVisibility(true);
 
@@ -95,18 +99,6 @@ void ACharacterMonster::Attack()
 
 	if (!AnimInstance) return;
 	AnimInstance->PlayAttack();
-
-	//Attack Check
-	TArray<FHitResult> HitResults;
-	FVector StartPos = GetActorLocation();
-	FVector EndPos = StartPos + GetActorForwardVector() * AttackRange;
-	FCollisionQueryParams Query;
-	Query.AddIgnoredActor(this);
-
-	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
-	{
-		DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, AttackRange / 2, 10, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), FColor::Red, false, 10.f);
-	}
 }
 
 void ACharacterMonster::InitState()
@@ -130,8 +122,7 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 	if (MontageName == TEXT("AM_AttackMonster"))
 	{
 		OnAttackEnd.Broadcast();
-
-		UUtil::DebugPrint("Attack End");
+		IsAttacking = false;
 	}
 	else if (MontageName == TEXT("AM_Attacked"))
 	{
@@ -153,6 +144,29 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
 		DropItem->Init(EItemName::E_Cube, EItemCategory::E_Material);
 		DropItem->SetbCanOverlap(true);
+	}
+}
+
+void ACharacterMonster::AttackCheck()
+{
+	//Attack Check
+	TArray<FHitResult> HitResults;
+	FVector StartPos = GetActorLocation();
+	FVector EndPos = StartPos + GetActorForwardVector() * AttackRange;
+	FCollisionQueryParams Query;
+	Query.AddIgnoredActor(this);
+
+	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
+	{
+		for (auto Result : HitResults)
+		{
+			AAcmeCharacter* Player = Cast<AAcmeCharacter>(Result.GetActor());
+			if (!Player) continue;
+
+			Player->OnAttacked(StatCompoenent->GetStrength());
+		}
+
+		DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, AttackRange / 2, 10, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), FColor::Red, false, 10.f);
 	}
 }
 

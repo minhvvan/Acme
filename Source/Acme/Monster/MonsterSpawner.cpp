@@ -57,7 +57,7 @@ void AMonsterSpawner::BeginPlay()
 
 	CenterPos = GetActorLocation();
 	
-	DrawDebugSphere(GetWorld(), CenterPos, 10, 10, FColor::Blue, false, 10.f);
+	//DrawDebugSphere(GetWorld(), CenterPos, 10, 10, FColor::Blue, false, 10.f);
 
 	Respawn();
 	GetWorldTimerManager().SetTimer(RespawnHandle, this, &AMonsterSpawner::Respawn, RespawnInterval, true);

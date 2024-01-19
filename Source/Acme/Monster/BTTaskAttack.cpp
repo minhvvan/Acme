@@ -19,7 +19,6 @@ UBTTaskAttack::UBTTaskAttack()
 EBTNodeResult::Type UBTTaskAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
-	if(bIsAttacking) return EBTNodeResult::Failed;
 
 	ACharacterMonster* Monster = Cast<ACharacterMonster>(OwnerComp.GetAIOwner()->GetPawn());
 	if (!Monster) return EBTNodeResult::Failed;

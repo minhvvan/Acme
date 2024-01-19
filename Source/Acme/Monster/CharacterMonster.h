@@ -64,7 +64,10 @@ public:
 	void Attack();
 
 	UFUNCTION()
-	void OnMontageEnd(UAnimMontage* Montage, bool bInterrupted);
+	void OnMontageEnd(UAnimMontage* Montage, bool bInterrupted);	
+	
+	UFUNCTION()
+	void AttackCheck();
 
 	FOnDie OnDied;
 	FOnAttackEnd OnAttackEnd;
@@ -114,6 +117,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
 	float SearchRadius;
+
+	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	bool IsAttacking;
 
 	FTimerHandle CombatTimer;
 	FTimerHandle ElementTimer;

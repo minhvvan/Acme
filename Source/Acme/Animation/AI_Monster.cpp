@@ -17,3 +17,8 @@ void UAI_Monster::PlayAttacked()
 {
 	if (!Montage_IsPlaying(AMAttakced)) Montage_Play(AMAttakced);
 }
+
+void UAI_Monster::AnimNotify_AttackCheck()
+{
+	OnAttack.Broadcast();
+}

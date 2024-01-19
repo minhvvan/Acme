@@ -6,9 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "AI_Monster.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE(FOnAttack);
+
 UCLASS()
 class ACME_API UAI_Monster : public UAnimInstance
 {
@@ -33,4 +32,10 @@ public:
 
 	UFUNCTION()
 	void PlayAttacked();
+
+	UFUNCTION()
+	void AnimNotify_AttackCheck();
+
+public:
+	FOnAttack OnAttack;
 };

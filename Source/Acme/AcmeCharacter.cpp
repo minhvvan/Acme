@@ -610,6 +610,17 @@ void AAcmeCharacter::ChangeWalkSpeed(float amount)
 	Movement->MaxWalkSpeed += amount;
 }
 
+void AAcmeCharacter::OnAttacked(int damage)
+{
+	TakeDamage(damage);
+}
+
+void AAcmeCharacter::TakeDamage(int damage)
+{
+	if (!StatCompoenent) return;
+	StatCompoenent->OnAttakced(damage);
+}
+
 void AAcmeCharacter::CloseInventory()
 {
 	auto PC = Cast<APlayerController>(GetController());

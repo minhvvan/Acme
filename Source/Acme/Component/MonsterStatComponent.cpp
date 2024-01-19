@@ -12,6 +12,8 @@ UMonsterStatComponent::UMonsterStatComponent()
 
 	CurrentHP = 100;
 	MaxHP = 100;
+
+	Strength = 10;
 }
 
 
@@ -42,5 +44,10 @@ void UMonsterStatComponent::SetCurrentHP(int HP)
 {
 	CurrentHP = HP;
 	OnChangedHP.Broadcast(CurrentHP, MaxHP);
+}
+
+int UMonsterStatComponent::GetStrength()
+{
+	return Strength;
 }
 
