@@ -11,6 +11,11 @@ void UAI_Main::PlayAttack(int idx)
 	Montage_JumpToSection(GetAttackMontageName(idx), AMAttack);
 }
 
+void UAI_Main::PlayAttacked()
+{
+	if (!Montage_IsPlaying(AMAttacked)) Montage_Play(AMAttacked);
+}
+
 void UAI_Main::PlayJumpDashAttack()
 {
 	if (!Montage_IsPlaying(AMJDAttack)) Montage_Play(AMJDAttack);

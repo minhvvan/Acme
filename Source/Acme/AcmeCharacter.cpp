@@ -612,6 +612,9 @@ void AAcmeCharacter::ChangeWalkSpeed(float amount)
 
 void AAcmeCharacter::OnAttacked(int damage)
 {
+	if (!AnimInstance) return;
+	AnimInstance->PlayAttacked();
+
 	TakeDamage(damage);
 }
 
