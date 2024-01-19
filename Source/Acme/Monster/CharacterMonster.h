@@ -84,6 +84,18 @@ public:
 	UFUNCTION()
 	AAcmeCharacter* GetTarget();
 
+	UFUNCTION()
+	void SetCenterPos(FVector pos);
+
+	UFUNCTION()
+	FVector GetCenterPos();
+
+	UFUNCTION()
+	void SetSearchRadius(float radius);
+
+	UFUNCTION()
+	float GetSearchRadius();
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsCombat;
@@ -96,6 +108,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	float AttackRange;
+
+	UPROPERTY(VisibleAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
+	FVector CenterPos;
+
+	UPROPERTY(EditAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
+	float SearchRadius;
 
 	FTimerHandle CombatTimer;
 	FTimerHandle ElementTimer;

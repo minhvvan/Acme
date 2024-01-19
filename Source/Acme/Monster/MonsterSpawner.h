@@ -20,6 +20,9 @@ class ACME_API AMonsterSpawner : public ADefaultSpawner
 	UPROPERTY(VisibleAnywhere, Category = Monster)
 	TArray<ACharacterMonster*> Monsters;
 
+	UPROPERTY(VisibleAnywhere, Category = Monster)
+	FVector CenterPos;
+
 public:	
 	// Sets default values for this actor's properties
 	AMonsterSpawner();

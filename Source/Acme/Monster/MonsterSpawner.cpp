@@ -5,6 +5,7 @@
 #include "Acme/Monster/CharacterMonster.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Debug/DebugDrawComponent.h"
 
 // Sets default values
 AMonsterSpawner::AMonsterSpawner()
@@ -42,6 +43,7 @@ void AMonsterSpawner::Respawn()
 
 			ACharacterMonster* Monster = GetWorld()->SpawnActor<ACharacterMonster>(MonsterClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
 			
+			Monster->SetCenterPos(CenterPos);
 			Monster->OnDied.AddLambda([this, Monster]() { Monsters.Remove(Monster); });
 			Monsters.Add(Monster);
 		}
@@ -52,7 +54,11 @@ void AMonsterSpawner::Respawn()
 void AMonsterSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CenterPos = GetActorLocation();
 	
+	DrawDebugSphere(GetWorld(), CenterPos, 10, 10, FColor::Blue, false, 10.f);
+
 	Respawn();
 	GetWorldTimerManager().SetTimer(RespawnHandle, this, &AMonsterSpawner::Respawn, RespawnInterval, true);
 }

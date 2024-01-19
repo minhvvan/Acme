@@ -185,6 +185,26 @@ AAcmeCharacter* ACharacterMonster::GetTarget()
 	return TargetCharacter.Get();
 }
 
+void ACharacterMonster::SetCenterPos(FVector pos)
+{
+	CenterPos = pos;
+}
+
+FVector ACharacterMonster::GetCenterPos()
+{
+	return CenterPos;
+}
+
+void ACharacterMonster::SetSearchRadius(float radius)
+{
+	SearchRadius = radius;
+}
+
+float ACharacterMonster::GetSearchRadius()
+{
+	return SearchRadius;
+}
+
 void ACharacterMonster::TakeDamage(int damage)
 {
 	int CurrentHP = StatCompoenent->GetCurrentHP();
