@@ -29,7 +29,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Default)
 	class UWidgetComponent* Indicator;
 
-	UPROPERTY(EditAnywhere, Category = Default)
+	UPROPERTY(VisibleAnywhere, Category = Default)
 	class AAcmeCharacter* OverlapedCharacter;
 
 	UFUNCTION()

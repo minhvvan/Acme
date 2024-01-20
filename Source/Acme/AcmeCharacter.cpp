@@ -417,16 +417,16 @@ void AAcmeCharacter::StartInteract()
 	if (GetWorld()->SweepSingleByChannel(HitResult, StartLocation, EndLocation, FQuat::Identity, ECC, CollisionShape, Query))
 	{
 		AActorInteractive* Item = Cast<AActorInteractive>(HitResult.GetActor());
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Name:%s"), *HitResult.GetActor()->GetName()));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Name:%s"), *HitResult.GetActor()->GetName()));
 		if (!Item) return;
 
 		Item->Interact();
 	}
 
-	FVector CenterOfSphere = ((EndLocation - StartLocation) / 2) + StartLocation;
+	//FVector CenterOfSphere = ((EndLocation - StartLocation) / 2) + StartLocation;
 
 	/*Draw the sphere in the viewport*/
-	DrawDebugSphere(GetWorld(), CenterOfSphere, CollisionShape.GetSphereRadius(), 10, FColor::Green, true);
+	//DrawDebugSphere(GetWorld(), CenterOfSphere, CollisionShape.GetSphereRadius(), 10, FColor::Green, true);
 }
 
 void AAcmeCharacter::ChangeEquip()
@@ -585,6 +585,12 @@ void AAcmeCharacter::QuickSlot8Start()
 
 void AAcmeCharacter::FlushQueue()
 {
+	if (!CanAttack)
+	{
+		AttackQueue.Empty();
+		return;
+	}
+
 	if (!AttackQueue.IsEmpty())
 	{
 		int idx = *AttackQueue.Peek();
@@ -732,7 +738,6 @@ void AAcmeCharacter::Equip(int idx)
 	if (!InventoryComponent) return;
 	InventoryComponent->Equip(idx);
 
-	//TODO:UI Update
 	if (!InventoryWidget) return;
 	InventoryWidget->UpdateBorderToEquip(idx);
 }
