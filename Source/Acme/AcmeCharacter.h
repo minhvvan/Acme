@@ -246,6 +246,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	bool IsOpenInven;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Achemy, meta = (AllowPrivateAccess = "true"))
+	bool IsOpenInteractWidget;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
 	EElement ActiveElement;
 
@@ -273,6 +276,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AActor_Projectile> ProjectileClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	class UAlchemicComposeWidget* InteractWidget;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
@@ -344,6 +350,15 @@ public:
 
 	UFUNCTION()
 	void DumpItem(EItemCategory Category, int idx);
+
+	UFUNCTION()
+	void SetIsOpenWidget(bool bOpen);
+
+	UFUNCTION()
+	void CloseInteractWidget();
+
+	UFUNCTION()
+	void SetInteractWidget(UAlchemicComposeWidget* widget);
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

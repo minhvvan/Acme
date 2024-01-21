@@ -23,6 +23,7 @@
 #include "Acme/Monster/CharacterMonster.h"
 #include "Kismet/GameplayStatics.h"
 #include "Acme/Widget/InventoryWidget.h"
+#include "Acme/Widget/AlchemicComposeWidget.h"
 #include "Acme/Component/EquipmentComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -530,24 +531,23 @@ void AAcmeCharacter::StaminaCheck(int Stamina)
 
 void AAcmeCharacter::OpenInventory()
 {
-	if (!IsOpenInven)
+	if (IsOpenInven || IsOpenInteractWidget) return;
+
+	//open
+	auto PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeUIOnly());
+	PC->SetPause(true);
+	PC->bShowMouseCursor = true;
+
+	if (InventoryWidget == nullptr)
 	{
-		//open
-		auto PC = Cast<APlayerController>(GetController());
-		if (!PC) return;
-
-		PC->SetInputMode(FInputModeUIOnly());
-		PC->SetPause(true);
-		PC->bShowMouseCursor = true;
-
-		if (InventoryWidget == nullptr)
-		{
-			InventoryWidget = Cast<UInventoryWidget>(CreateWidget(GetWorld(), InventoryClass));
-		}
-
-		InventoryWidget->AddToViewport();
-		IsOpenInven = true;
+		InventoryWidget = Cast<UInventoryWidget>(CreateWidget(GetWorld(), InventoryClass));
 	}
+
+	InventoryWidget->AddToViewport();
+	IsOpenInven = true;
 }
 
 void AAcmeCharacter::QuickSlot1Start()
@@ -772,4 +772,30 @@ void AAcmeCharacter::DumpItem(EItemCategory Category, int idx)
 
 	if (!InventoryWidget) return;
 	InventoryWidget->EmptyEntry(Category, idx);
+}
+
+void AAcmeCharacter::SetIsOpenWidget(bool bOpen)
+{
+	IsOpenInteractWidget = bOpen;
+}
+
+void AAcmeCharacter::CloseInteractWidget()
+{
+	//TODO: InteractWidget -> Super로 바꿔야함(요리나 다른 위젯이 있을 수 있음)
+	if (!InteractWidget) return;
+
+	auto PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeGameOnly());
+	PC->SetPause(false);
+	PC->bShowMouseCursor = false;
+
+	InteractWidget->RemoveFromViewport();
+	IsOpenInteractWidget = false;
+}
+
+void AAcmeCharacter::SetInteractWidget(UAlchemicComposeWidget* widget)
+{
+	InteractWidget = widget;
 }
