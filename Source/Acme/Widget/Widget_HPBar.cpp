@@ -6,7 +6,6 @@
 #include "Components/TileView.h"
 #include "Acme/Component/MonsterStatComponent.h"
 #include "Acme/Data/ElementData.h"
-#include "ElementItemWidget.h"
 #include "Acme/Utils/Util.h"
 
 void UWidget_HPBar::SetHPPercent(int CurrentHP, int MaxHP)

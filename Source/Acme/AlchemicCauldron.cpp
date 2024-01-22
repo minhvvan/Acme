@@ -5,6 +5,7 @@
 #include "Acme/Utils/Util.h"
 #include "Acme/Widget/AlchemicComposeWidget.h"
 #include "AcmeCharacter.h"
+#include "Acme/Data/ElementData.h"
 
 AAlchemicCauldron::AAlchemicCauldron()
 {

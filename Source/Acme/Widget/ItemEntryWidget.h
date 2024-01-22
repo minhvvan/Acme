@@ -12,7 +12,7 @@
 DECLARE_MULTICAST_DELEGATE(FOnDragCanceled)
 
 UCLASS()
-class ACME_API UItemEntryWidget : public UUserWidget
+class ACME_API UItemEntryWidget : public UUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
 
@@ -57,6 +57,8 @@ public:
 	UFUNCTION()
 	void SetNormalBorder();
 
+	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+
 	FOnDragCanceled OnDragCancle;
 
 protected:
@@ -74,6 +76,9 @@ protected:
 
 	UPROPERTY()
 	int Index;
+
+	UPROPERTY()
+	bool bCanShowDetail = true;
 
 	UPROPERTY(EditAnywhere)
 	UMaterial* NormalBorderMat;

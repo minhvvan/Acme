@@ -80,36 +80,48 @@ void UItemEntryWidget::SetNormalBorder()
 	BorderItem->SetBrushFromMaterial(NormalBorderMat);
 }
 
+void UItemEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
+{
+	UItemData* Data = Cast<UItemData>(ListItemObject);
+
+	FItem info = Data->GetItemInfo();
+	SetItemInfo(info);
+
+	bCanShowDetail = false;
+}
+
 FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply reply;
-	
-	UTileInventoryWidget* ParentWidget = Cast<UTileInventoryWidget>(GetParent()->GetOuter()->GetOuter());
-	ParentWidget->CloseDetailWidget();
 	
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
 		reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 		reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
 	}
-	
-	if(InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton))
+	else
 	{
-		if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-
-		UDetailActionWidget* Detail = Cast<UDetailActionWidget>(CreateWidget(GetWorld(), DetailWidgetClass));
-		Detail->AddToViewport();
-		Detail->SetPositionInViewport(InMouseEvent.GetScreenSpacePosition());
-
-		FItem itemInfo = Player->GetItem(Category, Index);
-
-		if (itemInfo.Name != EItemName::E_Empty)
+		if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton) && bCanShowDetail)
 		{
-			Detail->SetInnerWidget(itemInfo, Index);
-			ParentWidget->SetDetailWidget(Detail);
+			UTileInventoryWidget* ParentWidget = Cast<UTileInventoryWidget>(GetParent()->GetOuter()->GetOuter());
+			if (ParentWidget) ParentWidget->CloseDetailWidget();
+
+			if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+
+			UDetailActionWidget* Detail = Cast<UDetailActionWidget>(CreateWidget(GetWorld(), DetailWidgetClass));
+			Detail->AddToViewport();
+			Detail->SetPositionInViewport(InMouseEvent.GetScreenSpacePosition());
+
+			FItem itemInfo = Player->GetItem(Category, Index);
+
+			if (itemInfo.Name != EItemName::E_Empty)
+			{
+				Detail->SetInnerWidget(itemInfo, Index);
+				ParentWidget->SetDetailWidget(Detail);
+			}
 		}
 	}
-
+	
 	return reply.NativeReply;
 }
 
