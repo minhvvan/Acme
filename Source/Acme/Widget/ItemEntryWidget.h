@@ -59,7 +59,7 @@ public:
 
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 
-	FOnDragCanceled OnDragCancle;
+	FOnDragCanceled OnDragCancel;
 
 protected:
 	UPROPERTY(EditAnywhere)

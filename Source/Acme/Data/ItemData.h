@@ -19,9 +19,18 @@ public:
 	UPROPERTY()
 	FItem ItemInfo;
 
+	UPROPERTY()
+	int Index;
+
 	UFUNCTION()
 	void SetItem(FItem info);
 
 	UFUNCTION()
 	FItem GetItemInfo();
+
+	UFUNCTION()
+	void SetIndex(int idx);
+
+	UFUNCTION()
+	int GetIndex();
 };

@@ -8,6 +8,7 @@
 #include "Acme/AcmeCharacter.h"
 #include "Acme/Data/ItemData.h"
 #include "Acme/Widget/ItemEntryWidget.h"
+#include "Acme/Utils/Util.h"
 
 void UAlchemicComposeWidget::NativeConstruct()
 {
@@ -21,17 +22,7 @@ void UAlchemicComposeWidget::NativeConstruct()
 
 	CurrentCategory = EItemCategory::E_Element;
 	SetActiveCategory();
-
-	TArray<FItem>& Items = OwnerCharacter->GetItems(CurrentCategory).Get();
-	for (int i = 0; i < Items.Num(); i++)
-	{
-		FItem& item = Items[i];
-
-		UItemData* Data = NewObject<UItemData>();
-		Data->SetItem(item);
-
-		TVItem->AddItem(Data);
-	}
+	SetItemList();
 
 	BtnElement->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnElementClicked);
 	BtnEquipment->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnEquipmentClicked);
@@ -107,6 +98,7 @@ void UAlchemicComposeWidget::SetItemList()
 
 		UItemData* Data = NewObject<UItemData>();
 		Data->SetItem(item);
+		Data->SetIndex(i);
 
 		TVItem->AddItem(Data);
 	}

@@ -85,6 +85,7 @@ void UItemEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 	UItemData* Data = Cast<UItemData>(ListItemObject);
 
 	FItem info = Data->GetItemInfo();
+	SetIndex(Data->GetIndex());
 	SetItemInfo(info);
 
 	bCanShowDetail = false;
@@ -93,10 +94,10 @@ void UItemEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply reply;
+	reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 	
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
-		reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 		reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
 	}
 	else
@@ -180,7 +181,7 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
-	if (!IsValid(DragWidget)) return false;
+	if (!IsValid(DragWidget))  return false;
 	if (DragWidget->Index == Index) return false;
 
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
@@ -191,6 +192,7 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 		Player->MoveItems(DragWidget->ItemInfo.Category, DragWidget->Index, Index);
 	}
 
+	SetItemInfo(DragWidget->ItemInfo);
 	return true;
 }
 
@@ -201,5 +203,5 @@ void UItemEntryWidget::NativeOnDragCancelled(const FDragDropEvent& InDragDropEve
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
 	if (!IsValid(DragWidget)) return;
 
-	OnDragCancle.Broadcast();
+	OnDragCancel.Broadcast();
 }

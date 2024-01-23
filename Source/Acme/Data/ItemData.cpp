@@ -12,3 +12,13 @@ FItem UItemData::GetItemInfo()
 {
 	return ItemInfo;
 }
+
+void UItemData::SetIndex(int idx)
+{
+	Index = idx;
+}
+
+int UItemData::GetIndex()
+{
+	return Index;
+}

@@ -28,7 +28,7 @@ void UTileInventoryWidget::UpdateInfo()
 		Entry->SetIndex(i);
 		Entry->AddToViewport();
 
-		Entry->OnDragCancle.AddUObject(this, &UTileInventoryWidget::UpdateInfo);
+		Entry->OnDragCancel.AddUObject(this, &UTileInventoryWidget::UpdateInfo);
 
 		ItemGrid->AddChildToGrid(Entry, i/5, i%5);
 	}

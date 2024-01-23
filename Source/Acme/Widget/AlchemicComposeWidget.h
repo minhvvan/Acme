@@ -94,8 +94,8 @@ protected:
 	void OnMaterialClicked();
 
 	UFUNCTION()
-	void SetItemList();	
-	
+	void SetItemList();		
+
 	UFUNCTION()
 	void SetActiveCategory();
 
