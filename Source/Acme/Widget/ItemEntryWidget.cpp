@@ -80,6 +80,16 @@ void UItemEntryWidget::SetNormalBorder()
 	BorderItem->SetBrushFromMaterial(NormalBorderMat);
 }
 
+void UItemEntryWidget::SetSelected()
+{
+	BorderSelected->SetBrushColor(FLinearColor(0, 50, 255, .2));
+}
+
+void UItemEntryWidget::SetUnSelected()
+{
+	BorderSelected->SetBrushColor(FLinearColor(0, 0, 0, 0));
+}
+
 void UItemEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
 	UItemData* Data = Cast<UItemData>(ListItemObject);

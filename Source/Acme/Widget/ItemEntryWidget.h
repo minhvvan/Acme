@@ -18,7 +18,10 @@ class ACME_API UItemEntryWidget : public UUserWidget, public IUserObjectListEntr
 
 protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgItem;
+	class UImage* ImgItem;	
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UBorder* BorderSelected;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UTextBlock* TxtAmount;
@@ -56,6 +59,12 @@ public:
 
 	UFUNCTION()
 	void SetNormalBorder();
+
+	UFUNCTION()
+	void SetSelected();
+
+	UFUNCTION()
+	void SetUnSelected();
 
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 

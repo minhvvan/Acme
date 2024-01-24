@@ -707,6 +707,13 @@ void AAcmeCharacter::MoveItems(EItemCategory Category, int from, int to)
 	InventoryComponent->MoveItems(Category, from, to);
 }
 
+void AAcmeCharacter::UseItem(EItemCategory Category, int idx)
+{
+	if (!InventoryComponent) return;
+
+	InventoryComponent->UseItem(Category, idx);
+}
+
 void AAcmeCharacter::UpdateInventoryWidget()
 {
 	if (!InventoryWidget) return;

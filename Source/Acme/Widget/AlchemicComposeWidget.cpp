@@ -5,10 +5,13 @@
 #include "Components/TileView.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "Components/Border.h"
+#include "Components/EditableTextBox.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/Data/ItemData.h"
 #include "Acme/Widget/ItemEntryWidget.h"
 #include "Acme/Utils/Util.h"
+#include "Kismet/KismetStringLibrary.h"
 
 void UAlchemicComposeWidget::NativeConstruct()
 {
@@ -30,6 +33,12 @@ void UAlchemicComposeWidget::NativeConstruct()
 	BtnPotion->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnPotionClicked);
 	BtnFood->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnFoodClicked);
 	BtnMaterial->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnMaterialClicked);
+
+	BtnMinus->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnMinusClicked);
+	BtnPlus->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnPlusClicked);
+	BtnCompose->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnComposeClicked);
+
+	EdtNum->OnTextChanged.AddDynamic(this, &UAlchemicComposeWidget::OnTextChanged);
 }
 
 FReply UAlchemicComposeWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
@@ -80,6 +89,43 @@ void UAlchemicComposeWidget::OnMaterialClicked()
 {
 	CurrentCategory = EItemCategory::E_Material;
 	SetItemList();
+}
+
+void UAlchemicComposeWidget::OnMinusClicked()
+{
+	int num = UKismetStringLibrary::Conv_StringToInt(EdtNum->GetText().ToString());
+	num--;
+
+	if (num < 1) num = 1;
+	SetNumTxt(FText::AsNumber(num));
+}
+
+void UAlchemicComposeWidget::OnPlusClicked()
+{
+	int num = UKismetStringLibrary::Conv_StringToInt(EdtNum->GetText().ToString());
+	num++;
+
+	if (num > 99) num = 99;
+	SetNumTxt(FText::AsNumber(num));
+}
+
+void UAlchemicComposeWidget::OnComposeClicked()
+{
+	UUtil::DebugPrint("Compose");
+}
+
+void UAlchemicComposeWidget::OnTextChanged(const FText& newText)
+{
+	//숫자가 아니면 걸러야 함
+	int num = UKismetStringLibrary::Conv_StringToInt(EdtNum->GetText().ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("convert: %d"), num));
+
+	SetNumTxt(newText);
+}
+
+void UAlchemicComposeWidget::SetNumTxt(const FText& newText)
+{
+	EdtNum->SetText(newText);
 }
 
 void UAlchemicComposeWidget::SetItemList()

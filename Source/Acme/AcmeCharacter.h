@@ -328,6 +328,9 @@ public:
 	void MoveItems(EItemCategory Category, int from, int to);
 
 	UFUNCTION()
+	void UseItem(EItemCategory Category, int idx);
+
+	UFUNCTION()
 	void UpdateInventoryWidget();
 
 	UFUNCTION()

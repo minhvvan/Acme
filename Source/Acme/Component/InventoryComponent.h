@@ -59,6 +59,9 @@ public:
 	UFUNCTION()
 	void Dump(EItemCategory Category, int idx);
 
+	UFUNCTION()
+	void UseItem(EItemCategory Category, int idx);
+
 private:
 	UPROPERTY()
 	TMap<EItemCategory, FItemList> Items;

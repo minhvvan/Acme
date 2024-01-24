@@ -61,8 +61,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UImage* ImgMaterial;
 
-	UPROPERTY(VisibleAnywhere)
-	class AAcmeCharacter* OwnerCharacter;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UButton* BtnMinus;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UButton* BtnPlus;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UEditableTextBox* EdtNum;
 
 protected:
 	virtual void NativeConstruct();
@@ -94,9 +100,27 @@ protected:
 	void OnMaterialClicked();
 
 	UFUNCTION()
+	void OnMinusClicked();
+
+	UFUNCTION()
+	void OnPlusClicked();
+
+	UFUNCTION()
+	void OnComposeClicked();
+
+	UFUNCTION()
+	void OnTextChanged(const FText& newText);
+
+	UFUNCTION()
+	void SetNumTxt(const FText& newText);
+
+	UFUNCTION()
 	void SetItemList();		
 
 	UFUNCTION()
 	void SetActiveCategory();
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+	class AAcmeCharacter* OwnerCharacter;
 };
