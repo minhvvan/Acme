@@ -32,18 +32,27 @@ protected:
 	FItem ItemInfo;
 
 	UPROPERTY(VisibleAnywhere)
+	int Index;
+
+	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* Player;
 
 	UPROPERTY(VisibleAnywhere)
 	class UItemEntryWidget* OriginRef;
 
-public:
+protected:
 	UFUNCTION()
 	void SetImage();
 
 	UFUNCTION()
 	void SetSlot(FItem info);
 
+	UFUNCTION()
+	void SetEmpty();
+
+public:
+	UFUNCTION()
+	void UseItem();
 
 protected:
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);

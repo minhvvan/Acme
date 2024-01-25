@@ -11,6 +11,7 @@
 #include "Acme/Data/ItemData.h"
 #include "Acme/Widget/ItemEntryWidget.h"
 #include "Acme/Utils/Util.h"
+#include "Acme/Widget/AlchemySlotWidget.h"
 #include "Kismet/KismetStringLibrary.h"
 
 void UAlchemicComposeWidget::NativeConstruct()
@@ -111,7 +112,10 @@ void UAlchemicComposeWidget::OnPlusClicked()
 
 void UAlchemicComposeWidget::OnComposeClicked()
 {
-	UUtil::DebugPrint("Compose");
+	LeftSlot->UseItem();
+	RightSlot->UseItem();
+
+	//TODO: 조합 공식이랑 새로운거 인벤에 집어넣어야 함
 }
 
 void UAlchemicComposeWidget::OnTextChanged(const FText& newText)

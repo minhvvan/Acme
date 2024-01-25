@@ -70,6 +70,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UEditableTextBox* EdtNum;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UAlchemySlotWidget* LeftSlot;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UAlchemySlotWidget* RightSlot;
+
 protected:
 	virtual void NativeConstruct();
 

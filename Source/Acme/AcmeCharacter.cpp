@@ -195,12 +195,6 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 void AAcmeCharacter::Move(const FInputActionValue& Value)
 {
-	if (IsAttacking)
-	{
-		AnimInstance->StopAllMontages(-1.f);
-	}
-
-	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
@@ -319,7 +313,9 @@ void AAcmeCharacter::StartAttack()
 	if (IsCombo)
 	{
 		//combo
-		ComboIdx = (ComboIdx + 1) % 3;
+		if (ComboIdx == 2) return;
+
+		ComboIdx++;
 		AttackQueue.Enqueue(ComboIdx);
 
 		return;
@@ -330,26 +326,6 @@ void AAcmeCharacter::StartAttack()
 
 	AttackQueue.Enqueue(ComboIdx);
 	FlushQueue();
-}
-
-void AAcmeCharacter::FireAttack()
-{
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-	SpawnParams.Instigator = GetInstigator();
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-	UCameraComponent* Cam = GetFollowCamera();
-	FVector CamLoc = Cam->GetComponentLocation();
-	FVector CamForward = Cam->GetForwardVector();
-
-	FVector loc = GetMesh()->GetSocketLocation(FName(TEXT("Attack_Socket")));
-	loc += CamForward * 100;
-	
-	FRotator rot = CamForward.Rotation();
-	rot.Pitch += 10;
-
-	AActor_Projectile* Projectile = GetWorld()->SpawnActor<AActor_Projectile>(ProjectileClass, loc, rot, SpawnParams);
 }
 
 void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
@@ -696,7 +672,6 @@ bool AAcmeCharacter::AddItem(FItem item)
 {
 	if (!InventoryComponent) return false;
 
-	UUtil::DebugPrint("Add");
 	return InventoryComponent->AddItem(item);
 }
 

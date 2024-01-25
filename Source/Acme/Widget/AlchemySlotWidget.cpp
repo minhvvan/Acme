@@ -27,6 +27,33 @@ void UAlchemySlotWidget::SetSlot(FItem info)
 	SetImage();
 }
 
+void UAlchemySlotWidget::SetEmpty()
+{
+	ItemInfo.Category = EItemCategory::E_End;
+	ItemInfo.Equiped = false;
+	ItemInfo.Name = EItemName::E_Empty;
+	ItemInfo.Num = 0;
+
+	SetImage();
+	OriginRef = nullptr;
+}
+
+void UAlchemySlotWidget::UseItem()
+{
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	if (ItemInfo.Name == EItemName::E_Empty) return;
+
+	Player->UseItem(ItemInfo.Category, Index);
+	if (OriginRef)
+	{
+		if (ItemInfo.Num - 1 == 0) OriginRef->SetEmpty();
+		else OriginRef->SetAmountTxt(ItemInfo.Num - 1);
+		OriginRef->SetUnSelected();
+	}
+
+	SetEmpty();
+}
+
 FReply UAlchemySlotWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply reply;
@@ -51,13 +78,11 @@ bool UAlchemySlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDr
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
 	ItemInfo = DragWidget->ItemInfo;
-	ItemInfo.Num = 1;
 
 	if (DragWidget->WidgetRef)
 	{
 		OriginRef = DragWidget->WidgetRef;
-
-		//Player->UseItem(DragWidget->ItemInfo.Category, DragWidget->Index);
+		Index = DragWidget->Index;
 		DragWidget->WidgetRef->SetSelected();
 	}
 

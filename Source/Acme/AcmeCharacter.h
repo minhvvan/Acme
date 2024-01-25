@@ -133,12 +133,8 @@ protected:
 	UFUNCTION()
 	void CoolDownDash();
 
-	/** Called for Attack input */
 	UFUNCTION()
 	void StartAttack();	
-
-	UFUNCTION()
-	void FireAttack(/*¼¼±â*/);
 
 	UFUNCTION()
 	void EndAttack(UAnimMontage* Montage, bool bInterrupted);
