@@ -129,4 +129,7 @@ protected:
 protected:
 	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* OwnerCharacter;
+
+	UPROPERTY(VisibleAnywhere)
+	class UAcmeGameInstance* GameInstance;
 };

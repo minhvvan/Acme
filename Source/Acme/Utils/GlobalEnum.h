@@ -50,7 +50,6 @@ enum class EItemName : uint8
 	E_Sphere UMETA(DisplayName = "Sphere"),
 	E_Sword UMETA(DisplayName = "Sword"),
 
-
 	E_Empty UMETA(DisplayName = "Empty"),
 };
 

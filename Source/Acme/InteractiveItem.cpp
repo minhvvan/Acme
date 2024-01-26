@@ -34,17 +34,8 @@ void AInteractiveItem::Init(EItemName itemKey, EItemCategory category)
 
 void AInteractiveItem::Interact()
 {
-	if (!OverlapedCharacter) 
-	{
-		UUtil::DebugPrint("No OverlapedCharacter");
-		return;
-	}
-
-	if (!bCanInteract)
-	{
-		UUtil::DebugPrint("No bCanInteract");
-		return;
-	}
+	if (!OverlapedCharacter) return;
+	if (!bCanInteract) return;
 
 	if (OverlapedCharacter->AddItem(ItemInfo))
 	{

@@ -2,6 +2,8 @@
 
 
 #include "Acme/Widget/AlchemicComposeWidget.h"
+#include "Kismet/KismetStringLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Components/TileView.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
@@ -12,7 +14,8 @@
 #include "Acme/Widget/ItemEntryWidget.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Widget/AlchemySlotWidget.h"
-#include "Kismet/KismetStringLibrary.h"
+#include "Acme/AcmeGameInstance.h"
+
 
 void UAlchemicComposeWidget::NativeConstruct()
 {
@@ -112,17 +115,32 @@ void UAlchemicComposeWidget::OnPlusClicked()
 
 void UAlchemicComposeWidget::OnComposeClicked()
 {
+	//check
+	if (LeftSlot->IsEmpty() || RightSlot->IsEmpty()) return;
+
+	FItem LeftItem = LeftSlot->GetItemInfo();
+	FItem RightItem = RightSlot->GetItemInfo();
+
+	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	TArray<FItem> ComposeResults = GameInstance->GetComposeResult(LeftItem, RightItem);
+
 	LeftSlot->UseItem();
 	RightSlot->UseItem();
 
-	//TODO: 조합 공식이랑 새로운거 인벤에 집어넣어야 함
+	//Add
+	if (!OwnerCharacter) OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	for (FItem result : ComposeResults)
+	{
+		OwnerCharacter->AddItem(result);
+		//TVItem Update
+		SetItemList();
+	}
 }
 
 void UAlchemicComposeWidget::OnTextChanged(const FText& newText)
 {
 	//숫자가 아니면 걸러야 함
 	int num = UKismetStringLibrary::Conv_StringToInt(EdtNum->GetText().ToString());
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("convert: %d"), num));
 
 	SetNumTxt(newText);
 }
@@ -136,10 +154,7 @@ void UAlchemicComposeWidget::SetItemList()
 {
 	TVItem->ClearListItems();
 
-	if (!OwnerCharacter)
-	{
-		OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-	}
+	if (!OwnerCharacter) OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
 	TArray<FItem>& Items = OwnerCharacter->GetItems(CurrentCategory).Get();
 	for (int i = 0; i < Items.Num(); i++)

@@ -119,13 +119,34 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::AttackEnd);
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
 
-	FItem temp1;
-	temp1.Name = EItemName::E_Sword;
-	temp1.Num = 1;
-	temp1.Equiped = false;
-	temp1.Category = EItemCategory::E_Equipment;
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Sword;
+		temp1.Num = 1;
+		temp1.Equiped = false;
+		temp1.Category = EItemCategory::E_Equipment;
 
-	InventoryComponent->AddItem(temp1);
+		InventoryComponent->AddItem(temp1);
+	}
+
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Fire;
+		temp1.Num = 1;
+		temp1.Equiped = false;
+		temp1.Category = EItemCategory::E_Element;
+
+		InventoryComponent->AddItem(temp1);
+	}
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Water;
+		temp1.Num = 1;
+		temp1.Equiped = false;
+		temp1.Category = EItemCategory::E_Element;
+
+		InventoryComponent->AddItem(temp1);
+	}
 }
 
 void AAcmeCharacter::Tick(float DeltaSeconds)

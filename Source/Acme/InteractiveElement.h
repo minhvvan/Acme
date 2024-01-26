@@ -22,6 +22,8 @@ public:
 	UFUNCTION()
 	void SetElementType(EElement element);
 
+	virtual void BeginPlay() override;
+
 protected:
 	EElement ElementType;
 

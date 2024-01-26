@@ -16,9 +16,16 @@ void AInteractiveElement::SetElementType(EElement element)
 	ElementType = element;
 }
 
+void AInteractiveElement::BeginPlay()
+{
+	Super::BeginPlay();
+	SetbCanOverlap(true);
+}
+
 void AInteractiveElement::Interact()
 {
 	//OverlapedCharacter
+	if (!OverlapedCharacter) return;
 	OverlapedCharacter->AddElement(ElementType);
 	Destroy();
 }

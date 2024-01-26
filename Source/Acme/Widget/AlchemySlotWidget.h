@@ -54,6 +54,12 @@ public:
 	UFUNCTION()
 	void UseItem();
 
+	UFUNCTION()
+	bool IsEmpty();
+
+	UFUNCTION()
+	FItem GetItemInfo();
+
 protected:
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 

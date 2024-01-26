@@ -8,7 +8,7 @@
 #include "GlobalStruct.generated.h"
 
 USTRUCT(Atomic, BlueprintType)
-struct FItem
+struct FItem : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -17,16 +17,16 @@ public:
 
 	FItem(EItemCategory cate);
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemName Name;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Num;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool Equiped;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemCategory Category;
 };
 

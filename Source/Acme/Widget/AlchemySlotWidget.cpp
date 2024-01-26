@@ -54,6 +54,17 @@ void UAlchemySlotWidget::UseItem()
 	SetEmpty();
 }
 
+bool UAlchemySlotWidget::IsEmpty()
+{
+	if (ItemInfo.Name == EItemName::E_Empty) return true;
+	return false;
+}
+
+FItem UAlchemySlotWidget::GetItemInfo()
+{
+	return ItemInfo;
+}
+
 FReply UAlchemySlotWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply reply;
