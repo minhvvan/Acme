@@ -26,6 +26,8 @@ void AInteractiveElement::Interact()
 {
 	//OverlapedCharacter
 	if (!OverlapedCharacter) return;
+	if (!bCanInteract) return;
+
 	OverlapedCharacter->AddElement(ElementType);
 	Destroy();
 }

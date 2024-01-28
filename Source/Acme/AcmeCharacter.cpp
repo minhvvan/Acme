@@ -398,7 +398,7 @@ void AAcmeCharacter::StartInteract()
 {
 	//trace 가장 가까운 item -> Interact
 	//TODO: Someting strange
-	FHitResult HitResult;
+	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Query;
 
 	FVector StartLocation = GetActorLocation();
@@ -412,13 +412,16 @@ void AAcmeCharacter::StartInteract()
 	CollisionShape.SetSphere(250);
 
 	Query.AddIgnoredActor(this);
-	if (GetWorld()->SweepSingleByChannel(HitResult, StartLocation, EndLocation, FQuat::Identity, ECC, CollisionShape, Query))
+	if (GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC, CollisionShape, Query))
 	{
-		AActorInteractive* Item = Cast<AActorInteractive>(HitResult.GetActor());
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Name:%s"), *HitResult.GetActor()->GetName()));
-		if (!Item) return;
+		for (auto HitResult : HitResults)
+		{
+			AActorInteractive* Item = Cast<AActorInteractive>(HitResult.GetActor());
+			if (!Item) continue;
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Name:%s"), *HitResult.GetActor()->GetName()));
 
-		Item->Interact();
+			Item->Interact();
+		}
 	}
 
 	//FVector CenterOfSphere = ((EndLocation - StartLocation) / 2) + StartLocation;
