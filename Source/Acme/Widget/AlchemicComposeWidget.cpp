@@ -132,7 +132,6 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	for (FItem result : ComposeResults)
 	{
 		OwnerCharacter->AddItem(result);
-		//TVItem Update
 		SetItemList();
 	}
 }

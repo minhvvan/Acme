@@ -397,7 +397,7 @@ void AAcmeCharacter::StartSkill()
 void AAcmeCharacter::StartInteract()
 {
 	//trace 가장 가까운 item -> Interact
-
+	//TODO: Someting strange
 	FHitResult HitResult;
 	FCollisionQueryParams Query;
 
