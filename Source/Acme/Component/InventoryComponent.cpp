@@ -80,7 +80,7 @@ bool UInventoryComponent::AddItem(FItem newItem)
 			{
 				Item.Name = newItem.Name;
 				Item.Num = newItem.Num;
-				Item.Equiped = newItem.Equiped;
+				//Item.Equiped = newItem.Equiped;
 				Item.Category = newItem.Category;
 
 				return true;
@@ -129,7 +129,7 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 		FItem temp = ItemList[to];
 		ItemList[to].Name = ItemList[from].Name;
 		ItemList[to].Num = ItemList[from].Num;
-		ItemList[to].Equiped = ItemList[from].Equiped;
+		//ItemList[to].Equiped = ItemList[from].Equiped;
 
 		ItemList[from] = temp;
 	}
@@ -141,7 +141,7 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 
 void UInventoryComponent::SetEmpty(FItem& item)
 {
-	item.Equiped = false;
+	//item.Equiped = false;
 	item.Name = EItemName::E_Empty;
 	item.Num = 0;
 }
@@ -156,29 +156,29 @@ void UInventoryComponent::SetQuickSlot(FItem item, int idx)
 	QuickSlots[idx] = item;
 }
 
-void UInventoryComponent::Equip(int idx)
-{
-	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
-	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
-
-	FItem& Item = ItemList[idx];
-	if (Item.Name == EItemName::E_Empty) return;
-
-	Item.Equiped = true;
-	Player->SetWeapon(Item);
-}
-
-void UInventoryComponent::Unequip(int idx)
-{
-	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
-	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
-
-	FItem& Item = ItemList[idx];
-	if (Item.Equiped == false) return;
-
-	Item.Equiped = false;
-	Player->RemoveWeapon();
-}
+//void UInventoryComponent::Equip(int idx)
+//{
+//	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
+//	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+//
+//	FItem& Item = ItemList[idx];
+//	if (Item.Name == EItemName::E_Empty) return;
+//
+//	Item.Equiped = true;
+//	Player->SetWeapon(Item);
+//}
+//
+//void UInventoryComponent::Unequip(int idx)
+//{
+//	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
+//	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+//
+//	FItem& Item = ItemList[idx];
+//	if (Item.Equiped == false) return;
+//
+//	//Item.Equiped = false;
+//	Player->RemoveWeapon();
+//}
 
 void UInventoryComponent::Dump(EItemCategory Category, int idx)
 {

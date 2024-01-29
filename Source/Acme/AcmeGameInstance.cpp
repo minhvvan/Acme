@@ -5,10 +5,20 @@
 
 UAcmeGameInstance::UAcmeGameInstance()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_Compose.DT_Compose'"));
-	if (TABLE.Succeeded())
 	{
-		ComposeTable = TABLE.Object;
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_Compose.DT_Compose'"));
+		if (TABLE.Succeeded())
+		{
+			ComposeTable = TABLE.Object;
+		}
+	}
+
+	{
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_ItemImages.DT_ItemImages'"));
+		if (TABLE.Succeeded())
+		{
+			ItemImageTable = TABLE.Object;
+		}
 	}
 }
 
@@ -43,6 +53,23 @@ TArray<FItem> UAcmeGameInstance::GetComposeResult(FItem Left, FItem Right)
 					}
 				}
 			}
+		}
+	}
+
+	return Result;
+}
+
+UTexture2D* UAcmeGameInstance::GetItemImage(EItemName name)
+{
+	TArray<FItemImages*> AllRows;
+	UTexture2D* Result = ItemImageTable->FindRow<FItemImages>(FName(TEXT("9"/*TODO: 아이템 이름 추가되면 계속 변경해야 함*/)), TEXT(""))->Image;
+
+	ItemImageTable->GetAllRows(TEXT("GetAllRows"), AllRows);
+	for (auto row : AllRows)
+	{
+		if (row->Key == name)
+		{
+			Result = row->Image;
 		}
 	}
 

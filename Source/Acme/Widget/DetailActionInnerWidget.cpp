@@ -18,10 +18,10 @@ void UDetailActionInnerWidget::OnClicked()
 	switch (DetailAction)
 	{
 	case EDetailAction::E_Equip:
-		Equip();
+		//Equip();
 		break;
 	case EDetailAction::E_Unequip:
-		Unequip();
+		//Unequip();
 		break;
 	case EDetailAction::E_Consume:
 		Consume();
@@ -33,20 +33,20 @@ void UDetailActionInnerWidget::OnClicked()
 
 	DelegateOnClicked.Broadcast();
 }
-
-void UDetailActionInnerWidget::Equip()
-{
-	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-
-	Player->Equip(Index);
-}
-
-void UDetailActionInnerWidget::Unequip()
-{
-	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-
-	Player->Unequip(Index);
-}
+//
+//void UDetailActionInnerWidget::Equip()
+//{
+//	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+//
+//	Player->Equip(Index);
+//}
+//
+//void UDetailActionInnerWidget::Unequip()
+//{
+//	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+//
+//	Player->Unequip(Index);
+//}
 
 void UDetailActionInnerWidget::Consume()
 {

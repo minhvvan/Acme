@@ -23,8 +23,8 @@ void UItemEntryWidget::SetItemInfo(FItem& info)
 	SetThumbnailImg(info.Name);
 	SetAmountTxt(info.Num);
 
-	if (info.Equiped) SetEquipBorder();
-	else SetNormalBorder();
+	//if (info.Equiped) SetEquipBorder();
+	//else SetNormalBorder();
 }
 
 void UItemEntryWidget::SetIndex(int idx)

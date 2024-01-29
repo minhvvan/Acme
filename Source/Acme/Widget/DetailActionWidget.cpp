@@ -16,12 +16,10 @@ void UDetailActionWidget::SetInnerWidget(FItem& item, int idx)
 		CreateDump();
 		break;
 	case EItemCategory::E_Equipment:
-		if (ItemInfo.Equiped == true) CreateUnEquip();
-		else CreateEquip();
 		CreateDump();
 		break;
 	case EItemCategory::E_Tool:
-		CreateInstall();
+		//CreateInstall();
 		CreateDump();
 		break;
 	case EItemCategory::E_Potion:
@@ -38,25 +36,25 @@ void UDetailActionWidget::SetInnerWidget(FItem& item, int idx)
 	}
 }
 
-void UDetailActionWidget::CreateEquip()
-{
-	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
-	if (!Detail) return;
-	
-	Detail->Init(EDetailAction::E_Equip, ItemInfo.Category, Index);
-	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
-	VertAction->AddChild(Detail);
-}
-
-void UDetailActionWidget::CreateUnEquip()
-{
-	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
-	if (!Detail) return;
-
-	Detail->Init(EDetailAction::E_Unequip, ItemInfo.Category, Index);
-	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
-	VertAction->AddChild(Detail);
-}
+//void UDetailActionWidget::CreateEquip()
+//{
+//	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
+//	if (!Detail) return;
+//	
+//	Detail->Init(EDetailAction::E_Equip, ItemInfo.Category, Index);
+//	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
+//	VertAction->AddChild(Detail);
+//}
+//
+//void UDetailActionWidget::CreateUnEquip()
+//{
+//	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
+//	if (!Detail) return;
+//
+//	Detail->Init(EDetailAction::E_Unequip, ItemInfo.Category, Index);
+//	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
+//	VertAction->AddChild(Detail);
+//}
 
 void UDetailActionWidget::CreateConsume()
 {
@@ -78,15 +76,15 @@ void UDetailActionWidget::CreateDump()
 	VertAction->AddChild(Detail);
 }
 
-void UDetailActionWidget::CreateInstall()
-{
-	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
-	if (!Detail) return;
-	
-	Detail->Init(EDetailAction::E_Install, ItemInfo.Category, Index);
-	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
-	VertAction->AddChild(Detail);
-}
+//void UDetailActionWidget::CreateInstall()
+//{
+//	UDetailActionInnerWidget* Detail = Cast<UDetailActionInnerWidget>(CreateWidget(GetWorld(), DetailInnerWidgetClass));
+//	if (!Detail) return;
+//	
+//	Detail->Init(EDetailAction::E_Install, ItemInfo.Category, Index);
+//	Detail->DelegateOnClicked.AddUObject(this, &UDetailActionWidget::CloseWidget);
+//	VertAction->AddChild(Detail);
+//}
 
 void UDetailActionWidget::CloseWidget()
 {

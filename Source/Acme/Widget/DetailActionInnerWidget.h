@@ -35,11 +35,11 @@ protected:
 	UPROPERTY()
 	int Index;
 
-	UFUNCTION()
-	void Equip();
+	//UFUNCTION()
+	//void Equip();
 
-	UFUNCTION()
-	void Unequip();
+	//UFUNCTION()
+	//void Unequip();
 
 	UFUNCTION()
 	void Consume();

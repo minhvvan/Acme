@@ -8,6 +8,7 @@
 #include "Acme/Widget/ItemDDOP.h"
 #include "ItemEntryWidget.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/AcmeGameInstance.h"
 
 void UQuickSlotWidget::SetItemInfo(FItem info)
 {
@@ -19,10 +20,10 @@ void UQuickSlotWidget::SetItemInfo(FItem info)
 
 void UQuickSlotWidget::SetImage(EItemName name)
 {
-	if (ItemImages[name])
-	{
-		ImgItem->SetBrushFromTexture(ItemImages[name]);
-	}
+	UAcmeGameInstance* GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+	if (!GameInstance) return;
+
+	ImgItem->SetBrushFromTexture(GameInstance->GetItemImage(name));
 }
 
 void UQuickSlotWidget::SetAmount(int amount)
@@ -97,7 +98,7 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 	if (!Player) return false;
 
-	if (DragWidget->ItemInfo.Category == EItemCategory::E_Element || DragWidget->ItemInfo.Category == EItemCategory::E_Equipment)
+	if (DragWidget->ItemInfo.Category == EItemCategory::E_Element)
 	{
 		return false;
 	}

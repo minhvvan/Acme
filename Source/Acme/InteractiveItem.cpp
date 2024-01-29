@@ -8,7 +8,7 @@
 AInteractiveItem::AInteractiveItem()
 {
 	ItemInfo.Name = EItemName::E_Empty;
-	ItemInfo.Equiped = false;
+	//ItemInfo.Equiped = false;
 	ItemInfo.Num = 1;
 	ItemInfo.Category = EItemCategory::E_End;
 }
@@ -26,7 +26,7 @@ void AInteractiveItem::Init(EItemName itemKey, EItemCategory category)
 
 	ItemInfo.Name = itemKey;
 	ItemInfo.Num = 1;
-	ItemInfo.Equiped = false;
+	//ItemInfo.Equiped = false;
 	ItemInfo.Category = category;
 
 	SetName(ItemInfo.Name);

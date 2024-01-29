@@ -33,11 +33,11 @@ public:
 	UFUNCTION()
 	void SetInnerWidget(FItem& item, int idx);
 
-	UFUNCTION()
-	void CreateEquip();
+	//UFUNCTION()
+	//void CreateEquip();
 
-	UFUNCTION()
-	void CreateUnEquip();
+	//UFUNCTION()
+	//void CreateUnEquip();
 
 	UFUNCTION()
 	void CreateConsume();
@@ -45,8 +45,8 @@ public:
 	UFUNCTION()
 	void CreateDump();
 
-	UFUNCTION()
-	void CreateInstall();
+	//UFUNCTION()
+	//void CreateInstall();
 
 	UFUNCTION()
 	void CloseWidget();

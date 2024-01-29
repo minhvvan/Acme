@@ -123,7 +123,7 @@ void AAcmeCharacter::BeginPlay()
 		FItem temp1;
 		temp1.Name = EItemName::E_Sword;
 		temp1.Num = 1;
-		temp1.Equiped = false;
+		//temp1.Equiped = false;
 		temp1.Category = EItemCategory::E_Equipment;
 
 		InventoryComponent->AddItem(temp1);
@@ -133,7 +133,7 @@ void AAcmeCharacter::BeginPlay()
 		FItem temp1;
 		temp1.Name = EItemName::E_Fire;
 		temp1.Num = 1;
-		temp1.Equiped = false;
+		//temp1.Equiped = false;
 		temp1.Category = EItemCategory::E_Element;
 
 		InventoryComponent->AddItem(temp1);
@@ -142,7 +142,7 @@ void AAcmeCharacter::BeginPlay()
 		FItem temp1;
 		temp1.Name = EItemName::E_Water;
 		temp1.Num = 1;
-		temp1.Equiped = false;
+		//temp1.Equiped = false;
 		temp1.Category = EItemCategory::E_Element;
 
 		InventoryComponent->AddItem(temp1);
@@ -641,7 +641,7 @@ void AAcmeCharacter::AddElement(EElement element)
 
 	FItem Item;
 	Item.Category = EItemCategory::E_Element;
-	Item.Equiped = false;
+	//Item.Equiped = false;
 	Item.Num = 1;
 
 	switch (element)
@@ -734,7 +734,7 @@ void AAcmeCharacter::Equip(int idx)
 {
 	//Spawn Weapon
 	if (!InventoryComponent) return;
-	InventoryComponent->Equip(idx);
+	//InventoryComponent->Equip(idx);
 
 	if (!InventoryWidget) return;
 	InventoryWidget->UpdateBorderToEquip(idx);
@@ -743,7 +743,7 @@ void AAcmeCharacter::Equip(int idx)
 void AAcmeCharacter::Unequip(int idx)
 {
 	if (!InventoryComponent) return;
-	InventoryComponent->Unequip(idx);
+	//InventoryComponent->Unequip(idx);
 
 	if (!InventoryWidget) return;
 	InventoryWidget->UpdateBorderToNoraml(idx);

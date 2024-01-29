@@ -57,7 +57,7 @@ void UEquipmentComponent::SetCurrentWeapon(FItem item)
 	//Spawn
 	if (item.Name == EItemName::E_Sword)
 	{
-		item.Equiped = true;
+		//item.Equiped = true;
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = Player;
 		FRotator rotator;

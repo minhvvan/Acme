@@ -50,11 +50,11 @@ public:
 	UFUNCTION()
 	void SetQuickSlot(FItem item, int idx);	
 
-	UFUNCTION()
-	void Equip(int idx);	
-	
-	UFUNCTION()
-	void Unequip(int idx);
+	//UFUNCTION()
+	//void Equip(int idx);	
+	//
+	//UFUNCTION()
+	//void Unequip(int idx);
 	
 	UFUNCTION()
 	void Dump(EItemCategory Category, int idx);

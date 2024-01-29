@@ -34,6 +34,19 @@ struct FComposeResult : public FTableRowBase
 };
 
 
+USTRUCT()
+struct FItemImages : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EItemName Key;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Image;
+};
+
+
 UCLASS()
 class ACME_API UAcmeGameInstance : public UGameInstance
 {
@@ -49,7 +62,13 @@ public:
 	UFUNCTION()
 	TArray<FItem> GetComposeResult(FItem Left, FItem Right);
 
+	UFUNCTION()
+	UTexture2D* GetItemImage(EItemName name);
+
 protected:
 	UPROPERTY()
 	class UDataTable* ComposeTable;
+
+	UPROPERTY()
+	class UDataTable* ItemImageTable;
 };

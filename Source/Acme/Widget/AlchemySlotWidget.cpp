@@ -30,7 +30,7 @@ void UAlchemySlotWidget::SetSlot(FItem info)
 void UAlchemySlotWidget::SetEmpty()
 {
 	ItemInfo.Category = EItemCategory::E_End;
-	ItemInfo.Equiped = false;
+	//ItemInfo.Equiped = false;
 	ItemInfo.Name = EItemName::E_Empty;
 	ItemInfo.Num = 0;
 
