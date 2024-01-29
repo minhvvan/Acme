@@ -293,9 +293,6 @@ public:
 	void SetIsAttacking(bool flag) { IsAttacking = flag; };
 
 	UFUNCTION()
-	void ShowOverlapInfo(bool bShow);
-
-	UFUNCTION()
 	void ChangeWalkSpeed(float amount);
 
 	UFUNCTION()

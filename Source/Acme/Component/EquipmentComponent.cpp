@@ -69,6 +69,7 @@ void UEquipmentComponent::SetCurrentWeapon(FItem item)
 		{
 			CurrentWeapon->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
 			CurrentWeapon->AttachBack();
+			CurrentWeapon->SetbCanInteract(false);
 		}
 	}
 }

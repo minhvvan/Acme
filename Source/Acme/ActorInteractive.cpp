@@ -57,7 +57,6 @@ void AActorInteractive::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AAct
 		bCanOverlap = false;
 
 		SetVisibleIndicator(true);
-		OverlapedCharacter->ShowOverlapInfo(true);
 	}
 }
 
@@ -72,7 +71,6 @@ void AActorInteractive::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, A
 		bCanOverlap = true;
 
 		SetVisibleIndicator(false);
-		OverlapedCharacter->ShowOverlapInfo(false);
 	}
 }
 

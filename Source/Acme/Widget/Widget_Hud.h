@@ -20,9 +20,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
 	class UWidget_Crosshair* Crosshair;
 
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UBorder* Border_Action;
-
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
 	class UQuickSlotWidget* WBP_QuickSlot1;
 
@@ -67,9 +64,6 @@ protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 
 public:
-	UFUNCTION()
-	void SetVisibleActionBorder(bool bVisible);
-
 	UFUNCTION()
 	void SetHealth(int CurrentHP, int MaxHP);
 

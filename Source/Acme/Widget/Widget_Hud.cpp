@@ -46,12 +46,6 @@ void UWidget_Hud::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	}
 }
 
-void UWidget_Hud::SetVisibleActionBorder(bool bVisible)
-{
-	if (bVisible) Border_Action->SetVisibility(ESlateVisibility::Visible);
-	else Border_Action->SetVisibility(ESlateVisibility::Hidden);
-}
-
 void UWidget_Hud::SetHealth(int CurrentHP, int MaxHP)
 {
 	if (!PB_Health || !TxtCurrentHealth || !TxtMaxHealth) return;

@@ -25,6 +25,12 @@ enum class EMovementState : uint8
 };
 
 UENUM(BlueprintType)
+enum class EMonsterState : uint8
+{
+	E_Attacked UMETA(DisplayName = "Attacked"),
+};
+
+UENUM(BlueprintType)
 enum class EElement : uint8
 {
 	E_Fire UMETA(DisplayName = "Fire"),

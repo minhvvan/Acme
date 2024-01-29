@@ -40,6 +40,12 @@ protected:
 	UPROPERTY()
 	class AMonsterAIController* AIController;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sound, meta = (AllowPrivateAccess = "true"))
+	class UAudioComponent* AudioComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = SFX, meta = (AllowPrivateAccess = "true"))
+	TMap<EMonsterState, class USoundBase*> SFXList;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -76,12 +82,6 @@ public:
 	void SetTarget(AAcmeCharacter* target);
 
 	UFUNCTION(BlueprintCallable)
-	bool GetIsAttacked();
-
-	UFUNCTION()
-	void SetIsAttacked(bool bIsAttack);
-
-	UFUNCTION(BlueprintCallable)
 	bool GetIsMoving();
 
 	UFUNCTION()
@@ -111,9 +111,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	float CombatSustainTime;
-
-	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
-	bool IsAttacked;
 
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsMoving;

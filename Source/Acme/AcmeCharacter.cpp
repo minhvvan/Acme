@@ -397,7 +397,6 @@ void AAcmeCharacter::StartSkill()
 void AAcmeCharacter::StartInteract()
 {
 	//trace 가장 가까운 item -> Interact
-	//TODO: Someting strange
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Query;
 
@@ -417,10 +416,11 @@ void AAcmeCharacter::StartInteract()
 		for (auto HitResult : HitResults)
 		{
 			AActorInteractive* Item = Cast<AActorInteractive>(HitResult.GetActor());
-			if (!Item) continue;
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Name:%s"), *HitResult.GetActor()->GetName()));
+			if (!Item || !Item->GetbCanInteract()) continue;
 
 			Item->Interact();
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *Item->GetName()));
+			return;
 		}
 	}
 
@@ -598,14 +598,6 @@ void AAcmeCharacter::FlushQueue()
 
 		AnimInstance->PlayAttack(idx);
 	}
-}
-
-void AAcmeCharacter::ShowOverlapInfo(bool bShow)
-{
-	if (!Hud) return;
-
-	if (!bShow) Hud->SetVisibleActionBorder(false);
-	else Hud->SetVisibleActionBorder(true);
 }
 
 void AAcmeCharacter::ChangeWalkSpeed(float amount)

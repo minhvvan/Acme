@@ -14,6 +14,7 @@
 #include "MonsterAIController.h"
 #include "Debug/DebugDrawComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 ACharacterMonster::ACharacterMonster()
@@ -26,6 +27,8 @@ ACharacterMonster::ACharacterMonster()
 	HPBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBar"));
 	HPBar->SetupAttachment(RootComponent);
 
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
+
 	IsCombat = false;
 	CombatSustainTime = 5.f;
 
@@ -33,6 +36,7 @@ ACharacterMonster::ACharacterMonster()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	AttackRange = 200.f;
+	IsMoving = true;
 }
 
 // Called when the game starts or when spawned
@@ -77,6 +81,12 @@ void ACharacterMonster::OnAttacked(int damage, EElement ElementType)
 
 	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
 	GetWorldTimerManager().SetTimer(CombatTimer, this, &ACharacterMonster::FinishCombat, CombatSustainTime, false);
+
+	if (AudioComp)
+	{
+		AudioComp->SetSound(SFXList[EMonsterState::E_Attacked]);
+		AudioComp->Play();
+	}
 
 	TakeDamage(damage);
 }
@@ -177,16 +187,6 @@ void ACharacterMonster::AttackCheck()
 void ACharacterMonster::SetTarget(AAcmeCharacter* target)
 {
 	TargetCharacter = target;
-}
-
-bool ACharacterMonster::GetIsAttacked()
-{
-	return IsAttacked;
-}
-
-void ACharacterMonster::SetIsAttacked(bool bIsAttack)
-{
-	IsAttacked = bIsAttack;
 }
 
 bool ACharacterMonster::GetIsMoving()
