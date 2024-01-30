@@ -7,6 +7,7 @@
 #include "Components/EditableTextBox.h"
 #include "Acme/Widget/ItemDDOP.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/AcmeGameInstance.h"
 
 void UAlchemySlotWidget::NativeConstruct()
 {
@@ -15,11 +16,13 @@ void UAlchemySlotWidget::NativeConstruct()
 
 void UAlchemySlotWidget::SetImage()
 {
-	//ItemInfo·Î
-	if (ItemImages[ItemInfo.Name])
-	{
-		ImgItem->SetBrushFromTexture(ItemImages[ItemInfo.Name]);
-	}
+	UAcmeGameInstance* GameInstance = GetGameInstance<UAcmeGameInstance>();
+	if (!GameInstance) return;
+
+	UTexture2D* Image = GameInstance->GetItemImage(ItemInfo.Name);
+	if (!Image) return;
+
+	ImgItem->SetBrushFromTexture(Image);
 }
 
 void UAlchemySlotWidget::SetSlot(FItem info)

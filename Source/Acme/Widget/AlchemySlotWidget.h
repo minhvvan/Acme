@@ -25,9 +25,6 @@ protected:
 	class UImage* ImgItem;
 
 protected:
-	UPROPERTY(EditAnywhere)
-	TMap<EItemName, UTexture2D*> ItemImages;
-
 	UPROPERTY(VisibleAnywhere)
 	FItem ItemInfo;
 

@@ -61,17 +61,15 @@ TArray<FItem> UAcmeGameInstance::GetComposeResult(FItem Left, FItem Right)
 
 UTexture2D* UAcmeGameInstance::GetItemImage(EItemName name)
 {
-	TArray<FItemImages*> AllRows;
-	UTexture2D* Result = ItemImageTable->FindRow<FItemImages>(FName(TEXT("9"/*TODO: 아이템 이름 추가되면 계속 변경해야 함*/)), TEXT(""))->Image;
+	UTexture2D* Result = ItemImageTable->FindRow<FItemImages>(FName(TEXT("E_Empty")), TEXT(""))->Image;
+	
+	UEnum* ItemEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("EItemName"), true);
+	FName ItemName = FName(*ItemEnum->GetNameStringByIndex(static_cast<uint8>(name)));
 
-	ItemImageTable->GetAllRows(TEXT("GetAllRows"), AllRows);
-	for (auto row : AllRows)
-	{
-		if (row->Key == name)
-		{
-			Result = row->Image;
-		}
-	}
+	FItemImages* row = ItemImageTable->FindRow<FItemImages>(ItemName, TEXT(""));
+	if (!row) return Result;
 
+	Result = row->Image;
+	
 	return Result;
 }

@@ -23,7 +23,10 @@ void UQuickSlotWidget::SetImage(EItemName name)
 	UAcmeGameInstance* GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
 	if (!GameInstance) return;
 
-	ImgItem->SetBrushFromTexture(GameInstance->GetItemImage(name));
+	UTexture2D* Image = GameInstance->GetItemImage(ItemInfo.Name);
+	if (!Image) return;
+
+	ImgItem->SetBrushFromTexture(Image);
 }
 
 void UQuickSlotWidget::SetAmount(int amount)

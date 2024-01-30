@@ -23,9 +23,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UTextBlock* TxtAmount;
 
-	UPROPERTY(EditAnywhere)
-	TMap<EItemName, UTexture2D*> ItemImages;
-
 	UPROPERTY()
 	FItem ItemInfo;
 

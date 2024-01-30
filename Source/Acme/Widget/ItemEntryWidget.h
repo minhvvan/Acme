@@ -71,9 +71,6 @@ public:
 	FOnDragCanceled OnDragCancel;
 
 protected:
-	UPROPERTY(EditAnywhere)
-	TMap<EItemName, UTexture2D*> ItemImages;
-
 	UPROPERTY()
 	bool IsEmpty;
 

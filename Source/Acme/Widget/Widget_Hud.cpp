@@ -3,7 +3,6 @@
 
 #include "Widget_Hud.h"
 #include "Widget_Crosshair.h"
-#include "Widget_Element.h"
 #include "Components/Border.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"

@@ -15,6 +15,7 @@
 #include "InventoryInnerWidget.h"
 #include "DetailActionWidget.h"
 #include "DetailActionInnerWidget.h"
+#include "Acme/AcmeGameInstance.h"
 
 void UItemEntryWidget::SetItemInfo(FItem& info)
 {
@@ -34,10 +35,13 @@ void UItemEntryWidget::SetIndex(int idx)
 
 void UItemEntryWidget::SetThumbnailImg(EItemName name)
 {
-	if (ItemImages[name])
-	{
-		ImgItem->SetBrushFromTexture(ItemImages[name]);
-	}
+	UAcmeGameInstance* GameInstance = GetGameInstance<UAcmeGameInstance>();
+	if (!GameInstance) return;
+
+	UTexture2D* Image = GameInstance->GetItemImage(name);
+	if (!Image) return;
+
+	ImgItem->SetBrushFromTexture(Image);
 }
 
 void UItemEntryWidget::SetAmountTxt(int amount)
