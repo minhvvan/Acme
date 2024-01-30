@@ -67,21 +67,6 @@ void UItemEntryWidget::SetEmpty()
 {
 	SetThumbnailImg(EItemName::E_Empty);
 	SetAmountTxt(0);
-	SetNormalBorder();
-}
-
-void UItemEntryWidget::SetEquipBorder()
-{
-	if (!EquipBorderMat) return;
-
-	BorderItem->SetBrushFromMaterial(EquipBorderMat);
-}
-
-void UItemEntryWidget::SetNormalBorder()
-{
-	if (!NormalBorderMat) return;
-
-	BorderItem->SetBrushFromMaterial(NormalBorderMat);
 }
 
 void UItemEntryWidget::SetSelected()
@@ -113,6 +98,9 @@ FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
 		reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
+
+		UTileInventoryWidget* ParentWidget = Cast<UTileInventoryWidget>(GetParent()->GetOuter()->GetOuter());
+		if (ParentWidget) ParentWidget->CloseDetailWidget();
 	}
 	else
 	{

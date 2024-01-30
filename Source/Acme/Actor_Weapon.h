@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InteractiveItem.h"
+#include "DefaultItem.h"
 #include "Acme/Utils/GlobalEnum.h"
 #include "Actor_Weapon.generated.h"
 
 UCLASS()
-class ACME_API AActor_Weapon : public AInteractiveItem
+class ACME_API AActor_Weapon : public ADefaultItem
 {
 	GENERATED_BODY()
 	
@@ -45,12 +45,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UFUNCTION()
-	void AttachHand();
-
-	UFUNCTION()
-	void AttachBack();
 
 	UFUNCTION()
 	void PlaySound();

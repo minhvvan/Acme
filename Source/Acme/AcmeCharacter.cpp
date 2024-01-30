@@ -74,6 +74,7 @@ AAcmeCharacter::AAcmeCharacter()
 	ActiveElement = EElement::E_End;
 
 	IsOpenInven = false;
+	CurrentQuickSlotIdx = 0;
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -433,7 +434,6 @@ void AAcmeCharacter::StartInteract()
 void AAcmeCharacter::ChangeEquip()
 {
 	if (!EquipmentComponent) return;
-	if (!EquipmentComponent->IsValidCurrnetWeapon()) return;
 
 	if (AnimState == EAnimState::E_Unarmed)
 	{
@@ -456,13 +456,11 @@ void AAcmeCharacter::AttachWeaponToHand()
 {
 	if (!EquipmentComponent) return;
 
-	EquipmentComponent->EquipCurrentWeapon();
 }
 
 void AAcmeCharacter::AttachWeaponToBack()
 {
 	if (!EquipmentComponent) return;
-	EquipmentComponent->DismantleCurrentWeapon();
 }
 
 void AAcmeCharacter::AttackStart()
@@ -497,18 +495,18 @@ void AAcmeCharacter::AttackCheck()
 	Query.AddIgnoredActor(this);
 
 	//TODO: Comp로 빼야될지도 (전투시스템)
-	FVector StartPos = EquipmentComponent->GetCurrentWeapon()->GetWeponTopPos();
-	FVector EndPos = EquipmentComponent->GetCurrentWeapon()->GetWeponEndPos();
+	//FVector StartPos = EquipmentComponent->GetCurrentHand()->GetWeponTopPos();
+	//FVector EndPos = EquipmentComponent->GetCurrentHand()->GetWeponEndPos();
 
-	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
-	{
-		for (auto Result : HitResults)
-		{
-			AActor* Victim = Result.GetActor();
+	//if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
+	//{
+	//	for (auto Result : HitResults)
+	//	{
+	//		AActor* Victim = Result.GetActor();
 
-			VictimSet.Add(Victim);
-		}
-	}
+	//		VictimSet.Add(Victim);
+	//	}
+	//}
 	//DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, (StartPos - EndPos).Length() / 2, 10, FRotationMatrix::MakeFromZ(Weapon->GetMesh()->GetRightVector()).ToQuat(), FColor::Red, false, 10.f, 0, 1.f);
 }
 
@@ -553,34 +551,42 @@ void AAcmeCharacter::OpenInventory()
 void AAcmeCharacter::QuickSlot1Start()
 {
 	//Attach Hand
+	ChangeQuickSlotIdx(0);
 }
 
 void AAcmeCharacter::QuickSlot2Start()
 {
+	ChangeQuickSlotIdx(1);
 }
 
 void AAcmeCharacter::QuickSlot3Start()
 {
+	ChangeQuickSlotIdx(2);
 }
 
 void AAcmeCharacter::QuickSlot4Start()
 {
+	ChangeQuickSlotIdx(3);
 }
 
 void AAcmeCharacter::QuickSlot5Start()
 {
+	ChangeQuickSlotIdx(4);
 }
 
 void AAcmeCharacter::QuickSlot6Start()
 {
+	ChangeQuickSlotIdx(5);
 }
 
 void AAcmeCharacter::QuickSlot7Start()
 {
+	ChangeQuickSlotIdx(6);
 }
 
 void AAcmeCharacter::QuickSlot8Start()
 {
+	ChangeQuickSlotIdx(7);
 }
 
 void AAcmeCharacter::FlushQueue()
@@ -722,45 +728,31 @@ TArray<FItem> AAcmeCharacter::GetQuickSlots()
 void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 {
 	if (!InventoryComponent) return;
+	if (!EquipmentComponent) return;
 
 	InventoryComponent->SetQuickSlot(item, idx);
+	EquipmentComponent->SpawnItem(item);
+
+	if (idx == CurrentQuickSlotIdx)
+	{
+		EquipmentComponent->SetCurrentHand(idx);
+	}
 
 	//HUD Update
 	if (!Hud) return;
 	Hud->SetQuickSlots(GetQuickSlots());
 }
 
-void AAcmeCharacter::Equip(int idx)
+void AAcmeCharacter::ChangeQuickSlotIdx(int idx)
 {
-	//Spawn Weapon
-	if (!InventoryComponent) return;
-	//InventoryComponent->Equip(idx);
+	CurrentQuickSlotIdx = idx;
 
-	if (!InventoryWidget) return;
-	InventoryWidget->UpdateBorderToEquip(idx);
-}
-
-void AAcmeCharacter::Unequip(int idx)
-{
-	if (!InventoryComponent) return;
-	//InventoryComponent->Unequip(idx);
-
-	if (!InventoryWidget) return;
-	InventoryWidget->UpdateBorderToNoraml(idx);
-}
-
-void AAcmeCharacter::SetWeapon(FItem item)
-{
+	//Equip Change
 	if (!EquipmentComponent) return;
 
-	EquipmentComponent->SetCurrentWeapon(item);
-}
-
-void AAcmeCharacter::RemoveWeapon()
-{
-	if (!EquipmentComponent) return;
-
-	EquipmentComponent->RemoveCurrentWeapon();
+	//HUD Update
+	if (!Hud) return;
+	Hud->ChangeSelectedSlot(idx);
 }
 
 void AAcmeCharacter::DumpItem(EItemCategory Category, int idx)

@@ -4,49 +4,58 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "DefaultItem.h"
-#include "ActorInteractive.generated.h"
+#include "Acme/Utils/GlobalEnum.h"
+#include "DefaultItem.generated.h"
 
 UCLASS()
-class ACME_API AActorInteractive : public ADefaultItem
+class ACME_API ADefaultItem : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AActorInteractive();
+	ADefaultItem();
+
+protected:
+	UPROPERTY(EditAnywhere, Category = Default)
+	class UStaticMeshComponent* Mesh;
+
+	UPROPERTY(EditAnywhere, Category = Default)
+	class USphereComponent* OverlapComp;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
 	virtual void OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION()
 	virtual void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 protected:
 	UPROPERTY(EditAnywhere, Category = Default)
-	class UWidgetComponent* Indicator;
+	EItemName Name;
 
 	UPROPERTY(VisibleAnywhere, Category = Default)
-	bool bCanInteract;
+	class AAcmeCharacter* OverlapedCharacter;
 
-	UPROPERTY(EditAnywhere, Category = Default)
-	TMap<EItemName, FString> NameStrings;
+	UPROPERTY(VisibleAnywhere, Category = Default)
+	bool bCanOverlap;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void SetVisibleIndicator(bool bVisible);
+	void SetName(EItemName newName);
 
 	UFUNCTION()
-	virtual void Interact();
+	void SetbCanOverlap(bool canOverlap);
 
 	UFUNCTION()
-	bool GetbCanInteract();
+	void AttachHand();
 
 	UFUNCTION()
-	void SetbCanInteract(bool canInteract);
+	void AttachBack();
 };

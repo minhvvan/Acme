@@ -4,11 +4,13 @@
 #include "Acme/Widget/QuickSlotWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Components/Border.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Acme/Widget/ItemDDOP.h"
 #include "ItemEntryWidget.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/AcmeGameInstance.h"
+#include "Acme/Utils/Util.h"
 
 void UQuickSlotWidget::SetItemInfo(FItem info)
 {
@@ -52,6 +54,20 @@ void UQuickSlotWidget::SetEmpty()
 {
 	SetImage(EItemName::E_Empty);
 	SetAmount(0);
+}
+
+void UQuickSlotWidget::SetSelectBorder()
+{
+	if (!SelectBorderMat) return;
+
+	BorderItem->SetBrushFromMaterial(SelectBorderMat);
+}
+
+void UQuickSlotWidget::SetUnSelectBorder()
+{
+	if (!NormalBorderMat) return;
+
+	BorderItem->SetBrushFromMaterial(NormalBorderMat);
 }
 
 FReply UQuickSlotWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

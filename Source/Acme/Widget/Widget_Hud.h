@@ -79,6 +79,9 @@ public:
 	UFUNCTION()
 	void BindStatus(class UStatComponent* StatComp);
 
+	UFUNCTION()
+	void ChangeSelectedSlot(int idx);
+
 private:
 	UPROPERTY()
 	float TargetHPPercent;
@@ -91,4 +94,10 @@ private:
 
 	UPROPERTY()
 	float CurrentStaminaPercent;
+
+	UPROPERTY()
+	int CurrentQuickSlotIdx;
+
+	UPROPERTY()
+	TArray<UQuickSlotWidget*> QuickSlotWidgets;
 };

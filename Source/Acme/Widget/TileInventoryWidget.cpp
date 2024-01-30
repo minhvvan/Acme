@@ -46,22 +46,6 @@ void UTileInventoryWidget::SetDetailWidget(UUserWidget* widget)
 	ShownDetailWidget = widget;
 }
 
-void UTileInventoryWidget::SetEuquipBorder(int idx)
-{
-	UItemEntryWidget* Entry = Cast<UItemEntryWidget>(ItemGrid->GetChildAt(idx));
-	if (!Entry) return;
-
-	Entry->SetEquipBorder();
-}
-
-void UTileInventoryWidget::SetNormalBorder(int idx)
-{
-	UItemEntryWidget* Entry = Cast<UItemEntryWidget>(ItemGrid->GetChildAt(idx));
-	if (!Entry) return;
-
-	Entry->SetNormalBorder();
-}
-
 void UTileInventoryWidget::SetEmpty(int idx)
 {
 	UItemEntryWidget* Entry = Cast<UItemEntryWidget>(ItemGrid->GetChildAt(idx));

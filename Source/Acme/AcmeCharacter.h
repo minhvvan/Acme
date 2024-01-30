@@ -245,6 +245,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Achemy, meta = (AllowPrivateAccess = "true"))
 	bool IsOpenInteractWidget;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Default, meta = (AllowPrivateAccess = "true"))
+	int CurrentQuickSlotIdx;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
 	EElement ActiveElement;
 
@@ -333,16 +336,7 @@ public:
 	void SetQuickSlot(FItem item, int idx);
 
 	UFUNCTION()
-	void Equip(int idx);
-
-	UFUNCTION()
-	void Unequip(int idx);
-
-	UFUNCTION()
-	void SetWeapon(FItem item);
-
-	UFUNCTION()
-	void RemoveWeapon();
+	void ChangeQuickSlotIdx(int idx);
 
 	UFUNCTION()
 	void DumpItem(EItemCategory Category, int idx);

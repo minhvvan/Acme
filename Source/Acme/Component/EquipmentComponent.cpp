@@ -21,9 +21,7 @@ UEquipmentComponent::UEquipmentComponent()
 void UEquipmentComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
+	QuickSlotItems.Reserve(8);
 }
 
 
@@ -35,22 +33,23 @@ void UEquipmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-void UEquipmentComponent::EquipCurrentWeapon()
+void UEquipmentComponent::SetCurrentHand(int idx)
 {
-	CurrentWeapon->AttachHand();
+	if (CurrentHand) CurrentHand->AttachBack();
+
+	if (QuickSlotItems[idx])
+	{
+		CurrentHand = QuickSlotItems[idx];
+		CurrentHand->AttachHand();
+	}
 }
 
-void UEquipmentComponent::DismantleCurrentWeapon()
+ADefaultItem* UEquipmentComponent::GetCurrentHand()
 {
-	CurrentWeapon->AttachBack();
+	return CurrentHand.Get();
 }
 
-AActor_Weapon* UEquipmentComponent::GetCurrentWeapon()
-{
-	return CurrentWeapon.Get();
-}
-
-void UEquipmentComponent::SetCurrentWeapon(FItem item)
+void UEquipmentComponent::SpawnItem(FItem item)
 {
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
@@ -64,23 +63,11 @@ void UEquipmentComponent::SetCurrentWeapon(FItem item)
 		FVector  SpawnLocation = Player->GetActorLocation();
 		SpawnLocation.Z += 100;
 
-		CurrentWeapon = GetWorld()->SpawnActor<AActor_Weapon>(WeaponClass, SpawnLocation, rotator, SpawnParams);
-		if (CurrentWeapon)
+		auto CurrentItem = GetWorld()->SpawnActor<AActor_Weapon>(ItemClass, SpawnLocation, rotator, SpawnParams);
+		if (CurrentItem)
 		{
-			CurrentWeapon->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
-			CurrentWeapon->AttachBack();
-			CurrentWeapon->SetbCanInteract(false);
+			CurrentItem->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			CurrentItem->AttachBack();
 		}
 	}
-}
-
-void UEquipmentComponent::RemoveCurrentWeapon()
-{
-	CurrentWeapon->Destroy();
-	CurrentWeapon = nullptr;
-}
-
-bool UEquipmentComponent::IsValidCurrnetWeapon()
-{
-	return CurrentWeapon != nullptr;
 }

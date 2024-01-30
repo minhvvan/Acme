@@ -16,16 +16,9 @@ AActorInteractive::AActorInteractive()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	SetRootComponent(Mesh);
-
-	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
-	OverlapComp->SetupAttachment(RootComponent);
-	OverlapComp->InitSphereRadius(100.f);
-
 	Indicator = CreateDefaultSubobject<UWidgetComponent>(TEXT("Indicator"));
 	Indicator->SetupAttachment(RootComponent);
-
+	
 	Name = EItemName::E_Empty;
 
 	bCanInteract = false;
@@ -41,9 +34,6 @@ void AActorInteractive::BeginPlay()
 	{
 		IndicatorWidget->SetName(NameStrings[Name]);
 	}
-
-	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &AActorInteractive::OnBeginOverlap);
-	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &AActorInteractive::OnEndOverlap);
 }
 
 void AActorInteractive::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -94,15 +84,6 @@ void AActorInteractive::Interact()
 	//OverlapedCharacter->Do Something
 }
 
-void AActorInteractive::SetName(EItemName newName)
-{
-	Name = newName;
-	if (UWidgetIndicator* IndicatorWidget = Cast<UWidgetIndicator>(Indicator->GetWidget()))
-	{
-		IndicatorWidget->SetName(NameStrings[newName]);
-	}
-}
-
 bool AActorInteractive::GetbCanInteract()
 {
 	return bCanInteract;
@@ -111,9 +92,4 @@ bool AActorInteractive::GetbCanInteract()
 void AActorInteractive::SetbCanInteract(bool canInteract)
 {
 	bCanInteract = canInteract;
-}
-
-void AActorInteractive::SetbCanOverlap(bool canOverlap)
-{
-	bCanOverlap = canOverlap;
 }

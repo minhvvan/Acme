@@ -7,7 +7,7 @@
 #include "Acme/Utils/GlobalStruct.h"
 #include "EquipmentComponent.generated.h"
 
-class AActor_Weapon;
+class ADefaultItem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ACME_API UEquipmentComponent : public UActorComponent
@@ -28,30 +28,25 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<AActor_Weapon> CurrentWeapon;
+	TObjectPtr<ADefaultItem> CurrentHand;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AActor_Weapon> WeaponClass;
-		
+	TSubclassOf<class ADefaultItem> ItemClass;
+	
 	UPROPERTY()
 	class AAcmeCharacter* Player;
 
 public:
 	UFUNCTION()
-	void EquipCurrentWeapon();
+	void SetCurrentHand(int idx);
 
 	UFUNCTION()
-	void DismantleCurrentWeapon();
+	ADefaultItem* GetCurrentHand();
 
 	UFUNCTION()
-	AActor_Weapon* GetCurrentWeapon();
+	void SpawnItem(FItem item);
 
-	UFUNCTION()
-	void SetCurrentWeapon(FItem item);
-
-	UFUNCTION()
-	void RemoveCurrentWeapon();
-
-	UFUNCTION()
-	bool IsValidCurrnetWeapon();
+private:
+	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	TArray<ADefaultItem*> QuickSlotItems;
 };

@@ -86,6 +86,18 @@ void UWidget_Hud::SetQuickSlots(TArray<FItem> QuickSlots)
 	WBP_QuickSlot6->SetItemInfo(QuickSlots[5]);
 	WBP_QuickSlot7->SetItemInfo(QuickSlots[6]);
 	WBP_QuickSlot8->SetItemInfo(QuickSlots[7]);
+
+	QuickSlotWidgets.Add(WBP_QuickSlot1);
+	QuickSlotWidgets.Add(WBP_QuickSlot2);
+	QuickSlotWidgets.Add(WBP_QuickSlot3);
+	QuickSlotWidgets.Add(WBP_QuickSlot4);
+	QuickSlotWidgets.Add(WBP_QuickSlot5);
+	QuickSlotWidgets.Add(WBP_QuickSlot6);
+	QuickSlotWidgets.Add(WBP_QuickSlot7);
+	QuickSlotWidgets.Add(WBP_QuickSlot8);
+
+	WBP_QuickSlot1->SetSelectBorder();
+	CurrentQuickSlotIdx = 0;
 }
 
 void UWidget_Hud::BindStatus(UStatComponent* StatComp)
@@ -93,4 +105,18 @@ void UWidget_Hud::BindStatus(UStatComponent* StatComp)
 	StatComp->OnChangedHP.AddUObject(this, &UWidget_Hud::SetHealth);
 	StatComp->OnChangedST.AddUObject(this, &UWidget_Hud::SetSatiety);
 	StatComp->OnChangedStamina.AddUObject(this, &UWidget_Hud::SetStamina);
+}
+
+void UWidget_Hud::ChangeSelectedSlot(int idx)
+{
+	if (QuickSlotWidgets[CurrentQuickSlotIdx])
+	{
+		QuickSlotWidgets[CurrentQuickSlotIdx]->SetUnSelectBorder();
+	}
+
+	CurrentQuickSlotIdx = idx;
+	if (QuickSlotWidgets[CurrentQuickSlotIdx])
+	{
+		QuickSlotWidgets[CurrentQuickSlotIdx]->SetSelectBorder();
+	}
 }

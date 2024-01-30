@@ -33,22 +33,6 @@ void AActor_Weapon::Tick(float DeltaTime)
 
 }
 
-void AActor_Weapon::AttachHand()
-{
-	AAcmeCharacter* Character = Cast<AAcmeCharacter>(GetOwner());
-	if (!Character) return;
-
-	Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, HandSocket);
-}
-
-void AActor_Weapon::AttachBack()
-{
-	AAcmeCharacter* Character = Cast<AAcmeCharacter>(GetOwner());
-	if (!Character) return;
-
-	Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, BackSocket);
-}
-
 void AActor_Weapon::PlaySound()
 {
 	AudioComp->SetSound(SFXList[CurrentType]);

@@ -23,6 +23,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UTextBlock* TxtAmount;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UBorder* BorderItem;
+
+protected:
 	UPROPERTY()
 	FItem ItemInfo;
 
@@ -31,6 +35,12 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> DragWidgetClass;
+
+	UPROPERTY(EditAnywhere)
+	UMaterial* NormalBorderMat;
+
+	UPROPERTY(EditAnywhere)
+	UMaterial* SelectBorderMat;
 
 public:
 	UFUNCTION()
@@ -47,6 +57,12 @@ public:
 
 	UFUNCTION()
 	void SetEmpty();
+
+	UFUNCTION()
+	void SetSelectBorder();
+
+	UFUNCTION()
+	void SetUnSelectBorder();
 
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 

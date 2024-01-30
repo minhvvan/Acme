@@ -156,30 +156,6 @@ void UInventoryComponent::SetQuickSlot(FItem item, int idx)
 	QuickSlots[idx] = item;
 }
 
-//void UInventoryComponent::Equip(int idx)
-//{
-//	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
-//	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
-//
-//	FItem& Item = ItemList[idx];
-//	if (Item.Name == EItemName::E_Empty) return;
-//
-//	Item.Equiped = true;
-//	Player->SetWeapon(Item);
-//}
-//
-//void UInventoryComponent::Unequip(int idx)
-//{
-//	TArray<FItem>& ItemList = Items[EItemCategory::E_Equipment].Get();
-//	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
-//
-//	FItem& Item = ItemList[idx];
-//	if (Item.Equiped == false) return;
-//
-//	//Item.Equiped = false;
-//	Player->RemoveWeapon();
-//}
-
 void UInventoryComponent::Dump(EItemCategory Category, int idx)
 {
 	TArray<FItem>& ItemList = Items[Category].Get();

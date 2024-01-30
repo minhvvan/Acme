@@ -55,12 +55,6 @@ public:
 	void SetEmpty();
 
 	UFUNCTION()
-	void SetEquipBorder();
-
-	UFUNCTION()
-	void SetNormalBorder();
-
-	UFUNCTION()
 	void SetSelected();
 
 	UFUNCTION()
@@ -85,12 +79,6 @@ protected:
 
 	UPROPERTY()
 	bool bCanShowDetail = true;
-
-	UPROPERTY(EditAnywhere)
-	UMaterial* NormalBorderMat;
-
-	UPROPERTY(EditAnywhere)
-	UMaterial* EquipBorderMat;
 
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
