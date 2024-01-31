@@ -88,3 +88,8 @@ void ADefaultItem::AttachBack()
 
 	Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GlobalConst::BackSocket);
 }
+
+void ADefaultItem::Active()
+{
+	//override
+}

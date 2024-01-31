@@ -6,8 +6,6 @@
 #include "Animation/AnimInstance.h"
 #include "AI_Main.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnEquip);
-DECLARE_MULTICAST_DELEGATE(FOnDismantle);
 DECLARE_MULTICAST_DELEGATE(FOnAttackStart);
 DECLARE_MULTICAST_DELEGATE(FOnAttackEnd);
 DECLARE_MULTICAST_DELEGATE(FOnInteract);
@@ -31,9 +29,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Equip", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMEquip;
 
-	UPROPERTY(EditAnywhere, Category = "Equip", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* AMDismantle;	
-	
 	UPROPERTY(EditAnywhere, Category = "Move", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMExhaust;	
 	
@@ -54,9 +49,6 @@ public:
 	void PlayEquip();
 
 	UFUNCTION()
-	void PlayDisMantle();	
-	
-	UFUNCTION()
 	void PlayExhaust();	
 	
 	UFUNCTION()
@@ -65,19 +57,11 @@ public:
 	UFUNCTION()
 	FName GetAttackMontageName(int idx);
 
-	FOnEquip OnEquip;
-	FOnDismantle OnDismantle;
 	FOnAttackStart OnAttackStart;
 	FOnAttackEnd OnAttackEnd;
 	FOnInteract OnInteract;
 
 private:
-	UFUNCTION()
-	void AnimNotify_AttachHand();
-
-	UFUNCTION()
-	void AnimNotify_AttachBack();	
-	
 	UFUNCTION()
 	void AnimNotify_AttackStart();
 

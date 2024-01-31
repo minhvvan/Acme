@@ -46,6 +46,9 @@ public:
 	UFUNCTION()
 	void SpawnItem(FItem item, int idx);
 
+	UFUNCTION()
+	void Active(int idx);
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	TArray<ADefaultItem*> QuickSlotItems;

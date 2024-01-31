@@ -114,8 +114,6 @@ void AAcmeCharacter::BeginPlay()
 
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
 	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &AAcmeCharacter::EndAttack);
-	AnimInstance->OnEquip.AddUObject(this, &AAcmeCharacter::AttachWeaponToHand);
-	AnimInstance->OnDismantle.AddUObject(this, &AAcmeCharacter::AttachWeaponToBack);
 	AnimInstance->OnAttackStart.AddUObject(this, &AAcmeCharacter::AttackStart);
 	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::AttackEnd);
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
@@ -321,7 +319,11 @@ void AAcmeCharacter::StartAttack()
 {
 	if (AnimState == EAnimState::E_Unarmed) return;
 	if (!CanAttack) return;
+	if (!EquipmentComponent) return;
 
+	EquipmentComponent->Active(CurrentQuickSlotIdx);
+
+	//TODO:무기쪽으로 옮겨야함
 	GetWorldTimerManager().ClearTimer(StaminaRecoveryTimer);
 	GetWorldTimerManager().SetTimer(StaminaRecoveryTimer,
 		FTimerDelegate::CreateLambda([this]() {
@@ -442,22 +444,7 @@ void AAcmeCharacter::ChangeEquip()
 	else
 	{
 		AnimState = EAnimState::E_Unarmed;
-
-		if (!AnimInstance) return;
-
-		AnimInstance->PlayDisMantle();
 	}
-}
-
-void AAcmeCharacter::AttachWeaponToHand()
-{
-	if (!EquipmentComponent) return;
-
-}
-
-void AAcmeCharacter::AttachWeaponToBack()
-{
-	if (!EquipmentComponent) return;
 }
 
 void AAcmeCharacter::AttackStart()
@@ -625,6 +612,11 @@ void AAcmeCharacter::TakeDamage(int damage)
 	StatCompoenent->OnAttakced(damage);
 }
 
+void AAcmeCharacter::SetAnimState(EAnimState newAnimState)
+{
+	AnimState = newAnimState;
+}
+
 void AAcmeCharacter::CloseInventory()
 {
 	auto PC = Cast<APlayerController>(GetController());
@@ -751,6 +743,10 @@ void AAcmeCharacter::ChangeQuickSlotIdx(int idx)
 	//HUD Update
 	if (!Hud) return;
 	Hud->ChangeSelectedSlot(idx);
+
+	//Anim
+	if (!AnimInstance) return;
+	AnimInstance->PlayEquip();
 }
 
 void AAcmeCharacter::DumpItem(EItemCategory Category, int idx)

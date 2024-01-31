@@ -149,12 +149,6 @@ protected:
 	void ChangeEquip();
 
 	UFUNCTION()
-	void AttachWeaponToHand();
-
-	UFUNCTION()
-	void AttachWeaponToBack();			
-	
-	UFUNCTION()
 	void AttackStart();	
 	
 	UFUNCTION()
@@ -301,7 +295,9 @@ public:
 	UFUNCTION()
 	void TakeDamage(int damage);
 
-public:
+	UFUNCTION()
+	void SetAnimState(EAnimState newAnimState);
+
 	UFUNCTION()
 	void CloseInventory();
 	

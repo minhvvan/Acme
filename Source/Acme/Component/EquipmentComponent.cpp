@@ -41,8 +41,15 @@ void UEquipmentComponent::SetCurrentHand(int idx)
 
 	if (QuickSlotItems[idx])
 	{
+		if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+		Player->SetAnimState(EAnimState::E_Equiped);
+
 		CurrentHand = QuickSlotItems[idx];
 		CurrentHand->AttachHand();
+	}
+	else
+	{
+		Player->SetAnimState(EAnimState::E_Unarmed);
 	}
 }
 
@@ -78,4 +85,10 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 	}
 
 	QuickSlotItems[idx] = CurrentItem;
+}
+
+void UEquipmentComponent::Active(int idx)
+{
+	if (!QuickSlotItems[idx]) return;
+	QuickSlotItems[idx]->Active();
 }

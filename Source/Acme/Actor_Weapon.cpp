@@ -4,6 +4,7 @@
 #include "Actor_Weapon.h"
 #include "AcmeCharacter.h"
 #include "Components/AudioComponent.h"
+#include "Acme/Utils/Util.h"
 
 // Sets default values
 AActor_Weapon::AActor_Weapon()
@@ -47,4 +48,9 @@ FVector AActor_Weapon::GetWeponTopPos()
 FVector AActor_Weapon::GetWeponEndPos()
 {
 	return Mesh->GetSocketLocation(WeaponEndName);
+}
+
+void AActor_Weapon::Active()
+{
+	UUtil::DebugPrint("Active");
 }

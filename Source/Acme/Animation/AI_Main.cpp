@@ -29,14 +29,6 @@ void UAI_Main::PlayEquip()
 	}
 }
 
-void UAI_Main::PlayDisMantle()
-{
-	if (!Montage_IsPlaying(AMDismantle))
-	{
-		Montage_Play(AMDismantle);
-	}
-}
-
 void UAI_Main::PlayExhaust()
 {
 	if (!Montage_IsPlaying(AMExhaust))
@@ -56,16 +48,6 @@ void UAI_Main::PlayInteract()
 FName UAI_Main::GetAttackMontageName(int idx)
 {
 	return FName(FString::Printf(TEXT("Attack%d"), idx));
-}
-
-void UAI_Main::AnimNotify_AttachHand()
-{
-	OnEquip.Broadcast();
-}
-
-void UAI_Main::AnimNotify_AttachBack()
-{
-	OnDismantle.Broadcast();
 }
 
 void UAI_Main::AnimNotify_AttackStart()

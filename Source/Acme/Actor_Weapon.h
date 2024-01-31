@@ -54,4 +54,6 @@ public:
 
 	UFUNCTION()
 	FVector GetWeponEndPos();
+
+	virtual void Active() override;
 };

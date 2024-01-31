@@ -58,4 +58,7 @@ public:
 
 	UFUNCTION()
 	void AttachBack();
+
+	UFUNCTION()
+	virtual void Active();
 };
