@@ -196,10 +196,7 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 		//Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartInteract);
-			
-		//Equip
-		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::ChangeEquip);
-	
+
 		//QuickSlot
 		EnhancedInputComponent->BindAction(Slot1Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot1Start);
 		EnhancedInputComponent->BindAction(Slot2Action, ETriggerEvent::Triggered, this, &AAcmeCharacter::QuickSlot2Start);
@@ -731,7 +728,7 @@ void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 	if (!EquipmentComponent) return;
 
 	InventoryComponent->SetQuickSlot(item, idx);
-	EquipmentComponent->SpawnItem(item);
+	EquipmentComponent->SpawnItem(item, idx);
 
 	if (idx == CurrentQuickSlotIdx)
 	{
@@ -749,6 +746,7 @@ void AAcmeCharacter::ChangeQuickSlotIdx(int idx)
 
 	//Equip Change
 	if (!EquipmentComponent) return;
+	EquipmentComponent->SetCurrentHand(CurrentQuickSlotIdx);
 
 	//HUD Update
 	if (!Hud) return;

@@ -17,6 +17,9 @@ const FString GlobalConst::InstallActionName =		FString::Printf(TEXT("설치하�
 const FString GlobalConst::ConsumeActionName =		FString::Printf(TEXT("소비하기"));
 const FString GlobalConst::DumpActionName =			FString::Printf(TEXT("버리기"));
 
+const FName GlobalConst::HandSocket =			FName(TEXT("Weapon_Hand_Socket"));
+const FName GlobalConst::BackSocket =			FName(TEXT("Weapon_Back_Socket"));
+
 GlobalConst::GlobalConst()
 {
 }

@@ -47,6 +47,31 @@ struct FItemImages : public FTableRowBase
 };
 
 
+USTRUCT()
+struct FItemNameString : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EItemName Key;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Name;
+};
+
+USTRUCT()
+struct FItemClass : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EItemName Key;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class ADefaultItem> Class;
+};
+
+
 UCLASS()
 class ACME_API UAcmeGameInstance : public UGameInstance
 {
@@ -65,10 +90,16 @@ public:
 	UFUNCTION()
 	UTexture2D* GetItemImage(EItemName name);
 
+	UFUNCTION()
+	TSubclassOf<class ADefaultItem> GetItemClass(EItemName name);
+
 protected:
 	UPROPERTY()
 	class UDataTable* ComposeTable;
 
 	UPROPERTY()
 	class UDataTable* ItemImageTable;
+
+	UPROPERTY()
+	class UDataTable* ItemClassTable;
 };

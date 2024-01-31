@@ -8,6 +8,7 @@
 #include "AcmeCharacter.h"
 #include "Acme/Widget/WidgetIndicator.h"
 #include "Acme/Utils/Util.h"
+#include "Acme/Utils/GlobalConst.h"
 
 // Sets default values
 ADefaultItem::ADefaultItem()
@@ -77,7 +78,7 @@ void ADefaultItem::AttachHand()
 	AAcmeCharacter* Character = Cast<AAcmeCharacter>(GetOwner());
 	if (!Character) return;
 
-	//Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, HandSocket);
+	Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GlobalConst::HandSocket);
 }
 
 void ADefaultItem::AttachBack()
@@ -85,5 +86,5 @@ void ADefaultItem::AttachBack()
 	AAcmeCharacter* Character = Cast<AAcmeCharacter>(GetOwner());
 	if (!Character) return;
 
-	//Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, BackSocket);
+	Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GlobalConst::BackSocket);
 }

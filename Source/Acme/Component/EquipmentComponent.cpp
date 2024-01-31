@@ -2,8 +2,10 @@
 
 
 #include "Acme/Component/EquipmentComponent.h"
-#include "Acme/Actor_Weapon.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/AcmeGameInstance.h"
+#include "Acme/Actor_Weapon.h"
+#include "Acme/DefaultItem.h"
 #include "Acme/Utils/Util.h"
 
 // Sets default values for this component's properties
@@ -21,7 +23,7 @@ UEquipmentComponent::UEquipmentComponent()
 void UEquipmentComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	QuickSlotItems.Reserve(8);
+	QuickSlotItems.SetNum(8);
 }
 
 
@@ -49,25 +51,31 @@ ADefaultItem* UEquipmentComponent::GetCurrentHand()
 	return CurrentHand.Get();
 }
 
-void UEquipmentComponent::SpawnItem(FItem item)
+void UEquipmentComponent::SpawnItem(FItem item, int idx)
 {
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+	if (!GameInstance) GameInstance = Player->GetGameInstance<UAcmeGameInstance>();
 
-	//Spawn
-	if (item.Name == EItemName::E_Sword)
+	TSubclassOf<ADefaultItem> ItemClass;
+	if (!(ItemClass = GameInstance->GetItemClass(item.Name))) return;
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = Player;
+	FRotator rotator;
+	FVector  SpawnLocation = Player->GetActorLocation();
+	SpawnLocation.Z += 100;
+
+	ADefaultItem* CurrentItem = GetWorld()->SpawnActor<ADefaultItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
+	if (CurrentItem)
 	{
-		//item.Equiped = true;
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = Player;
-		FRotator rotator;
-		FVector  SpawnLocation = Player->GetActorLocation();
-		SpawnLocation.Z += 100;
-
-		auto CurrentItem = GetWorld()->SpawnActor<AActor_Weapon>(ItemClass, SpawnLocation, rotator, SpawnParams);
-		if (CurrentItem)
-		{
-			CurrentItem->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
-			CurrentItem->AttachBack();
-		}
+		CurrentItem->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		CurrentItem->AttachBack();
 	}
+
+	if (QuickSlotItems[idx])
+	{
+		//TODO: 이미 있던 아이템을 어떻게 처리할지
+	}
+
+	QuickSlotItems[idx] = CurrentItem;
 }

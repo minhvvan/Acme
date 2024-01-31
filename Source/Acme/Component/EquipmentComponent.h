@@ -30,11 +30,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<ADefaultItem> CurrentHand;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class ADefaultItem> ItemClass;
-	
 	UPROPERTY()
 	class AAcmeCharacter* Player;
+
+	UPROPERTY()
+	class UAcmeGameInstance* GameInstance;
 
 public:
 	UFUNCTION()
@@ -44,7 +44,7 @@ public:
 	ADefaultItem* GetCurrentHand();
 
 	UFUNCTION()
-	void SpawnItem(FItem item);
+	void SpawnItem(FItem item, int idx);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))

@@ -20,6 +20,14 @@ UAcmeGameInstance::UAcmeGameInstance()
 			ItemImageTable = TABLE.Object;
 		}
 	}
+
+	{
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_ItemClass.DT_ItemClass'"));
+		if (TABLE.Succeeded())
+		{
+			ItemClassTable = TABLE.Object;
+		}
+	}
 }
 
 void UAcmeGameInstance::Init()
@@ -71,5 +79,20 @@ UTexture2D* UAcmeGameInstance::GetItemImage(EItemName name)
 
 	Result = row->Image;
 	
+	return Result;
+}
+
+TSubclassOf<class ADefaultItem> UAcmeGameInstance::GetItemClass(EItemName name)
+{
+	TSubclassOf<class ADefaultItem> Result = ItemClassTable->FindRow<FItemClass>(FName(TEXT("E_Empty")), TEXT(""))->Class;
+
+	UEnum* ItemEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("EItemName"), true);
+	FName ItemName = FName(*ItemEnum->GetNameStringByIndex(static_cast<uint8>(name)));
+
+	FItemClass* row = ItemClassTable->FindRow<FItemClass>(ItemName, TEXT(""));
+	if (!row) return Result;
+
+	Result = row->Class;
+
 	return Result;
 }

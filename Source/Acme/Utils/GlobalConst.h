@@ -23,4 +23,8 @@ public:
 	static const FString InstallActionName;
 	static const FString ConsumeActionName;
 	static const FString DumpActionName;
+
+	static const FName HandSocket;
+	static const FName BackSocket;
+
 };
