@@ -23,24 +23,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sound, meta = (AllowPrivateAccess = "true"))
 	class UAudioComponent* AudioComp;
 
-	UPROPERTY(EditAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
-	FName HandSocket;
-
-	UPROPERTY(EditAnywhere, Category = Default, meta = (AllowPrivateAccess = "true"))
-	FName BackSocket;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = SFX, meta = (AllowPrivateAccess = "true"))
 	TMap<EElement, class USoundBase*> SFXList;
-
-	UPROPERTY()
-	EElement CurrentType;
-
-	UPROPERTY(EditAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	FName WeaponTopName;
-
-	UPROPERTY(EditAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	FName WeaponEndName;
-
 
 public:	
 	// Called every frame
@@ -48,12 +32,6 @@ public:
 
 	UFUNCTION()
 	void PlaySound();
-
-	UFUNCTION()
-	FVector GetWeponTopPos();
-
-	UFUNCTION()
-	FVector GetWeponEndPos();
 
 	virtual void Active() override;
 };

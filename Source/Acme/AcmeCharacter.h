@@ -134,7 +134,7 @@ protected:
 	void StartAttack();	
 
 	UFUNCTION()
-	void EndAttack(UAnimMontage* Montage, bool bInterrupted);
+	void AnimEnd(UAnimMontage* Montage, bool bInterrupted);
 
 	UFUNCTION()
 	void StartJampDashAttack();
@@ -146,16 +146,10 @@ protected:
 	void StartInteract();	
 	
 	UFUNCTION()
-	void ChangeEquip();
-
-	UFUNCTION()
-	void AttackStart();	
+	void StartSwordAttack();
 	
 	UFUNCTION()
-	void AttackEnd();
-
-	UFUNCTION()
-	void AttackCheck();	
+	void EndSwordAttack();
 	
 	UFUNCTION()
 	void Interact();
@@ -224,12 +218,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	EAnimState AnimState;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
-	bool IsCombo;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
-	int ComboIdx;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	bool IsOpenInven;
 
@@ -241,9 +229,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
 	EElement ActiveElement;
-
-	UPROPERTY()
-	FTimerHandle AttackTimer;
 
 	UPROPERTY()
 	FTimerHandle StaminaRecoveryTimer;
@@ -276,11 +261,8 @@ protected:
 
 	TQueue<int> AttackQueue;
 
-	UPROPERTY()
-	TSet<AActor*> VictimSet;
-
-	UFUNCTION()
-	void FlushQueue();
+	//UFUNCTION()
+	//void FlushQueue();
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -342,6 +324,12 @@ public:
 
 	UFUNCTION()
 	void SetInteractWidget(UAlchemicComposeWidget* widget);
+
+	UFUNCTION()
+	void ConsumeStamina(int amount);
+
+	UFUNCTION()
+	void PlaySwordAttack(int idx);
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

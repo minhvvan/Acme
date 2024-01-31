@@ -13,11 +13,6 @@ AActor_Weapon::AActor_Weapon()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
-
-	CurrentType = EElement::E_End;
-
-	WeaponTopName = FName(TEXT("WeaponTop"));
-	WeaponEndName = FName(TEXT("WeaponEnd"));
 }
 
 // Called when the game starts or when spawned
@@ -36,21 +31,9 @@ void AActor_Weapon::Tick(float DeltaTime)
 
 void AActor_Weapon::PlaySound()
 {
-	AudioComp->SetSound(SFXList[CurrentType]);
-	AudioComp->Play();
-}
-
-FVector AActor_Weapon::GetWeponTopPos()
-{
-	return Mesh->GetSocketLocation(WeaponTopName);
-}
-
-FVector AActor_Weapon::GetWeponEndPos()
-{
-	return Mesh->GetSocketLocation(WeaponEndName);
+	AudioComp->Play();	
 }
 
 void AActor_Weapon::Active()
 {
-	UUtil::DebugPrint("Active");
 }

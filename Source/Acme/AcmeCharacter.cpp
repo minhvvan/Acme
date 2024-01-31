@@ -25,6 +25,7 @@
 #include "Acme/Widget/InventoryWidget.h"
 #include "Acme/Widget/AlchemicComposeWidget.h"
 #include "Acme/Component/EquipmentComponent.h"
+#include "Acme/SwordActor.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -68,7 +69,6 @@ AAcmeCharacter::AAcmeCharacter()
 
 	PrimaryActorTick.bCanEverTick = true;
 
-	ComboIdx = 0;
 	CanAttack = true;
 
 	ActiveElement = EElement::E_End;
@@ -113,9 +113,9 @@ void AAcmeCharacter::BeginPlay()
 	}
 
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
-	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &AAcmeCharacter::EndAttack);
-	AnimInstance->OnAttackStart.AddUObject(this, &AAcmeCharacter::AttackStart);
-	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::AttackEnd);
+	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &AAcmeCharacter::AnimEnd);
+	AnimInstance->OnAttackStart.AddUObject(this, &AAcmeCharacter::StartSwordAttack);
+	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::EndSwordAttack);
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
 
 	{
@@ -322,50 +322,20 @@ void AAcmeCharacter::StartAttack()
 	if (!EquipmentComponent) return;
 
 	EquipmentComponent->Active(CurrentQuickSlotIdx);
-
-	//TODO:무기쪽으로 옮겨야함
-	GetWorldTimerManager().ClearTimer(StaminaRecoveryTimer);
-	GetWorldTimerManager().SetTimer(StaminaRecoveryTimer,
-		FTimerDelegate::CreateLambda([this]() {
-			StatCompoenent->RecoveryStamina(100);
-			}),
-		5.f, true);
-
-	if (IsCombo)
-	{
-		//combo
-		if (ComboIdx == 2) return;
-
-		ComboIdx++;
-		AttackQueue.Enqueue(ComboIdx);
-
-		return;
-	}
-
-	IsAttacking = true;
-	IsCombo = true;
-
-	AttackQueue.Enqueue(ComboIdx);
-	FlushQueue();
 }
 
-void AAcmeCharacter::EndAttack(UAnimMontage* Montage, bool bInterrupted)
+void AAcmeCharacter::AnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	FString MontageName = Montage->GetName();
 
-	if (!AttackQueue.IsEmpty())
-	{
-		FlushQueue();
-	}
-	else
-	{
-		IsCombo = false;
-		IsAttacking = false;
-		ComboIdx = 0;
-	}
-
 	if (MontageName == TEXT("AM_Attack") || MontageName == TEXT("AM_JDAttack"))
 	{
+		ASwordActor* Sword = Cast<ASwordActor>(EquipmentComponent->GetCurrentHand());
+		if (Sword)
+		{
+			Sword->PlayCombo();
+		}
+
 		if (!bInterrupted)
 		{
 			StatCompoenent->ConsumeStamina(10/*TODO:var*/);
@@ -430,74 +400,49 @@ void AAcmeCharacter::StartInteract()
 	//DrawDebugSphere(GetWorld(), CenterOfSphere, CollisionShape.GetSphereRadius(), 10, FColor::Green, true);
 }
 
-void AAcmeCharacter::ChangeEquip()
+void AAcmeCharacter::StartSwordAttack()
 {
 	if (!EquipmentComponent) return;
 
-	if (AnimState == EAnimState::E_Unarmed)
-	{
-		AnimState = EAnimState::E_Equiped;
+	ASwordActor* Sword = Cast<ASwordActor>(EquipmentComponent->GetCurrentHand());
+	if (!Sword) return;
 
-		if (!AnimInstance) return;
-		AnimInstance->PlayEquip();
-	}
-	else
-	{
-		AnimState = EAnimState::E_Unarmed;
-	}
+	Sword->BeginSeinsing();
 }
 
-void AAcmeCharacter::AttackStart()
-{
-	GetWorldTimerManager().SetTimer(OUT AttackTimer, this, &AAcmeCharacter::AttackCheck, .01f, true);
-}
-
-void AAcmeCharacter::AttackEnd()
-{
-	GetWorldTimerManager().ClearTimer(AttackTimer);
-
-	for (AActor* Victim : VictimSet)
-	{
-		//Damage 계산(Victim쪽에서)
-		auto Monster = Cast<ACharacterMonster>(Victim);
-		if (!Monster) continue;
-
-		Monster->SetTarget(this);
-		Monster->OnAttacked(10, ActiveElement);
-	}
-
-	VictimSet.Empty();
-}
-
-void AAcmeCharacter::AttackCheck()
+void AAcmeCharacter::EndSwordAttack()
 {
 	if (!EquipmentComponent) return;
 
-	TArray<FHitResult> HitResults;
-	FCollisionQueryParams Query;
+	ASwordActor* Sword = Cast<ASwordActor>(EquipmentComponent->GetCurrentHand());
+	if (!Sword) return;
 
-	Query.AddIgnoredActor(this);
-
-	//TODO: Comp로 빼야될지도 (전투시스템)
-	//FVector StartPos = EquipmentComponent->GetCurrentHand()->GetWeponTopPos();
-	//FVector EndPos = EquipmentComponent->GetCurrentHand()->GetWeponEndPos();
-
-	//if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
-	//{
-	//	for (auto Result : HitResults)
-	//	{
-	//		AActor* Victim = Result.GetActor();
-
-	//		VictimSet.Add(Victim);
-	//	}
-	//}
-	//DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, (StartPos - EndPos).Length() / 2, 10, FRotationMatrix::MakeFromZ(Weapon->GetMesh()->GetRightVector()).ToQuat(), FColor::Red, false, 10.f, 0, 1.f);
+	Sword->EndSeinsing();
 }
 
 void AAcmeCharacter::Interact()
 {
 	if (!OverlapActor.Get()) return;
 	OverlapActor->Interact();
+}
+
+void AAcmeCharacter::ConsumeStamina(int amount)
+{
+	if (!StatCompoenent) return;
+
+	StatCompoenent->ConsumeStamina(amount);
+	GetWorldTimerManager().ClearTimer(StaminaRecoveryTimer);
+	GetWorldTimerManager().SetTimer(StaminaRecoveryTimer,
+		FTimerDelegate::CreateLambda([this]() {
+			StatCompoenent->RecoveryStamina(100);
+			}),
+		5.f, true);
+}
+
+void AAcmeCharacter::PlaySwordAttack(int idx)
+{
+	if (!AnimInstance) return;
+	AnimInstance->PlayAttack(idx);
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)
@@ -571,23 +516,6 @@ void AAcmeCharacter::QuickSlot7Start()
 void AAcmeCharacter::QuickSlot8Start()
 {
 	ChangeQuickSlotIdx(7);
-}
-
-void AAcmeCharacter::FlushQueue()
-{
-	if (!CanAttack)
-	{
-		AttackQueue.Empty();
-		return;
-	}
-
-	if (!AttackQueue.IsEmpty())
-	{
-		int idx = *AttackQueue.Peek();
-		AttackQueue.Pop();
-
-		AnimInstance->PlayAttack(idx);
-	}
 }
 
 void AAcmeCharacter::ChangeWalkSpeed(float amount)
