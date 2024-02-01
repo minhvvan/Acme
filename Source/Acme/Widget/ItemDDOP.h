@@ -26,4 +26,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UItemEntryWidget* WidgetRef;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bQuickSlot;
 };

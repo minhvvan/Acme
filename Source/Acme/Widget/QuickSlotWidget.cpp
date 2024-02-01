@@ -15,26 +15,6 @@
 
 void UQuickSlotWidget::SetItemInfo(FItem info)
 {
-	if (ItemInfo.Name != EItemName::E_Empty)
-	{
-		if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-		if (!Player->AddItem(ItemInfo))
-		{
-			if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
-
-			TSubclassOf<ADefaultItem> ItemClass;
-			if (!(ItemClass = GameInstance->GetItemClass(info.Name))) return;
-
-			FActorSpawnParameters SpawnParams;
-			//SpawnParams.Owner = Player;
-			FRotator rotator;
-			FVector  SpawnLocation = Player->GetActorLocation();
-			SpawnLocation.Z += 10;
-
-			ADefaultItem* CurrentItem = GetWorld()->SpawnActor<ADefaultItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
-		}
-	}
-
 	ItemInfo = info;
 	
 	SetImage(ItemInfo.Name);
@@ -72,6 +52,10 @@ void UQuickSlotWidget::SetIndex(int idx)
 
 void UQuickSlotWidget::SetEmpty()
 {
+	//TODO:이렇게 해도 되는지 확인 필요
+	ItemInfo.Category = EItemCategory::E_End;
+	ItemInfo.Name = EItemName::E_Empty;
+
 	SetImage(EItemName::E_Empty);
 	SetAmount(0);
 }
@@ -110,6 +94,7 @@ void UQuickSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDDOP::StaticClass()));
 	DragWidget->Index = Index;
 	DragWidget->ItemInfo = ItemInfo;
+	DragWidget->bQuickSlot = true;
 
 	UQuickSlotWidget* DragVisual = Cast<UQuickSlotWidget>(CreateWidget(GetWorld(), DragWidgetClass));
 	DragVisual->SetItemInfo(ItemInfo);
@@ -121,7 +106,7 @@ void UQuickSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
 	FItem EmptyItem = FItem();
-	Player->SetQuickSlot(EmptyItem, Index);
+	Player->RemoveQuickSlot(Index);
 
 	OutOperation = DragWidget;
 }
@@ -140,9 +125,34 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 		return result;
 	}
 
-	//기존에 있던거 해당 Category로 보내야함
+	if (DragWidget->bQuickSlot)
+	{
+
+		if (ItemInfo.Name == EItemName::E_Empty)
+		{
+			//Add
+			Player->SetQuickSlot(DragWidget->ItemInfo, Index);
+		}
+		else
+		{
+			//swap
+			Player->SwapQuickByIdx(DragWidget->ItemInfo, DragWidget->Index, Index);
+		}
+	}
+	else
+	{
+		if (ItemInfo.Name == EItemName::E_Empty)
+		{
+			//Add
+			Player->SetQuickSlot(DragWidget->ItemInfo, Index);
+		}
+		else
+		{
+			Player->SwapQuickAndInven(DragWidget->ItemInfo, DragWidget->Index, Index);
+		}
+	}
+
 	SetItemInfo(DragWidget->ItemInfo);
-	Player->SetQuickSlot(ItemInfo, Index);
 
 	return result;
 }

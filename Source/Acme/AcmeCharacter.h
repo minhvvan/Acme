@@ -296,10 +296,22 @@ public:
 	bool AddItem(FItem item);
 
 	UFUNCTION()
-	void MoveItems(EItemCategory Category, int from, int to);
+	void AddToInvenByIdx(FItem item, int idx);
+
+	UFUNCTION()
+	void SwapInvenByIdx(FItem fromItem, int from, int to);
+
+	UFUNCTION()
+	void SwapQuickByIdx(FItem fromItem, int from, int to);
+
+	UFUNCTION()
+	void SwapQuickAndInven(FItem item, int quickIdx, int invenIdx);
 
 	UFUNCTION()
 	void UseItem(EItemCategory Category, int idx);
+
+	UFUNCTION()
+	void RemoveItem(EItemCategory Category, int idx);
 
 	UFUNCTION()
 	void UpdateInventoryWidget();
@@ -309,6 +321,9 @@ public:
 
 	UFUNCTION()
 	void SetQuickSlot(FItem item, int idx);
+
+	UFUNCTION()
+	void RemoveQuickSlot(int idx);
 
 	UFUNCTION()
 	void ChangeQuickSlotIdx(int idx);

@@ -27,13 +27,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION()
-	bool AddItem(FItem newItem);
-
-	UFUNCTION()
 	FItemList& GetItemList(EItemCategory category);
 
 	UFUNCTION()
 	FItem GetItem(EItemCategory category, int idx);
+
+	UFUNCTION()
+	FItem GetQuickItem(int idx);
 
 	UFUNCTION()
 	int GetMaxQuantity();
@@ -46,15 +46,27 @@ public:
 
 	UFUNCTION()
 	TArray<FItem>& GetQuickSlots();
-
-	UFUNCTION()
-	void SetQuickSlot(FItem item, int idx);	
 	
 	UFUNCTION()
 	void Dump(EItemCategory Category, int idx);
 
 	UFUNCTION()
 	void UseItem(EItemCategory Category, int idx);
+
+	UFUNCTION()
+	bool AddItem(FItem newItem);
+
+	UFUNCTION()
+	void AddToInven(FItem newItem, int idx);
+
+	UFUNCTION()
+	void RemoveFromInven(EItemCategory Category, int idx);
+
+	UFUNCTION()
+	void AddToQuick(FItem newItem, int idx);
+
+	UFUNCTION()
+	void RemoveFromQuick(int idx);
 
 private:
 	UPROPERTY()

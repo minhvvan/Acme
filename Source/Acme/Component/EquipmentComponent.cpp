@@ -39,7 +39,7 @@ void UEquipmentComponent::SetCurrentHand(int idx)
 {
 	if (CurrentHand) CurrentHand->AttachBack();
 
-	if (QuickSlotItems[idx])
+	if (QuickSlotItems[idx] && !QuickSlotItems[idx]->IsPendingKill())
 	{
 		if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 		Player->SetAnimState(EAnimState::E_Equiped);
@@ -51,6 +51,13 @@ void UEquipmentComponent::SetCurrentHand(int idx)
 	{
 		Player->SetAnimState(EAnimState::E_Unarmed);
 	}
+}
+
+void UEquipmentComponent::ClearCurrentHand()
+{
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+	Player->SetAnimState(EAnimState::E_Unarmed);
+	CurrentHand = nullptr;
 }
 
 ADefaultItem* UEquipmentComponent::GetCurrentHand()
@@ -79,11 +86,7 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 		CurrentItem->AttachBack();
 	}
 
-	if (QuickSlotItems[idx])
-	{
-		//TODO: 이미 있던 아이템을 어떻게 처리할지
-	}
-
+	DestroyAttachActor(idx);
 	QuickSlotItems[idx] = CurrentItem;
 }
 
@@ -91,4 +94,12 @@ void UEquipmentComponent::Active(int idx)
 {
 	if (!QuickSlotItems[idx]) return;
 	QuickSlotItems[idx]->Active();
+}
+
+void UEquipmentComponent::DestroyAttachActor(int idx)
+{
+	if (QuickSlotItems[idx])
+	{
+		QuickSlotItems[idx]->Destroy();
+	}
 }

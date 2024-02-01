@@ -72,7 +72,7 @@ protected:
 	class AAcmeCharacter* Player;
 
 	UPROPERTY()
-	EItemCategory Category;
+	FItem ItemInfo;
 
 	UPROPERTY()
 	int Index;

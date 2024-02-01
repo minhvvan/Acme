@@ -125,7 +125,7 @@ void AAcmeCharacter::BeginPlay()
 		//temp1.Equiped = false;
 		temp1.Category = EItemCategory::E_Equipment;
 
-		InventoryComponent->AddItem(temp1);
+		InventoryComponent->AddToInven(temp1, 2);
 	}
 
 	{
@@ -614,11 +614,38 @@ bool AAcmeCharacter::AddItem(FItem item)
 	return InventoryComponent->AddItem(item);
 }
 
-void AAcmeCharacter::MoveItems(EItemCategory Category, int from, int to)
+void AAcmeCharacter::AddToInvenByIdx(FItem item, int idx)
 {
 	if (!InventoryComponent) return;
 
-	InventoryComponent->MoveItems(Category, from, to);
+	InventoryComponent->AddToInven(item, idx);
+}
+
+void AAcmeCharacter::SwapInvenByIdx(FItem fromItem, int from, int to)
+{
+	if (!InventoryComponent) return;
+
+	FItem toItem = InventoryComponent->GetItem(fromItem.Category, to);
+	InventoryComponent->AddToInven(fromItem, to);
+	InventoryComponent->AddToInven(toItem, from);
+}
+
+void AAcmeCharacter::SwapQuickByIdx(FItem fromItem, int from, int to)
+{
+	if (!InventoryComponent) return;
+
+	FItem toItem = InventoryComponent->GetItem(fromItem.Category, to);
+	SetQuickSlot(fromItem, to);
+	SetQuickSlot(toItem, from);
+}
+
+void AAcmeCharacter::SwapQuickAndInven(FItem item, int quickIdx, int invenIdx)
+{
+	if (!InventoryComponent) return;
+
+	FItem temp = InventoryComponent->GetItem(item.Category, invenIdx);
+	InventoryComponent->AddToInven(item, invenIdx);
+	SetQuickSlot(temp, quickIdx);
 }
 
 void AAcmeCharacter::UseItem(EItemCategory Category, int idx)
@@ -626,6 +653,13 @@ void AAcmeCharacter::UseItem(EItemCategory Category, int idx)
 	if (!InventoryComponent) return;
 
 	InventoryComponent->UseItem(Category, idx);
+}
+
+void AAcmeCharacter::RemoveItem(EItemCategory Category, int idx)
+{
+	if (!InventoryComponent) return;
+
+	InventoryComponent->RemoveFromInven(Category, idx);
 }
 
 void AAcmeCharacter::UpdateInventoryWidget()
@@ -647,7 +681,7 @@ void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 	if (!InventoryComponent) return;
 	if (!EquipmentComponent) return;
 
-	InventoryComponent->SetQuickSlot(item, idx);
+	InventoryComponent->AddToQuick(item, idx);
 	EquipmentComponent->SpawnItem(item, idx);
 
 	if (idx == CurrentQuickSlotIdx)
@@ -656,6 +690,23 @@ void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 	}
 
 	//HUD Update
+	if (!Hud) return;
+	Hud->SetQuickSlots(GetQuickSlots());
+}
+
+void AAcmeCharacter::RemoveQuickSlot(int idx)
+{
+	if (!InventoryComponent) return;
+	if (!EquipmentComponent) return;
+
+	InventoryComponent->RemoveFromQuick(idx);
+	EquipmentComponent->DestroyAttachActor(idx);
+
+	if (idx == CurrentQuickSlotIdx)
+	{
+		EquipmentComponent->ClearCurrentHand();
+	}
+
 	if (!Hud) return;
 	Hud->SetQuickSlots(GetQuickSlots());
 }

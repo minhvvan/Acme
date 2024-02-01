@@ -19,13 +19,10 @@
 
 void UItemEntryWidget::SetItemInfo(FItem& info)
 {
-	Category = info.Category;
+	ItemInfo = info;
 
 	SetThumbnailImg(info.Name);
 	SetAmountTxt(info.Num);
-
-	//if (info.Equiped) SetEquipBorder();
-	//else SetNormalBorder();
 }
 
 void UItemEntryWidget::SetIndex(int idx)
@@ -65,6 +62,11 @@ void UItemEntryWidget::SetAmountTxt(int amount)
 
 void UItemEntryWidget::SetEmpty()
 {
+	IsEmpty = true;
+	ItemInfo.Category = EItemCategory::E_End;
+	ItemInfo.Name = EItemName::E_Empty;
+	ItemInfo.Num = 0;
+
 	SetThumbnailImg(EItemName::E_Empty);
 	SetAmountTxt(0);
 }
@@ -115,11 +117,9 @@ FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 			Detail->AddToViewport();
 			Detail->SetPositionInViewport(InMouseEvent.GetScreenSpacePosition());
 
-			FItem itemInfo = Player->GetItem(Category, Index);
-
-			if (itemInfo.Name != EItemName::E_Empty)
+			if (ItemInfo.Name != EItemName::E_Empty)
 			{
-				Detail->SetInnerWidget(itemInfo, Index);
+				Detail->SetInnerWidget(ItemInfo, Index);
 				ParentWidget->SetDetailWidget(Detail);
 			}
 		}
@@ -131,15 +131,19 @@ FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 void UItemEntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
+
+	//ctrl = 1°³
+	//shift = Àý¹Ý
 	 
 	if (IsEmpty) return;
 	if(!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-	FItem itemInfo = Player->GetItem(Category, Index);
+	FItem itemInfo = Player->GetItem(ItemInfo.Category, Index);
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDDOP::StaticClass()));
 	DragWidget->Index = Index;
 	DragWidget->ItemInfo = itemInfo;
 	DragWidget->WidgetRef = this;
+	DragWidget->bQuickSlot = false;
 
 	UItemEntryWidget* DragVisual = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), DragWidgetClass));
 	DragVisual->SetItemInfo(itemInfo);
@@ -147,6 +151,9 @@ void UItemEntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	DragWidget->DefaultDragVisual = DragVisual;
 	DragWidget->Pivot = EDragPivot::CenterCenter;
 
+	Player->RemoveItem(ItemInfo.Category, Index);
+
+	SetEmpty();
 	OutOperation = DragWidget;
 }
 
@@ -184,14 +191,36 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
 	if (!IsValid(DragWidget))  return false;
-	if (DragWidget->Index == Index) return false;
-
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
-	if (DragWidget->WidgetRef)
+	if (DragWidget->bQuickSlot)
 	{
-		DragWidget->WidgetRef->SetEmpty();
-		Player->MoveItems(DragWidget->ItemInfo.Category, DragWidget->Index, Index);
+		if (IsEmpty)
+		{
+			//Add
+			Player->AddToInvenByIdx(DragWidget->ItemInfo, Index);
+		}
+		else
+		{
+			Player->SwapQuickAndInven(DragWidget->ItemInfo, DragWidget->Index, Index);
+		}
+	}
+	else
+	{
+		if (IsEmpty)
+		{
+			//Add
+			Player->AddToInvenByIdx(DragWidget->ItemInfo, Index);
+		}
+		else
+		{
+			//Swap
+			Player->SwapInvenByIdx(DragWidget->ItemInfo, DragWidget->Index, Index);
+			if (DragWidget->WidgetRef)
+			{
+				DragWidget->WidgetRef->SetItemInfo(ItemInfo);
+			}
+		}
 	}
 
 	SetItemInfo(DragWidget->ItemInfo);
@@ -204,6 +233,13 @@ void UItemEntryWidget::NativeOnDragCancelled(const FDragDropEvent& InDragDropEve
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
 	if (!IsValid(DragWidget)) return;
+
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+
+	if (DragWidget->WidgetRef)
+	{
+		DragWidget->WidgetRef->SetItemInfo(DragWidget->ItemInfo);
+	}
 
 	OnDragCancel.Broadcast();
 }

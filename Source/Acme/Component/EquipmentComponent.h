@@ -41,6 +41,9 @@ public:
 	void SetCurrentHand(int idx);
 
 	UFUNCTION()
+	void ClearCurrentHand();
+
+	UFUNCTION()
 	ADefaultItem* GetCurrentHand();
 
 	UFUNCTION()
@@ -48,6 +51,9 @@ public:
 
 	UFUNCTION()
 	void Active(int idx);
+
+	UFUNCTION()
+	void DestroyAttachActor(int idx);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))

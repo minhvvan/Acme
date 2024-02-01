@@ -51,46 +51,6 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-bool UInventoryComponent::AddItem(FItem newItem)
-{
-	if (newItem.Category == EItemCategory::E_End || newItem.Name == EItemName::E_Empty) return false;
-	TArray<FItem>& ItemList = Items[newItem.Category].Get();
-
-	//find
-	bool bCanAdd = false;
-	for (auto& Item : ItemList)
-	{
-		if (Item.Name == newItem.Name)
-		{
-			if (Item.Num < maxQuantity)
-			{
-				Item.Num++;
-				bCanAdd = true;
-				
-				return true;
-			}
-		}
-	}
-
-	if (!bCanAdd)
-	{
-		for (auto& Item : ItemList)
-		{
-			if (Item.Name == EItemName::E_Empty)
-			{
-				Item.Name = newItem.Name;
-				Item.Num = newItem.Num;
-				//Item.Equiped = newItem.Equiped;
-				Item.Category = newItem.Category;
-
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
 FItemList& UInventoryComponent::GetItemList(EItemCategory category)
 {
 	//TODO: 예외처리해야 되는데....
@@ -100,6 +60,11 @@ FItemList& UInventoryComponent::GetItemList(EItemCategory category)
 FItem UInventoryComponent::GetItem(EItemCategory category, int idx)
 {
 	return Items[category].Get()[idx];
+}
+
+FItem UInventoryComponent::GetQuickItem(int idx)
+{
+	return QuickSlots[idx];
 }
 
 int UInventoryComponent::GetMaxQuantity()
@@ -135,13 +100,11 @@ void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
 	}
 
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
-	
 	Player->UpdateInventoryWidget();
 }
 
 void UInventoryComponent::SetEmpty(FItem& item)
 {
-	//item.Equiped = false;
 	item.Name = EItemName::E_Empty;
 	item.Num = 0;
 }
@@ -149,11 +112,6 @@ void UInventoryComponent::SetEmpty(FItem& item)
 TArray<FItem>& UInventoryComponent::GetQuickSlots()
 {
 	return QuickSlots;
-}
-
-void UInventoryComponent::SetQuickSlot(FItem item, int idx)
-{
-	QuickSlots[idx] = item;
 }
 
 void UInventoryComponent::Dump(EItemCategory Category, int idx)
@@ -186,4 +144,69 @@ void UInventoryComponent::UseItem(EItemCategory Category, int idx)
 
 	Item.Num--;
 	if (Item.Num == 0) SetEmpty(Item);
+}
+
+bool UInventoryComponent::AddItem(FItem newItem)
+{
+	if (newItem.Category == EItemCategory::E_End || newItem.Name == EItemName::E_Empty) return false;
+	TArray<FItem>& ItemList = Items[newItem.Category].Get();
+
+	//find
+	bool bCanAdd = false;
+	for (auto& Item : ItemList)
+	{
+		if (Item.Name == newItem.Name)
+		{
+			if (Item.Num < maxQuantity)
+			{
+				Item.Num++;
+				bCanAdd = true;
+
+				return true;
+			}
+		}
+	}
+
+	if (!bCanAdd)
+	{
+		for (auto& Item : ItemList)
+		{
+			if (Item.Name == EItemName::E_Empty)
+			{
+				Item = newItem;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void UInventoryComponent::AddToInven(FItem newItem, int idx)
+{
+	TArray<FItem>& ItemList = Items[newItem.Category].Get();
+	ItemList[idx] = newItem;
+}
+
+void UInventoryComponent::RemoveFromInven(EItemCategory Category, int idx)
+{
+	if (Category == EItemCategory::E_End) return;
+
+	TArray<FItem>& ItemList = Items[Category].Get();
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+
+	FItem& Item = ItemList[idx];
+	SetEmpty(Item);
+}
+
+void UInventoryComponent::AddToQuick(FItem newItem, int idx)
+{
+	QuickSlots[idx] = newItem;
+}
+
+void UInventoryComponent::RemoveFromQuick(int idx)
+{
+	QuickSlots[idx].Category = EItemCategory::E_End;
+	QuickSlots[idx].Name = EItemName::E_Empty;
+	QuickSlots[idx].Num = 0;
 }
