@@ -42,6 +42,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UMaterial* SelectBorderMat;
 
+	UPROPERTY(VisibleAnywhere)
+	class AAcmeCharacter* Player;
+
+	UPROPERTY(VisibleAnywhere)
+	class UAcmeGameInstance* GameInstance;
+
 public:
 	UFUNCTION()
 	void SetItemInfo(FItem info);

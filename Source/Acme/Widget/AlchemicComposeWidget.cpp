@@ -15,7 +15,7 @@
 #include "Acme/Utils/Util.h"
 #include "Acme/Widget/AlchemySlotWidget.h"
 #include "Acme/AcmeGameInstance.h"
-
+#include "Acme/DefaultItem.h"
 
 void UAlchemicComposeWidget::NativeConstruct()
 {
@@ -131,9 +131,23 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	if (!OwnerCharacter) OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 	for (FItem result : ComposeResults)
 	{
-		OwnerCharacter->AddItem(result);
-		SetItemList();
+		if (OwnerCharacter->AddItem(result))
+		{
+			//TODO: 추가 못하면 땅바닥에 생성
+			if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
+			auto ItemClass = GameInstance->GetItemClass(result.Name);
+
+			FActorSpawnParameters SpawnParams;
+			//SpawnParams.Owner = Player;
+			FRotator rotator;
+			FVector  SpawnLocation = OwnerCharacter->GetActorLocation();
+			SpawnLocation.Z += 10;
+
+			ADefaultItem* CurrentItem = GetWorld()->SpawnActor<ADefaultItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
+		}
 	}
+	
+	SetItemList();
 }
 
 void UAlchemicComposeWidget::OnTextChanged(const FText& newText)

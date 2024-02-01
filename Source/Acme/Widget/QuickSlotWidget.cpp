@@ -11,9 +11,30 @@
 #include "Acme/AcmeCharacter.h"
 #include "Acme/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
+#include "Acme/DefaultItem.h"
 
 void UQuickSlotWidget::SetItemInfo(FItem info)
 {
+	if (ItemInfo.Name != EItemName::E_Empty)
+	{
+		if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+		if (!Player->AddItem(ItemInfo))
+		{
+			if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
+
+			TSubclassOf<ADefaultItem> ItemClass;
+			if (!(ItemClass = GameInstance->GetItemClass(info.Name))) return;
+
+			FActorSpawnParameters SpawnParams;
+			//SpawnParams.Owner = Player;
+			FRotator rotator;
+			FVector  SpawnLocation = Player->GetActorLocation();
+			SpawnLocation.Z += 10;
+
+			ADefaultItem* CurrentItem = GetWorld()->SpawnActor<ADefaultItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
+		}
+	}
+
 	ItemInfo = info;
 	
 	SetImage(ItemInfo.Name);
@@ -22,8 +43,7 @@ void UQuickSlotWidget::SetItemInfo(FItem info)
 
 void UQuickSlotWidget::SetImage(EItemName name)
 {
-	UAcmeGameInstance* GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
-	if (!GameInstance) return;
+	if(!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
 
 	UTexture2D* Image = GameInstance->GetItemImage(ItemInfo.Name);
 	if (!Image) return;
@@ -98,8 +118,7 @@ void UQuickSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	DragWidget->Pivot = EDragPivot::CenterCenter;
 
 	SetEmpty();
-	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-	if (!Player) return;
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
 	FItem EmptyItem = FItem();
 	Player->SetQuickSlot(EmptyItem, Index);
@@ -112,16 +131,16 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	bool result = Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
-	if (!IsValid(DragWidget)) return false;
+	if (!IsValid(DragWidget)) return result;
 
-	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
-	if (!Player) return false;
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
-	if (DragWidget->ItemInfo.Category == EItemCategory::E_Element)
+	if (DragWidget->ItemInfo.Category == EItemCategory::E_Element /*입는 장비도 안됨*/)
 	{
-		return false;
+		return result;
 	}
 
+	//기존에 있던거 해당 Category로 보내야함
 	SetItemInfo(DragWidget->ItemInfo);
 	Player->SetQuickSlot(ItemInfo, Index);
 
