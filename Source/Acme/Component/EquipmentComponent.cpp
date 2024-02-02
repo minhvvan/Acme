@@ -38,10 +38,10 @@ void UEquipmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 void UEquipmentComponent::SetCurrentHand(int idx)
 {
 	if (CurrentHand) CurrentHand->AttachBack();
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
 	if (QuickSlotItems[idx] && !QuickSlotItems[idx]->IsPendingKill())
 	{
-		if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 		Player->SetAnimState(EAnimState::E_Equiped);
 
 		CurrentHand = QuickSlotItems[idx];

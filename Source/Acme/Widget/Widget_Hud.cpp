@@ -95,9 +95,6 @@ void UWidget_Hud::SetQuickSlots(TArray<FItem> QuickSlots)
 	QuickSlotWidgets.Add(WBP_QuickSlot6);
 	QuickSlotWidgets.Add(WBP_QuickSlot7);
 	QuickSlotWidgets.Add(WBP_QuickSlot8);
-
-	WBP_QuickSlot1->SetSelectBorder();
-	CurrentQuickSlotIdx = 0;
 }
 
 void UWidget_Hud::BindStatus(UStatComponent* StatComp)

@@ -107,7 +107,10 @@ void AAcmeCharacter::BeginPlay()
 		Hud->SetStamina(StatCompoenent->GetCurrentStamina());
 		Hud->BindStatus(StatCompoenent);
 
+		CurrentQuickSlotIdx = 0;
+
 		Hud->SetQuickSlots(InventoryComponent->GetQuickSlots());
+		Hud->ChangeSelectedSlot(CurrentQuickSlotIdx);
 
 		StatCompoenent->OnChangedStamina.AddUObject(this, &AAcmeCharacter::StaminaCheck);
 	}
@@ -692,6 +695,7 @@ void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 	//HUD Update
 	if (!Hud) return;
 	Hud->SetQuickSlots(GetQuickSlots());
+	Hud->ChangeSelectedSlot(CurrentQuickSlotIdx);
 }
 
 void AAcmeCharacter::RemoveQuickSlot(int idx)
