@@ -17,7 +17,7 @@ class ACME_API UTileInventoryWidget : public UInventoryInnerWidget
 	
 protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UGridPanel* ItemGrid;
+	class UTileView* TVItem;
 
 	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* OwnerCharacter;
@@ -25,7 +25,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> ItemEntryClass;
 
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UUserWidget> ShownDetailWidget;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UItemEntryWidget> SelectedEntry;
 
 public:
 	virtual void UpdateInfo() override;
@@ -35,6 +39,9 @@ public:
 
 	UFUNCTION()
 	void SetDetailWidget(UUserWidget* widget);
+
+	UFUNCTION()
+	void SetSelectedEntry(UItemEntryWidget* entry);
 	
 	virtual void SetEmpty(int idx);
 };

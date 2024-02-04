@@ -5,6 +5,7 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/Border.h"
+#include "Components/ListViewBase.h"
 #include "Acme/Data/ItemData.h"
 #include "Acme/Utils/Util.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
@@ -73,7 +74,10 @@ void UItemEntryWidget::SetEmpty()
 
 void UItemEntryWidget::SetSelected()
 {
-	BorderSelected->SetBrushColor(FLinearColor(0, 50, 255, .2));
+	BorderSelected->SetBrushColor(FLinearColor(0, .2f, 1.f, .2f));
+
+	if (!ParentTileView) return;
+	ParentTileView->SetSelectedEntry(this);
 }
 
 void UItemEntryWidget::SetUnSelected()
@@ -88,40 +92,45 @@ void UItemEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 	FItem info = Data->GetItemInfo();
 	SetIndex(Data->GetIndex());
 	SetItemInfo(info);
+	bCanShowDetail = Data->GetbCanShowDetail();
 
-	bCanShowDetail = false;
+	if (Cast<UTileInventoryWidget>(Data->GetParentRef()) != nullptr)
+	{
+		ParentTileView = Cast<UTileInventoryWidget>(Data->GetParentRef());
+	}
 }
 
 FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply reply;
 	reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
-	
+
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
 		reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
 
-		UTileInventoryWidget* ParentWidget = Cast<UTileInventoryWidget>(GetParent()->GetOuter()->GetOuter());
-		if (ParentWidget) ParentWidget->CloseDetailWidget();
+		if (!ParentTileView) return reply.NativeReply;
+		ParentTileView->CloseDetailWidget();
+
+		//FX
+		if (ItemInfo.Name == EItemName::E_Empty) return reply.NativeReply;
+		SetSelected();
 	}
 	else
 	{
 		if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton) && bCanShowDetail)
 		{
-			UTileInventoryWidget* ParentWidget = Cast<UTileInventoryWidget>(GetParent()->GetOuter()->GetOuter());
-			if (ParentWidget) ParentWidget->CloseDetailWidget();
+			if (ParentTileView) ParentTileView->CloseDetailWidget();
+			if (ItemInfo.Name == EItemName::E_Empty) return reply.NativeReply;
 
 			if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
 			UDetailActionWidget* Detail = Cast<UDetailActionWidget>(CreateWidget(GetWorld(), DetailWidgetClass));
 			Detail->AddToViewport();
 			Detail->SetPositionInViewport(InMouseEvent.GetScreenSpacePosition());
+			Detail->SetInnerWidget(ItemInfo, Index);
 
-			if (ItemInfo.Name != EItemName::E_Empty)
-			{
-				Detail->SetInnerWidget(ItemInfo, Index);
-				ParentWidget->SetDetailWidget(Detail);
-			}
+			ParentTileView->SetDetailWidget(Detail);
 		}
 	}
 	
@@ -131,6 +140,8 @@ FReply UItemEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 void UItemEntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
+
+	SetUnSelected();
 
 	//ctrl = 1°³
 	//shift = Àý¹Ý
@@ -157,32 +168,22 @@ void UItemEntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	OutOperation = DragWidget;
 }
 
-void UItemEntryWidget::NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
-{
-	Super::NativeOnDragLeave(InDragDropEvent, InOperation);
-
-}
-
-void UItemEntryWidget::NativeOnDragEnter(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
-{
-	Super::NativeOnDragEnter(InGeometry, InDragDropEvent, InOperation);
-
-	//Highliht Slot
-}
-
 void UItemEntryWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
 
-	//Highliht Slot Border
+	if (!SelectBorderMat) return;
+
+	BorderItem->SetBrushFromMaterial(SelectBorderMat);
 }
 
 void UItemEntryWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 {
 	Super::NativeOnMouseLeave(InMouseEvent);
 
-	//Highliht Slot Border Off
+	if (!NormalBorderMat) return;
 
+	BorderItem->SetBrushFromMaterial(NormalBorderMat);
 }
 
 bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
@@ -240,6 +241,4 @@ void UItemEntryWidget::NativeOnDragCancelled(const FDragDropEvent& InDragDropEve
 	{
 		DragWidget->WidgetRef->SetItemInfo(DragWidget->ItemInfo);
 	}
-
-	OnDragCancel.Broadcast();
 }

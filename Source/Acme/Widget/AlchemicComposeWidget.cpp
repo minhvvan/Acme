@@ -177,6 +177,7 @@ void UAlchemicComposeWidget::SetItemList()
 		UItemData* Data = NewObject<UItemData>();
 		Data->SetItem(item);
 		Data->SetIndex(i);
+		Data->SetbCanShowDetail(false);
 
 		TVItem->AddItem(Data);
 	}

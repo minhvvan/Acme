@@ -48,7 +48,7 @@ struct FItemImages : public FTableRowBase
 
 
 USTRUCT()
-struct FItemNameString : public FTableRowBase
+struct FItemString : public FTableRowBase
 {
 	GENERATED_BODY()
 
@@ -57,6 +57,9 @@ struct FItemNameString : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Description;
 };
 
 USTRUCT()

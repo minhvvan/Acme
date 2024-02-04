@@ -2,6 +2,7 @@
 
 
 #include "ItemData.h"
+#include "Acme/Widget/TileInventoryWidget.h"
 
 void UItemData::SetItem(FItem info)
 {
@@ -21,4 +22,24 @@ void UItemData::SetIndex(int idx)
 int UItemData::GetIndex()
 {
 	return Index;
+}
+
+void UItemData::SetbCanShowDetail(bool bShow)
+{
+	bCanShowDetail = bShow;
+}
+
+bool UItemData::GetbCanShowDetail()
+{
+	return bCanShowDetail;
+}
+
+void UItemData::SetParentRef(UUserWidget* parent)
+{
+	ParentRef = parent;
+}
+
+UUserWidget* UItemData::GetParentRef()
+{
+	return ParentRef;
 }

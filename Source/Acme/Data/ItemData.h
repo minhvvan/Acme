@@ -17,10 +17,16 @@ class ACME_API UItemData : public UObject
 	
 public:
 	UPROPERTY()
+	UUserWidget* ParentRef;
+
+	UPROPERTY()
 	FItem ItemInfo;
 
 	UPROPERTY()
 	int Index;
+
+	UPROPERTY()
+	bool bCanShowDetail;
 
 	UFUNCTION()
 	void SetItem(FItem info);
@@ -33,4 +39,16 @@ public:
 
 	UFUNCTION()
 	int GetIndex();
+
+	UFUNCTION()
+	void SetbCanShowDetail(bool bShow);
+
+	UFUNCTION()
+	bool GetbCanShowDetail();
+
+	UFUNCTION()
+	void SetParentRef(UUserWidget* parent);
+
+	UFUNCTION()
+	UUserWidget* GetParentRef();
 };

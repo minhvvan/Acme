@@ -9,8 +9,6 @@
 #include "Acme/Utils/GlobalStruct.h"
 #include "ItemEntryWidget.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnDragCanceled)
-
 UCLASS()
 class ACME_API UItemEntryWidget : public UUserWidget, public IUserObjectListEntry
 {
@@ -62,8 +60,6 @@ public:
 
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 
-	FOnDragCanceled OnDragCancel;
-
 protected:
 	UPROPERTY()
 	bool IsEmpty;
@@ -78,15 +74,20 @@ protected:
 	int Index;
 
 	UPROPERTY()
-	bool bCanShowDetail = true;
+	bool bCanShowDetail;
+
+	UPROPERTY()
+	class UTileInventoryWidget* ParentTileView;
+
+	UPROPERTY(EditAnywhere)
+	UMaterial* NormalBorderMat;
+
+	UPROPERTY(EditAnywhere)
+	UMaterial* SelectBorderMat;
 
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation);
-
-	virtual void NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation);
-
-	virtual void NativeOnDragEnter(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation);
 
 	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 	
