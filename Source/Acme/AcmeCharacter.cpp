@@ -4,6 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SceneCaptureComponent2D.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -63,6 +64,13 @@ AAcmeCharacter::AAcmeCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	UICameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("UICameraBoom"));
+	UICameraBoom->SetupAttachment(RootComponent);
+	UICameraBoom->TargetArmLength = 200; // The camera follows at this distance behind the character	
+
+	UISceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("UISceneCapture"));
+	UISceneCapture->SetupAttachment(UICameraBoom);
+
 	StatCompoenent = CreateDefaultSubobject<UStatComponent>(TEXT("StatCompoenent"));
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryCompoenent"));
 	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentCompoenent"));
@@ -90,6 +98,8 @@ void AAcmeCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	UISceneCapture->ShowOnlyComponent(GetMesh());
 
 	StatCompoenent->CDDash.AddUObject(this, &AAcmeCharacter::CoolDownDash);
 
