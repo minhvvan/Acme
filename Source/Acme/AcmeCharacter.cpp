@@ -478,7 +478,7 @@ void AAcmeCharacter::OpenInventory()
 	if (!PC) return;
 
 	PC->SetInputMode(FInputModeUIOnly());
-	PC->SetPause(true);
+	//PC->SetPause(true);
 	PC->bShowMouseCursor = true;
 
 	if (InventoryWidget == nullptr)
@@ -564,7 +564,7 @@ void AAcmeCharacter::CloseInventory()
 	if (!PC) return;
 
 	PC->SetInputMode(FInputModeGameOnly());
-	PC->SetPause(false);
+	//PC->SetPause(false);
 	PC->bShowMouseCursor = false;
 
 	InventoryWidget->RemoveFromViewport();
