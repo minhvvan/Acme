@@ -8,6 +8,7 @@
 #include "Acme/Data/ItemData.h"
 #include "Acme/Utils/Util.h"
 #include "ItemEntryWidget.h"
+#include "InventoryWidget.h"
 
 void UTileInventoryWidget::UpdateInfo()
 {
@@ -50,8 +51,6 @@ void UTileInventoryWidget::SetSelectedEntry(UItemEntryWidget* entry)
 	}
 
 	SelectedEntry = entry;
-
-	//TODO: Item info Ç¥½Ã
 }
 
 void UTileInventoryWidget::SetEmpty(int idx)
@@ -60,4 +59,16 @@ void UTileInventoryWidget::SetEmpty(int idx)
 	if (!Entry) return;
 
 	Entry->SetEmpty();
+}
+
+void UTileInventoryWidget::SetItemInfoText(FItem item)
+{
+	if (!Inven) return;
+
+	Inven->SetItemInfoText(item);
+}
+
+void UTileInventoryWidget::SetInven(UInventoryWidget* parent)
+{
+	Inven = parent;
 }

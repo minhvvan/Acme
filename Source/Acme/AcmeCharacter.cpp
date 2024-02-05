@@ -143,6 +143,16 @@ void AAcmeCharacter::BeginPlay()
 
 	{
 		FItem temp1;
+		temp1.Name = EItemName::E_Helmet;
+		temp1.Num = 1;
+		//temp1.Equiped = false;
+		temp1.Category = EItemCategory::E_Equipment;
+
+		InventoryComponent->AddToInven(temp1, 1);
+	}
+
+	{
+		FItem temp1;
 		temp1.Name = EItemName::E_Fire;
 		temp1.Num = 1;
 		//temp1.Equiped = false;
@@ -159,6 +169,8 @@ void AAcmeCharacter::BeginPlay()
 
 		InventoryComponent->AddItem(temp1);
 	}
+
+
 }
 
 void AAcmeCharacter::Tick(float DeltaSeconds)
@@ -402,7 +414,6 @@ void AAcmeCharacter::StartInteract()
 			if (!Item || !Item->GetbCanInteract()) continue;
 
 			Item->Interact();
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *Item->GetName()));
 			return;
 		}
 	}
@@ -456,6 +467,13 @@ void AAcmeCharacter::PlaySwordAttack(int idx)
 {
 	if (!AnimInstance) return;
 	AnimInstance->PlayAttack(idx);
+}
+
+void AAcmeCharacter::Equip(EEquipmentPart part, FItem item)
+{
+	if (!EquipmentComponent) return;
+
+	EquipmentComponent->Equip(part, item);
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)

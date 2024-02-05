@@ -55,9 +55,35 @@ enum class EItemName : uint8
 	E_Cube UMETA(DisplayName = "Cube"),
 	E_Sphere UMETA(DisplayName = "Sphere"),
 	E_Sword UMETA(DisplayName = "Sword"),
+	E_Helmet UMETA(DisplayName = "Helmet"),
 
 	E_Empty UMETA(DisplayName = "Empty"),
 };
+
+UENUM(BlueprintType)
+enum class EEquipmentPart : uint8
+{
+	E_Head UMETA(DisplayName = "Head"),
+	E_Body UMETA(DisplayName = "Body"),
+	E_Shoe UMETA(DisplayName = "Shoe"),
+	E_Accessory UMETA(DisplayName = "Accessory"),
+
+	E_End UMETA(DisplayName = "End"),
+};
+
+
+UENUM(BlueprintType)
+enum class ESocketName : uint8
+{
+	E_HeadSocket UMETA(DisplayName = "HeadSocket"),
+	E_BodyScoekt UMETA(DisplayName = "BodySocket"),
+	E_ShoeScoekt UMETA(DisplayName = "ShoeSocket"),
+	E_HandScoekt UMETA(DisplayName = "HandScoekt"),
+	E_BackScoekt UMETA(DisplayName = "BackScoekt"),
+
+	E_End UMETA(DisplayName = "End"),
+};
+
 
 UENUM(BlueprintType)
 enum class EItemCategory : uint8

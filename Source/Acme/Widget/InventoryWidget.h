@@ -27,6 +27,12 @@ protected:
 	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
 	class UWidgetSwitcher* WSInven;
 
+	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
+	class UTextBlock* TxtItemName;
+
+	UPROPERTY(VisibleAnyWhere, meta = (BindWidget))
+	class UTextBlock* TxtItemInfo;
+
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
 	class UQuickSlotWidget* WBP_QuickSlot1;
 
@@ -94,18 +100,18 @@ private:
 	int Index;
 
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
-	class UInventoryInnerWidget* CurrentCategoryView;
+	class UTileInventoryWidget* CurrentCategoryView;
+
+	UPROPERTY(VisibleAnywhere)
+	class UAcmeGameInstance* GameInstance;
 
 public:
 	UFUNCTION()
 	void UpdateWidgetByCategory();
 
 	UFUNCTION()
-	void UpdateBorderToEquip(int idx);
-
-	UFUNCTION()
-	void UpdateBorderToNoraml(int idx);
-
-	UFUNCTION()
 	void EmptyEntry(EItemCategory Category, int idx);
+
+	UFUNCTION()
+	void SetItemInfoText(FItem item);
 };

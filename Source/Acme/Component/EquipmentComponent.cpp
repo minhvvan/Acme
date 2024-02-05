@@ -7,6 +7,7 @@
 #include "Acme/Actor_Weapon.h"
 #include "Acme/DefaultItem.h"
 #include "Acme/Utils/Util.h"
+#include "Acme/EquipmentItem.h"
 
 // Sets default values for this component's properties
 UEquipmentComponent::UEquipmentComponent()
@@ -84,6 +85,7 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 	{
 		CurrentItem->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		CurrentItem->AttachBack();
+		CurrentItem->SetName(item.Name);
 	}
 
 	DestroyAttachActor(idx);
@@ -101,5 +103,42 @@ void UEquipmentComponent::DestroyAttachActor(int idx)
 	if (QuickSlotItems[idx])
 	{
 		QuickSlotItems[idx]->Destroy();
+	}
+}
+
+void UEquipmentComponent::Equip(EEquipmentPart part, FItem item)
+{
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+	if (!GameInstance) GameInstance = Player->GetGameInstance<UAcmeGameInstance>();
+
+	TSubclassOf<ADefaultItem> ItemClass;
+	if (!(ItemClass = GameInstance->GetItemClass(item.Name))) return;
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = Player;
+	FRotator rotator;
+	FVector  SpawnLocation = Player->GetActorLocation();
+	SpawnLocation.Z += 100;
+
+	AEquipmentItem* CurrentItem = GetWorld()->SpawnActor<AEquipmentItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
+	if (CurrentItem)
+	{
+		switch (part)
+		{
+		case EEquipmentPart::E_Head:
+			EquipmentHead = CurrentItem;
+			break;
+		case EEquipmentPart::E_Body:
+			EquipmentBody = CurrentItem;
+			break;
+		case EEquipmentPart::E_Shoe:
+			EquipmentShoe = CurrentItem;
+			break;
+		case EEquipmentPart::E_Accessory:
+			EquipmentAcc = CurrentItem;
+			break;
+		}
+
+		CurrentItem->AttachToSocket(part);
 	}
 }

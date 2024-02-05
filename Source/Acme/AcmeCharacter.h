@@ -352,6 +352,9 @@ public:
 	UFUNCTION()
 	void PlaySwordAttack(int idx);
 
+	UFUNCTION()
+	void Equip(EEquipmentPart part, FItem item);
+
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

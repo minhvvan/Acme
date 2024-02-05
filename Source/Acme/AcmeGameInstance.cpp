@@ -28,6 +28,22 @@ UAcmeGameInstance::UAcmeGameInstance()
 			ItemClassTable = TABLE.Object;
 		}
 	}
+
+	{
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_ItemString.DT_ItemString'"));
+		if (TABLE.Succeeded())
+		{
+			ItemStringTable = TABLE.Object;
+		}
+	}
+
+	{
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_SocketName.DT_SocketName'"));
+		if (TABLE.Succeeded())
+		{
+			SocketNameTable = TABLE.Object;
+		}
+	}
 }
 
 void UAcmeGameInstance::Init()
@@ -93,6 +109,36 @@ TSubclassOf<class ADefaultItem> UAcmeGameInstance::GetItemClass(EItemName name)
 	if (!row) return Result;
 
 	Result = row->Class;
+
+	return Result;
+}
+
+FItemString UAcmeGameInstance::GetItemString(EItemName name)
+{
+	FItemString Result = *ItemStringTable->FindRow<FItemString>(FName(TEXT("E_Empty")), TEXT(""));
+
+	UEnum* ItemEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("EItemName"), true);
+	FName ItemName = FName(*ItemEnum->GetNameStringByIndex(static_cast<uint8>(name)));
+
+	FItemString* row = ItemStringTable->FindRow<FItemString>(ItemName, TEXT(""));
+	if (!row) return Result;
+
+	Result = *row;
+
+	return Result;
+}
+
+FSocketString UAcmeGameInstance::GetSocketName(ESocketName name)
+{
+	FSocketString Result = *SocketNameTable->FindRow<FSocketString>(FName(TEXT("E_End")), TEXT(""));
+
+	UEnum* SocketEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESocketName"), true);
+	FName SotcketName = FName(*SocketEnum->GetNameStringByIndex(static_cast<uint8>(name)));
+
+	FSocketString* row = SocketNameTable->FindRow<FSocketString>(SotcketName, TEXT(""));
+	if (!row) return Result;
+
+	Result = *row;
 
 	return Result;
 }

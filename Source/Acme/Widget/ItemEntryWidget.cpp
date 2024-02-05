@@ -78,6 +78,7 @@ void UItemEntryWidget::SetSelected()
 
 	if (!ParentTileView) return;
 	ParentTileView->SetSelectedEntry(this);
+	ParentTileView->SetItemInfoText(ItemInfo);
 }
 
 void UItemEntryWidget::SetUnSelected()

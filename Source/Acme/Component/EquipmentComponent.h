@@ -30,6 +30,19 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<ADefaultItem> CurrentHand;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<ADefaultItem> EquipmentHead;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<ADefaultItem> EquipmentBody;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<ADefaultItem> EquipmentShoe;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<ADefaultItem> EquipmentAcc;
+
+
 	UPROPERTY()
 	class AAcmeCharacter* Player;
 
@@ -50,10 +63,13 @@ public:
 	void SpawnItem(FItem item, int idx);
 
 	UFUNCTION()
-	void Active(int idx);
+	void Active(int idx);	
 
 	UFUNCTION()
 	void DestroyAttachActor(int idx);
+
+	UFUNCTION()
+	void Equip(EEquipmentPart part, FItem item);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))

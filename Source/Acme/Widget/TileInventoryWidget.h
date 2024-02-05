@@ -19,6 +19,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UTileView* TVItem;
 
+protected:
 	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* OwnerCharacter;
 
@@ -30,6 +31,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UItemEntryWidget> SelectedEntry;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UInventoryWidget> Inven;
 
 public:
 	virtual void UpdateInfo() override;
@@ -44,4 +48,10 @@ public:
 	void SetSelectedEntry(UItemEntryWidget* entry);
 	
 	virtual void SetEmpty(int idx);
+
+	UFUNCTION()
+	void SetItemInfoText(FItem item);
+
+	UFUNCTION()
+	void SetInven(UInventoryWidget* parent);
 };

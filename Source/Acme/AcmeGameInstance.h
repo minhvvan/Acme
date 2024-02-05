@@ -74,6 +74,18 @@ struct FItemClass : public FTableRowBase
 	TSubclassOf<class ADefaultItem> Class;
 };
 
+USTRUCT()
+struct FSocketString : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ESocketName Key;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName SocketName;
+};
+
 
 UCLASS()
 class ACME_API UAcmeGameInstance : public UGameInstance
@@ -96,6 +108,12 @@ public:
 	UFUNCTION()
 	TSubclassOf<class ADefaultItem> GetItemClass(EItemName name);
 
+	UFUNCTION()
+	FItemString GetItemString(EItemName name);
+
+	UFUNCTION()
+	FSocketString GetSocketName(ESocketName name);
+
 protected:
 	UPROPERTY()
 	class UDataTable* ComposeTable;
@@ -105,4 +123,10 @@ protected:
 
 	UPROPERTY()
 	class UDataTable* ItemClassTable;
+
+	UPROPERTY()
+	class UDataTable* ItemStringTable;
+
+	UPROPERTY()
+	class UDataTable* SocketNameTable;
 };

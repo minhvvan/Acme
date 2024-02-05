@@ -7,10 +7,13 @@
 #include "Components/HorizontalBox.h"
 #include "Components/ScaleBox.h"
 #include "Components/Image.h"
+#include "Components/TextBlock.h"
 #include "Components/WidgetSwitcher.h"
 #include "InventoryInnerWidget.h"
 #include "Acme/Utils/Util.h"
 #include "QuickSlotWidget.h"
+#include "TileInventoryWidget.h"
+#include "Acme/AcmeGameInstance.h"
 
 void UInventoryWidget::NativeConstruct()
 {
@@ -110,12 +113,14 @@ void UInventoryWidget::ChangeCurrentView(int change)
 	NextImage->SetColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 1.f));
 
 	WSInven->SetActiveWidgetIndex(Index);
-	CurrentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(Index));
+	CurrentCategoryView = Cast<UTileInventoryWidget>(WSInven->GetWidgetAtIndex(Index));
 	
 	if (!CurrentCategoryView) return;
 
 	CurrentCategoryView->SetCategory((EItemCategory)Index);
 	CurrentCategoryView->UpdateInfo();
+
+	CurrentCategoryView->SetInven(this);
 }
 
 void UInventoryWidget::ClearAllCategory()
@@ -156,26 +161,21 @@ void UInventoryWidget::SetQuickSlots()
 	WBP_QuickSlot8->SetIndex(7);
 }
 
+void UInventoryWidget::SetItemInfoText(FItem item)
+{
+	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+
+	FItemString ItemString = GameInstance->GetItemString(item.Name);
+
+
+	TxtItemName->SetText(FText::FromString(ItemString.Name));
+	TxtItemInfo->SetText(FText::FromString(ItemString.Description));
+}
+
 void UInventoryWidget::UpdateWidgetByCategory()
 {
 	if (!CurrentCategoryView) return;
 	CurrentCategoryView->UpdateInfo();
-}
-
-void UInventoryWidget::UpdateBorderToEquip(int idx)
-{
-	UInventoryInnerWidget* EquipmentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(1));
-	if (!EquipmentCategoryView) return;
-
-	EquipmentCategoryView->SetEuquipBorder(idx);
-}
-
-void UInventoryWidget::UpdateBorderToNoraml(int idx)
-{
-	UInventoryInnerWidget* EquipmentCategoryView = Cast<UInventoryInnerWidget>(WSInven->GetWidgetAtIndex(1));
-	if (!EquipmentCategoryView) return;
-
-	EquipmentCategoryView->SetNormalBorder(idx);
 }
 
 void UInventoryWidget::EmptyEntry(EItemCategory Category, int idx)
