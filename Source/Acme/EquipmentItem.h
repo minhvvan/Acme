@@ -30,4 +30,7 @@ public:
 
 	UFUNCTION()
 	void SetPart(EEquipmentPart newPart);
+
+	UFUNCTION()
+	UStaticMeshComponent* GetMesh();
 };

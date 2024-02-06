@@ -34,17 +34,25 @@ protected:
 	UPROPERTY()
 	class UAcmeGameInstance* GameInstance;
 
+	UPROPERTY()
+	bool IsEmpty;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> DragWidgetClass;
+
 public:
+	UFUNCTION()
+	void SetEmpty();
 
-
-protected:
 	UFUNCTION()
 	void SetItemInfo(FItem item);
-
+protected:
 	UFUNCTION()
 	void SetThumbnailImg(EItemName name);
 
 	virtual void NativeConstruct();
+
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation);
 

@@ -71,6 +71,9 @@ public:
 	UFUNCTION()
 	void Equip(EEquipmentPart part, FItem item);
 
+	UFUNCTION()
+	void UnEquip(EEquipmentPart part);
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	TArray<ADefaultItem*> QuickSlotItems;

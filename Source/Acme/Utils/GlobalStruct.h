@@ -23,11 +23,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Num;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//bool Equiped;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EEquipmentPart Part;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemCategory Category;
+
+	void Clear();
 };
 
 UCLASS()

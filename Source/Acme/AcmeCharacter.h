@@ -255,20 +255,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	class UAI_Main* AnimInstance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AActor_Projectile> ProjectileClass;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UAlchemicComposeWidget* InteractWidget;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
 	TWeakObjectPtr<class AActorInteractive> OverlapActor;
-
-	TQueue<int> AttackQueue;
-
-	//UFUNCTION()
-	//void FlushQueue();
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -354,6 +346,12 @@ public:
 
 	UFUNCTION()
 	void Equip(EEquipmentPart part, FItem item);
+
+	UFUNCTION()
+	void UnEquip(EEquipmentPart part);
+
+	UFUNCTION()
+	void SetShowInvenCam(UPrimitiveComponent* newMesh);
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

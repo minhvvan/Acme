@@ -55,7 +55,19 @@ protected:
 	class UQuickSlotWidget* WBP_QuickSlot7;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
-	class UQuickSlotWidget* WBP_QuickSlot8;
+	class UQuickSlotWidget* WBP_QuickSlot8;	
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UEquipmentSlot* EquipSlotHead;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UEquipmentSlot* EquipSlotBody;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UEquipmentSlot* EquipSlotShoe;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
+	class UEquipmentSlot* EquipSlotAcc;
 	
 protected:
 	virtual void NativeConstruct();
@@ -114,4 +126,7 @@ public:
 
 	UFUNCTION()
 	void SetItemInfoText(FItem item);
+
+	UFUNCTION()
+	void ClearEquip(EEquipmentPart part);
 };

@@ -35,3 +35,8 @@ void AEquipmentItem::SetPart(EEquipmentPart newPart)
 {
 	Part = newPart;
 }
+
+UStaticMeshComponent* AEquipmentItem::GetMesh()
+{
+	return Mesh;
+}

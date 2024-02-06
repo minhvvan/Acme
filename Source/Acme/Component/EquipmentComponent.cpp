@@ -140,5 +140,29 @@ void UEquipmentComponent::Equip(EEquipmentPart part, FItem item)
 		}
 
 		CurrentItem->AttachToSocket(part);
+		Player->SetShowInvenCam(CurrentItem->GetMesh());
 	}
+}
+
+void UEquipmentComponent::UnEquip(EEquipmentPart part)
+{
+	TObjectPtr<ADefaultItem> CurrentPart;
+	switch (part)
+	{
+	case EEquipmentPart::E_Head:
+		CurrentPart = EquipmentHead;
+		break;
+	case EEquipmentPart::E_Body:
+		CurrentPart = EquipmentBody;
+		break;
+	case EEquipmentPart::E_Shoe:
+		CurrentPart = EquipmentShoe;
+		break;
+	case EEquipmentPart::E_Accessory:
+		CurrentPart = EquipmentAcc;
+		break;
+	}
+
+	CurrentPart->Destroy();
+	CurrentPart = nullptr;
 }

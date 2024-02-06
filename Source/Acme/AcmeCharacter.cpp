@@ -135,7 +135,6 @@ void AAcmeCharacter::BeginPlay()
 		FItem temp1;
 		temp1.Name = EItemName::E_Sword;
 		temp1.Num = 1;
-		//temp1.Equiped = false;
 		temp1.Category = EItemCategory::E_Equipment;
 
 		InventoryComponent->AddToInven(temp1, 2);
@@ -145,7 +144,7 @@ void AAcmeCharacter::BeginPlay()
 		FItem temp1;
 		temp1.Name = EItemName::E_Helmet;
 		temp1.Num = 1;
-		//temp1.Equiped = false;
+		temp1.Part = EEquipmentPart::E_Head;
 		temp1.Category = EItemCategory::E_Equipment;
 
 		InventoryComponent->AddToInven(temp1, 1);
@@ -155,7 +154,6 @@ void AAcmeCharacter::BeginPlay()
 		FItem temp1;
 		temp1.Name = EItemName::E_Fire;
 		temp1.Num = 1;
-		//temp1.Equiped = false;
 		temp1.Category = EItemCategory::E_Element;
 
 		InventoryComponent->AddItem(temp1);
@@ -474,6 +472,23 @@ void AAcmeCharacter::Equip(EEquipmentPart part, FItem item)
 	if (!EquipmentComponent) return;
 
 	EquipmentComponent->Equip(part, item);
+	UpdateInventoryWidget();
+}
+
+void AAcmeCharacter::UnEquip(EEquipmentPart part)
+{
+	if (!EquipmentComponent) return;
+	if (!InventoryWidget) return;
+
+	EquipmentComponent->UnEquip(part);
+	InventoryWidget->ClearEquip(part);
+}
+
+void AAcmeCharacter::SetShowInvenCam(UPrimitiveComponent* newMesh)
+{
+	if (!UISceneCapture) return;
+
+	UISceneCapture->ShowOnlyComponent(newMesh);
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)
@@ -640,7 +655,10 @@ bool AAcmeCharacter::AddItem(FItem item)
 {
 	if (!InventoryComponent) return false;
 
-	return InventoryComponent->AddItem(item);
+	bool Result = InventoryComponent->AddItem(item);
+	UpdateInventoryWidget();
+
+	return Result;
 }
 
 void AAcmeCharacter::AddToInvenByIdx(FItem item, int idx)
@@ -648,6 +666,7 @@ void AAcmeCharacter::AddToInvenByIdx(FItem item, int idx)
 	if (!InventoryComponent) return;
 
 	InventoryComponent->AddToInven(item, idx);
+	UpdateInventoryWidget();
 }
 
 void AAcmeCharacter::SwapInvenByIdx(FItem fromItem, int from, int to)
@@ -657,6 +676,7 @@ void AAcmeCharacter::SwapInvenByIdx(FItem fromItem, int from, int to)
 	FItem toItem = InventoryComponent->GetItem(fromItem.Category, to);
 	InventoryComponent->AddToInven(fromItem, to);
 	InventoryComponent->AddToInven(toItem, from);
+	UpdateInventoryWidget();
 }
 
 void AAcmeCharacter::SwapQuickByIdx(FItem fromItem, int from, int to)
@@ -682,6 +702,7 @@ void AAcmeCharacter::UseItem(EItemCategory Category, int idx)
 	if (!InventoryComponent) return;
 
 	InventoryComponent->UseItem(Category, idx);
+	UpdateInventoryWidget();
 }
 
 void AAcmeCharacter::RemoveItem(EItemCategory Category, int idx)
@@ -689,6 +710,7 @@ void AAcmeCharacter::RemoveItem(EItemCategory Category, int idx)
 	if (!InventoryComponent) return;
 
 	InventoryComponent->RemoveFromInven(Category, idx);
+	UpdateInventoryWidget();
 }
 
 void AAcmeCharacter::UpdateInventoryWidget()

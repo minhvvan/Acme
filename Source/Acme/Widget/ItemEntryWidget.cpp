@@ -149,13 +149,15 @@ void UItemEntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	 
 	if (IsEmpty) return;
 	if(!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+
+	//TODO: Change
 	FItem itemInfo = Player->GetItem(ItemInfo.Category, Index);
 
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDDOP::StaticClass()));
 	DragWidget->Index = Index;
 	DragWidget->ItemInfo = itemInfo;
 	DragWidget->WidgetRef = this;
-	DragWidget->bQuickSlot = false;
+	DragWidget->bFromQuickSlot = false;
 
 	UItemEntryWidget* DragVisual = Cast<UItemEntryWidget>(CreateWidget(GetWorld(), DragWidgetClass));
 	DragVisual->SetItemInfo(itemInfo);
@@ -195,7 +197,7 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	if (!IsValid(DragWidget))  return false;
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
-	if (DragWidget->bQuickSlot)
+	if (DragWidget->bFromQuickSlot) /*From Quick*/
 	{
 		if (IsEmpty)
 		{
@@ -218,14 +220,9 @@ bool UItemEntryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 		{
 			//Swap
 			Player->SwapInvenByIdx(DragWidget->ItemInfo, DragWidget->Index, Index);
-			if (DragWidget->WidgetRef)
-			{
-				DragWidget->WidgetRef->SetItemInfo(ItemInfo);
-			}
 		}
 	}
 
-	SetItemInfo(DragWidget->ItemInfo);
 	return true;
 }
 

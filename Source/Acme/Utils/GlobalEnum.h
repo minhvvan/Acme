@@ -68,7 +68,7 @@ enum class EEquipmentPart : uint8
 	E_Shoe UMETA(DisplayName = "Shoe"),
 	E_Accessory UMETA(DisplayName = "Accessory"),
 
-	E_End UMETA(DisplayName = "End"),
+	E_None UMETA(DisplayName = "None"),
 };
 
 

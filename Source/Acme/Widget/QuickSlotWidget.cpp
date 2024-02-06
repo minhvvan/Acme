@@ -94,7 +94,7 @@ void UQuickSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry, const F
 	UItemDDOP* DragWidget = Cast<UItemDDOP>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDDOP::StaticClass()));
 	DragWidget->Index = Index;
 	DragWidget->ItemInfo = ItemInfo;
-	DragWidget->bQuickSlot = true;
+	DragWidget->bFromQuickSlot = true;
 
 	UQuickSlotWidget* DragVisual = Cast<UQuickSlotWidget>(CreateWidget(GetWorld(), DragWidgetClass));
 	DragVisual->SetItemInfo(ItemInfo);
@@ -125,7 +125,7 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 		return result;
 	}
 
-	if (DragWidget->bQuickSlot)
+	if (DragWidget->bFromQuickSlot)
 	{
 
 		if (ItemInfo.Name == EItemName::E_Empty)

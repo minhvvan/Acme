@@ -14,6 +14,7 @@
 #include "QuickSlotWidget.h"
 #include "TileInventoryWidget.h"
 #include "Acme/AcmeGameInstance.h"
+#include "Acme/Widget/EquipmentSlot.h"
 
 void UInventoryWidget::NativeConstruct()
 {
@@ -170,6 +171,28 @@ void UInventoryWidget::SetItemInfoText(FItem item)
 
 	TxtItemName->SetText(FText::FromString(ItemString.Name));
 	TxtItemInfo->SetText(FText::FromString(ItemString.Description));
+}
+
+void UInventoryWidget::ClearEquip(EEquipmentPart part)
+{
+	UEquipmentSlot* CurrentSlot = EquipSlotHead;
+	switch (part)
+	{
+	case EEquipmentPart::E_Head:
+		CurrentSlot = EquipSlotHead;
+		break;
+	case EEquipmentPart::E_Body:
+		CurrentSlot = EquipSlotBody;
+		break;
+	case EEquipmentPart::E_Shoe:
+		CurrentSlot = EquipSlotShoe;
+		break;
+	case EEquipmentPart::E_Accessory:
+		CurrentSlot = EquipSlotAcc;
+		break;
+	}
+
+	CurrentSlot->SetEmpty();
 }
 
 void UInventoryWidget::UpdateWidgetByCategory()

@@ -39,9 +39,6 @@ public:
 	int GetMaxQuantity();
 
 	UFUNCTION()
-	void MoveItems(EItemCategory Category, int from, int to);
-
-	UFUNCTION()
 	void SetEmpty(FItem& item);
 
 	UFUNCTION()

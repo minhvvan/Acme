@@ -72,37 +72,6 @@ int UInventoryComponent::GetMaxQuantity()
 	return maxQuantity;
 }
 
-void UInventoryComponent::MoveItems(EItemCategory Category, int from, int to)
-{
-	TArray<FItem>& ItemList = Items[Category].Get();
-
-	if (ItemList[to].Name == ItemList[from].Name)
-	{
-		int movableAmount = maxQuantity - ItemList[to].Num;
-		int moveAmount = movableAmount < ItemList[from].Num ? movableAmount : ItemList[from].Num;
-
-		ItemList[from].Num -= moveAmount;
-		if (ItemList[from].Num <= 0)
-		{
-			SetEmpty(ItemList[from]);
-		}
-
-		ItemList[to].Num += moveAmount;
-	}
-	else
-	{
-		FItem temp = ItemList[to];
-		ItemList[to].Name = ItemList[from].Name;
-		ItemList[to].Num = ItemList[from].Num;
-		//ItemList[to].Equiped = ItemList[from].Equiped;
-
-		ItemList[from] = temp;
-	}
-
-	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
-	Player->UpdateInventoryWidget();
-}
-
 void UInventoryComponent::SetEmpty(FItem& item)
 {
 	item.Name = EItemName::E_Empty;
