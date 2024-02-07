@@ -126,10 +126,26 @@ protected:
 	UFUNCTION()
 	void SetActiveCategory();
 
+public:
+	UFUNCTION()
+	bool AddToSlot(int idx);
+
+	UFUNCTION()
+	bool RemoveFromSlot(int idx);
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* OwnerCharacter;
 
 	UPROPERTY(VisibleAnywhere)
 	class UAcmeGameInstance* GameInstance;
+
+	UPROPERTY(VisibleAnywhere)
+	int LeftSlotIdx;
+
+	UPROPERTY(VisibleAnywhere)
+	int RightSlotIdx;
+
+	UPROPERTY(VisibleAnywhere)
+	int Amount;
 };

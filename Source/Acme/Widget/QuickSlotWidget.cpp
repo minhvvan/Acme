@@ -120,8 +120,9 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
-	if (DragWidget->ItemInfo.Category == EItemCategory::E_Element /*입는 장비도 안됨*/)
+	if (!DragWidget->ItemInfo.bCanAddQuick)
 	{
+		Player->AddItem(DragWidget->ItemInfo);
 		return result;
 	}
 

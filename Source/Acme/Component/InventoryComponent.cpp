@@ -104,14 +104,14 @@ void UInventoryComponent::Dump(EItemCategory Category, int idx)
 	SetEmpty(Item);
 }
 
-void UInventoryComponent::UseItem(EItemCategory Category, int idx)
+void UInventoryComponent::UseItem(EItemCategory Category, int idx, int amount)
 {
 	TArray<FItem>& ItemList = Items[Category].Get();
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
 	FItem& Item = ItemList[idx];
 
-	Item.Num--;
+	Item.Num -= amount;
 	if (Item.Num == 0) SetEmpty(Item);
 }
 

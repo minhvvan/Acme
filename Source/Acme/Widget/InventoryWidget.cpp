@@ -184,9 +184,6 @@ void UInventoryWidget::ClearEquip(EEquipmentPart part)
 	case EEquipmentPart::E_Body:
 		CurrentSlot = EquipSlotBody;
 		break;
-	case EEquipmentPart::E_Shoe:
-		CurrentSlot = EquipSlotShoe;
-		break;
 	case EEquipmentPart::E_Accessory:
 		CurrentSlot = EquipSlotAcc;
 		break;

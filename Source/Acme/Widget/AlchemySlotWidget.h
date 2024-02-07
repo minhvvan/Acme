@@ -29,27 +29,21 @@ protected:
 	FItem ItemInfo;
 
 	UPROPERTY(VisibleAnywhere)
-	int Index;
-
-	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* Player;
 
 	UPROPERTY(VisibleAnywhere)
-	class UItemEntryWidget* OriginRef;
+	class UAcmeGameInstance* GameInstance;
 
 protected:
 	UFUNCTION()
 	void SetImage();
 
+public:
 	UFUNCTION()
 	void SetSlot(FItem info);
 
 	UFUNCTION()
-	void SetEmpty();
-
-public:
-	UFUNCTION()
-	void UseItem();
+	void Compose();
 
 	UFUNCTION()
 	bool IsEmpty();
@@ -57,14 +51,8 @@ public:
 	UFUNCTION()
 	FItem GetItemInfo();
 
+	UFUNCTION()
+	void SetEmpty();
+
 protected:
-	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
-
-	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation);
-
-	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation);
-
-	virtual void NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation);
-
-
 };

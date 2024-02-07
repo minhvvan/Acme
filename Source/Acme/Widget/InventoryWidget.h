@@ -64,9 +64,6 @@ protected:
 	class UEquipmentSlot* EquipSlotBody;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
-	class UEquipmentSlot* EquipSlotShoe;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
 	class UEquipmentSlot* EquipSlotAcc;
 	
 protected:

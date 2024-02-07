@@ -52,10 +52,26 @@ enum class EItemName : uint8
 	E_Earth UMETA(DisplayName = "Earth"),
 	E_Ice UMETA(DisplayName = "Ice"),
 	E_Thunder UMETA(DisplayName = "Thunder"),
-	E_Cube UMETA(DisplayName = "Cube"),
-	E_Sphere UMETA(DisplayName = "Sphere"),
+	E_Lava UMETA(DisplayName = "Lava"),
+	E_Energy UMETA(DisplayName = "Energy"),
+	E_Plasma UMETA(DisplayName = "Plasma"),
+	E_Stone UMETA(DisplayName = "Stone"),
+	E_Metal UMETA(DisplayName = "Metal"),
+	E_Sand UMETA(DisplayName = "Sand"),
+	E_Glass UMETA(DisplayName = "Glass"),
+	E_Tree UMETA(DisplayName = "Tree"),
+	E_Coal UMETA(DisplayName = "Coal"),
+	E_Steam UMETA(DisplayName = "Steam"),
+	E_Swamp UMETA(DisplayName = "Swamp"),
+	E_QuickSilver UMETA(DisplayName = "QuickSilver"),
+	E_Wood UMETA(DisplayName = "Wood"),
+	E_Boat UMETA(DisplayName = "Boat"),
+	E_Storm UMETA(DisplayName = "Storm"),
+	E_Seed UMETA(DisplayName = "Seed"),
+
 	E_Sword UMETA(DisplayName = "Sword"),
 	E_Helmet UMETA(DisplayName = "Helmet"),
+	E_LetherArmor UMETA(DisplayName = "LetherArmor"),
 
 	E_Empty UMETA(DisplayName = "Empty"),
 };
@@ -65,7 +81,6 @@ enum class EEquipmentPart : uint8
 {
 	E_Head UMETA(DisplayName = "Head"),
 	E_Body UMETA(DisplayName = "Body"),
-	E_Shoe UMETA(DisplayName = "Shoe"),
 	E_Accessory UMETA(DisplayName = "Accessory"),
 
 	E_None UMETA(DisplayName = "None"),
@@ -77,7 +92,6 @@ enum class ESocketName : uint8
 {
 	E_HeadSocket UMETA(DisplayName = "HeadSocket"),
 	E_BodyScoekt UMETA(DisplayName = "BodySocket"),
-	E_ShoeScoekt UMETA(DisplayName = "ShoeSocket"),
 	E_HandScoekt UMETA(DisplayName = "HandScoekt"),
 	E_BackScoekt UMETA(DisplayName = "BackScoekt"),
 

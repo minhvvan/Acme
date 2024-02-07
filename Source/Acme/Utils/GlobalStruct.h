@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemCategory Category;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanAddQuick;
+
 	void Clear();
 };
 

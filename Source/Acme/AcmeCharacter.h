@@ -306,7 +306,7 @@ public:
 	void SwapQuickAndInven(FItem item, int quickIdx, int invenIdx);
 
 	UFUNCTION()
-	void UseItem(EItemCategory Category, int idx);
+	void UseItem(EItemCategory Category, int idx, int amount);
 
 	UFUNCTION()
 	void RemoveItem(EItemCategory Category, int idx);

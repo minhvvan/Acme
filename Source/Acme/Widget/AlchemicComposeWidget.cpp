@@ -43,6 +43,10 @@ void UAlchemicComposeWidget::NativeConstruct()
 	BtnCompose->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnComposeClicked);
 
 	EdtNum->OnTextChanged.AddDynamic(this, &UAlchemicComposeWidget::OnTextChanged);
+
+	LeftSlotIdx = -1;
+	RightSlotIdx = -1;
+	Amount = 1;
 }
 
 FReply UAlchemicComposeWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
@@ -97,20 +101,27 @@ void UAlchemicComposeWidget::OnMaterialClicked()
 
 void UAlchemicComposeWidget::OnMinusClicked()
 {
-	int num = UKismetStringLibrary::Conv_StringToInt(EdtNum->GetText().ToString());
-	num--;
+	if (Amount == 1) return;
+	Amount--;
 
-	if (num < 1) num = 1;
-	SetNumTxt(FText::AsNumber(num));
+	if (Amount < 1) Amount = 1;
+	SetNumTxt(FText::AsNumber(Amount));
 }
 
 void UAlchemicComposeWidget::OnPlusClicked()
 {
-	int num = UKismetStringLibrary::Conv_StringToInt(EdtNum->GetText().ToString());
-	num++;
+	if (Amount == 99) return;
+	if (LeftSlotIdx == -1 || RightSlotIdx == -1) return;
 
-	if (num > 99) num = 99;
-	SetNumTxt(FText::AsNumber(num));
+	FItem LeftItem = LeftSlot->GetItemInfo();
+	FItem RightItem = RightSlot->GetItemInfo();
+
+	if (Amount >= LeftItem.Num || Amount >= RightItem.Num) return;
+
+	Amount++;
+
+	if (Amount > 99) Amount = 99;
+	SetNumTxt(FText::AsNumber(Amount));
 }
 
 void UAlchemicComposeWidget::OnComposeClicked()
@@ -124,16 +135,18 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	TArray<FItem> ComposeResults = GameInstance->GetComposeResult(LeftItem, RightItem);
 
-	LeftSlot->UseItem();
-	RightSlot->UseItem();
+	LeftSlot->Compose();
+	RightSlot->Compose();
+
+	if (!OwnerCharacter) OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	OwnerCharacter->UseItem(LeftItem.Category, LeftSlotIdx, Amount);
+	OwnerCharacter->UseItem(RightItem.Category, RightSlotIdx, Amount);
 
 	//Add
-	if (!OwnerCharacter) OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 	for (FItem result : ComposeResults)
 	{
-		if (OwnerCharacter->AddItem(result))
+		if (!OwnerCharacter->AddItem(result))
 		{
-			//TODO: 추가 못하면 땅바닥에 생성
 			if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
 			auto ItemClass = GameInstance->GetItemClass(result.Name);
 
@@ -177,7 +190,7 @@ void UAlchemicComposeWidget::SetItemList()
 		UItemData* Data = NewObject<UItemData>();
 		Data->SetItem(item);
 		Data->SetIndex(i);
-		Data->SetbCanShowDetail(false);
+		Data->SetParentRef(this);
 
 		TVItem->AddItem(Data);
 	}
@@ -218,4 +231,53 @@ void UAlchemicComposeWidget::SetActiveCategory()
 	{
 		ActiveCategoryImg->SetColorAndOpacity(FColor(0, 0, 0, 255));
 	}
+}
+
+bool UAlchemicComposeWidget::AddToSlot(int idx)
+{
+	if (LeftSlotIdx == idx || RightSlotIdx == idx) return false;
+
+	if (LeftSlot->IsEmpty())
+	{
+		//Add
+		UItemData* Data = Cast<UItemData>(TVItem->GetItemAt(idx));
+		FItem info = Data->GetItemInfo();
+
+		LeftSlot->SetSlot(info);
+		LeftSlotIdx = idx;
+
+		return true;
+	}
+	else if(RightSlot->IsEmpty())
+	{
+		UItemData* Data = Cast<UItemData>(TVItem->GetItemAt(idx));
+		FItem info = Data->GetItemInfo();
+
+		RightSlot->SetSlot(info);
+		RightSlotIdx = idx;
+
+		return true;
+	}
+
+	return false;
+}
+
+bool UAlchemicComposeWidget::RemoveFromSlot(int idx)
+{
+	if (LeftSlotIdx == idx)
+	{
+		LeftSlot->SetEmpty();
+		LeftSlotIdx = -1;
+
+		return true;
+	}
+	else if (RightSlotIdx == idx)
+	{
+		RightSlot->SetEmpty();
+		RightSlotIdx = -1;
+
+		return true;
+	}
+
+	return false;
 }

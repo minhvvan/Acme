@@ -131,9 +131,6 @@ void UEquipmentComponent::Equip(EEquipmentPart part, FItem item)
 		case EEquipmentPart::E_Body:
 			EquipmentBody = CurrentItem;
 			break;
-		case EEquipmentPart::E_Shoe:
-			EquipmentShoe = CurrentItem;
-			break;
 		case EEquipmentPart::E_Accessory:
 			EquipmentAcc = CurrentItem;
 			break;
@@ -154,9 +151,6 @@ void UEquipmentComponent::UnEquip(EEquipmentPart part)
 		break;
 	case EEquipmentPart::E_Body:
 		CurrentPart = EquipmentBody;
-		break;
-	case EEquipmentPart::E_Shoe:
-		CurrentPart = EquipmentShoe;
 		break;
 	case EEquipmentPart::E_Accessory:
 		CurrentPart = EquipmentAcc;

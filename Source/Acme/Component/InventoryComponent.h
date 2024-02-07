@@ -48,7 +48,7 @@ public:
 	void Dump(EItemCategory Category, int idx);
 
 	UFUNCTION()
-	void UseItem(EItemCategory Category, int idx);
+	void UseItem(EItemCategory Category, int idx, int amount);
 
 	UFUNCTION()
 	bool AddItem(FItem newItem);

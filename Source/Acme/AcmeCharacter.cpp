@@ -136,6 +136,7 @@ void AAcmeCharacter::BeginPlay()
 		temp1.Name = EItemName::E_Sword;
 		temp1.Num = 1;
 		temp1.Category = EItemCategory::E_Equipment;
+		temp1.bCanAddQuick = true;
 
 		InventoryComponent->AddToInven(temp1, 2);
 	}
@@ -146,23 +147,36 @@ void AAcmeCharacter::BeginPlay()
 		temp1.Num = 1;
 		temp1.Part = EEquipmentPart::E_Head;
 		temp1.Category = EItemCategory::E_Equipment;
+		temp1.bCanAddQuick = false;
 
 		InventoryComponent->AddToInven(temp1, 1);
 	}
 
 	{
 		FItem temp1;
-		temp1.Name = EItemName::E_Fire;
+		temp1.Name = EItemName::E_LetherArmor;
 		temp1.Num = 1;
+		temp1.Part = EEquipmentPart::E_Body;
+		temp1.Category = EItemCategory::E_Equipment;
+		temp1.bCanAddQuick = false;
+
+		InventoryComponent->AddToInven(temp1, 0);
+	}
+
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Fire;
+		temp1.Num = 3;
 		temp1.Category = EItemCategory::E_Element;
+		temp1.bCanAddQuick = false;
 
 		InventoryComponent->AddItem(temp1);
 	}
 	{
 		FItem temp1;
 		temp1.Name = EItemName::E_Water;
-		temp1.Num = 1;
-		//temp1.Equiped = false;
+		temp1.Num = 5;
+		temp1.bCanAddQuick = false;
 		temp1.Category = EItemCategory::E_Element;
 
 		InventoryComponent->AddItem(temp1);
@@ -697,11 +711,11 @@ void AAcmeCharacter::SwapQuickAndInven(FItem item, int quickIdx, int invenIdx)
 	SetQuickSlot(temp, quickIdx);
 }
 
-void AAcmeCharacter::UseItem(EItemCategory Category, int idx)
+void AAcmeCharacter::UseItem(EItemCategory Category, int idx, int amount)
 {
 	if (!InventoryComponent) return;
 
-	InventoryComponent->UseItem(Category, idx);
+	InventoryComponent->UseItem(Category, idx, amount);
 	UpdateInventoryWidget();
 }
 
