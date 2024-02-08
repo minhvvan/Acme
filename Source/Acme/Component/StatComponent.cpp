@@ -26,6 +26,8 @@ UStatComponent::UStatComponent()
 	CoolTimedash = 2.f;
 	ConsumeTimeSatiety = 30.f;
 	ConsumeAmountSatiety = 1;
+
+	RecoveryTime = 3.f;
 }
 
 
@@ -107,6 +109,13 @@ void UStatComponent::ConsumeStamina(int amount)
 	if (newCurrentStamina < 0) newCurrentStamina = 0;
 
 	SetCurrentStamina(newCurrentStamina);
+
+	GetWorld()->GetTimerManager().ClearTimer(StaminaRecoveryTimer);
+	GetWorld()->GetTimerManager().SetTimer(StaminaRecoveryTimer,
+		FTimerDelegate::CreateLambda([this]() {
+			RecoveryStamina(100);
+			}),
+		RecoveryTime, true);
 }
 
 void UStatComponent::RecoveryStamina(int amount)
@@ -116,3 +125,18 @@ void UStatComponent::RecoveryStamina(int amount)
 
 	SetCurrentStamina(newCurrentStamina);
 }
+
+void UStatComponent::StartSprint()
+{
+	GetWorld()->GetTimerManager().SetTimer(TimerSprint, FTimerDelegate::CreateLambda(
+		[this]()->void
+		{
+			ConsumeStamina(5);
+		}
+	), .5f, true);
+}
+
+void UStatComponent::EndSprint()
+{
+	GetWorld()->GetTimerManager().ClearTimer(TimerSprint);
+}	

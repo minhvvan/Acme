@@ -65,6 +65,12 @@ public:
 	UFUNCTION()
 	void RecoveryStamina(int amount);
 
+	UFUNCTION()
+	void StartSprint();
+	
+	UFUNCTION()
+	void EndSprint();
+
 	FCoolDown CDDash;
 	FCoolDown CDSkill;
 
@@ -73,9 +79,20 @@ public:
 	FChangeStamina OnChangedStamina;
 
 private:
+	UPROPERTY()
 	FTimerHandle TimerDash;
+
+	UPROPERTY()
 	FTimerHandle TimerSkill;
+
+	UPROPERTY()
 	FTimerHandle TimerSatiety;
+
+	UPROPERTY()
+	FTimerHandle TimerSprint;
+
+	UPROPERTY()
+	FTimerHandle StaminaRecoveryTimer;
 
 	//stat
 	UPROPERTY(VisibleAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
@@ -105,12 +122,15 @@ private:
 	int CurrentSatiety;
 
 	//Others
-	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	float CoolTimedash;
 
-	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	float ConsumeTimeSatiety;
 
-	UPROPERTY(VisibleAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	int ConsumeAmountSatiety;
+
+	UPROPERTY(EditAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	float RecoveryTime;
 };

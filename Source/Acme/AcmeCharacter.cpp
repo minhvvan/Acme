@@ -218,9 +218,12 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartCrouch);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopCrouch);
 	
-		//Crouch
-		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartDash);
-		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDash);
+		//Sprint
+		//EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartDash);
+		//EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDash);
+		
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAcmeCharacter::EndSprint);
 	
 		//Attack
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartAttack);
@@ -456,6 +459,24 @@ void AAcmeCharacter::EndSwordAttack()
 	Sword->EndSeinsing();
 }
 
+void AAcmeCharacter::StartSprint()
+{
+	if (IsSprint) return;
+
+	IsSprint = true;
+	GetCharacterMovement()->MaxWalkSpeed = 900.f;
+
+	StatCompoenent->StartSprint();
+}
+
+void AAcmeCharacter::EndSprint()
+{
+	IsSprint = false;
+	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+
+	StatCompoenent->EndSprint();
+}
+
 void AAcmeCharacter::Interact()
 {
 	if (!OverlapActor.Get()) return;
@@ -467,12 +488,6 @@ void AAcmeCharacter::ConsumeStamina(int amount)
 	if (!StatCompoenent) return;
 
 	StatCompoenent->ConsumeStamina(amount);
-	GetWorldTimerManager().ClearTimer(StaminaRecoveryTimer);
-	GetWorldTimerManager().SetTimer(StaminaRecoveryTimer,
-		FTimerDelegate::CreateLambda([this]() {
-			StatCompoenent->RecoveryStamina(100);
-			}),
-		5.f, true);
 }
 
 void AAcmeCharacter::PlaySwordAttack(int idx)
