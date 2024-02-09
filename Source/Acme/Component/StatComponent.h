@@ -30,9 +30,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION()
-	void ExeDash();
-
-	UFUNCTION()
 	int GetCurrentHP() { return CurrentHP; };
 
 	UFUNCTION()
@@ -71,7 +68,6 @@ public:
 	UFUNCTION()
 	void EndSprint();
 
-	FCoolDown CDDash;
 	FCoolDown CDSkill;
 
 	FChangeHP OnChangedHP;

@@ -51,26 +51,6 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-
-void UStatComponent::ExeDash()
-{
-	float time = CoolTimedash - (Dexterity * .01);
-
-	if (time <= 0)
-	{
-		CDDash.Broadcast();
-		return;
-	}
-
-	GetWorld()->GetTimerManager().SetTimer(TimerDash, FTimerDelegate::CreateLambda(
-		[this]()->void
-		{
-			this->CDDash.Broadcast();
-		}
-	), time, false);
-}
-
-
 void UStatComponent::SetCurrentHP(int HP)
 {
 	CurrentHP = HP;

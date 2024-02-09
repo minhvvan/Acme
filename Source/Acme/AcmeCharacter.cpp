@@ -78,6 +78,7 @@ AAcmeCharacter::AAcmeCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CanAttack = true;
+	IsDodgeRoll = false;
 
 	ActiveElement = EElement::E_End;
 
@@ -101,10 +102,7 @@ void AAcmeCharacter::BeginPlay()
 
 	UISceneCapture->ShowOnlyComponent(GetMesh());
 
-	StatCompoenent->CDDash.AddUObject(this, &AAcmeCharacter::CoolDownDash);
-
 	AnimState = EAnimState::E_Unarmed;
-	CanDash = true;
 
 	if (HudClass.Get() != nullptr)
 	{
@@ -130,6 +128,7 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnAttackStart.AddUObject(this, &AAcmeCharacter::StartSwordAttack);
 	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::EndSwordAttack);
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
+	AnimInstance->OnDodgeRoll.AddUObject(this, &AAcmeCharacter::StopDodgeRoll);
 
 	{
 		FItem temp1;
@@ -218,9 +217,9 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartCrouch);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopCrouch);
 	
-		//Sprint
-		//EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartDash);
-		//EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDash);
+		//Dodge
+		EnhancedInputComponent->BindAction(DodgeRollAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartDodgeRoll);
+		EnhancedInputComponent->BindAction(DodgeRollAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDodgeRoll);
 		
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAcmeCharacter::EndSprint);
@@ -270,8 +269,8 @@ void AAcmeCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 
-		DashForward = MovementVector.Y;
-		DashRight = MovementVector.X;
+		DodgeForward = MovementVector.Y;
+		DodgeRight = MovementVector.X;
 	}
 }
 
@@ -312,47 +311,20 @@ void AAcmeCharacter::StopCrouch()
 	UnCrouch();
 }
 
-void AAcmeCharacter::StartDash()
+void AAcmeCharacter::StartDodgeRoll()
 {
 	auto Movement = GetCharacterMovement();
-	if (!Movement || IsDashing || IsCrouch) return;
-	if (!CanDash) return;
+	if (!Movement || IsCrouch || IsDodgeRoll) return;
+	if (!AnimInstance) return;
 
-	IsDashing = true;
-	FVector Dir;
+	IsDodgeRoll = true;
 
-	if (DashForward != 0)
-	{
-		Dir = GetActorForwardVector() * DashForward;
-	}
-	else
-	{
-		if (DashRight == 0) return;
-
-		Dir = GetActorRightVector() * DashRight;
-	}
-
-	//scale
-	Dir.X *= 1000;
-	Dir.Y *= 1000;
-
-	LaunchCharacter(Dir, false, false);
-
-	CanDash = false;
-	StatCompoenent->ExeDash();
+	AnimInstance->PlayDodgeRoll();
 }
 
-void AAcmeCharacter::StopDash()
+void AAcmeCharacter::StopDodgeRoll()
 {
-	auto Movement = GetCharacterMovement();
-	if (!Movement) return;
-
-	IsDashing = false;
-}
-
-void AAcmeCharacter::CoolDownDash()
-{
-	CanDash = true;
+	IsDodgeRoll = false;
 }
 
 void AAcmeCharacter::StartAttack()
@@ -396,7 +368,7 @@ void AAcmeCharacter::StartJampDashAttack()
 	if (AnimState == EAnimState::E_Unarmed) return;
 	IsAttacking = true;
 
-	StartDash();
+	StartDodgeRoll();
 	AnimInstance->PlayJumpDashAttack();
 }
 

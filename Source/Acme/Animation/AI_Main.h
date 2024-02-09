@@ -9,6 +9,7 @@
 DECLARE_MULTICAST_DELEGATE(FOnAttackStart);
 DECLARE_MULTICAST_DELEGATE(FOnAttackEnd);
 DECLARE_MULTICAST_DELEGATE(FOnInteract);
+DECLARE_MULTICAST_DELEGATE(FOnDodgeRoll);
 
 
 UCLASS()
@@ -35,6 +36,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Move", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMInteract;
 
+	UPROPERTY(EditAnywhere, Category = "Move", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMDodgeRoll;
+
 public:
 	UFUNCTION()
 	void PlayAttack(int idx);
@@ -55,11 +59,15 @@ public:
 	void PlayInteract();
 
 	UFUNCTION()
+	void PlayDodgeRoll();
+
+	UFUNCTION()
 	FName GetAttackMontageName(int idx);
 
 	FOnAttackStart OnAttackStart;
 	FOnAttackEnd OnAttackEnd;
 	FOnInteract OnInteract;
+	FOnDodgeRoll OnDodgeRoll;
 
 private:
 	UFUNCTION()
@@ -70,4 +78,7 @@ private:
 
 	UFUNCTION()
 	void AnimNotify_Interact();
+
+	UFUNCTION()
+	void AnimNotify_DodgeRoll();
 };

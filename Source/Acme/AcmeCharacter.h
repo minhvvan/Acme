@@ -52,8 +52,8 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* CrouchAction;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	//class UInputAction* DashAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* DodgeRollAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* AttackAction;
@@ -128,13 +128,10 @@ protected:
 
 	/** Called for Dash input */
 	UFUNCTION()
-	void StartDash();
+	void StartDodgeRoll();
 
 	UFUNCTION()
-	void StopDash();
-
-	UFUNCTION()
-	void CoolDownDash();
+	void StopDodgeRoll();
 
 	UFUNCTION()
 	void StartAttack();	
@@ -207,16 +204,10 @@ protected:
 	float TurnRate;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
-	float DashForward;
+	float DodgeForward;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
-	float DashRight;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
-	bool IsDashing;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
-	bool CanDash;
+	float DodgeRight;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
 	bool IsSprint;
@@ -229,6 +220,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
 	bool CanAttack;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
+	bool IsDodgeRoll;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
 	EAnimState AnimState;
@@ -245,8 +239,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
 	EElement ActiveElement;
 
-	//UPROPERTY()
-	//FTimerHandle StaminaRecoveryTimer;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
