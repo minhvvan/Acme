@@ -124,6 +124,7 @@ enum class EDetailAction : uint8
 	E_End UMETA(DisplayName = "End"),
 };
 
+
 class ACME_API GlobalEnum
 {
 public:

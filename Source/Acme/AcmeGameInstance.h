@@ -86,6 +86,21 @@ struct FSocketString : public FTableRowBase
 	FName SocketName;
 };
 
+USTRUCT()
+struct FQuest : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int QusetID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Desc;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FItem> Rewards;
+};
+
 
 UCLASS()
 class ACME_API UAcmeGameInstance : public UGameInstance
