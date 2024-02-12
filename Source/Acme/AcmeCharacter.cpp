@@ -28,6 +28,7 @@
 #include "Acme/Widget/AlchemicComposeWidget.h"
 #include "Acme/Component/EquipmentComponent.h"
 #include "Acme/SwordActor.h"
+#include "InteractableActor.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -398,6 +399,11 @@ void AAcmeCharacter::StartInteract()
 	{
 		for (auto HitResult : HitResults)
 		{
+			IInteractableActor* Interactable = Cast<IInteractableActor>(HitResult.GetActor());
+			if (Interactable) Interactable->Interact();
+
+			//TODO: Item Interface로 바꿔야함 상속 구조 변경 필요
+
 			AActorInteractive* Item = Cast<AActorInteractive>(HitResult.GetActor());
 			if (!Item || !Item->GetbCanInteract()) continue;
 

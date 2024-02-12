@@ -15,13 +15,13 @@ ANPCCharacter::ANPCCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	QuestIndicator = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Indicator"));
+	QuestIndicator = ACharacter::CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Indicator"));
 	QuestIndicator->SetupAttachment(RootComponent);
 
-	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
+	OverlapComp = ACharacter::CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
 	OverlapComp->SetupAttachment(RootComponent);	
 	
-	InteractWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractWidget"));
+	InteractWidget = ACharacter::CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractWidget"));
 	InteractWidget->SetupAttachment(RootComponent);
 }
 
@@ -109,7 +109,7 @@ void ANPCCharacter::UpdateQuestIndicator()
 	{
 		QuestIndicator->SetVisibility(true);
 
-		if (!Player) Player = Cast<AAcmeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		if (!Player) Player = Cast<AAcmeCharacter>(UGameplayStatics::GetPlayerCharacter(ACharacter::GetWorld(), 0));
 		
 		for (auto quest : QuestList)
 		{
@@ -122,5 +122,10 @@ void ANPCCharacter::UpdateQuestIndicator()
 
 		QuestIndicator->SetStaticMesh(Meshes[EQuestState::E_Ready]);
 	}
+}
+
+void ANPCCharacter::Interact()
+{
+	UUtil::DebugPrint("Interact");
 }
 

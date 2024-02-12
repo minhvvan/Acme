@@ -6,12 +6,13 @@
 #include "GameFramework/Character.h"
 #include "Acme/Utils/GlobalEnum.h"
 #include "AcmeGameInstance.h"
+#include "InteractableActor.h"
 #include "NPCCharacter.generated.h"
 
 struct FQuest;
 
 UCLASS()
-class ACME_API ANPCCharacter : public ACharacter
+class ACME_API ANPCCharacter : public ACharacter, public IInteractableActor
 {
 	GENERATED_BODY()
 
@@ -55,6 +56,8 @@ public:
 
 	UFUNCTION()
 	void UpdateQuestIndicator();
+
+	virtual void Interact() override;
 
 protected:
 	UPROPERTY()
