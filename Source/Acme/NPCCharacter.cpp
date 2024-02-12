@@ -3,7 +3,8 @@
 
 #include "NPCCharacter.h"
 #include "Components/StaticMeshComponent.h"
-#include "AcmeGameInstance.h"
+#include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "AcmeCharacter.h"
 #include "Acme/Utils/Util.h"
@@ -16,6 +17,12 @@ ANPCCharacter::ANPCCharacter()
 
 	QuestIndicator = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Indicator"));
 	QuestIndicator->SetupAttachment(RootComponent);
+
+	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
+	OverlapComp->SetupAttachment(RootComponent);	
+	
+	InteractWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractWidget"));
+	InteractWidget->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -23,17 +30,38 @@ void ANPCCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//TODO: Update Quest
 	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
 	TArray<FQuest> Quests = GameInstance->GetQuest();
 
-	for (auto quest : Quests)
+	for (FQuest quest : Quests)
 	{
 		QuestList.Add(quest);
 	}
 
 	UpdateQuestIndicator();
-}	
+	InteractWidget->SetVisibility(false);
+
+	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &ANPCCharacter::OnBeginOverlap);
+	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &ANPCCharacter::OnEndOverlap);
+}
+
+void ANPCCharacter::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AAcmeCharacter* PlayerCharacter = Cast<AAcmeCharacter>(OtherActor);
+	if (OtherActor != nullptr && OtherComp != nullptr && PlayerCharacter)
+	{
+		InteractWidget->SetVisibility(true);
+	}
+}
+
+void ANPCCharacter::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor != nullptr && OtherComp != nullptr)
+	{
+		InteractWidget->SetVisibility(false);
+	}
+}
+
 
 // Called every frame
 void ANPCCharacter::Tick(float DeltaTime)

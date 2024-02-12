@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Acme/Utils/GlobalEnum.h"
+#include "AcmeGameInstance.h"
 #include "NPCCharacter.generated.h"
 
 struct FQuest;
@@ -25,9 +26,19 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Default)
 	class USphereComponent* OverlapComp;
 
+	UPROPERTY(VisibleAnywhere, Category = Default)
+	class UWidgetComponent* InteractWidget;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 
 public:	
 	// Called every frame
