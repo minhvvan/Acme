@@ -98,6 +98,12 @@ struct FQuest : public FTableRowBase
 	FString Desc;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EQuestState State;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FItem> Request;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FItem> Rewards;
 };
 
@@ -129,6 +135,9 @@ public:
 	UFUNCTION()
 	FSocketString GetSocketName(ESocketName name);
 
+	UFUNCTION()
+	TArray<FQuest> GetQuest();
+
 protected:
 	UPROPERTY()
 	class UDataTable* ComposeTable;
@@ -144,4 +153,7 @@ protected:
 
 	UPROPERTY()
 	class UDataTable* SocketNameTable;
+
+	UPROPERTY()
+	class UDataTable* QuestTable;
 };

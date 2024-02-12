@@ -43,6 +43,14 @@ UAcmeGameInstance::UAcmeGameInstance()
 		{
 			SocketNameTable = TABLE.Object;
 		}
+	}	
+	
+	{
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_Quest.DT_Quest'"));
+		if (TABLE.Succeeded())
+		{
+			QuestTable = TABLE.Object;
+		}
 	}
 }
 
@@ -139,6 +147,18 @@ FSocketString UAcmeGameInstance::GetSocketName(ESocketName name)
 	if (!row) return Result;
 
 	Result = *row;
+
+	return Result;
+}
+
+TArray<FQuest> UAcmeGameInstance::GetQuest()
+{
+	TArray<FQuest> Result;
+
+	FName QuestID = FName("0");
+	FQuest* row = QuestTable->FindRow<FQuest>(QuestID, TEXT(""));
+
+	Result.Add(*row);
 
 	return Result;
 }

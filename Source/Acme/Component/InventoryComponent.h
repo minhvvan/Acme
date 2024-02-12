@@ -65,6 +65,9 @@ public:
 	UFUNCTION()
 	void RemoveFromQuick(int idx);
 
+	UFUNCTION()
+	bool HasItem(FItem item);
+
 private:
 	UPROPERTY()
 	TMap<EItemCategory, FItemList> Items;

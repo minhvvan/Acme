@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "AcmeCharacter.h"
+#include "AcmeGameInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -165,7 +166,7 @@ void AAcmeCharacter::BeginPlay()
 	{
 		FItem temp1;
 		temp1.Name = EItemName::E_Fire;
-		temp1.Num = 3;
+		temp1.Num = 1;
 		temp1.Category = EItemCategory::E_Element;
 		temp1.bCanAddQuick = false;
 
@@ -490,6 +491,20 @@ void AAcmeCharacter::SetShowInvenCam(UPrimitiveComponent* newMesh)
 	if (!UISceneCapture) return;
 
 	UISceneCapture->ShowOnlyComponent(newMesh);
+}
+
+bool AAcmeCharacter::IsCompleteQuest(FQuest quest)
+{
+	if (!InventoryComponent) return false;
+	bool Result = true;
+
+	for (FItem item : quest.Request)
+	{
+		Result = InventoryComponent->HasItem(item);
+		if (Result == false) return Result;
+	}
+
+	return Result;
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)

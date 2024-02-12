@@ -4,6 +4,9 @@
 #include "NPCCharacter.h"
 #include "Components/StaticMeshComponent.h"
 #include "AcmeGameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "AcmeCharacter.h"
+#include "Acme/Utils/Util.h"
 
 // Sets default values
 ANPCCharacter::ANPCCharacter()
@@ -20,7 +23,16 @@ void ANPCCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	QuestIndicator->SetVisibility(false);
+	//TODO: Update Quest
+	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+	TArray<FQuest> Quests = GameInstance->GetQuest();
+
+	for (auto quest : Quests)
+	{
+		QuestList.Add(quest);
+	}
+
+	UpdateQuestIndicator();
 }	
 
 // Called every frame
@@ -41,7 +53,7 @@ void ANPCCharacter::AddQuset(FQuest quest)
 {
 	QuestList.Add(quest);
 
-	//TODO: Update Indicator;
+	UpdateQuestIndicator();
 }
 
 void ANPCCharacter::RemoveQuset(int qusetID)
@@ -52,10 +64,35 @@ void ANPCCharacter::RemoveQuset(int qusetID)
 		if (quest.QusetID == qusetID)
 		{
 			QuestList.RemoveAt(i);
-			//TODO: Update Indicator;
+			UpdateQuestIndicator();
 
 			return;
 		}
+	}
+}
+
+void ANPCCharacter::UpdateQuestIndicator()
+{
+	if (QuestList.Num() == 0)
+	{
+		QuestIndicator->SetVisibility(false);
+	}
+	else
+	{
+		QuestIndicator->SetVisibility(true);
+
+		if (!Player) Player = Cast<AAcmeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		
+		for (auto quest : QuestList)
+		{
+			if (Player->IsCompleteQuest(quest))
+			{
+				QuestIndicator->SetStaticMesh(Meshes[EQuestState::E_Complete]);
+				return;
+			}
+		}
+
+		QuestIndicator->SetStaticMesh(Meshes[EQuestState::E_Ready]);
 	}
 }
 

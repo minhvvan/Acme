@@ -179,3 +179,31 @@ void UInventoryComponent::RemoveFromQuick(int idx)
 	QuickSlots[idx].Name = EItemName::E_Empty;
 	QuickSlots[idx].Num = 0;
 }
+
+bool UInventoryComponent::HasItem(FItem item)
+{
+	bool Result = false;
+	int Num = item.Num;
+
+	for (EItemCategory Category : TEnumRange<EItemCategory>())
+	{
+		TArray<FItem> ItemList = Items[Category].Get();
+		for (FItem OwnItem : ItemList)
+		{
+			if (OwnItem.Name == item.Name)
+			{
+				Num -= OwnItem.Num;
+			}
+		}
+	}
+
+	for (FItem OwnItem : QuickSlots)
+	{
+		if (OwnItem.Name == item.Name)
+		{
+			Num -= OwnItem.Num;
+		}
+	}
+
+	return Num <= 0;
+}

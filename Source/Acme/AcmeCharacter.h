@@ -354,6 +354,9 @@ public:
 	UFUNCTION()
 	void SetShowInvenCam(UPrimitiveComponent* newMesh);
 
+	UFUNCTION()
+	bool IsCompleteQuest(struct FQuest quest);
+
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

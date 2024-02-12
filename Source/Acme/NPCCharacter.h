@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Acme/Utils/GlobalEnum.h"
 #include "NPCCharacter.generated.h"
 
 struct FQuest;
@@ -20,6 +21,9 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, Category = Default)
 	class UStaticMeshComponent* QuestIndicator;
+
+	UPROPERTY(VisibleAnywhere, Category = Default)
+	class USphereComponent* OverlapComp;
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,8 +42,19 @@ public:
 	UFUNCTION()
 	void RemoveQuset(int qusetID);
 
+	UFUNCTION()
+	void UpdateQuestIndicator();
 
 protected:
 	UPROPERTY()
 	TArray<FQuest> QuestList;
+
+	UPROPERTY()
+	class UAcmeGameInstance* GameInstance;
+
+	UPROPERTY()
+	class AAcmeCharacter* Player;
+
+	UPROPERTY(EditAnywhere, Category = "Quest")
+	TMap<EQuestState, class UStaticMesh*> Meshes;
 };
