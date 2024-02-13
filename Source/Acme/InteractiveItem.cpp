@@ -27,16 +27,16 @@ void AInteractiveItem::Init(EItemName itemKey, EItemCategory category)
 	ItemInfo.Num = 1;
 	ItemInfo.Category = category;
 
-	SetName(ItemInfo.Name);
+	//SetName(ItemInfo.Name);
 }
 
 void AInteractiveItem::Interact()
 {
-	if (!OverlapedCharacter) return;
-	if (!bCanInteract) return;
+	//if (!OverlapedCharacter) return;
+	//if (!bCanInteract) return;
 
-	if (OverlapedCharacter->AddItem(ItemInfo))
-	{
-		Destroy();
-	}
+	//if (OverlapedCharacter->AddItem(ItemInfo))
+	//{
+	//	Destroy();
+	//}
 }

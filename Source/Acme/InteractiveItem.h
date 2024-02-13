@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "ActorInteractive.h"
-#include "Acme/Utils/GlobalEnum.h"
-#include "Acme/Utils/GlobalStruct.h"
+#include "BaseItem.h"
+#include "InteractableActor.h"
 #include "InteractiveItem.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACME_API AInteractiveItem : public AActorInteractive
+class ACME_API AInteractiveItem : public ABaseItem, public IInteractableActor
 {
 	GENERATED_BODY()
 	

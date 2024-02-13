@@ -155,9 +155,10 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 		FActorSpawnParameters SpawnParam;
 		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
-		DropItem->Init(EItemName::E_Sword, EItemCategory::E_Equipment);
-		DropItem->SetbCanOverlap(true);
+		//TODO: Drop Item
+		//AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+		//DropItem->Init(EItemName::E_Sword, EItemCategory::E_Equipment);
+		//DropItem->SetbCanOverlap(true);
 	}
 }
 
