@@ -28,7 +28,7 @@
 #include "Acme/Widget/AlchemicComposeWidget.h"
 #include "Acme/Component/EquipmentComponent.h"
 #include "Acme/SwordActor.h"
-#include "InteractableActor.h"
+#include "Acme/Interface/InteractableActor.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -227,7 +227,7 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAcmeCharacter::EndSprint);
 	
 		//Attack
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartAttack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartActive);
 		EnhancedInputComponent->BindAction(JumpDashAttack, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartJampDashAttack);
 	
 		//Skill
@@ -329,7 +329,7 @@ void AAcmeCharacter::StopDodgeRoll()
 	IsDodgeRoll = false;
 }
 
-void AAcmeCharacter::StartAttack()
+void AAcmeCharacter::StartActive()
 {
 	if (AnimState == EAnimState::E_Unarmed) return;
 	if (!CanAttack) return;
@@ -400,15 +400,10 @@ void AAcmeCharacter::StartInteract()
 		for (auto HitResult : HitResults)
 		{
 			IInteractableActor* Interactable = Cast<IInteractableActor>(HitResult.GetActor());
-			if (Interactable) Interactable->Interact();
-
-			//TODO: Item Interface로 바꿔야함 상속 구조 변경 필요
-
-			AActorInteractive* Item = Cast<AActorInteractive>(HitResult.GetActor());
-			if (!Item || !Item->GetbCanInteract()) continue;
-
-			Item->Interact();
-			return;
+			{
+				if (Interactable) Interactable->Interact();
+				return;
+			}
 		}
 	}
 

@@ -22,10 +22,18 @@ UAcmeGameInstance::UAcmeGameInstance()
 	}
 
 	{
-		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_ItemClass.DT_ItemClass'"));
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_ItemClass.DT_DropItemClass'"));
 		if (TABLE.Succeeded())
 		{
-			ItemClassTable = TABLE.Object;
+			DropItemClassTable = TABLE.Object;
+		}
+	}
+
+	{
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_EquipItemClass.DT_EquipItemClass'"));
+		if (TABLE.Succeeded())
+		{
+			EquipItemClassTable = TABLE.Object;
 		}
 	}
 
@@ -106,14 +114,29 @@ UTexture2D* UAcmeGameInstance::GetItemImage(EItemName name)
 	return Result;
 }
 
-TSubclassOf<class ADefaultItem> UAcmeGameInstance::GetItemClass(EItemName name)
+TSubclassOf<class ABaseItem> UAcmeGameInstance::GetDropItemClass(EItemName name)
 {
-	TSubclassOf<class ADefaultItem> Result = ItemClassTable->FindRow<FItemClass>(FName(TEXT("E_Empty")), TEXT(""))->Class;
+	TSubclassOf<class ABaseItem> Result = DropItemClassTable->FindRow<FItemClass>(FName(TEXT("E_Empty")), TEXT(""))->Class;
 
 	UEnum* ItemEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("EItemName"), true);
 	FName ItemName = FName(*ItemEnum->GetNameStringByIndex(static_cast<uint8>(name)));
 
-	FItemClass* row = ItemClassTable->FindRow<FItemClass>(ItemName, TEXT(""));
+	FItemClass* row = DropItemClassTable->FindRow<FItemClass>(ItemName, TEXT(""));
+	if (!row) return Result;
+
+	Result = row->Class;
+
+	return Result;
+}
+
+TSubclassOf<class ABaseItem> UAcmeGameInstance::GetEquipItemClass(EItemName name)
+{
+	TSubclassOf<class ABaseItem> Result = EquipItemClassTable->FindRow<FItemClass>(FName(TEXT("E_Empty")), TEXT(""))->Class;
+
+	UEnum* ItemEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("EItemName"), true);
+	FName ItemName = FName(*ItemEnum->GetNameStringByIndex(static_cast<uint8>(name)));
+
+	FItemClass* row = EquipItemClassTable->FindRow<FItemClass>(ItemName, TEXT(""));
 	if (!row) return Result;
 
 	Result = row->Class;

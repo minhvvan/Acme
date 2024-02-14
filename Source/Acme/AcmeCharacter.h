@@ -134,7 +134,7 @@ protected:
 	void StopDodgeRoll();
 
 	UFUNCTION()
-	void StartAttack();	
+	void StartActive();	
 
 	UFUNCTION()
 	void AnimEnd(UAnimMontage* Montage, bool bInterrupted);

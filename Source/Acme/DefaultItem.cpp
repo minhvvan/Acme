@@ -36,12 +36,11 @@ void ADefaultItem::BeginPlay()
 
 void ADefaultItem::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor != nullptr && OtherComp != nullptr && bCanOverlap)
+	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		OverlapedCharacter = Cast<AAcmeCharacter>(OtherActor);
 		if (!OverlapedCharacter) return;
 
-		bCanOverlap = false;
 	}
 }
 
@@ -52,7 +51,6 @@ void ADefaultItem::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 		OverlapedCharacter = Cast<AAcmeCharacter>(OtherActor);
 		if (!OverlapedCharacter) return;
 
-		bCanOverlap = true;
 	}
 }
 
@@ -68,10 +66,6 @@ void ADefaultItem::SetName(EItemName newName)
 	Name = newName;
 }
 
-void ADefaultItem::SetbCanOverlap(bool canOverlap)
-{
-	bCanOverlap = canOverlap;
-}
 
 void ADefaultItem::AttachHand()
 {

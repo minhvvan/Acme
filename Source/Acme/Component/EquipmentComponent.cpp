@@ -5,9 +5,10 @@
 #include "Acme/AcmeCharacter.h"
 #include "Acme/AcmeGameInstance.h"
 #include "Acme/Actor_Weapon.h"
-#include "Acme/DefaultItem.h"
+#include "Acme/Item/BaseItem.h"
 #include "Acme/Utils/Util.h"
-#include "Acme/EquipmentItem.h"
+#include "Acme/Interface/UsableInterface.h"
+#include "Acme/Item/EquipmentItem.h"
 
 // Sets default values for this component's properties
 UEquipmentComponent::UEquipmentComponent()
@@ -46,7 +47,7 @@ void UEquipmentComponent::SetCurrentHand(int idx)
 		Player->SetAnimState(EAnimState::E_Equiped);
 
 		CurrentHand = QuickSlotItems[idx];
-		CurrentHand->AttachHand();
+		CurrentHand->AttachToSocket(EEquipmentPart::E_Hand);
 	}
 	else
 	{
@@ -61,7 +62,7 @@ void UEquipmentComponent::ClearCurrentHand()
 	CurrentHand = nullptr;
 }
 
-ADefaultItem* UEquipmentComponent::GetCurrentHand()
+AEquipmentItem* UEquipmentComponent::GetCurrentHand()
 {
 	return CurrentHand.Get();
 }
@@ -71,8 +72,8 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 	if (!GameInstance) GameInstance = Player->GetGameInstance<UAcmeGameInstance>();
 
-	TSubclassOf<ADefaultItem> ItemClass;
-	if (!(ItemClass = GameInstance->GetItemClass(item.Name))) return;
+	TSubclassOf<ABaseItem> ItemClass;
+	if (!(ItemClass = GameInstance->GetEquipItemClass(item.Name))) return;
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = Player;
@@ -80,12 +81,14 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 	FVector  SpawnLocation = Player->GetActorLocation();
 	SpawnLocation.Z += 100;
 
-	ADefaultItem* CurrentItem = GetWorld()->SpawnActor<ADefaultItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
+	AEquipmentItem* CurrentItem = GetWorld()->SpawnActor<AEquipmentItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
 	if (CurrentItem)
 	{
 		CurrentItem->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		CurrentItem->AttachBack();
-		CurrentItem->SetName(item.Name);
+		CurrentItem->Init(item);
+
+		Player->SetShowInvenCam(CurrentItem->GetMesh());
 	}
 
 	DestroyAttachActor(idx);
@@ -95,7 +98,9 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 void UEquipmentComponent::Active(int idx)
 {
 	if (!QuickSlotItems[idx]) return;
-	QuickSlotItems[idx]->Active();
+
+	IUsableInterface* ActiveItem = Cast<IUsableInterface>(QuickSlotItems[idx]);
+	if (ActiveItem) ActiveItem->Active();
 }
 
 void UEquipmentComponent::DestroyAttachActor(int idx)
@@ -112,7 +117,7 @@ void UEquipmentComponent::Equip(EEquipmentPart part, FItem item)
 	if (!GameInstance) GameInstance = Player->GetGameInstance<UAcmeGameInstance>();
 
 	TSubclassOf<ADefaultItem> ItemClass;
-	if (!(ItemClass = GameInstance->GetItemClass(item.Name))) return;
+	if (!(ItemClass = GameInstance->GetDropItemClass(item.Name))) return;
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = Player;
@@ -143,7 +148,7 @@ void UEquipmentComponent::Equip(EEquipmentPart part, FItem item)
 
 void UEquipmentComponent::UnEquip(EEquipmentPart part)
 {
-	TObjectPtr<ADefaultItem> CurrentPart;
+	TObjectPtr<ABaseItem> CurrentPart;
 	switch (part)
 	{
 	case EEquipmentPart::E_Head:

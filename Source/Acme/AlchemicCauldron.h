@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ActorInteractive.h"
+#include "Acme/Item/BaseItem.h"
+#include "Acme/Interface/InteractableActor.h"
 #include "AlchemicCauldron.generated.h"
 
 class UAlchemicComposeWidget;
 
 UCLASS()
-class ACME_API AAlchemicCauldron : public AActorInteractive
+class ACME_API AAlchemicCauldron : public ABaseItem, public IInteractableActor
 {
 	GENERATED_BODY()
 	
@@ -17,13 +18,28 @@ public:
 	AAlchemicCauldron();
 
 protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, Category = Default)
+	class USphereComponent* OverlapComp;
 
+protected:
 	UPROPERTY(EditAnywhere, Category = Widget, meta = (AllowAccessPrivate = "true"))
 	TSubclassOf<UUserWidget> WidgetClass;
 
 	UPROPERTY(VisibleAnywhere, Category = Widget, meta = (AllowAccessPrivate = "true"))
 	UAlchemicComposeWidget* InteractWidget;
+
+	UPROPERTY(VisibleAnywhere, Category = Default)
+	class AAcmeCharacter* OverlappedCharacter;
+
+protected:
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	virtual void OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	virtual void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 
 public:
 	virtual void Interact();

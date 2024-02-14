@@ -5,7 +5,7 @@
 #include "Acme/Utils/Util.h"
 #include "Acme/Utils/GlobalEnum.h"
 #include "Acme/Actor_Weapon.h"
-#include "Acme/InteractiveItem.h"
+#include "Acme/Item/InteractiveItem.h"
 #include "Acme/AcmeCharacter.h"
 
 // Sets default values for this component's properties
@@ -99,7 +99,7 @@ void UInventoryComponent::Dump(EItemCategory Category, int idx)
 	if (!SpawnClass) return;
 	auto DropItem = GetWorld()->SpawnActor<AInteractiveItem>(SpawnClass, SpawnLocation, rotator, SpawnParams);
 	DropItem->GetMesh()->SetSimulatePhysics(true);
-	DropItem->Init(Item.Name, Item.Category);
+	DropItem->Init(Item);
 
 	SetEmpty(Item);
 }
@@ -120,6 +120,8 @@ bool UInventoryComponent::AddItem(FItem newItem)
 	if (newItem.Category == EItemCategory::E_End || newItem.Name == EItemName::E_Empty) return false;
 	TArray<FItem>& ItemList = Items[newItem.Category].Get();
 
+
+	UUtil::DebugPrint("inven");
 	//find
 	bool bCanAdd = false;
 	for (auto& Item : ItemList)

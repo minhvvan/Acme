@@ -4,13 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Actor_Weapon.h"
+#include "Acme/Interface/UsableInterface.h"
+#include "Acme/Item/EquipmentItem.h"
 #include "SwordActor.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACME_API ASwordActor : public AActor_Weapon
+class ACME_API ASwordActor : public AEquipmentItem, public IUsableInterface
 {
 	GENERATED_BODY()
 
@@ -23,9 +25,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	FName WeaponEndName;
-
-	UPROPERTY()
-	class AAcmeCharacter* Player;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
 	bool IsCombo;
@@ -45,12 +44,13 @@ protected:
 	EElement Element;
 
 protected:
-	virtual void Active() override;
-
 	UFUNCTION()
 	void FlushQueue();
 
 public:
+	UFUNCTION()
+	virtual void Active() override;
+
 	UFUNCTION()
 	FVector GetWeponTopPos();
 

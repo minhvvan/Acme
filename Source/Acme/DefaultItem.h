@@ -40,8 +40,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Default)
 	class AAcmeCharacter* OverlapedCharacter;
 
-	UPROPERTY(VisibleAnywhere, Category = Default)
-	bool bCanOverlap;
 
 public:	
 	// Called every frame
@@ -49,9 +47,6 @@ public:
 
 	UFUNCTION()
 	void SetName(EItemName newName);
-
-	UFUNCTION()
-	void SetbCanOverlap(bool canOverlap);
 
 	UFUNCTION()
 	void AttachHand();

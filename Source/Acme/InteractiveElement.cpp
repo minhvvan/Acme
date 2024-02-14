@@ -19,7 +19,6 @@ void AInteractiveElement::SetElementType(EElement element)
 void AInteractiveElement::BeginPlay()
 {
 	Super::BeginPlay();
-	SetbCanOverlap(true);
 }
 
 void AInteractiveElement::Interact()

@@ -34,9 +34,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class AAcmeCharacter> TargetCharacter;
 
-	UPROPERTY(EditAnywhere, Category = Item, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AInteractiveItem> ItemClass;
-
 	UPROPERTY()
 	class AMonsterAIController* AIController;
 
@@ -45,6 +42,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = SFX, meta = (AllowPrivateAccess = "true"))
 	TMap<EMonsterState, class USoundBase*> SFXList;
+
+	UPROPERTY()
+	class UAcmeGameInstance* GameInstance;
 
 protected:
 	// Called when the game starts or when spawned

@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "Acme/Utils/GlobalEnum.h"
 #include "Acme/Utils/GlobalStruct.h"
+#include "Acme/Item/BaseItem.h"
 #include "AcmeGameInstance.generated.h"
 
 USTRUCT()
@@ -71,7 +72,7 @@ struct FItemClass : public FTableRowBase
 	EItemName Key;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ADefaultItem> Class;
+	TSubclassOf<class ABaseItem> Class;
 };
 
 USTRUCT()
@@ -127,7 +128,10 @@ public:
 	UTexture2D* GetItemImage(EItemName name);
 
 	UFUNCTION()
-	TSubclassOf<class ADefaultItem> GetItemClass(EItemName name);
+	TSubclassOf<class ABaseItem> GetDropItemClass(EItemName name);
+
+	UFUNCTION()
+	TSubclassOf<class ABaseItem> GetEquipItemClass(EItemName name);
 
 	UFUNCTION()
 	FItemString GetItemString(EItemName name);
@@ -146,7 +150,10 @@ protected:
 	class UDataTable* ItemImageTable;
 
 	UPROPERTY()
-	class UDataTable* ItemClassTable;
+	class UDataTable* DropItemClassTable;
+
+	UPROPERTY()
+	class UDataTable* EquipItemClassTable;
 
 	UPROPERTY()
 	class UDataTable* ItemStringTable;

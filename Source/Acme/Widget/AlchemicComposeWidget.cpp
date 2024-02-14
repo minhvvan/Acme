@@ -148,7 +148,7 @@ void UAlchemicComposeWidget::OnComposeClicked()
 		if (!OwnerCharacter->AddItem(result))
 		{
 			if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
-			auto ItemClass = GameInstance->GetItemClass(result.Name);
+			auto ItemClass = GameInstance->GetDropItemClass(result.Name);
 
 			FActorSpawnParameters SpawnParams;
 			//SpawnParams.Owner = Player;

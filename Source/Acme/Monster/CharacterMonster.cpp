@@ -9,11 +9,12 @@
 #include "Acme/Widget/Widget_HPBar.h"
 #include "Acme/Animation/AI_Monster.h"
 #include "Acme/AcmeCharacter.h"
-#include "Acme/InteractiveItem.h"
+#include "Acme/Item/InteractiveItem.h"
 #include "Acme/Utils/Util.h"
 #include "MonsterAIController.h"
 #include "Debug/DebugDrawComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Acme/AcmeGameInstance.h"
 #include "Components/AudioComponent.h"
 
 // Sets default values
@@ -146,19 +147,26 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 		Destroy();
 		OnDied.Broadcast();
 
-		//TODO: fx,Item Drop
-		if (ItemClass == nullptr) return;
-
 		FVector SpawnPos = GetActorLocation();
 		SpawnPos.Z += 10;
 
 		FActorSpawnParameters SpawnParam;
 		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
+		if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+
+		TSubclassOf<ABaseItem> ItemClass;
+		if (!(ItemClass = GameInstance->GetDropItemClass(EItemName::E_Sword))) return;
+
 		//TODO: Drop Item
-		//AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
-		//DropItem->Init(EItemName::E_Sword, EItemCategory::E_Equipment);
-		//DropItem->SetbCanOverlap(true);
+		FItem temp;
+		temp.bCanAddQuick = true;
+		temp.Category = EItemCategory::E_Equipment;
+		temp.Name = EItemName::E_Sword;
+		temp.Num = 1;
+
+		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+		DropItem->Init(temp);
 	}
 }
 

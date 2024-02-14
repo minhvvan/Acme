@@ -7,7 +7,7 @@
 #include "Acme/Utils/GlobalStruct.h"
 #include "EquipmentComponent.generated.h"
 
-class ADefaultItem;
+class AEquipmentItem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ACME_API UEquipmentComponent : public UActorComponent
@@ -28,19 +28,16 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<ADefaultItem> CurrentHand;
+	TObjectPtr<AEquipmentItem> CurrentHand;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<ADefaultItem> EquipmentHead;
+	TObjectPtr<AEquipmentItem> EquipmentHead;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<ADefaultItem> EquipmentBody;
+	TObjectPtr<AEquipmentItem> EquipmentBody;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<ADefaultItem> EquipmentShoe;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<ADefaultItem> EquipmentAcc;
+	TObjectPtr<AEquipmentItem> EquipmentAcc;
 
 
 	UPROPERTY()
@@ -57,7 +54,7 @@ public:
 	void ClearCurrentHand();
 
 	UFUNCTION()
-	ADefaultItem* GetCurrentHand();
+	AEquipmentItem* GetCurrentHand();
 
 	UFUNCTION()
 	void SpawnItem(FItem item, int idx);
@@ -76,5 +73,5 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TArray<ADefaultItem*> QuickSlotItems;
+	TArray<class AEquipmentItem*> QuickSlotItems;
 };
