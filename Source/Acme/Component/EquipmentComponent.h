@@ -8,6 +8,7 @@
 #include "EquipmentComponent.generated.h"
 
 class AEquipmentItem;
+class AActiveItem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ACME_API UEquipmentComponent : public UActorComponent
@@ -27,8 +28,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
+	//Usable Actor로 바꿔야 할 듯
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<AEquipmentItem> CurrentHand;
+	TObjectPtr<AActiveItem> CurrentHand;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<AEquipmentItem> EquipmentHead;
@@ -54,7 +56,7 @@ public:
 	void ClearCurrentHand();
 
 	UFUNCTION()
-	AEquipmentItem* GetCurrentHand();
+	AActiveItem* GetCurrentHand();
 
 	UFUNCTION()
 	void SpawnItem(FItem item, int idx);
@@ -73,5 +75,5 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TArray<class AEquipmentItem*> QuickSlotItems;
+	TArray<class AActiveItem*> QuickSlotItems;
 };

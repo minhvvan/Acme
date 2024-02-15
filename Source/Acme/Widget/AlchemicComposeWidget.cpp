@@ -15,7 +15,7 @@
 #include "Acme/Utils/Util.h"
 #include "Acme/Widget/AlchemySlotWidget.h"
 #include "Acme/AcmeGameInstance.h"
-#include "Acme/DefaultItem.h"
+#include "Acme/Item/InteractiveItem.h"
 
 void UAlchemicComposeWidget::NativeConstruct()
 {
@@ -147,16 +147,13 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	{
 		if (!OwnerCharacter->AddItem(result))
 		{
-			if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
-			auto ItemClass = GameInstance->GetDropItemClass(result.Name);
-
 			FActorSpawnParameters SpawnParams;
 			//SpawnParams.Owner = Player;
 			FRotator rotator;
 			FVector  SpawnLocation = OwnerCharacter->GetActorLocation();
 			SpawnLocation.Z += 10;
 
-			ADefaultItem* CurrentItem = GetWorld()->SpawnActor<ADefaultItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
+			AInteractiveItem* ResultItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, SpawnLocation, rotator, SpawnParams);
 		}
 	}
 	

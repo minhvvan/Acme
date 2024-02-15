@@ -127,6 +127,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsAttacking;
 
+	UPROPERTY(EditAnywhere, Category = Item, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AInteractiveItem> DropItemClass;
+
 	FTimerHandle CombatTimer;
 	FTimerHandle ElementTimer;
 

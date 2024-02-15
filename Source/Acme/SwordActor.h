@@ -4,15 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Actor_Weapon.h"
-#include "Acme/Interface/UsableInterface.h"
-#include "Acme/Item/EquipmentItem.h"
+#include "Acme/Item/ActiveItem.h"
 #include "SwordActor.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACME_API ASwordActor : public AEquipmentItem, public IUsableInterface
+class ACME_API ASwordActor : public AActiveItem
 {
 	GENERATED_BODY()
 
@@ -48,7 +47,6 @@ protected:
 	void FlushQueue();
 
 public:
-	UFUNCTION()
 	virtual void Active() override;
 
 	UFUNCTION()

@@ -148,4 +148,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	int Amount;
+
+	UPROPERTY(EditAnywhere, Category = Item, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AInteractiveItem> DropItemClass;
 };

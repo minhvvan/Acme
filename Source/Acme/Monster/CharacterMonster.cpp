@@ -16,6 +16,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Acme/AcmeGameInstance.h"
 #include "Components/AudioComponent.h"
+#include "Acme/Item/InteractiveItem.h"
 
 // Sets default values
 ACharacterMonster::ACharacterMonster()
@@ -153,19 +154,14 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 		FActorSpawnParameters SpawnParam;
 		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-		if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
-
-		TSubclassOf<ABaseItem> ItemClass;
-		if (!(ItemClass = GameInstance->GetDropItemClass(EItemName::E_Sword))) return;
-
-		//TODO: Drop Item
+		//TODO: Drop Item List 
 		FItem temp;
 		temp.bCanAddQuick = true;
 		temp.Category = EItemCategory::E_Equipment;
 		temp.Name = EItemName::E_Sword;
 		temp.Num = 1;
 
-		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(ItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
 		DropItem->Init(temp);
 	}
 }

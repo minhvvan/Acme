@@ -9,6 +9,7 @@
 #include "Acme/Utils/Util.h"
 #include "Acme/Interface/UsableInterface.h"
 #include "Acme/Item/EquipmentItem.h"
+#include "Acme/Item/ActiveItem.h"
 
 // Sets default values for this component's properties
 UEquipmentComponent::UEquipmentComponent()
@@ -62,7 +63,7 @@ void UEquipmentComponent::ClearCurrentHand()
 	CurrentHand = nullptr;
 }
 
-AEquipmentItem* UEquipmentComponent::GetCurrentHand()
+AActiveItem* UEquipmentComponent::GetCurrentHand()
 {
 	return CurrentHand.Get();
 }
@@ -72,7 +73,7 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 	if (!GameInstance) GameInstance = Player->GetGameInstance<UAcmeGameInstance>();
 
-	TSubclassOf<ABaseItem> ItemClass;
+	TSubclassOf<AActiveItem> ItemClass;
 	if (!(ItemClass = GameInstance->GetEquipItemClass(item.Name))) return;
 
 	FActorSpawnParameters SpawnParams;
@@ -81,7 +82,7 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 	FVector  SpawnLocation = Player->GetActorLocation();
 	SpawnLocation.Z += 100;
 
-	AEquipmentItem* CurrentItem = GetWorld()->SpawnActor<AEquipmentItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
+	AActiveItem* CurrentItem = GetWorld()->SpawnActor<AActiveItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
 	if (CurrentItem)
 	{
 		CurrentItem->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
@@ -117,7 +118,7 @@ void UEquipmentComponent::Equip(EEquipmentPart part, FItem item)
 	if (!GameInstance) GameInstance = Player->GetGameInstance<UAcmeGameInstance>();
 
 	TSubclassOf<ADefaultItem> ItemClass;
-	if (!(ItemClass = GameInstance->GetDropItemClass(item.Name))) return;
+	if (!(ItemClass = GameInstance->GetEquipItemClass(item.Name))) return;
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = Player;

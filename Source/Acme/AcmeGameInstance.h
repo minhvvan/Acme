@@ -108,6 +108,18 @@ struct FQuest : public FTableRowBase
 	TArray<FItem> Rewards;
 };
 
+USTRUCT()
+struct FItemMesh : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EItemName Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* Mesh;
+};
+
 
 UCLASS()
 class ACME_API UAcmeGameInstance : public UGameInstance
@@ -128,9 +140,6 @@ public:
 	UTexture2D* GetItemImage(EItemName name);
 
 	UFUNCTION()
-	TSubclassOf<class ABaseItem> GetDropItemClass(EItemName name);
-
-	UFUNCTION()
 	TSubclassOf<class ABaseItem> GetEquipItemClass(EItemName name);
 
 	UFUNCTION()
@@ -148,9 +157,6 @@ protected:
 
 	UPROPERTY()
 	class UDataTable* ItemImageTable;
-
-	UPROPERTY()
-	class UDataTable* DropItemClassTable;
 
 	UPROPERTY()
 	class UDataTable* EquipItemClassTable;
