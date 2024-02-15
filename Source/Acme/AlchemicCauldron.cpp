@@ -3,6 +3,7 @@
 
 #include "AlchemicCauldron.h"
 #include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 #include "AcmeCharacter.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Widget/AlchemicComposeWidget.h"
@@ -33,6 +34,7 @@ void AAlchemicCauldron::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AAct
 	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		OverlappedCharacter = Cast<AAcmeCharacter>(OtherActor);
+		SetVisibleIndicator(true);
 	}
 }
 
@@ -43,8 +45,16 @@ void AAlchemicCauldron::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, A
 		if (Cast<AAcmeCharacter>(OtherActor))
 		{
 			OverlappedCharacter = nullptr;
+			SetVisibleIndicator(false);
 		}
 	}
+}
+
+void AAlchemicCauldron::SetVisibleIndicator(bool bVisible)
+{
+	if (!IsValid(Indicator)) return;
+
+	Indicator->SetVisibility(bVisible);
 }
 
 void AAlchemicCauldron::Interact()

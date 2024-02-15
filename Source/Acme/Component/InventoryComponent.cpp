@@ -120,8 +120,6 @@ bool UInventoryComponent::AddItem(FItem newItem)
 	if (newItem.Category == EItemCategory::E_End || newItem.Name == EItemName::E_Empty) return false;
 	TArray<FItem>& ItemList = Items[newItem.Category].Get();
 
-
-	UUtil::DebugPrint("inven");
 	//find
 	bool bCanAdd = false;
 	for (auto& Item : ItemList)

@@ -4,6 +4,7 @@
 #include "InteractiveItem.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Acme/AcmeGameInstance.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/Utils/Util.h"
 
@@ -25,8 +26,8 @@ void AInteractiveItem::Init(FItem newItem)
 {
 	//Info Setting
 	//TODO: GI -> GetMesh
-
-	//Mesh->SetStaticMesh(Meshes[itemKey]);
+	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+	Mesh->SetStaticMesh(GameInstance->GetItemMesh(newItem.Name));
 
 	ItemInfo.Name = newItem.Name;
 	ItemInfo.Num = 1;

@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Default)
 	class AAcmeCharacter* OverlappedCharacter;
 
+	UPROPERTY(EditAnywhere, Category = Default)
+	class UWidgetComponent* Indicator;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -40,6 +43,8 @@ protected:
 	UFUNCTION()
 	virtual void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UFUNCTION()
+	void SetVisibleIndicator(bool bVisible);
 
 public:
 	virtual void Interact();

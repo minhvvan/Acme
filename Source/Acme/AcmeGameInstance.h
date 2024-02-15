@@ -143,7 +143,10 @@ public:
 	TSubclassOf<class ABaseItem> GetEquipItemClass(EItemName name);
 
 	UFUNCTION()
-	FItemString GetItemString(EItemName name);
+	FItemString GetItemString(EItemName name);	
+	
+	UFUNCTION()
+	UStaticMesh* GetItemMesh(EItemName name);
 
 	UFUNCTION()
 	FSocketString GetSocketName(ESocketName name);
@@ -160,6 +163,9 @@ protected:
 
 	UPROPERTY()
 	class UDataTable* EquipItemClassTable;
+
+	UPROPERTY()
+	class UDataTable* ItemMeshTable;
 
 	UPROPERTY()
 	class UDataTable* ItemStringTable;

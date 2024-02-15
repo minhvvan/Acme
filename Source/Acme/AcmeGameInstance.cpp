@@ -30,6 +30,14 @@ UAcmeGameInstance::UAcmeGameInstance()
 	}
 
 	{
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_ItemMesh.DT_ItemMesh'"));
+		if (TABLE.Succeeded())
+		{
+			ItemMeshTable = TABLE.Object;
+		}
+	}	
+	
+	{
 		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_ItemString.DT_ItemString'"));
 		if (TABLE.Succeeded())
 		{
@@ -134,6 +142,20 @@ FItemString UAcmeGameInstance::GetItemString(EItemName name)
 	Result = *row;
 
 	return Result;
+}
+
+UStaticMesh* UAcmeGameInstance::GetItemMesh(EItemName name)
+{
+	FItemMesh Result = *ItemMeshTable->FindRow<FItemMesh>(FName(TEXT("E_Empty")), TEXT(""));
+
+	UEnum* ItemEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("EItemName"), true);
+	FName ItemName = FName(*ItemEnum->GetNameStringByIndex(static_cast<uint8>(name)));
+
+	FItemMesh* row = ItemMeshTable->FindRow<FItemMesh>(ItemName, TEXT(""));
+	if (!row) return Result.Mesh;
+
+	Result = *row;
+	return Result.Mesh;
 }
 
 FSocketString UAcmeGameInstance::GetSocketName(ESocketName name)

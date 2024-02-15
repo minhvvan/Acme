@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "InteractiveElement.h"
+#include "Acme/Item/InteractiveItem.h"
 #include "Acme/Utils/GlobalConst.h"
 #include "Acme/Utils/Util.h"
 
@@ -32,31 +33,34 @@ void AElementSpawner::Respawn()
 		FActorSpawnParameters SpawnParam;
 		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-		AInteractiveElement* Element = GetWorld()->SpawnActor<AInteractiveElement>(ElementClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
-		Element->SetElementType(ElementType);
+		AInteractiveItem* Element = GetWorld()->SpawnActor<AInteractiveItem>(ElementClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
 
+		FItem item;
+		item.Num = 1;
+		item.Category = EItemCategory::E_Element;
 		switch (ElementType)
 		{
 		case EElement::E_Fire:
-			Element->SetName(EItemName::E_Fire);
+			item.Name = EItemName::E_Fire;
 			break;
 		case EElement::E_Water:
-			Element->SetName(EItemName::E_Water);
+			item.Name = EItemName::E_Water;
 			break;
 		case EElement::E_Earth:
-			Element->SetName(EItemName::E_Earth);
+			item.Name = EItemName::E_Earth;
 			break;
 		case EElement::E_Air:
-			Element->SetName(EItemName::E_Air);
+			item.Name = EItemName::E_Air;
 			break;
 		case EElement::E_Ice:
-			Element->SetName(EItemName::E_Ice);
+			item.Name = EItemName::E_Ice;
 			break;
 		case EElement::E_Thunder:
-			Element->SetName(EItemName::E_Thunder);
+			item.Name = EItemName::E_Thunder;
 			break;
 		}
 
+		Element->Init(item);
 		Elements.Add(Element);
 	}
 }

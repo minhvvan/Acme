@@ -53,6 +53,9 @@ protected:
 	class AAcmeCharacter* OverlappedCharacter;
 
 	UPROPERTY(VisibleAnywhere, Category = Default)
+	class UAcmeGameInstance* GameInstance;
+
+	UPROPERTY(VisibleAnywhere, Category = Default)
 	bool bCanOverlap;
 
 public:

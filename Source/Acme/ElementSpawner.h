@@ -7,7 +7,7 @@
 #include "Acme/Utils/GlobalEnum.h"
 #include "ElementSpawner.generated.h"
 
-class AInteractiveElement;
+class AInteractiveItem;
 
 UCLASS()
 class ACME_API AElementSpawner : public ADefaultSpawner
@@ -15,10 +15,10 @@ class ACME_API AElementSpawner : public ADefaultSpawner
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AInteractiveElement> ElementClass;
+	TSubclassOf<AInteractiveItem> ElementClass;
 
 	UPROPERTY(VisibleAnywhere, Category = Element)
-	TArray<AInteractiveElement*> Elements;
+	TArray<AInteractiveItem*> Elements;
 
 public:
 	// Sets default values for this actor's properties

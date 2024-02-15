@@ -401,16 +401,14 @@ void AAcmeCharacter::StartInteract()
 		{
 			IInteractableActor* Interactable = Cast<IInteractableActor>(HitResult.GetActor());
 			{
-				if (Interactable) Interactable->Interact();
-				return;
+				if (Interactable)
+				{
+					Interactable->Interact();
+					return;
+				}
 			}
 		}
 	}
-
-	//FVector CenterOfSphere = ((EndLocation - StartLocation) / 2) + StartLocation;
-
-	/*Draw the sphere in the viewport*/
-	//DrawDebugSphere(GetWorld(), CenterOfSphere, CollisionShape.GetSphereRadius(), 10, FColor::Green, true);
 }
 
 void AAcmeCharacter::StartSwordAttack()
