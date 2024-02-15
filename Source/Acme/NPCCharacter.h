@@ -71,4 +71,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Quest")
 	TMap<EQuestState, class UStaticMesh*> Meshes;
+
+	UPROPERTY()
+	FRotator TargetRot;
 };

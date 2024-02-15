@@ -47,8 +47,8 @@ void ANPCCharacter::BeginPlay()
 
 void ANPCCharacter::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AAcmeCharacter* PlayerCharacter = Cast<AAcmeCharacter>(OtherActor);
-	if (OtherActor != nullptr && OtherComp != nullptr && PlayerCharacter)
+	Player = Cast<AAcmeCharacter>(OtherActor);
+	if (OtherActor != nullptr && OtherComp != nullptr && Player)
 	{
 		InteractWidget->SetVisibility(true);
 	}
@@ -59,6 +59,7 @@ void ANPCCharacter::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		InteractWidget->SetVisibility(false);
+		Player = nullptr;
 	}
 }
 
@@ -68,6 +69,12 @@ void ANPCCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FRotator CurrentRot = GetActorRotation();
+	if (TargetRot != CurrentRot)
+	{
+		FRotator Rot = FMath::Lerp(CurrentRot, TargetRot, .1);
+		SetActorRotation(Rot);
+	}
 }
 
 // Called to bind functionality to input
@@ -126,6 +133,13 @@ void ANPCCharacter::UpdateQuestIndicator()
 
 void ANPCCharacter::Interact()
 {
-	UUtil::DebugPrint("Interact");
+	//TODO: Player쪽으로 방향 돌리고
+	//WIdget 띄우기
+
+	if (!Player) return;
+	FVector PlayerLoc = Player->GetActorLocation();
+	TargetRot = (PlayerLoc - GetActorLocation()).Rotation();
+
+	Player->ShowDialogWidget();
 }
 

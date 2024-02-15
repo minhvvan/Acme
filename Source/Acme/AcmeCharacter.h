@@ -259,9 +259,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UAlchemicComposeWidget* InteractWidget;
 
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<class UDialogueWidget> DialogueWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "Widget")
+	UDialogueWidget* DialogueWidget;
+
 protected:
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
-	//TWeakObjectPtr<class AActorInteractive> OverlapActor;
+
+
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -356,6 +362,9 @@ public:
 
 	UFUNCTION()
 	bool IsCompleteQuest(struct FQuest quest);
+
+	UFUNCTION()
+	void ShowDialogWidget();
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

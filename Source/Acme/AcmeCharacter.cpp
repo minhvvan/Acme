@@ -23,6 +23,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Acme/Widget/InventoryWidget.h"
 #include "Acme/Widget/AlchemicComposeWidget.h"
+#include "Acme/Widget/DialogueWidget.h"
 #include "Acme/Component/EquipmentComponent.h"
 #include "Acme/SwordActor.h"
 #include "Acme/Interface/InteractableActor.h"
@@ -501,6 +502,19 @@ bool AAcmeCharacter::IsCompleteQuest(FQuest quest)
 	}
 
 	return Result;
+}
+
+void AAcmeCharacter::ShowDialogWidget()
+{
+	if(!DialogueWidget) DialogueWidget = Cast<UDialogueWidget>(CreateWidget(GetWorld(), DialogueWidgetClass));
+
+	DialogueWidget->AddToViewport();
+
+	auto PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeUIOnly());
+	PC->bShowMouseCursor = true;
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)
