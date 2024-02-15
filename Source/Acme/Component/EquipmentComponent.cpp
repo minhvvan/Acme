@@ -4,7 +4,6 @@
 #include "Acme/Component/EquipmentComponent.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/AcmeGameInstance.h"
-#include "Acme/Actor_Weapon.h"
 #include "Acme/Item/BaseItem.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Interface/UsableInterface.h"
@@ -117,7 +116,7 @@ void UEquipmentComponent::Equip(EEquipmentPart part, FItem item)
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 	if (!GameInstance) GameInstance = Player->GetGameInstance<UAcmeGameInstance>();
 
-	TSubclassOf<ADefaultItem> ItemClass;
+	TSubclassOf<ABaseItem> ItemClass;
 	if (!(ItemClass = GameInstance->GetEquipItemClass(item.Name))) return;
 
 	FActorSpawnParameters SpawnParams;

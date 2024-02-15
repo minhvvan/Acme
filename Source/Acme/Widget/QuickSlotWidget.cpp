@@ -11,7 +11,6 @@
 #include "Acme/AcmeCharacter.h"
 #include "Acme/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
-#include "Acme/DefaultItem.h"
 
 void UQuickSlotWidget::SetItemInfo(FItem info)
 {

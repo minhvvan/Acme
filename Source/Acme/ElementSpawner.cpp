@@ -4,7 +4,6 @@
 #include "ElementSpawner.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "InteractiveElement.h"
 #include "Acme/Item/InteractiveItem.h"
 #include "Acme/Utils/GlobalConst.h"
 #include "Acme/Utils/Util.h"

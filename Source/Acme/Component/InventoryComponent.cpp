@@ -4,7 +4,6 @@
 #include "Acme/Component/InventoryComponent.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Utils/GlobalEnum.h"
-#include "Acme/Actor_Weapon.h"
 #include "Acme/Item/InteractiveItem.h"
 #include "Acme/AcmeCharacter.h"
 

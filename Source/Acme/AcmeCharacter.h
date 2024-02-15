@@ -260,8 +260,8 @@ protected:
 	class UAlchemicComposeWidget* InteractWidget;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
-	TWeakObjectPtr<class AActorInteractive> OverlapActor;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack, meta = (AllowPrivateAccess = "true"))
+	//TWeakObjectPtr<class AActorInteractive> OverlapActor;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -337,7 +337,7 @@ public:
 	void CloseInteractWidget();
 
 	UFUNCTION()
-	void SetInteractWidget(UAlchemicComposeWidget* widget);
+	void SetInteractWidget(class UAlchemicComposeWidget* widget);
 
 	UFUNCTION()
 	void ConsumeStamina(int amount);

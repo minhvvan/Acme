@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Actor_Weapon.h"
 #include "Acme/Item/ActiveItem.h"
 #include "SwordActor.generated.h"
 

@@ -18,10 +18,7 @@
 #include "Acme/Animation/AI_Main.h"
 #include "Acme/Widget/Widget_Hud.h"
 #include "Acme/Utils/Util.h"
-#include "ActorInteractive.h"
-#include "Actor_Projectile.h"
 #include "Sound/SoundBase.h"
-#include "Actor_Weapon.h"
 #include "Acme/Monster/CharacterMonster.h"
 #include "Kismet/GameplayStatics.h"
 #include "Acme/Widget/InventoryWidget.h"
@@ -451,8 +448,8 @@ void AAcmeCharacter::EndSprint()
 
 void AAcmeCharacter::Interact()
 {
-	if (!OverlapActor.Get()) return;
-	OverlapActor->Interact();
+	//if (!OverlapActor.Get()) return;
+	//OverlapActor->Interact();
 }
 
 void AAcmeCharacter::ConsumeStamina(int amount)
