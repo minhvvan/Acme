@@ -99,7 +99,7 @@ struct FQuest : public FTableRowBase
 	FString Desc;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EQuestState State;
+	class ANPCCharacter* Client;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FItem> Request;
@@ -152,7 +152,7 @@ public:
 	FSocketString GetSocketName(ESocketName name);
 
 	UFUNCTION()
-	TArray<FQuest> GetQuest();
+	FQuest GetQuest();
 
 protected:
 	UPROPERTY()

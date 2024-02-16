@@ -9,7 +9,7 @@
 #include "Acme/Utils/GlobalContainer.h"
 #include "AcmeCharacter.generated.h"
 
-
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnAcceptQuest, int);
 
 UCLASS(config=Game)
 class AAcmeCharacter : public ACharacter
@@ -103,6 +103,9 @@ class AAcmeCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Equipment, meta = (AllowPrivateAccess = "true"))
 	class UEquipmentComponent* EquipmentComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Quest, meta = (AllowPrivateAccess = "true"))
+	class UQuestComponent* QuestComponent;
 
 public:
 	AAcmeCharacter();
@@ -265,10 +268,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Widget")
 	UDialogueWidget* DialogueWidget;
 
-protected:
-
-
-
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetIsAttacking(bool flag) { IsAttacking = flag; };
@@ -287,9 +286,6 @@ public:
 
 	UFUNCTION()
 	void CloseInventory();
-	
-	UFUNCTION()
-	void AddElement(EElement element);
 	
 	UFUNCTION()
 	FItemList& GetItems(EItemCategory category);
@@ -364,7 +360,13 @@ public:
 	bool IsCompleteQuest(struct FQuest quest);
 
 	UFUNCTION()
-	void ShowDialogWidget();
+	void ShowDialogWidget(FQuest quest);
+
+	UFUNCTION()
+	void AddQuest(FQuest quest);
+
+public:
+	FOnAcceptQuest OnAcceptQuest;
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

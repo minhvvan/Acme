@@ -173,14 +173,14 @@ FSocketString UAcmeGameInstance::GetSocketName(ESocketName name)
 	return Result;
 }
 
-TArray<FQuest> UAcmeGameInstance::GetQuest()
+FQuest UAcmeGameInstance::GetQuest()
 {
-	TArray<FQuest> Result;
+	FQuest Result;
 
 	FName QuestID = FName("0");
 	FQuest* row = QuestTable->FindRow<FQuest>(QuestID, TEXT(""));
 
-	Result.Add(*row);
+	Result = *row;
 
 	return Result;
 }

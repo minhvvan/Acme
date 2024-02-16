@@ -52,16 +52,25 @@ public:
 	void AddQuset(FQuest quest);
 
 	UFUNCTION()
-	void RemoveQuset(int qusetID);
+	void RemoveQuset();
 
 	UFUNCTION()
 	void UpdateQuestIndicator();
 
+	UFUNCTION()
+	void CompleteQuest();
+
 	virtual void Interact() override;
+
+	UFUNCTION()
+	void OnAcceptQuest(int questID);
 
 protected:
 	UPROPERTY()
-	TArray<FQuest> QuestList;
+	FQuest Quest;
+
+	UPROPERTY()
+	TArray<FQuest> OngoingQuests;
 
 	UPROPERTY()
 	class UAcmeGameInstance* GameInstance;
@@ -74,4 +83,7 @@ protected:
 
 	UPROPERTY()
 	FRotator TargetRot;
+
+	UPROPERTY()
+	bool bValidQuest;
 };

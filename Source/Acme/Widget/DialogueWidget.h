@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Acme/AcmeGameInstance.h"
 #include "DialogueWidget.generated.h"
 
 /**
@@ -55,4 +56,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Transient, meta = (BindWidgetAnim))
 	UWidgetAnimation* AnimHoverReject;
 
+	UPROPERTY()
+	class AAcmeCharacter* Player;
+
+	UPROPERTY()
+	FQuest Quest;
+	
+public:
+	UFUNCTION()
+	void SetQuestInfo(FQuest newQuest);
 };

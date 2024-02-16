@@ -25,6 +25,7 @@
 #include "Acme/Widget/AlchemicComposeWidget.h"
 #include "Acme/Widget/DialogueWidget.h"
 #include "Acme/Component/EquipmentComponent.h"
+#include "Acme/Component/QuestComponent.h"
 #include "Acme/SwordActor.h"
 #include "Acme/Interface/InteractableActor.h"
 
@@ -74,6 +75,7 @@ AAcmeCharacter::AAcmeCharacter()
 	StatCompoenent = CreateDefaultSubobject<UStatComponent>(TEXT("StatCompoenent"));
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryCompoenent"));
 	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentCompoenent"));
+	QuestComponent = CreateDefaultSubobject<UQuestComponent>(TEXT("QuestComponent"));
 
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -504,17 +506,26 @@ bool AAcmeCharacter::IsCompleteQuest(FQuest quest)
 	return Result;
 }
 
-void AAcmeCharacter::ShowDialogWidget()
+void AAcmeCharacter::ShowDialogWidget(FQuest quest)
 {
 	if(!DialogueWidget) DialogueWidget = Cast<UDialogueWidget>(CreateWidget(GetWorld(), DialogueWidgetClass));
-
 	DialogueWidget->AddToViewport();
+
+	DialogueWidget->SetQuestInfo(quest);
 
 	auto PC = Cast<APlayerController>(GetController());
 	if (!PC) return;
 
 	PC->SetInputMode(FInputModeUIOnly());
 	PC->bShowMouseCursor = true;
+}
+
+void AAcmeCharacter::AddQuest(FQuest quest)
+{
+	if (!QuestComponent) return;
+	QuestComponent->AddQuest(quest);
+
+	OnAcceptQuest.Broadcast(quest.QusetID);
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)
@@ -628,40 +639,6 @@ void AAcmeCharacter::CloseInventory()
 	IsOpenInven = false;
 }
 
-void AAcmeCharacter::AddElement(EElement element)
-{
-	if (!InventoryComponent) return;
-
-	FItem Item;
-	Item.Category = EItemCategory::E_Element;
-	//Item.Equiped = false;
-	Item.Num = 1;
-
-	switch (element)
-	{
-	case EElement::E_Fire:
-		Item.Name = EItemName::E_Fire;
-		break;
-	case EElement::E_Water:
-		Item.Name = EItemName::E_Water;
-		break;
-	case EElement::E_Earth:
-		Item.Name = EItemName::E_Earth;
-		break;
-	case EElement::E_Air:
-		Item.Name = EItemName::E_Air;
-		break;
-	case EElement::E_Ice:
-		Item.Name = EItemName::E_Ice;
-		break;
-	case EElement::E_Thunder:
-		Item.Name = EItemName::E_Thunder;
-		break;
-	}
-
-	InventoryComponent->AddItem(Item);
-}
-
 FItemList& AAcmeCharacter::GetItems(EItemCategory category)
 {
 	FItemList temp = FItemList();
@@ -680,9 +657,11 @@ FItem AAcmeCharacter::GetItem(EItemCategory category, int idx)
 bool AAcmeCharacter::AddItem(FItem item)
 {
 	if (!InventoryComponent) return false;
+	if (!QuestComponent) return false;
 
 	bool Result = InventoryComponent->AddItem(item);
 	UpdateInventoryWidget();
+	QuestComponent->UpdateQuestState();
 
 	return Result;
 }

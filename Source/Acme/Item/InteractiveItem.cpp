@@ -47,12 +47,10 @@ void AInteractiveItem::BeginPlay()
 
 void AInteractiveItem::Interact()
 {
-	//DropItem -> Player
 	if (!OverlappedCharacter) return;
 
 	if (OverlappedCharacter->AddItem(ItemInfo))
 	{
-		UUtil::DebugPrint("Inter");
 		Destroy();
 	}
 }

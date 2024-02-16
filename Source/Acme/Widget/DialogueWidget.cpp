@@ -2,6 +2,7 @@
 
 
 #include "Acme/Widget/DialogueWidget.h"
+#include "Acme/AcmeCharacter.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Animation/WidgetAnimation.h"
@@ -21,13 +22,11 @@ void UDialogueWidget::NativeOnInitialized()
 void UDialogueWidget::OnHoveredAccept()
 {
 	if (AnimHoverAccept) PlayAnimation(AnimHoverAccept);
-	UUtil::DebugPrint("Hover");
 }
 
 void UDialogueWidget::OnLeavedAccept()
 {
 	if (AnimHoverAccept) PlayAnimationReverse(AnimHoverAccept);
-	UUtil::DebugPrint("Leave");
 }
 
 void UDialogueWidget::OnHoveredReject()
@@ -42,9 +41,30 @@ void UDialogueWidget::OnLeavedReject()
 
 void UDialogueWidget::OnClickedAccept()
 {
+	auto PC = GetOwningPlayer();
+	if (!PC) return;
 
+	if (!Player) Player = Cast<AAcmeCharacter>(PC->GetCharacter());
+	Player->AddQuest(Quest);
+
+	PC->SetInputMode(FInputModeGameOnly());
+	PC->bShowMouseCursor = false;
+
+	RemoveFromParent();
 }
 
 void UDialogueWidget::OnClickedReject()
 {
+	auto PC = GetOwningPlayer();
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeGameOnly());
+	PC->bShowMouseCursor = false;
+
+	RemoveFromParent();
+}
+
+void UDialogueWidget::SetQuestInfo(FQuest newQuest)
+{
+	Quest = newQuest;
 }

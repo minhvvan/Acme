@@ -23,6 +23,8 @@ ANPCCharacter::ANPCCharacter()
 	
 	InteractWidget = ACharacter::CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractWidget"));
 	InteractWidget->SetupAttachment(RootComponent);
+
+	bValidQuest = false;
 }
 
 // Called when the game starts or when spawned
@@ -31,12 +33,10 @@ void ANPCCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
-	TArray<FQuest> Quests = GameInstance->GetQuest();
+	Quest = GameInstance->GetQuest();
+	Quest.Client = this;
 
-	for (FQuest quest : Quests)
-	{
-		QuestList.Add(quest);
-	}
+	bValidQuest = true;
 
 	UpdateQuestIndicator();
 	InteractWidget->SetVisibility(false);
@@ -63,7 +63,6 @@ void ANPCCharacter::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	}
 }
 
-
 // Called every frame
 void ANPCCharacter::Tick(float DeltaTime)
 {
@@ -86,60 +85,46 @@ void ANPCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ANPCCharacter::AddQuset(FQuest quest)
 {
-	QuestList.Add(quest);
+	Quest = quest;
+	Quest.Client = this;
 
+	bValidQuest = true;
 	UpdateQuestIndicator();
 }
 
-void ANPCCharacter::RemoveQuset(int qusetID)
+void ANPCCharacter::RemoveQuset()
 {
-	for (int i = 0; i < QuestList.Num(); i++)
-	{
-		FQuest quest = QuestList[i];
-		if (quest.QusetID == qusetID)
-		{
-			QuestList.RemoveAt(i);
-			UpdateQuestIndicator();
-
-			return;
-		}
-	}
+	bValidQuest = false;
 }
 
 void ANPCCharacter::UpdateQuestIndicator()
 {
-	if (QuestList.Num() == 0)
-	{
-		QuestIndicator->SetVisibility(false);
-	}
+	if(!bValidQuest) QuestIndicator->SetVisibility(false);
 	else
 	{
-		QuestIndicator->SetVisibility(true);
-
-		if (!Player) Player = Cast<AAcmeCharacter>(UGameplayStatics::GetPlayerCharacter(ACharacter::GetWorld(), 0));
-		
-		for (auto quest : QuestList)
-		{
-			if (Player->IsCompleteQuest(quest))
-			{
-				QuestIndicator->SetStaticMesh(Meshes[EQuestState::E_Complete]);
-				return;
-			}
-		}
-
 		QuestIndicator->SetStaticMesh(Meshes[EQuestState::E_Ready]);
+		QuestIndicator->SetVisibility(true);
 	}
+}
+
+void ANPCCharacter::CompleteQuest()
+{
+	QuestIndicator->SetStaticMesh(Meshes[EQuestState::E_Complete]);
+	QuestIndicator->SetVisibility(true);
 }
 
 void ANPCCharacter::Interact()
 {
-	//TODO: Player쪽으로 방향 돌리고
-	//WIdget 띄우기
-
 	if (!Player) return;
 	FVector PlayerLoc = Player->GetActorLocation();
 	TargetRot = (PlayerLoc - GetActorLocation()).Rotation();
 
-	Player->ShowDialogWidget();
+	Player->ShowDialogWidget(Quest);
+	Player->OnAcceptQuest.AddUObject(this, &ANPCCharacter::OnAcceptQuest);
 }
 
+void ANPCCharacter::OnAcceptQuest(int questID)
+{
+	bValidQuest = false;
+	UpdateQuestIndicator();
+}
