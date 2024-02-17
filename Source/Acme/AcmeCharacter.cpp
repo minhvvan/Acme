@@ -28,6 +28,7 @@
 #include "Acme/Component/QuestComponent.h"
 #include "Acme/SwordActor.h"
 #include "Acme/Interface/InteractableActor.h"
+#include "Acme/Widget/RewardDialogueWidget.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -510,8 +511,21 @@ void AAcmeCharacter::ShowDialogWidget(FQuest quest)
 {
 	if(!DialogueWidget) DialogueWidget = Cast<UDialogueWidget>(CreateWidget(GetWorld(), DialogueWidgetClass));
 	DialogueWidget->AddToViewport();
-
 	DialogueWidget->SetQuestInfo(quest);
+
+	auto PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeUIOnly());
+	PC->bShowMouseCursor = true;
+}
+
+void AAcmeCharacter::ShowRewardWidget(FQuest quest)
+{
+	//TODO: Reward widget
+	if (!RewardWidget) RewardWidget = Cast<URewardDialogueWidget>(CreateWidget(GetWorld(), RewardWidgetClass));
+	RewardWidget->AddToViewport();
+	RewardWidget->SetQuestInfo(quest);
 
 	auto PC = Cast<APlayerController>(GetController());
 	if (!PC) return;
@@ -710,6 +724,16 @@ void AAcmeCharacter::UseItem(EItemCategory Category, int idx, int amount)
 	UpdateInventoryWidget();
 }
 
+void AAcmeCharacter::SubmitItem(FItem item)
+{
+	if (!InventoryComponent) return;
+
+	OnRewardQuest.Broadcast();
+
+	InventoryComponent->SubmitItem(item);
+	UpdateInventoryWidget();
+}
+
 void AAcmeCharacter::RemoveItem(EItemCategory Category, int idx)
 {
 	if (!InventoryComponent) return;
@@ -801,7 +825,6 @@ void AAcmeCharacter::SetIsOpenWidget(bool bOpen)
 
 void AAcmeCharacter::CloseInteractWidget()
 {
-	//TODO: InteractWidget -> Super로 바꿔야함(요리나 다른 위젯이 있을 수 있음)
 	if (!InteractWidget) return;
 
 	auto PC = Cast<APlayerController>(GetController());

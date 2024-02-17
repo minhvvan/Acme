@@ -25,6 +25,9 @@ ANPCCharacter::ANPCCharacter()
 	InteractWidget->SetupAttachment(RootComponent);
 
 	bValidQuest = false;
+	bCompleteQuest = false;
+
+	NPCName = TEXT("NPC");
 }
 
 // Called when the game starts or when spawned
@@ -32,13 +35,7 @@ void ANPCCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
-	Quest = GameInstance->GetQuest();
-	Quest.Client = this;
-
-	bValidQuest = true;
-
-	UpdateQuestIndicator();
+	AddQuest();
 	InteractWidget->SetVisibility(false);
 
 	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &ANPCCharacter::OnBeginOverlap);
@@ -83,13 +80,18 @@ void ANPCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void ANPCCharacter::AddQuset(FQuest quest)
+void ANPCCharacter::AddQuest()
 {
-	Quest = quest;
+	if (bValidQuest) return;
+	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+	Quest = GameInstance->GetQuest();
 	Quest.Client = this;
 
 	bValidQuest = true;
+	bCompleteQuest = false;
 	UpdateQuestIndicator();
+
+	//TODO: Quest Timer Clear
 }
 
 void ANPCCharacter::RemoveQuset()
@@ -111,6 +113,8 @@ void ANPCCharacter::CompleteQuest()
 {
 	QuestIndicator->SetStaticMesh(Meshes[EQuestState::E_Complete]);
 	QuestIndicator->SetVisibility(true);
+
+	bCompleteQuest = true;
 }
 
 void ANPCCharacter::Interact()
@@ -119,12 +123,33 @@ void ANPCCharacter::Interact()
 	FVector PlayerLoc = Player->GetActorLocation();
 	TargetRot = (PlayerLoc - GetActorLocation()).Rotation();
 
-	Player->ShowDialogWidget(Quest);
-	Player->OnAcceptQuest.AddUObject(this, &ANPCCharacter::OnAcceptQuest);
+	if (bCompleteQuest)
+	{
+		Player->ShowRewardWidget(Quest);
+		Player->OnRewardQuest.AddUObject(this, &ANPCCharacter::OnRewardQuest);
+
+		//TODO: Set Quest Timer
+	}
+	else
+	{
+		Player->ShowDialogWidget(Quest);
+		Player->OnAcceptQuest.AddUObject(this, &ANPCCharacter::OnAcceptQuest);
+	}
 }
 
 void ANPCCharacter::OnAcceptQuest(int questID)
 {
 	bValidQuest = false;
 	UpdateQuestIndicator();
+}
+
+void ANPCCharacter::OnRewardQuest()
+{
+	bValidQuest = false;
+	UpdateQuestIndicator();
+}
+
+FString ANPCCharacter::GetNPCName()
+{
+	return NPCName;
 }

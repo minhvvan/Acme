@@ -10,6 +10,7 @@
 #include "AcmeCharacter.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnAcceptQuest, int);
+DECLARE_MULTICAST_DELEGATE(FOnRewardQuest);
 
 UCLASS(config=Game)
 class AAcmeCharacter : public ACharacter
@@ -268,6 +269,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Widget")
 	UDialogueWidget* DialogueWidget;
 
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<class URewardDialogueWidget> RewardWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "Widget")
+	URewardDialogueWidget* RewardWidget;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetIsAttacking(bool flag) { IsAttacking = flag; };
@@ -310,6 +317,9 @@ public:
 
 	UFUNCTION()
 	void UseItem(EItemCategory Category, int idx, int amount);
+
+	UFUNCTION()
+	void SubmitItem(FItem item);
 
 	UFUNCTION()
 	void RemoveItem(EItemCategory Category, int idx);
@@ -360,13 +370,17 @@ public:
 	bool IsCompleteQuest(struct FQuest quest);
 
 	UFUNCTION()
-	void ShowDialogWidget(FQuest quest);
+	void ShowDialogWidget(FQuest quest);	
+	
+	UFUNCTION()
+	void ShowRewardWidget(FQuest quest);
 
 	UFUNCTION()
 	void AddQuest(FQuest quest);
 
 public:
 	FOnAcceptQuest OnAcceptQuest;
+	FOnRewardQuest OnRewardQuest;
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

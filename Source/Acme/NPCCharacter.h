@@ -49,7 +49,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
-	void AddQuset(FQuest quest);
+	void AddQuest();
 
 	UFUNCTION()
 	void RemoveQuset();
@@ -64,6 +64,12 @@ public:
 
 	UFUNCTION()
 	void OnAcceptQuest(int questID);
+
+	UFUNCTION()
+	void OnRewardQuest();
+
+	UFUNCTION()
+	FString GetNPCName();
 
 protected:
 	UPROPERTY()
@@ -86,4 +92,10 @@ protected:
 
 	UPROPERTY()
 	bool bValidQuest;
+
+	UPROPERTY()
+	bool bCompleteQuest;
+
+	UPROPERTY(EditAnywhere)
+	FString NPCName;
 };

@@ -114,6 +114,29 @@ void UInventoryComponent::UseItem(EItemCategory Category, int idx, int amount)
 	if (Item.Num == 0) SetEmpty(Item);
 }
 
+void UInventoryComponent::SubmitItem(FItem item)
+{
+	TArray<FItem>& ItemList = Items[item.Category].Get();
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+
+	int amount = item.Num;
+
+	for (FItem& ownItem : ItemList)
+	{
+		if (ownItem.Name == item.Name)
+		{
+			ownItem.Num -= amount;
+			if (ownItem.Num <= 0)
+			{
+				amount += ownItem.Num;
+				SetEmpty(ownItem);
+			}
+
+			if (amount == 0) break;
+		}
+	}
+}
+
 bool UInventoryComponent::AddItem(FItem newItem)
 {
 	if (newItem.Category == EItemCategory::E_End || newItem.Name == EItemName::E_Empty) return false;
