@@ -27,6 +27,8 @@ ANPCCharacter::ANPCCharacter()
 	bValidQuest = false;
 	bCompleteQuest = false;
 
+	TimerSetTime = 300.f;
+
 	NPCName = TEXT("NPC");
 }
 
@@ -92,6 +94,7 @@ void ANPCCharacter::AddQuest()
 	UpdateQuestIndicator();
 
 	//TODO: Quest Timer Clear
+	GetWorldTimerManager().ClearTimer(QuestHandle);
 }
 
 void ANPCCharacter::RemoveQuset()
@@ -128,12 +131,20 @@ void ANPCCharacter::Interact()
 		Player->ShowRewardWidget(Quest);
 		Player->OnRewardQuest.AddUObject(this, &ANPCCharacter::OnRewardQuest);
 
-		//TODO: Set Quest Timer
+		GetWorldTimerManager().SetTimer(QuestHandle, this, &ANPCCharacter::AddQuest, TimerSetTime, false);
 	}
 	else
 	{
-		Player->ShowDialogWidget(Quest);
-		Player->OnAcceptQuest.AddUObject(this, &ANPCCharacter::OnAcceptQuest);
+		if (bValidQuest)
+		{
+			Player->ShowDialogWidget(Quest);
+			Player->OnAcceptQuest.AddUObject(this, &ANPCCharacter::OnAcceptQuest);
+		}
+		else
+		{
+			//Not yet
+			Player->ShowNotComleteWidget(Quest);
+		}
 	}
 }
 

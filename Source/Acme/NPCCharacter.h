@@ -98,4 +98,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	FString NPCName;
+
+	UPROPERTY()
+	FTimerHandle QuestHandle;
+
+	UPROPERTY(EditAnywhere)
+	float TimerSetTime;
 };

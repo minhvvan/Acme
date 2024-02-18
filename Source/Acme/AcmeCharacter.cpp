@@ -29,6 +29,7 @@
 #include "Acme/SwordActor.h"
 #include "Acme/Interface/InteractableActor.h"
 #include "Acme/Widget/RewardDialogueWidget.h"
+#include "Widget/QuestNotCompleteWidget.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -522,7 +523,6 @@ void AAcmeCharacter::ShowDialogWidget(FQuest quest)
 
 void AAcmeCharacter::ShowRewardWidget(FQuest quest)
 {
-	//TODO: Reward widget
 	if (!RewardWidget) RewardWidget = Cast<URewardDialogueWidget>(CreateWidget(GetWorld(), RewardWidgetClass));
 	RewardWidget->AddToViewport();
 	RewardWidget->SetQuestInfo(quest);
@@ -532,6 +532,20 @@ void AAcmeCharacter::ShowRewardWidget(FQuest quest)
 
 	PC->SetInputMode(FInputModeUIOnly());
 	PC->bShowMouseCursor = true;
+}
+
+void AAcmeCharacter::ShowNotComleteWidget(FQuest quest)
+{
+	if (!NotCompleteWidget) NotCompleteWidget = Cast<UQuestNotCompleteWidget>(CreateWidget(GetWorld(), NotCompleteWidgetClass));
+	NotCompleteWidget->AddToViewport();
+	NotCompleteWidget->SetQuestInfo(quest);
+
+	auto PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeUIOnly());
+	PC->bShowMouseCursor = true;
+
 }
 
 void AAcmeCharacter::AddQuest(FQuest quest)

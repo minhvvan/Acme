@@ -7,6 +7,7 @@
 #include "Components/Button.h"
 #include "Animation/WidgetAnimation.h"
 #include "Acme/Utils/Util.h"
+#include "Acme/NPCCharacter.h"
 
 void UDialogueWidget::NativeOnInitialized()
 {
@@ -67,4 +68,7 @@ void UDialogueWidget::OnClickedReject()
 void UDialogueWidget::SetQuestInfo(FQuest newQuest)
 {
 	Quest = newQuest;
+
+	TxtName->SetText(FText::FromString(Quest.Client->GetNPCName()));
+	TxtDescription->SetText(FText::FromString(Quest.Desc));
 }

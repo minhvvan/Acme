@@ -275,6 +275,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Widget")
 	URewardDialogueWidget* RewardWidget;
 
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<class UQuestNotCompleteWidget> NotCompleteWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "Widget")
+	UQuestNotCompleteWidget* NotCompleteWidget;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetIsAttacking(bool flag) { IsAttacking = flag; };
@@ -374,6 +380,9 @@ public:
 	
 	UFUNCTION()
 	void ShowRewardWidget(FQuest quest);
+
+	UFUNCTION()
+	void ShowNotComleteWidget(FQuest quest);
 
 	UFUNCTION()
 	void AddQuest(FQuest quest);

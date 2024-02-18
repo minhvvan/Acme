@@ -51,6 +51,4 @@ protected:
 
 	UPROPERTY()
 	class AAcmeCharacter* Player;
-
-
 };
