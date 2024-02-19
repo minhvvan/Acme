@@ -31,7 +31,6 @@ void AElementSpawner::Respawn()
 
 		FActorSpawnParameters SpawnParam;
 		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
 		AInteractiveItem* Element = GetWorld()->SpawnActor<AInteractiveItem>(ElementClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
 
 		FItem item;

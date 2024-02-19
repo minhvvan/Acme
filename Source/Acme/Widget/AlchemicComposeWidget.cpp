@@ -54,7 +54,7 @@ FReply UAlchemicComposeWidget::NativeOnKeyDown(const FGeometry& InGeometry, cons
 	FReply Result = Super::NativeOnKeyDown(InGeometry, InKeyEvent);
 
 	//TODO: Change Key
-	if (InKeyEvent.GetKey() == EKeys::End)
+	if (InKeyEvent.GetKey() == EKeys::Tab)
 	{
 		AAcmeCharacter* Character = GetOwningPlayerPawn<AAcmeCharacter>();
 		Character->CloseInteractWidget();
@@ -145,15 +145,18 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	//Add
 	for (FItem result : ComposeResults)
 	{
-		if (!OwnerCharacter->AddItem(result))
+		for (int i = 0; i < Amount; i++)
 		{
-			FActorSpawnParameters SpawnParams;
-			//SpawnParams.Owner = Player;
-			FRotator rotator;
-			FVector  SpawnLocation = OwnerCharacter->GetActorLocation();
-			SpawnLocation.Z += 10;
+			if (!OwnerCharacter->AddItem(result))
+			{
+				FActorSpawnParameters SpawnParams;
+				//SpawnParams.Owner = Player;
+				FRotator rotator;
+				FVector  SpawnLocation = OwnerCharacter->GetActorLocation();
+				SpawnLocation.Z += 10;
 
-			AInteractiveItem* ResultItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, SpawnLocation, rotator, SpawnParams);
+				AInteractiveItem* ResultItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, SpawnLocation, rotator, SpawnParams);
+			}
 		}
 	}
 	
