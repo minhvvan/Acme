@@ -33,6 +33,7 @@ void AInteractiveItem::Init(FItem newItem)
 	ItemInfo.Num = 1;
 	ItemInfo.Category = newItem.Category;
 	ItemInfo.Part = newItem.Part;
+	ItemInfo.bCanAddQuick = newItem.bCanAddQuick;
 }
 
 void AInteractiveItem::BeginPlay()

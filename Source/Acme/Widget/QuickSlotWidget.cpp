@@ -122,6 +122,8 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	if (!DragWidget->ItemInfo.bCanAddQuick)
 	{
 		Player->AddItem(DragWidget->ItemInfo);
+
+		UUtil::DebugPrint("DDD");
 		return result;
 	}
 

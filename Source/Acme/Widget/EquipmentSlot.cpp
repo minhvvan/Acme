@@ -98,6 +98,7 @@ bool UEquipmentSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 	SetItemInfo(DragWidget->ItemInfo);
 	Player->Equip(Part, DragWidget->ItemInfo);
 
+
 	return Result;
 }
 

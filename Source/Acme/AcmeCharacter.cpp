@@ -295,8 +295,6 @@ void AAcmeCharacter::Look(const FInputActionValue& Value)
 
 void AAcmeCharacter::Jump()
 {
-	if (IsAttacking) return;
-
 	Super::Jump();
 }
 
@@ -370,7 +368,6 @@ void AAcmeCharacter::AnimEnd(UAnimMontage* Montage, bool bInterrupted)
 void AAcmeCharacter::StartJampDashAttack()
 {
 	if (AnimState == EAnimState::E_Unarmed) return;
-	IsAttacking = true;
 
 	StartDodgeRoll();
 	AnimInstance->PlayJumpDashAttack();

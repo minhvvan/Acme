@@ -27,7 +27,6 @@ void ASwordActor::Active()
 		return;
 	}
 
-	Player->SetIsAttacking(true);
 	IsCombo = true;
 
 	AttackQueue.Enqueue(ComboIdx);
