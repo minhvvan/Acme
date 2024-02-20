@@ -84,8 +84,6 @@ AAcmeCharacter::AAcmeCharacter()
 	CanAttack = true;
 	IsDodgeRoll = false;
 
-	ActiveElement = EElement::E_End;
-
 	IsOpenInven = false;
 	CurrentQuickSlotIdx = 0;
 }
@@ -551,6 +549,16 @@ void AAcmeCharacter::AddQuest(FQuest quest)
 	QuestComponent->AddQuest(quest);
 
 	OnAcceptQuest.Broadcast(quest.QusetID);
+}
+
+TArray<FRecipe> AAcmeCharacter::GetRecipes()
+{
+	return OwnRecipes;
+}
+
+void AAcmeCharacter::AddRecipe(FRecipe newRecipe)
+{
+	OwnRecipes.Add(newRecipe);
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)

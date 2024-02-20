@@ -14,6 +14,9 @@ AAlchemicCauldron::AAlchemicCauldron()
 	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
 	OverlapComp->SetupAttachment(RootComponent);
 	OverlapComp->InitSphereRadius(100.f);
+
+	Indicator = CreateDefaultSubobject<UWidgetComponent>(TEXT("Indicator"));
+	Indicator->SetupAttachment(RootComponent);
 }
 
 void AAlchemicCauldron::BeginPlay()
@@ -24,6 +27,8 @@ void AAlchemicCauldron::BeginPlay()
 	{
 		InteractWidget = Cast<UAlchemicComposeWidget>(CreateWidget(GetWorld(), WidgetClass));
 	}
+
+	SetVisibleIndicator(false);
 
 	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &AAlchemicCauldron::OnBeginOverlap);
 	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &AAlchemicCauldron::OnEndOverlap);
@@ -69,7 +74,7 @@ void AAlchemicCauldron::Interact()
 	if (!PC) return;
 
 	PC->SetInputMode(FInputModeUIOnly());
-	PC->SetPause(true);
+	//PC->SetPause(true);
 	PC->bShowMouseCursor = true;
 
 	InteractWidget->AddToViewport();

@@ -241,8 +241,7 @@ protected:
 	int CurrentQuickSlotIdx;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
-	EElement ActiveElement;
-
+	TArray<struct FRecipe> OwnRecipes;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
@@ -387,6 +386,12 @@ public:
 	UFUNCTION()
 	void AddQuest(FQuest quest);
 
+	UFUNCTION()
+	TArray<FRecipe> GetRecipes();
+
+	UFUNCTION()
+	void AddRecipe(FRecipe newRecipe);
+		 
 public:
 	FOnAcceptQuest OnAcceptQuest;
 	FOnRewardQuest OnRewardQuest;

@@ -21,6 +21,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Default)
 	class USphereComponent* OverlapComp;
 
+	UPROPERTY(EditAnywhere, Category = Default)
+	class UWidgetComponent* Indicator;
+
 protected:
 	UPROPERTY(EditAnywhere, Category = Widget, meta = (AllowAccessPrivate = "true"))
 	TSubclassOf<UUserWidget> WidgetClass;
@@ -30,9 +33,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Default)
 	class AAcmeCharacter* OverlappedCharacter;
-
-	UPROPERTY(EditAnywhere, Category = Default)
-	class UWidgetComponent* Indicator;
 
 protected:
 	virtual void BeginPlay() override;

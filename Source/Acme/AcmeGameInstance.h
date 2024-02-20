@@ -120,6 +120,19 @@ struct FItemMesh : public FTableRowBase
 	UStaticMesh* Mesh;
 };
 
+USTRUCT()
+struct FRecipe : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FItem> Material;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FItem Result;
+};
+
+
 
 UCLASS()
 class ACME_API UAcmeGameInstance : public UGameInstance
