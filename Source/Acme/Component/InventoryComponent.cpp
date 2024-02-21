@@ -229,3 +229,20 @@ bool UInventoryComponent::HasItem(FItem item)
 
 	return Num <= 0;
 }
+
+int UInventoryComponent::GetItemNums(FItem item)
+{
+	TArray<FItem>& ItemList = Items[item.Category].Get();
+
+	int Cnt = 0;
+
+	for (auto ownItem : ItemList)
+	{
+		if (item.Name == ownItem.Name)
+		{
+			Cnt += ownItem.Num;
+		}
+	}
+
+	return Cnt;
+}

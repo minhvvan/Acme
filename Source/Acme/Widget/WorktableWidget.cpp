@@ -2,18 +2,20 @@
 
 
 #include "Acme/Widget/WorktableWidget.h"
+#include "Acme/Widget/RecipeEntryWidget.h"
+#include "Acme/Widget/MaterialEntryWidget.h"
 #include "Acme/AcmeCharacter.h"
-#include "Acme/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/TileView.h"
 #include "Acme/Data/RecipeData.h"
+#include "Acme/Data/ItemData.h"
 
 void UWorktableWidget::Init()
 {
-	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());
+	if(!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());
 	TArray<FRecipe> Recipes = Player->GetRecipes();
 
 	for (auto mat : Recipes)
@@ -21,14 +23,44 @@ void UWorktableWidget::Init()
 		URecipeData* Data = NewObject<URecipeData>();
 
 		Data->SetRecipe(mat);
+		Data->SetParentRef(this);
+
 		TVRecipe->AddItem(Data);
 	}
+}
+
+void UWorktableWidget::SetRecipeInfo(FRecipe recipe)
+{
+	CurrentRecipe = recipe;
+	TVMaterial->ClearListItems();
+
+	for (FItem item : recipe.Material)
+	{
+		UItemData* Data = NewObject<UItemData>();
+		
+		Data->SetItem(item);
+		TVMaterial->AddItem(Data);
+	}
+
+	if(SelectedRecipe) SelectedRecipe->SetSelectedColor(false);
+
+	if(!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+	ImgItem->SetBrushFromSoftTexture(GameInstance->GetItemImage(recipe.Result.Name));
+
+	TxtDesc->SetText(FText::FromString(GameInstance->GetItemString(recipe.Result.Name).Description));
+}
+
+void UWorktableWidget::SetSelectedRecipe(URecipeEntryWidget* recipe)
+{
+	SelectedRecipe = recipe;
 }
 
 void UWorktableWidget::NativeConstruct()
 {
 	bIsFocusable = true;
 	Init();
+
+	BtnCraft->OnClicked.AddDynamic(this, &UWorktableWidget::OnClicked);
 }
 
 FReply UWorktableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
@@ -46,4 +78,30 @@ FReply UWorktableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKey
 	}
 
 	return reply;
+}
+
+void UWorktableWidget::OnClicked()
+{
+	for (auto item : TVMaterial->GetListItems())
+	{
+		UMaterialEntryWidget* Material = Cast<UMaterialEntryWidget>(TVMaterial->GetEntryWidgetFromItem(item));
+		if (!Material->GetbHasItem()) return;
+	}
+
+	if (!SelectedRecipe) return;
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());
+
+	TVMaterial->ClearListItems();
+	for (FItem item : CurrentRecipe.Material)
+	{
+		UItemData* Data = NewObject<UItemData>();
+
+		Player->SubmitItem(item);
+
+		Data->SetItem(item); 
+		TVMaterial->AddItem(Data);
+	}
+
+	//Add
+	Player->AddItem(SelectedRecipe->GetRecipe().Result);
 }

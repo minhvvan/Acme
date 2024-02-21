@@ -71,6 +71,9 @@ public:
 	UFUNCTION()
 	bool HasItem(FItem item);
 
+	UFUNCTION()
+	int GetItemNums(FItem item);
+
 private:
 	UPROPERTY()
 	TMap<EItemCategory, FItemList> Items;

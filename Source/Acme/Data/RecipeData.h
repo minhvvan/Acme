@@ -20,10 +20,19 @@ public:
 	UPROPERTY()
 	FRecipe Recipe;
 
+	UPROPERTY()
+	class UWorktableWidget* ParentRef;
+
 public:
 	UFUNCTION()
 	void SetRecipe(FRecipe newRecipe);
 
 	UFUNCTION()
 	FRecipe GetRecipe();
+
+	UFUNCTION()
+	void SetParentRef(UWorktableWidget* ref);
+
+	UFUNCTION()
+	UWorktableWidget* GetParentRef();
 };

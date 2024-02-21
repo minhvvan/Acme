@@ -391,6 +391,9 @@ public:
 
 	UFUNCTION()
 	void AddRecipe(FRecipe newRecipe);
+
+	UFUNCTION()
+	int GetItemNums(FItem item);
 		 
 public:
 	FOnAcceptQuest OnAcceptQuest;

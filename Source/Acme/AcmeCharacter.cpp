@@ -183,6 +183,82 @@ void AAcmeCharacter::BeginPlay()
 		InventoryComponent->AddItem(temp1);
 	}
 
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Wood;
+		temp1.Num = 5;
+		temp1.bCanAddQuick = false;
+		temp1.Category = EItemCategory::E_Material;
+
+		InventoryComponent->AddItem(temp1);
+	}
+
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Stone;
+		temp1.Num = 5;
+		temp1.bCanAddQuick = false;
+		temp1.Category = EItemCategory::E_Material;
+
+		InventoryComponent->AddItem(temp1);
+	}
+
+	{
+		FRecipe recipe;
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Wood;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Stone;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Sword;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Equipment;
+
+			recipe.Result = temp;
+		}
+
+		OwnRecipes.Add(recipe);
+	}
+
+	{
+		FRecipe recipe;
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Glass;
+			temp.Num = 3;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Steam;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Result = temp;
+		}
+
+		OwnRecipes.Add(recipe);
+	}
 
 }
 
@@ -559,6 +635,15 @@ TArray<FRecipe> AAcmeCharacter::GetRecipes()
 void AAcmeCharacter::AddRecipe(FRecipe newRecipe)
 {
 	OwnRecipes.Add(newRecipe);
+}
+
+int AAcmeCharacter::GetItemNums(FItem item)
+{
+	if (!InventoryComponent) return false;
+	int Result = 0;
+
+	Result = InventoryComponent->GetItemNums(item);
+	return Result;
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)

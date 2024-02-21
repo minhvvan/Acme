@@ -12,3 +12,13 @@ FRecipe URecipeData::GetRecipe()
 {
 	return Recipe;
 }
+
+void URecipeData::SetParentRef(UWorktableWidget* ref)
+{
+	ParentRef = ref;
+}
+
+UWorktableWidget* URecipeData::GetParentRef()
+{
+	return ParentRef;
+}
