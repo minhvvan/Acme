@@ -6,14 +6,21 @@
 #include "Components/Border.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
+#include "Components/CanvasPanelSlot.h"
 #include "Acme/Component/StatComponent.h"
 #include "Acme/Widget/QuickSlotWidget.h"
 #include "Acme/Utils/Util.h"
+#include "Acme/AcmeCharacter.h"
+#include "Camera/CameraComponent.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+
 
 void UWidget_Hud::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 }
 
 void UWidget_Hud::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -42,6 +49,21 @@ void UWidget_Hud::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		float newPercent = FMath::Lerp(CurrentStaminaPercent, TargetStaminaPercent, .1);
 		Crosshair->SetPercent(newPercent);
 		CurrentStaminaPercent = newPercent;
+	}
+
+	if (Player)
+	{
+		FRotator rot = Player->GetFollowCamera()->GetComponentRotation();
+
+		float FinalX = rot.Yaw;
+
+		FinalX *= -1;
+		FinalX *= 10;
+		FinalX -= 450;
+
+		FVector2D FinalPos = FVector2D(FinalX, 30);
+
+		UWidgetLayoutLibrary::SlotAsCanvasSlot(ImgCompass)->SetPosition(FinalPos);
 	}
 }
 

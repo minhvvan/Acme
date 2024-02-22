@@ -57,7 +57,10 @@ protected:
 	class UTextBlock* TxtMaxHealth;
 	
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UTextBlock* TxtCurrentSatiety;
+	class UTextBlock* TxtCurrentSatiety;	
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UImage* ImgCompass;
 
 	void NativeOnInitialized();
 
@@ -100,4 +103,7 @@ private:
 
 	UPROPERTY()
 	TArray<UQuickSlotWidget*> QuickSlotWidgets;
+
+	UPROPERTY()
+	class AAcmeCharacter* Player;
 };
