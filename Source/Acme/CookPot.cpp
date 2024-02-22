@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Worktable.h"
+#include "CookPot.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "AcmeCharacter.h"
-#include "Acme/Widget/WorktableWidget.h"
+#include "Acme/Widget/CookPotWidget.h"
 
 
-AWorktable::AWorktable()
+ACookPot::ACookPot()
 {
 	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
 	OverlapComp->SetupAttachment(RootComponent);
@@ -18,17 +18,17 @@ AWorktable::AWorktable()
 	Indicator->SetupAttachment(RootComponent);
 }
 
-void AWorktable::BeginPlay()
+void ACookPot::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &AWorktable::OnBeginOverlap);
-	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &AWorktable::OnEndOverlap);
+	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &ACookPot::OnBeginOverlap);
+	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &ACookPot::OnEndOverlap);
 
 	SetVisibleIndicator(false);
 }
 
-void AWorktable::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ACookPot::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
@@ -37,7 +37,7 @@ void AWorktable::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* Oth
 	}
 }
 
-void AWorktable::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void ACookPot::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
@@ -46,13 +46,13 @@ void AWorktable::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	}
 }
 
-void AWorktable::SetVisibleIndicator(bool bVisible)
+void ACookPot::SetVisibleIndicator(bool bVisible)
 {
 	if (!IsValid(Indicator)) return;
 	Indicator->SetVisibility(bVisible);
 }
 
-void AWorktable::Interact()
+void ACookPot::Interact()
 {
 	if (!OverlappedCharacter) return;
 
@@ -62,7 +62,7 @@ void AWorktable::Interact()
 	PC->SetInputMode(FInputModeUIOnly());
 	PC->bShowMouseCursor = true;
 
-	InteractWidget = CreateWidget<UWorktableWidget>(GetWorld(), WidgetClass);
+	InteractWidget = CreateWidget<UCookPotWidget>(GetWorld(), WidgetClass);
 	if (!InteractWidget) return;
 
 	InteractWidget->AddToViewport();

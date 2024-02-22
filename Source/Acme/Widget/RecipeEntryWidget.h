@@ -38,7 +38,7 @@ protected:
 	FRecipe Recipe;
 
 	UPROPERTY()
-	class UWorktableWidget* ParentRef;
+	class UCookPotWidget* ParentRef;
 
 protected:
 };

@@ -21,7 +21,7 @@ public:
 	FRecipe Recipe;
 
 	UPROPERTY()
-	class UWorktableWidget* ParentRef;
+	class UCookPotWidget* ParentRef;
 
 public:
 	UFUNCTION()
@@ -31,8 +31,8 @@ public:
 	FRecipe GetRecipe();
 
 	UFUNCTION()
-	void SetParentRef(UWorktableWidget* ref);
+	void SetParentRef(UCookPotWidget* ref);
 
 	UFUNCTION()
-	UWorktableWidget* GetParentRef();
+	UCookPotWidget* GetParentRef();
 };

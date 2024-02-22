@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Acme/Widget/WorktableWidget.h"
+#include "Acme/Widget/CookPotWidget.h"
 #include "Acme/Widget/RecipeEntryWidget.h"
 #include "Acme/Widget/MaterialEntryWidget.h"
 #include "Acme/AcmeCharacter.h"
@@ -13,7 +13,7 @@
 #include "Acme/Data/RecipeData.h"
 #include "Acme/Data/ItemData.h"
 
-void UWorktableWidget::Init()
+void UCookPotWidget::Init()
 {
 	if(!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());
 	TArray<FRecipe> Recipes = Player->GetRecipes();
@@ -29,7 +29,7 @@ void UWorktableWidget::Init()
 	}
 }
 
-void UWorktableWidget::SetRecipeInfo(FRecipe recipe)
+void UCookPotWidget::SetRecipeInfo(FRecipe recipe)
 {
 	CurrentRecipe = recipe;
 	TVMaterial->ClearListItems();
@@ -48,22 +48,23 @@ void UWorktableWidget::SetRecipeInfo(FRecipe recipe)
 	ImgItem->SetBrushFromSoftTexture(GameInstance->GetItemImage(recipe.Result.Name));
 
 	TxtDesc->SetText(FText::FromString(GameInstance->GetItemString(recipe.Result.Name).Description));
+	TxtName->SetText(FText::FromString(GameInstance->GetItemString(recipe.Result.Name).Name));
 }
 
-void UWorktableWidget::SetSelectedRecipe(URecipeEntryWidget* recipe)
+void UCookPotWidget::SetSelectedRecipe(URecipeEntryWidget* recipe)
 {
 	SelectedRecipe = recipe;
 }
 
-void UWorktableWidget::NativeConstruct()
+void UCookPotWidget::NativeConstruct()
 {
 	bIsFocusable = true;
 	Init();
 
-	BtnCraft->OnClicked.AddDynamic(this, &UWorktableWidget::OnClicked);
+	BtnCraft->OnClicked.AddDynamic(this, &UCookPotWidget::OnClicked);
 }
 
-FReply UWorktableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+FReply UCookPotWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
 	FReply reply = Super::NativeOnKeyDown(InGeometry, InKeyEvent);
 
@@ -80,7 +81,7 @@ FReply UWorktableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKey
 	return reply;
 }
 
-void UWorktableWidget::OnClicked()
+void UCookPotWidget::OnClicked()
 {
 	for (auto item : TVMaterial->GetListItems())
 	{

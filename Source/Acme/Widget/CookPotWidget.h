@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Acme/AcmeGameInstance.h"
-#include "WorktableWidget.generated.h"
+#include "CookPotWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACME_API UWorktableWidget : public UUserWidget
+class ACME_API UCookPotWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
@@ -30,7 +30,10 @@ protected:
 	class UImage* ImgItem;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* TxtDesc;
+	class UTextBlock* TxtDesc;	
+	
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* TxtName;
 
 public:
 	UFUNCTION()

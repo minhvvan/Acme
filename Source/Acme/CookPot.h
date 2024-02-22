@@ -5,18 +5,18 @@
 #include "CoreMinimal.h"
 #include "Item/BaseItem.h"
 #include "Acme/Interface/InteractableActor.h"
-#include "Worktable.generated.h"
+#include "CookPot.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACME_API AWorktable : public ABaseItem, public IInteractableActor
+class ACME_API ACookPot : public ABaseItem, public IInteractableActor
 {
 	GENERATED_BODY()
 	
 public:
-	AWorktable();
+	ACookPot();
 
 protected:
 	UPROPERTY(EditAnywhere, Category = Default)
@@ -45,8 +45,8 @@ protected:
 	class AAcmeCharacter* OverlappedCharacter;
 
 	UPROPERTY(EditAnywhere, Category = Widget, meta = (AllowAccessPrivate = "true"))
-	TSubclassOf<class UWorktableWidget> WidgetClass;
+	TSubclassOf<class UCookPotWidget> WidgetClass;
 
 	UPROPERTY(VisibleAnywhere, Category = Widget, meta = (AllowAccessPrivate = "true"))
-	UWorktableWidget* InteractWidget;
+	UCookPotWidget* InteractWidget;
 };
