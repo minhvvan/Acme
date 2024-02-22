@@ -911,13 +911,18 @@ void AAcmeCharacter::ChangeQuickSlotIdx(int idx)
 	if (!EquipmentComponent) return;
 	EquipmentComponent->SetCurrentHand(CurrentQuickSlotIdx);
 
+
 	//HUD Update
 	if (!Hud) return;
 	Hud->ChangeSelectedSlot(idx);
 
 	//Anim
 	if (!AnimInstance) return;
-	AnimInstance->PlayEquip();
+	
+	if (EquipmentComponent->GetCurrentHand() != nullptr)
+	{
+		AnimInstance->PlayEquip();
+	}
 }
 
 void AAcmeCharacter::DumpItem(EItemCategory Category, int idx)

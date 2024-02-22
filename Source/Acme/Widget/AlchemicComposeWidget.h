@@ -76,6 +76,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
 	class UAlchemySlotWidget* RightSlot;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UBorder* BorderAlert;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UButton* BtnOk;
+
 protected:
 	virtual void NativeConstruct();
 
@@ -125,6 +131,12 @@ protected:
 
 	UFUNCTION()
 	void SetActiveCategory();
+
+	UFUNCTION()
+	void ShowAlert();
+
+	UFUNCTION()
+	void OnClickedOK();
 
 public:
 	UFUNCTION()

@@ -44,6 +44,8 @@ void UAlchemicComposeWidget::NativeConstruct()
 
 	EdtNum->OnTextChanged.AddDynamic(this, &UAlchemicComposeWidget::OnTextChanged);
 
+	BtnOk->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnClickedOK);
+
 	LeftSlotIdx = -1;
 	RightSlotIdx = -1;
 	Amount = 1;
@@ -53,7 +55,6 @@ FReply UAlchemicComposeWidget::NativeOnKeyDown(const FGeometry& InGeometry, cons
 {
 	FReply Result = Super::NativeOnKeyDown(InGeometry, InKeyEvent);
 
-	//TODO: Change Key
 	if (InKeyEvent.GetKey() == EKeys::Tab)
 	{
 		AAcmeCharacter* Character = GetOwningPlayerPawn<AAcmeCharacter>();
@@ -135,6 +136,13 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	TArray<FItem> ComposeResults = GameInstance->GetComposeResult(LeftItem, RightItem);
 
+	if (ComposeResults.Num() == 0)
+	{
+		//Alert
+		ShowAlert();
+		return;
+	}
+
 	LeftSlot->Compose();
 	RightSlot->Compose();
 
@@ -145,6 +153,12 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	//Add
 	for (FItem result : ComposeResults)
 	{
+		//Set TVResult
+		UItemData* Data = NewObject<UItemData>();
+		Data->SetItem(result);
+
+		TVResult->AddItem(Data);
+
 		for (int i = 0; i < Amount; i++)
 		{
 			if (!OwnerCharacter->AddItem(result))
@@ -161,6 +175,8 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	}
 	
 	SetItemList();
+	Amount = 1;
+	EdtNum->SetText(FText::AsNumber(Amount));
 }
 
 void UAlchemicComposeWidget::OnTextChanged(const FText& newText)
@@ -231,6 +247,17 @@ void UAlchemicComposeWidget::SetActiveCategory()
 	{
 		ActiveCategoryImg->SetColorAndOpacity(FColor(0, 0, 0, 255));
 	}
+}
+
+void UAlchemicComposeWidget::ShowAlert()
+{
+	//TODO: SFX
+	BorderAlert->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UAlchemicComposeWidget::OnClickedOK()
+{
+	BorderAlert->SetVisibility(ESlateVisibility::Hidden);
 }
 
 bool UAlchemicComposeWidget::AddToSlot(int idx)

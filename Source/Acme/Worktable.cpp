@@ -42,7 +42,7 @@ void AWorktable::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		OverlappedCharacter = nullptr;
-		SetVisibleIndicator(true);
+		SetVisibleIndicator(false);
 	}
 }
 
