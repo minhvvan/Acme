@@ -74,6 +74,13 @@ AAcmeCharacter::AAcmeCharacter()
 	UISceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("UISceneCapture"));
 	UISceneCapture->SetupAttachment(UICameraBoom);
 
+	MiniMapCameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("MiniMapCameraBoom"));
+	MiniMapCameraBoom->SetupAttachment(RootComponent);
+	MiniMapCameraBoom->TargetArmLength = 200; // The camera follows at this distance behind the character	
+
+	MiniMapSceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MiniMapSceneCapture"));
+	MiniMapSceneCapture->SetupAttachment(MiniMapCameraBoom);
+
 	StatCompoenent = CreateDefaultSubobject<UStatComponent>(TEXT("StatCompoenent"));
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryCompoenent"));
 	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentCompoenent"));
