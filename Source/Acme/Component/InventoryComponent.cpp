@@ -246,3 +246,13 @@ int UInventoryComponent::GetItemNums(FItem item)
 
 	return Cnt;
 }
+
+void UInventoryComponent::ConsumeQuickSlot(int idx)
+{
+	QuickSlots[idx].Num--;
+
+	if (QuickSlots[idx].Num == 0)
+	{
+		RemoveFromQuick(idx);
+	}
+}

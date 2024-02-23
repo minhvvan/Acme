@@ -68,6 +68,9 @@ public:
 	UFUNCTION()
 	void EndSprint();
 
+	UFUNCTION()
+	void AddSatiety(int amount);
+
 	FCoolDown CDSkill;
 
 	FChangeHP OnChangedHP;

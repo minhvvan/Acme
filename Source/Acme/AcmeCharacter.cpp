@@ -88,7 +88,7 @@ AAcmeCharacter::AAcmeCharacter()
 
 	PrimaryActorTick.bCanEverTick = true;
 
-	CanAttack = true;
+	CanActive = true;
 	IsDodgeRoll = false;
 
 	IsOpenInven = false;
@@ -192,20 +192,20 @@ void AAcmeCharacter::BeginPlay()
 
 	{
 		FItem temp1;
-		temp1.Name = EItemName::E_Wood;
+		temp1.Name = EItemName::E_Meat;
 		temp1.Num = 5;
 		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Material;
+		temp1.Category = EItemCategory::E_Food;
 
 		InventoryComponent->AddItem(temp1);
 	}
 
 	{
 		FItem temp1;
-		temp1.Name = EItemName::E_Stone;
+		temp1.Name = EItemName::E_Fruit;
 		temp1.Num = 5;
 		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Material;
+		temp1.Category = EItemCategory::E_Food;
 
 		InventoryComponent->AddItem(temp1);
 	}
@@ -215,51 +215,27 @@ void AAcmeCharacter::BeginPlay()
 
 		{
 			FItem temp;
-			temp.Name = EItemName::E_Wood;
+			temp.Name = EItemName::E_Meat;
 			temp.Num = 1;
-			temp.Category = EItemCategory::E_Material;
+			temp.Category = EItemCategory::E_Food;
 
 			recipe.Material.Add(temp);
 		}
 
 		{
 			FItem temp;
-			temp.Name = EItemName::E_Stone;
+			temp.Name = EItemName::E_Fruit;
 			temp.Num = 1;
-			temp.Category = EItemCategory::E_Material;
+			temp.Category = EItemCategory::E_Food;
 
 			recipe.Material.Add(temp);
 		}
 
 		{
 			FItem temp;
-			temp.Name = EItemName::E_Sword;
+			temp.Name = EItemName::E_MeatPie;
 			temp.Num = 1;
-			temp.Category = EItemCategory::E_Equipment;
-
-			recipe.Result = temp;
-		}
-
-		OwnRecipes.Add(recipe);
-	}
-
-	{
-		FRecipe recipe;
-
-		{
-			FItem temp;
-			temp.Name = EItemName::E_Glass;
-			temp.Num = 3;
-			temp.Category = EItemCategory::E_Material;
-
-			recipe.Material.Add(temp);
-		}
-
-		{
-			FItem temp;
-			temp.Name = EItemName::E_Steam;
-			temp.Num = 1;
-			temp.Category = EItemCategory::E_Material;
+			temp.Category = EItemCategory::E_Food;
 
 			recipe.Result = temp;
 		}
@@ -412,8 +388,7 @@ void AAcmeCharacter::StopDodgeRoll()
 
 void AAcmeCharacter::StartActive()
 {
-	if (AnimState == EAnimState::E_Unarmed) return;
-	if (!CanAttack) return;
+	if (!CanActive) return;
 	if (!EquipmentComponent) return;
 
 	EquipmentComponent->Active(CurrentQuickSlotIdx);
@@ -441,7 +416,7 @@ void AAcmeCharacter::AnimEnd(UAnimMontage* Montage, bool bInterrupted)
 	{
 		//stamina recovery
 		StatCompoenent->RecoveryStamina(100);
-		CanAttack = true;
+		CanActive = true;
 		ChangeWalkSpeed(100);
 	}
 }
@@ -653,13 +628,34 @@ int AAcmeCharacter::GetItemNums(FItem item)
 	return Result;
 }
 
+void AAcmeCharacter::AddSatiety(int amount)
+{
+	if (!StatCompoenent) return;
+
+	StatCompoenent->AddSatiety(amount);
+}
+
+void AAcmeCharacter::ConsumeItemQuick()
+{
+	if (!EquipmentComponent) return;
+	if (!InventoryComponent) return;
+
+	InventoryComponent->ConsumeQuickSlot(CurrentQuickSlotIdx);
+	EquipmentComponent->ConsumeCurrentHand();
+
+	//HUD Update
+	if (!Hud) return;
+	Hud->SetQuickSlots(GetQuickSlots());
+	Hud->ChangeSelectedSlot(CurrentQuickSlotIdx);
+}
+
 void AAcmeCharacter::StaminaCheck(int Stamina)
 {
 	if (Stamina == 0)
 	{
 		AnimInstance->PlayExhaust();
 
-		CanAttack = false;
+		CanActive = false;
 		ChangeWalkSpeed(-100 /*TODO: Var*/);
 	}
 }

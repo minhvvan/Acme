@@ -229,7 +229,7 @@ protected:
 	bool IsAttacking;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
-	bool CanAttack;
+	bool CanActive;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Move, meta = (AllowPrivateAccess = "true"))
 	bool IsDodgeRoll;
@@ -400,7 +400,13 @@ public:
 
 	UFUNCTION()
 	int GetItemNums(FItem item);
-		 
+
+	UFUNCTION()
+	void AddSatiety(int amount);
+
+	UFUNCTION()
+	void ConsumeItemQuick();
+
 public:
 	FOnAcceptQuest OnAcceptQuest;
 	FOnRewardQuest OnRewardQuest;

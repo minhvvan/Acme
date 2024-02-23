@@ -68,10 +68,15 @@ enum class EItemName : uint8
 	E_Boat UMETA(DisplayName = "Boat"),
 	E_Storm UMETA(DisplayName = "Storm"),
 	E_Seed UMETA(DisplayName = "Seed"),
+	E_Meat UMETA(DisplayName = "Meat"),
+	E_Fruit UMETA(DisplayName = "Fruit"),
 
 	E_Sword UMETA(DisplayName = "Sword"),
 	E_Helmet UMETA(DisplayName = "Helmet"),
 	E_LetherArmor UMETA(DisplayName = "LetherArmor"),
+
+	E_MeatPie UMETA(DisplayName = "MeatPie"),
+
 
 	E_Empty UMETA(DisplayName = "Empty"),
 };

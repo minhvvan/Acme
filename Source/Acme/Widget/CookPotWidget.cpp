@@ -10,6 +10,7 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/TileView.h"
+#include "Components/EditableTextBox.h"
 #include "Acme/Data/RecipeData.h"
 #include "Acme/Data/ItemData.h"
 
@@ -27,6 +28,8 @@ void UCookPotWidget::Init()
 
 		TVRecipe->AddItem(Data);
 	}
+
+	Amount = 0;
 }
 
 void UCookPotWidget::SetRecipeInfo(FRecipe recipe)
@@ -61,7 +64,9 @@ void UCookPotWidget::NativeConstruct()
 	bIsFocusable = true;
 	Init();
 
-	BtnCraft->OnClicked.AddDynamic(this, &UCookPotWidget::OnClicked);
+	BtnCraft->OnClicked.AddDynamic(this, &UCookPotWidget::OnClickedCraft);
+	BtnMinus->OnClicked.AddDynamic(this, &UCookPotWidget::OnClickedMinus);
+	BtnPlus->OnClicked.AddDynamic(this, &UCookPotWidget::OnClickedPlus);
 }
 
 FReply UCookPotWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
@@ -81,7 +86,7 @@ FReply UCookPotWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEv
 	return reply;
 }
 
-void UCookPotWidget::OnClicked()
+void UCookPotWidget::OnClickedCraft()
 {
 	for (auto item : TVMaterial->GetListItems())
 	{
@@ -97,12 +102,57 @@ void UCookPotWidget::OnClicked()
 	{
 		UItemData* Data = NewObject<UItemData>();
 
-		Player->SubmitItem(item);
+		for (int i = 0; i < Amount; i++)
+		{
+			Player->SubmitItem(item);
+		}
 
 		Data->SetItem(item); 
 		TVMaterial->AddItem(Data);
 	}
 
 	//Add
-	Player->AddItem(SelectedRecipe->GetRecipe().Result);
+	for (int i = 0; i < Amount; i++)
+	{
+		Player->AddItem(SelectedRecipe->GetRecipe().Result);
+	}
+
+	//Reset
+	Amount = 0;
+	EdtNum->SetText(FText::AsNumber(Amount));
 }
+
+void UCookPotWidget::OnClickedMinus()
+{
+	if (!SelectedRecipe) return;
+
+	Amount--;
+	if (Amount < 0) Amount = 0;
+
+	EdtNum->SetText(FText::AsNumber(Amount));
+}
+
+void UCookPotWidget::OnClickedPlus()
+{
+	if (!SelectedRecipe) return;
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());
+
+	int minNum = 99;
+	for (FItem item : CurrentRecipe.Material)
+	{
+		minNum = FMath::Min(minNum, Player->GetItemNums(item));
+	}
+
+	if (Amount >= minNum)
+	{
+		Amount = minNum;
+		EdtNum->SetText(FText::AsNumber(Amount));
+		return;
+	}
+
+	Amount++;
+
+	if (Amount > 99) Amount = 99;
+	EdtNum->SetText(FText::AsNumber(Amount));
+}
+

@@ -27,6 +27,12 @@ protected:
 	class UButton* BtnCraft;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* BtnMinus;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* BtnPlus;
+
+	UPROPERTY(meta = (BindWidget))
 	class UImage* ImgItem;
 
 	UPROPERTY(meta = (BindWidget))
@@ -34,6 +40,9 @@ protected:
 	
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* TxtName;
+
+	UPROPERTY(meta = (BindWidget))
+	class UEditableTextBox* EdtNum;
 
 public:
 	UFUNCTION()
@@ -51,7 +60,13 @@ protected:
 	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent);
 
 	UFUNCTION()
-	void OnClicked();
+	void OnClickedCraft();
+
+	UFUNCTION()
+	void OnClickedMinus();
+
+	UFUNCTION()
+	void OnClickedPlus();
 
 protected:
 	UPROPERTY()
@@ -65,4 +80,7 @@ protected:
 
 	UPROPERTY()
 	URecipeEntryWidget* SelectedRecipe;
+
+	UPROPERTY()
+	int Amount;
 };

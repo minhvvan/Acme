@@ -43,4 +43,7 @@ public:
 
 	UFUNCTION()
 	UStaticMeshComponent* GetMesh();
+
+	UFUNCTION()
+	FItem& GetItem();
 };

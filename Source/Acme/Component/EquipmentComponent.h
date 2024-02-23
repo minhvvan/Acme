@@ -73,7 +73,13 @@ public:
 	UFUNCTION()
 	void UnEquip(EEquipmentPart part);
 
+	UFUNCTION()
+	void ConsumeCurrentHand();
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	TArray<class AActiveItem*> QuickSlotItems;
+
+	UPROPERTY()
+	int CurrentIdx;
 };

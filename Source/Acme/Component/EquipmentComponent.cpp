@@ -17,7 +17,7 @@ UEquipmentComponent::UEquipmentComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	CurrentIdx = 0;
 }
 
 
@@ -26,6 +26,7 @@ void UEquipmentComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	QuickSlotItems.SetNum(8);
+
 }
 
 
@@ -42,9 +43,18 @@ void UEquipmentComponent::SetCurrentHand(int idx)
 	if (CurrentHand) CurrentHand->AttachBack();
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
+	CurrentIdx = idx;
+
 	if (QuickSlotItems[idx] && !QuickSlotItems[idx]->IsPendingKill())
 	{
-		Player->SetAnimState(EAnimState::E_Equiped);
+		if (QuickSlotItems[idx]->GetItem().Category == EItemCategory::E_Equipment)
+		{
+			Player->SetAnimState(EAnimState::E_Equiped);
+		}
+		else
+		{
+			Player->SetAnimState(EAnimState::E_Unarmed);
+		}
 
 		CurrentHand = QuickSlotItems[idx];
 		CurrentHand->AttachToSocket(EEquipmentPart::E_Hand);
@@ -81,18 +91,18 @@ void UEquipmentComponent::SpawnItem(FItem item, int idx)
 	FVector  SpawnLocation = Player->GetActorLocation();
 	SpawnLocation.Z += 100;
 
-	AActiveItem* CurrentItem = GetWorld()->SpawnActor<AActiveItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
-	if (CurrentItem)
+	AActiveItem* SpawnedItem = GetWorld()->SpawnActor<AActiveItem>(ItemClass, SpawnLocation, rotator, SpawnParams);
+	if (SpawnedItem)
 	{
-		CurrentItem->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		CurrentItem->AttachBack();
-		CurrentItem->Init(item);
+		SpawnedItem->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		SpawnedItem->AttachBack();
+		SpawnedItem->Init(item);
 
-		Player->SetShowInvenCam(CurrentItem->GetMesh());
+		Player->SetShowInvenCam(SpawnedItem->GetMesh());
 	}
 
 	DestroyAttachActor(idx);
-	QuickSlotItems[idx] = CurrentItem;
+	QuickSlotItems[idx] = SpawnedItem;
 }
 
 void UEquipmentComponent::Active(int idx)
@@ -164,4 +174,17 @@ void UEquipmentComponent::UnEquip(EEquipmentPart part)
 
 	CurrentPart->Destroy();
 	CurrentPart = nullptr;
+}
+
+void UEquipmentComponent::ConsumeCurrentHand()
+{
+	if (!CurrentHand) return;
+
+	FItem& item = CurrentHand->GetItem();
+	item.Num--;
+
+	if (item.Num == 0)
+	{
+		CurrentHand->Destroy();
+	}
 }

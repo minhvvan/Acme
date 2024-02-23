@@ -51,3 +51,8 @@ UStaticMeshComponent* AEquipmentItem::GetMesh()
 {
 	return Mesh;
 }
+
+FItem& AEquipmentItem::GetItem()
+{
+	return ItemInfo;
+}

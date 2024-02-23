@@ -119,4 +119,13 @@ void UStatComponent::StartSprint()
 void UStatComponent::EndSprint()
 {
 	GetWorld()->GetTimerManager().ClearTimer(TimerSprint);
-}	
+}
+
+void UStatComponent::AddSatiety(int amount)
+{
+	int newSatiety = CurrentSatiety + amount;
+	if (newSatiety > 100) newSatiety = 100;
+
+
+	SetCurrentST(newSatiety);
+}

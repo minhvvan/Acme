@@ -74,6 +74,9 @@ public:
 	UFUNCTION()
 	int GetItemNums(FItem item);
 
+	UFUNCTION()
+	void ConsumeQuickSlot(int idx);
+
 private:
 	UPROPERTY()
 	TMap<EItemCategory, FItemList> Items;
