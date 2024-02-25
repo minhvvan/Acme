@@ -55,6 +55,7 @@ void ACookPot::SetVisibleIndicator(bool bVisible)
 void ACookPot::Interact()
 {
 	if (!OverlappedCharacter) return;
+	if (!WidgetClass) return;
 
 	auto PC = Cast<APlayerController>(OverlappedCharacter->GetController());
 	if (!PC) return;

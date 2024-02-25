@@ -7,6 +7,7 @@
 #include "Acme/Data/RecipeData.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Widget/CookPotWidget.h"
+#include "Acme/Interface/CraftWidgetInterface.h"
 
 
 void URecipeEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
@@ -27,8 +28,13 @@ FReply URecipeEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, 
 {
 	FReply reply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
-	ParentRef->SetRecipeInfo(Recipe);
-	ParentRef->SetSelectedRecipe(this);
+	ICraftWidgetInterface* Parent = Cast<ICraftWidgetInterface>(ParentRef);
+	if (!Parent) return reply;
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("ddd")));
+
+	Parent->SetRecipeInfo(Recipe);
+	Parent->SetSelectedRecipe(this);
 
 	SetSelectedColor(true);
 

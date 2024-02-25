@@ -13,12 +13,12 @@ FRecipe URecipeData::GetRecipe()
 	return Recipe;
 }
 
-void URecipeData::SetParentRef(UCookPotWidget* ref)
+void URecipeData::SetParentRef(UUserWidget* ref)
 {
 	ParentRef = ref;
 }
 
-UCookPotWidget* URecipeData::GetParentRef()
+UUserWidget* URecipeData::GetParentRef()
 {
 	return ParentRef;
 }

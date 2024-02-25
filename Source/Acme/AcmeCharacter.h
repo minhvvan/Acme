@@ -249,6 +249,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
 	TArray<struct FRecipe> OwnRecipes;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
+	TArray<struct FRecipe> OwnPotionRecipes;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> HudClass;
@@ -394,6 +397,9 @@ public:
 
 	UFUNCTION()
 	TArray<FRecipe> GetRecipes();
+
+	UFUNCTION()
+	TArray<FRecipe> GetPorionRecipes();
 
 	UFUNCTION()
 	void AddRecipe(FRecipe newRecipe);

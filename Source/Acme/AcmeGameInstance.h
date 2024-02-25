@@ -41,9 +41,6 @@ struct FItemImages : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EItemName Key;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* Image;
 };
 

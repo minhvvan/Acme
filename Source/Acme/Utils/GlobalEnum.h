@@ -77,6 +77,10 @@ enum class EItemName : uint8
 
 	E_MeatPie UMETA(DisplayName = "MeatPie"),
 
+	E_HealthPotion UMETA(DisplayName = "HealthPotion"),
+	E_Herb UMETA(DisplayName = "Herb"),
+
+
 
 	E_Empty UMETA(DisplayName = "Empty"),
 };

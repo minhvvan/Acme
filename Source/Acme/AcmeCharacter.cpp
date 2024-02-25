@@ -210,6 +210,28 @@ void AAcmeCharacter::BeginPlay()
 		InventoryComponent->AddItem(temp1);
 	}
 
+
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Herb;
+		temp1.Num = 5;
+		temp1.bCanAddQuick = false;
+		temp1.Category = EItemCategory::E_Food;
+
+		InventoryComponent->AddItem(temp1);
+	}
+
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Glass;
+		temp1.Num = 5;
+		temp1.bCanAddQuick = false;
+		temp1.Category = EItemCategory::E_Material;
+
+		InventoryComponent->AddItem(temp1);
+	}
+
+
 	{
 		FRecipe recipe;
 
@@ -224,7 +246,7 @@ void AAcmeCharacter::BeginPlay()
 
 		{
 			FItem temp;
-			temp.Name = EItemName::E_Fruit;
+			temp.Name = EItemName::E_Herb;
 			temp.Num = 1;
 			temp.Category = EItemCategory::E_Food;
 
@@ -241,6 +263,40 @@ void AAcmeCharacter::BeginPlay()
 		}
 
 		OwnRecipes.Add(recipe);
+	}
+
+
+	{
+		FRecipe recipe;
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Glass;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Herb;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Food;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_HealthPotion;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Potion;
+
+			recipe.Result = temp;
+		}
+
+		OwnPotionRecipes.Add(recipe);
 	}
 
 }
@@ -612,6 +668,11 @@ void AAcmeCharacter::AddQuest(FQuest quest)
 TArray<FRecipe> AAcmeCharacter::GetRecipes()
 {
 	return OwnRecipes;
+}
+
+TArray<FRecipe> AAcmeCharacter::GetPorionRecipes()
+{
+	return OwnPotionRecipes;
 }
 
 void AAcmeCharacter::AddRecipe(FRecipe newRecipe)

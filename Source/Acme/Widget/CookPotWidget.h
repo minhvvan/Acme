@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Acme/AcmeGameInstance.h"
+#include "Acme/Interface/CraftWidgetInterface.h"
 #include "CookPotWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACME_API UCookPotWidget : public UUserWidget
+class ACME_API UCookPotWidget : public UUserWidget, public ICraftWidgetInterface
 {
 	GENERATED_BODY()
 	
@@ -48,11 +49,9 @@ public:
 	UFUNCTION()
 	void Init();
 
-	UFUNCTION()
-	void SetRecipeInfo(struct FRecipe recipe);
+	virtual void SetRecipeInfo(struct FRecipe recipe);
 
-	UFUNCTION()
-	void SetSelectedRecipe(class URecipeEntryWidget* recipe);
+	virtual void SetSelectedRecipe(class URecipeEntryWidget* recipe);
 
 protected:
 	virtual void NativeConstruct();

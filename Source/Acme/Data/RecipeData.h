@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Acme/AcmeGameInstance.h"
+#include "Acme/Interface/CraftWidgetInterface.h"
 #include "RecipeData.generated.h"
 
 /**
@@ -21,7 +22,7 @@ public:
 	FRecipe Recipe;
 
 	UPROPERTY()
-	class UCookPotWidget* ParentRef;
+	UUserWidget* ParentRef;
 
 public:
 	UFUNCTION()
@@ -31,8 +32,8 @@ public:
 	FRecipe GetRecipe();
 
 	UFUNCTION()
-	void SetParentRef(UCookPotWidget* ref);
+	void SetParentRef(UUserWidget* ref);
 
 	UFUNCTION()
-	UCookPotWidget* GetParentRef();
+	UUserWidget* GetParentRef();
 };
