@@ -12,7 +12,7 @@ APotionTrunk::APotionTrunk()
 {
 	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
 	OverlapComp->SetupAttachment(RootComponent);
-	OverlapComp->InitSphereRadius(100.f);
+	OverlapComp->InitSphereRadius(300.f);
 
 	Indicator = CreateDefaultSubobject<UWidgetComponent>(TEXT("Indicator"));
 	Indicator->SetupAttachment(RootComponent);
@@ -37,8 +37,12 @@ void APotionTrunk::Interact()
 
 void APotionTrunk::BeginPlay()
 {
+	Super::BeginPlay();
+
 	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &APotionTrunk::OnBeginOverlap);
 	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &APotionTrunk::OnEndOverlap);
+
+	SetVisibleIndicator(false);
 }
 
 void APotionTrunk::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -61,7 +65,6 @@ void APotionTrunk::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 
 void APotionTrunk::SetVisibleIndicator(bool bVisible)
 {
-	if (!Indicator) return;
-
+	if (!IsValid(Indicator)) return;
 	Indicator->SetVisibility(bVisible);
 }
