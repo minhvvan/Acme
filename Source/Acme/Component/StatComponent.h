@@ -71,6 +71,9 @@ public:
 	UFUNCTION()
 	void AddSatiety(int amount);
 
+	UFUNCTION()
+	void Heal(int amount);
+
 	FCoolDown CDSkill;
 
 	FChangeHP OnChangedHP;

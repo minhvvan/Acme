@@ -123,7 +123,6 @@ bool UQuickSlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 	{
 		Player->AddItem(DragWidget->ItemInfo);
 
-		UUtil::DebugPrint("DDD");
 		return result;
 	}
 

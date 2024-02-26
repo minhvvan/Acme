@@ -129,3 +129,11 @@ void UStatComponent::AddSatiety(int amount)
 
 	SetCurrentST(newSatiety);
 }
+
+void UStatComponent::Heal(int amount)
+{
+	int newHP = CurrentHP + amount;
+	if (newHP > MaxHP) newHP = MaxHP;
+
+	SetCurrentHP(newHP);
+}

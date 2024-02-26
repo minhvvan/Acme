@@ -258,6 +258,7 @@ void AAcmeCharacter::BeginPlay()
 			temp.Name = EItemName::E_MeatPie;
 			temp.Num = 1;
 			temp.Category = EItemCategory::E_Food;
+			temp.bCanAddQuick = true;
 
 			recipe.Result = temp;
 		}
@@ -292,6 +293,7 @@ void AAcmeCharacter::BeginPlay()
 			temp.Name = EItemName::E_HealthPotion;
 			temp.Num = 1;
 			temp.Category = EItemCategory::E_Potion;
+			temp.bCanAddQuick = true;
 
 			recipe.Result = temp;
 		}
@@ -694,6 +696,14 @@ void AAcmeCharacter::AddSatiety(int amount)
 	if (!StatCompoenent) return;
 
 	StatCompoenent->AddSatiety(amount);
+}
+
+void AAcmeCharacter::Heal(int amount)
+{
+	//TODO: FX
+
+	if (!StatCompoenent) return;
+	StatCompoenent->Heal(amount);
 }
 
 void AAcmeCharacter::ConsumeItemQuick()

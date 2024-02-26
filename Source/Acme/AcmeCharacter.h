@@ -411,6 +411,9 @@ public:
 	void AddSatiety(int amount);
 
 	UFUNCTION()
+	void Heal(int amount);
+
+	UFUNCTION()
 	void ConsumeItemQuick();
 
 public:
