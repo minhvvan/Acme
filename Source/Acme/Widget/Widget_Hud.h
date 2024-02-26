@@ -62,6 +62,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UImage* ImgCompass;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UListView* LVQuest;
+
 	void NativeOnInitialized();
 
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
@@ -84,6 +87,12 @@ public:
 
 	UFUNCTION()
 	void ChangeSelectedSlot(int idx);
+
+	UFUNCTION()
+	void AddQuest(FQuest quest);
+
+	UFUNCTION()
+	void RemoveQuest(int questID);
 
 private:
 	UPROPERTY()

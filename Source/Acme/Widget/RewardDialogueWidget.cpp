@@ -31,6 +31,8 @@ void URewardDialogueWidget::OnClicked()
 		}
 	}
 
+	Player->RemoveQuestList(QuestInfo.QusetID);
+
 	GetOwningPlayer()->bShowMouseCursor = false;
 	GetOwningPlayer()->SetInputMode(FInputModeGameOnly());
 

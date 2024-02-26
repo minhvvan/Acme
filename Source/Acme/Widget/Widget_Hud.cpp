@@ -7,13 +7,16 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
+#include "Components/ListView.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Acme/Component/StatComponent.h"
 #include "Acme/Widget/QuickSlotWidget.h"
+#include "Acme/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/AcmeCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "Acme/Data/QuestData.h"
 
 
 void UWidget_Hud::NativeOnInitialized()
@@ -137,5 +140,29 @@ void UWidget_Hud::ChangeSelectedSlot(int idx)
 	if (QuickSlotWidgets[CurrentQuickSlotIdx])
 	{
 		QuickSlotWidgets[CurrentQuickSlotIdx]->SetSelectBorder();
+	}
+}
+
+void UWidget_Hud::AddQuest(FQuest quest)
+{
+	if (LVQuest->GetNumItems() >= 5) return;
+
+	UQuestData* Data = NewObject<UQuestData>();
+	Data->Quest = quest;
+
+	LVQuest->AddItem(Data);
+}
+
+void UWidget_Hud::RemoveQuest(int questID)
+{
+	for (int i = 0; i < LVQuest->GetNumItems(); i++)
+	{
+		UQuestData* Data = Cast<UQuestData>(LVQuest->GetItemAt(i));
+		if (!Data) return;
+
+		if (Data->Quest.QusetID == questID)
+		{
+			LVQuest->RemoveItem(Data);
+		}
 	}
 }

@@ -416,6 +416,9 @@ public:
 	UFUNCTION()
 	void ConsumeItemQuick();
 
+	UFUNCTION()
+	void RemoveQuestList(int questID);
+
 public:
 	FOnAcceptQuest OnAcceptQuest;
 	FOnRewardQuest OnRewardQuest;

@@ -93,6 +93,9 @@ struct FQuest : public FTableRowBase
 	int QusetID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Title;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Desc;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

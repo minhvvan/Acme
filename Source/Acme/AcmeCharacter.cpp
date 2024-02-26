@@ -174,7 +174,7 @@ void AAcmeCharacter::BeginPlay()
 	{
 		FItem temp1;
 		temp1.Name = EItemName::E_Fire;
-		temp1.Num = 1;
+		temp1.Num = 2;
 		temp1.Category = EItemCategory::E_Element;
 		temp1.bCanAddQuick = false;
 
@@ -662,7 +662,9 @@ void AAcmeCharacter::ShowNotComleteWidget(FQuest quest)
 void AAcmeCharacter::AddQuest(FQuest quest)
 {
 	if (!QuestComponent) return;
+	if (!Hud) return;
 	QuestComponent->AddQuest(quest);
+	Hud->AddQuest(quest);
 
 	OnAcceptQuest.Broadcast(quest.QusetID);
 }
@@ -718,6 +720,11 @@ void AAcmeCharacter::ConsumeItemQuick()
 	if (!Hud) return;
 	Hud->SetQuickSlots(GetQuickSlots());
 	Hud->ChangeSelectedSlot(CurrentQuickSlotIdx);
+}
+
+void AAcmeCharacter::RemoveQuestList(int questID)
+{
+	Hud->RemoveQuest(questID);
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)

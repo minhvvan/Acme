@@ -4,6 +4,7 @@
 #include "Acme/Component/QuestComponent.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/NPCCharacter.h"
+#include "Acme/Utils/Util.h"
 
 // Sets default values for this component's properties
 UQuestComponent::UQuestComponent()
@@ -37,6 +38,7 @@ void UQuestComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 void UQuestComponent::AddQuest(FQuest newQuest)
 {
 	OngoingQuests.Add(newQuest);
+	UpdateQuestState();
 }
 
 void UQuestComponent::CompleteQuest(int idx)

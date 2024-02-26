@@ -93,7 +93,6 @@ void ANPCCharacter::AddQuest()
 	bCompleteQuest = false;
 	UpdateQuestIndicator();
 
-	//TODO: Quest Timer Clear
 	GetWorldTimerManager().ClearTimer(QuestHandle);
 }
 
@@ -104,6 +103,8 @@ void ANPCCharacter::RemoveQuset()
 
 void ANPCCharacter::UpdateQuestIndicator()
 {
+	if (bCompleteQuest) return;
+
 	if(!bValidQuest) QuestIndicator->SetVisibility(false);
 	else
 	{
@@ -157,6 +158,8 @@ void ANPCCharacter::OnAcceptQuest(int questID)
 void ANPCCharacter::OnRewardQuest()
 {
 	bValidQuest = false;
+	bCompleteQuest = false;
+
 	UpdateQuestIndicator();
 }
 
