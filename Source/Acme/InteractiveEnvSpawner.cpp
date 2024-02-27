@@ -33,7 +33,7 @@ void AInteractiveEnvSpawner::Respawn()
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, Pos, Pos + FVector(0, 0, -300), ECollisionChannel::ECC_Visibility))
 		{
 			FVector newPos = HitResult.ImpactPoint;
-			newPos.Z += 30;
+			newPos.Z += 10;
 
 			FActorSpawnParameters SpawnParam;
 			SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;

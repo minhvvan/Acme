@@ -16,7 +16,7 @@ class ACME_API ABaseItem : public AActor
 protected:
 	UPROPERTY(EditAnywhere, Category = Default)
 	class UStaticMeshComponent* Mesh;
-	
+
 public:	
 	// Sets default values for this actor's properties
 	ABaseItem();

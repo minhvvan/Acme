@@ -62,6 +62,7 @@ void AInteractiveItem::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActo
 		OverlappedCharacter = Cast<AAcmeCharacter>(OtherActor);
 		if (!OverlappedCharacter) return;
 
+		Mesh->SetRenderCustomDepth(true);
 		SetVisibleIndicator(true);
 	}
 }
@@ -72,6 +73,7 @@ void AInteractiveItem::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	{
 		OverlappedCharacter = nullptr;
 
+		Mesh->SetRenderCustomDepth(false);
 		bCanOverlap = true;
 		SetVisibleIndicator(false);
 	}

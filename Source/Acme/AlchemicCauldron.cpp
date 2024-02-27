@@ -39,6 +39,7 @@ void AAlchemicCauldron::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AAct
 	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		OverlappedCharacter = Cast<AAcmeCharacter>(OtherActor);
+		Mesh->SetRenderCustomDepth(true);
 		SetVisibleIndicator(true);
 	}
 }
@@ -50,6 +51,7 @@ void AAlchemicCauldron::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, A
 		if (Cast<AAcmeCharacter>(OtherActor))
 		{
 			OverlappedCharacter = nullptr;
+			Mesh->SetRenderCustomDepth(false);
 			SetVisibleIndicator(false);
 		}
 	}
