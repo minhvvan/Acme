@@ -30,6 +30,8 @@
 #include "Acme/Interface/InteractableActor.h"
 #include "Acme/Widget/RewardDialogueWidget.h"
 #include "Widget/QuestNotCompleteWidget.h"
+#include "GameFramework/PhysicsVolume.h"
+#include "Kismet/KismetMathLibrary.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -93,6 +95,8 @@ AAcmeCharacter::AAcmeCharacter()
 
 	IsOpenInven = false;
 	CurrentQuickSlotIdx = 0;
+
+	IsSwimming = false;
 }
 
 void AAcmeCharacter::BeginPlay()
@@ -300,7 +304,6 @@ void AAcmeCharacter::BeginPlay()
 
 		OwnPotionRecipes.Add(recipe);
 	}
-
 }
 
 void AAcmeCharacter::Tick(float DeltaSeconds)
@@ -324,6 +327,7 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		
 		//Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Ongoing, this, &AAcmeCharacter::SwimUP);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		//Moving
@@ -338,6 +342,7 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	
 		//Dodge
 		EnhancedInputComponent->BindAction(DodgeRollAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartDodgeRoll);
+		EnhancedInputComponent->BindAction(DodgeRollAction, ETriggerEvent::Ongoing, this, &AAcmeCharacter::SwimDown);
 		EnhancedInputComponent->BindAction(DodgeRollAction, ETriggerEvent::Completed, this, &AAcmeCharacter::StopDodgeRoll);
 		
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::StartSprint);
@@ -374,22 +379,29 @@ void AAcmeCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		if (!IsSwimming)
+		{
+			// find out which way is forward
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
-		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+			// get forward vector
+			const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+			// get right vector 
+			const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		DodgeForward = MovementVector.Y;
-		DodgeRight = MovementVector.X;
+			// add movement 
+			AddMovementInput(ForwardDirection, MovementVector.Y);
+			AddMovementInput(RightDirection, MovementVector.X);
+
+			DodgeForward = MovementVector.Y;
+			DodgeRight = MovementVector.X;
+		}
+		else
+		{
+			AddMovementInput(GetControlRotation().Vector());
+		}
 	}
 }
 
@@ -410,7 +422,14 @@ void AAcmeCharacter::Look(const FInputActionValue& Value)
 
 void AAcmeCharacter::Jump()
 {
-	Super::Jump();
+	if (!IsSwimming)
+	{
+		Super::Jump();
+	}
+	else
+	{
+		AddMovementInput(GetActorUpVector());
+	}
 }
 
 void AAcmeCharacter::StartCrouch()
@@ -430,6 +449,7 @@ void AAcmeCharacter::StopCrouch()
 
 void AAcmeCharacter::StartDodgeRoll()
 {
+	if (IsSwimming) return;
 	auto Movement = GetCharacterMovement();
 	if (!Movement || IsCrouch || IsDodgeRoll) return;
 	if (!AnimInstance) return;
@@ -723,6 +743,36 @@ void AAcmeCharacter::ConsumeItemQuick()
 void AAcmeCharacter::RemoveQuestList(int questID)
 {
 	Hud->RemoveQuest(questID);
+}
+
+void AAcmeCharacter::StartSwim()
+{
+	GetCharacterMovement()->GetPhysicsVolume()->bWaterVolume = true;
+
+	FVector Dir = UKismetMathLibrary::GetUpVector(GetControlRotation()) * 20;
+	Dir += UKismetMathLibrary::GetForwardVector(GetControlRotation()) * 20;
+
+	LaunchCharacter(Dir, false, false);
+	
+	IsSwimming = true;
+}
+
+void AAcmeCharacter::StopSwim()
+{
+	GetCharacterMovement()->GetPhysicsVolume()->bWaterVolume = false;
+	IsSwimming = false;
+}
+
+void AAcmeCharacter::SwimUP()
+{
+	if (!IsSwimming) return;
+	AddMovementInput(GetActorUpVector());
+}
+
+void AAcmeCharacter::SwimDown()
+{
+	if (!IsSwimming) return;
+	AddMovementInput(-1*GetActorUpVector());
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)

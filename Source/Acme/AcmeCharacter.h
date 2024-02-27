@@ -246,11 +246,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Default, meta = (AllowPrivateAccess = "true"))
 	int CurrentQuickSlotIdx;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Recipe, meta = (AllowPrivateAccess = "true"))
 	TArray<struct FRecipe> OwnRecipes;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Element, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Recipe, meta = (AllowPrivateAccess = "true"))
 	TArray<struct FRecipe> OwnPotionRecipes;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Swim, meta = (AllowPrivateAccess = "true"))
+	bool IsSwimming;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
@@ -418,6 +421,19 @@ public:
 
 	UFUNCTION()
 	void RemoveQuestList(int questID);
+
+	//Swim
+	UFUNCTION(BlueprintCallable)
+	void StartSwim();
+
+	UFUNCTION(BlueprintCallable)
+	void StopSwim();	
+	
+	UFUNCTION()
+	void SwimUP();	
+	
+	UFUNCTION()
+	void SwimDown();
 
 public:
 	FOnAcceptQuest OnAcceptQuest;
