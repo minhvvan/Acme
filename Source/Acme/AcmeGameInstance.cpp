@@ -59,6 +59,14 @@ UAcmeGameInstance::UAcmeGameInstance()
 		{
 			QuestTable = TABLE.Object;
 		}
+	}	
+	
+	{
+		static ConstructorHelpers::FObjectFinder<UDataTable> TABLE(TEXT("/Script/Engine.DataTable'/Game/Acme/Data/DT_Item.DT_Item'"));
+		if (TABLE.Succeeded())
+		{
+			ItemTable = TABLE.Object;
+		}
 	}
 }
 
@@ -166,6 +174,21 @@ FSocketString UAcmeGameInstance::GetSocketName(ESocketName name)
 	FName SotcketName = FName(*SocketEnum->GetNameStringByIndex(static_cast<uint8>(name)));
 
 	FSocketString* row = SocketNameTable->FindRow<FSocketString>(SotcketName, TEXT(""));
+	if (!row) return Result;
+
+	Result = *row;
+
+	return Result;
+}
+
+FItem UAcmeGameInstance::GetItemInfo(EItemName name)
+{
+	FItem Result = *ItemTable->FindRow<FItem>(FName(TEXT("E_Empty")), TEXT(""));
+
+	UEnum* ItemEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("EItemName"), true);
+	FName ItemName = FName(*ItemEnum->GetNameStringByIndex(static_cast<uint8>(name)));
+
+	FItem* row = ItemTable->FindRow<FItem>(ItemName, TEXT(""));
 	if (!row) return Result;
 
 	Result = *row;

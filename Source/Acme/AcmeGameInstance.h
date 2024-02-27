@@ -165,6 +165,9 @@ public:
 	FSocketString GetSocketName(ESocketName name);
 
 	UFUNCTION()
+	FItem GetItemInfo(EItemName name);
+
+	UFUNCTION()
 	FQuest GetQuest();
 
 protected:
@@ -188,4 +191,7 @@ protected:
 
 	UPROPERTY()
 	class UDataTable* QuestTable;
+
+	UPROPERTY()
+	class UDataTable* ItemTable;
 };

@@ -25,7 +25,6 @@ AInteractiveItem::AInteractiveItem()
 void AInteractiveItem::Init(FItem newItem)
 {
 	//Info Setting
-	//TODO: GI -> GetMesh
 	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
 	Mesh->SetStaticMesh(GameInstance->GetItemMesh(newItem.Name));
 

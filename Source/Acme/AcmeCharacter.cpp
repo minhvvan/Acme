@@ -246,7 +246,7 @@ void AAcmeCharacter::BeginPlay()
 
 		{
 			FItem temp;
-			temp.Name = EItemName::E_Herb;
+			temp.Name = EItemName::E_Fruit;
 			temp.Num = 1;
 			temp.Category = EItemCategory::E_Food;
 
@@ -493,7 +493,6 @@ void AAcmeCharacter::StartSkill()
 
 void AAcmeCharacter::StartInteract()
 {
-	//trace 가장 가까운 item -> Interact
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Query;
 
@@ -508,17 +507,16 @@ void AAcmeCharacter::StartInteract()
 	CollisionShape.SetSphere(250);
 
 	Query.AddIgnoredActor(this);
+
 	if (GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC, CollisionShape, Query))
 	{
 		for (auto HitResult : HitResults)
 		{
 			IInteractableActor* Interactable = Cast<IInteractableActor>(HitResult.GetActor());
+			if (Interactable)
 			{
-				if (Interactable)
-				{
-					Interactable->Interact();
-					return;
-				}
+				Interactable->Interact();
+				return;
 			}
 		}
 	}
