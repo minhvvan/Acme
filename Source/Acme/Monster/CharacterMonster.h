@@ -130,6 +130,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Item, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AInteractiveItem> DropItemClass;
 
+	UPROPERTY(EditAnywhere, Category = Item, meta = (AllowPrivateAccess = "true"))
+	TArray<EItemName> DropItems;
+
 	FTimerHandle CombatTimer;
 	FTimerHandle ElementTimer;
 

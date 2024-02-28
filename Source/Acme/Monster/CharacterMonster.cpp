@@ -154,12 +154,11 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 		FActorSpawnParameters SpawnParam;
 		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-		//TODO: Drop Item List 
-		FItem temp;
-		temp.bCanAddQuick = true;
-		temp.Category = EItemCategory::E_Equipment;
-		temp.Name = EItemName::E_Sword;
-		temp.Num = 1;
+		if (DropItems.IsEmpty()) return;
+		int idx = FMath::RandRange(0, DropItems.Num() - 1);
+		if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
+
+		FItem temp = GameInstance->GetItemInfo(DropItems[idx]);
 
 		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
 		DropItem->Init(temp);
@@ -185,7 +184,7 @@ void ACharacterMonster::AttackCheck()
 			Player->OnAttacked(StatCompoenent->GetStrength());
 		}
 
-		DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, AttackRange / 2, 10, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), FColor::Red, false, 10.f);
+		//DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, AttackRange / 2, 10, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), FColor::Red, false, 10.f);
 	}
 }
 
