@@ -17,10 +17,19 @@ class ACME_API UAlchemicComposeWidget : public UUserWidget
 
 protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UWidgetSwitcher* WSInven;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UTileView* TVResult;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UTileView* TVItem;
+	class UTileView* TVElement;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTileView* TVTool;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTileView* TVMaterial;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UButton* BtnCompose;
@@ -29,16 +38,7 @@ protected:
 	class UButton* BtnElement;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UButton* BtnEquipment;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UButton* BtnTool;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UButton* BtnPotion;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UButton* BtnFood;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UButton* BtnMaterial;
@@ -47,16 +47,7 @@ protected:
 	class UImage* ImgElement;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgEquipment;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UImage* ImgTool;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgPotion;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UImage* ImgFood;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UImage* ImgMaterial;
@@ -97,16 +88,7 @@ protected:
 	void OnElementClicked();
 
 	UFUNCTION()
-	void OnEquipmentClicked();
-
-	UFUNCTION()
 	void OnToolClicked();
-
-	UFUNCTION()
-	void OnPotionClicked();
-
-	UFUNCTION()
-	void OnFoodClicked();
 
 	UFUNCTION()
 	void OnMaterialClicked();
@@ -137,6 +119,9 @@ protected:
 
 	UFUNCTION()
 	void OnClickedOK();
+
+	UFUNCTION()
+	UTileView* GetCurrentCategory();
 
 public:
 	UFUNCTION()

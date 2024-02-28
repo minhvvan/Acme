@@ -40,8 +40,8 @@ protected:
 	int Index;
 
 	UPROPERTY()
-	bool IsEmpty;
-
+	bool IsEmpty;	
+	
 	UPROPERTY()
 	class UAcmeGameInstance* GameInstance;
 

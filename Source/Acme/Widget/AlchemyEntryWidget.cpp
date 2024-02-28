@@ -23,6 +23,8 @@ void UAlchemyEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 	SetIndex(Data->GetIndex());
 	SetItemInfo(info);
 
+	SetUnSelected();
+
 	ParentWidget = Cast<UAlchemicComposeWidget>(Data->GetParentRef());
 	if (!ParentWidget) return;
 }

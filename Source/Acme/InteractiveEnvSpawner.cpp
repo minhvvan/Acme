@@ -20,17 +20,16 @@ void AInteractiveEnvSpawner::Respawn()
 	if (!Area) return;
 	if (!EnvClass) return;
 
+	FVector Loc = GetActorLocation();
+	FVector Extand = Area->GetScaledBoxExtent();
+	
 	while (Enves.Num() != MaxPopulation)
-	//for(int i = 0; i < MaxPopulation; i++)
 	{
-		FVector Loc = GetActorLocation();
-		FVector Extand = Area->GetScaledBoxExtent();
-
 		FVector Pos = UKismetMathLibrary::RandomPointInBoundingBox(Loc, Extand);
 		Pos.Z += 100;
 
 		FHitResult HitResult;
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, Pos, Pos + FVector(0, 0, -300), ECollisionChannel::ECC_Visibility))
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, Pos, Pos + FVector(0, 0, -2000), ECollisionChannel::ECC_Visibility))
 		{
 			FVector newPos = HitResult.ImpactPoint;
 			newPos.Z += 10;

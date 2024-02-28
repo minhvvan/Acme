@@ -178,7 +178,7 @@ void AAcmeCharacter::BeginPlay()
 	{
 		FItem temp1;
 		temp1.Name = EItemName::E_Fire;
-		temp1.Num = 2;
+		temp1.Num = 100;
 		temp1.Category = EItemCategory::E_Element;
 		temp1.bCanAddQuick = false;
 
@@ -187,7 +187,7 @@ void AAcmeCharacter::BeginPlay()
 	{
 		FItem temp1;
 		temp1.Name = EItemName::E_Water;
-		temp1.Num = 5;
+		temp1.Num = 100;
 		temp1.bCanAddQuick = false;
 		temp1.Category = EItemCategory::E_Element;
 
@@ -196,41 +196,19 @@ void AAcmeCharacter::BeginPlay()
 
 	{
 		FItem temp1;
-		temp1.Name = EItemName::E_Meat;
-		temp1.Num = 5;
+		temp1.Name = EItemName::E_Earth;
+		temp1.Num = 100;
+		temp1.Category = EItemCategory::E_Element;
 		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Food;
 
 		InventoryComponent->AddItem(temp1);
 	}
-
 	{
 		FItem temp1;
-		temp1.Name = EItemName::E_Fruit;
-		temp1.Num = 5;
+		temp1.Name = EItemName::E_Air;
+		temp1.Num = 100;
 		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Food;
-
-		InventoryComponent->AddItem(temp1);
-	}
-
-
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Herb;
-		temp1.Num = 5;
-		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Food;
-
-		InventoryComponent->AddItem(temp1);
-	}
-
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Glass;
-		temp1.Num = 5;
-		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Material;
+		temp1.Category = EItemCategory::E_Element;
 
 		InventoryComponent->AddItem(temp1);
 	}

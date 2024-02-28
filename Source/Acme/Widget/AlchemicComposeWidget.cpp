@@ -5,6 +5,7 @@
 #include "Kismet/KismetStringLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/TileView.h"
+#include "Components/WidgetSwitcher.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
 #include "Components/Border.h"
@@ -32,10 +33,7 @@ void UAlchemicComposeWidget::NativeConstruct()
 	SetItemList();
 
 	BtnElement->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnElementClicked);
-	BtnEquipment->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnEquipmentClicked);
 	BtnTool->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnToolClicked);
-	BtnPotion->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnPotionClicked);
-	BtnFood->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnFoodClicked);
 	BtnMaterial->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnMaterialClicked);
 
 	BtnMinus->OnClicked.AddDynamic(this, &UAlchemicComposeWidget::OnMinusClicked);
@@ -67,37 +65,22 @@ FReply UAlchemicComposeWidget::NativeOnKeyDown(const FGeometry& InGeometry, cons
 void UAlchemicComposeWidget::OnElementClicked()
 {
 	CurrentCategory = EItemCategory::E_Element;
-	SetItemList();
-}
-
-void UAlchemicComposeWidget::OnEquipmentClicked()
-{
-	CurrentCategory = EItemCategory::E_Equipment;
-	SetItemList();
+	WSInven->SetActiveWidgetIndex(0);
+	SetActiveCategory();
 }
 
 void UAlchemicComposeWidget::OnToolClicked()
 {
 	CurrentCategory = EItemCategory::E_Tool;
-	SetItemList();
-}
-
-void UAlchemicComposeWidget::OnPotionClicked()
-{
-	CurrentCategory = EItemCategory::E_Potion;
-	SetItemList();
-}
-
-void UAlchemicComposeWidget::OnFoodClicked()
-{
-	CurrentCategory = EItemCategory::E_Food;
-	SetItemList();
+	WSInven->SetActiveWidgetIndex(1);
+	SetActiveCategory();
 }
 
 void UAlchemicComposeWidget::OnMaterialClicked()
 {
 	CurrentCategory = EItemCategory::E_Material;
-	SetItemList();
+	WSInven->SetActiveWidgetIndex(2);
+	SetActiveCategory();
 }
 
 void UAlchemicComposeWidget::OnMinusClicked()
@@ -151,6 +134,7 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	OwnerCharacter->UseItem(RightItem.Category, RightSlotIdx, Amount);
 
 	//Add
+	TVResult->ClearListItems();
 	for (FItem result : ComposeResults)
 	{
 		//Set TVResult
@@ -177,6 +161,8 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	SetItemList();
 	Amount = 1;
 	EdtNum->SetText(FText::AsNumber(Amount));
+	LeftSlotIdx = -1;
+	RightSlotIdx = -1;
 }
 
 void UAlchemicComposeWidget::OnTextChanged(const FText& newText)
@@ -194,24 +180,58 @@ void UAlchemicComposeWidget::SetNumTxt(const FText& newText)
 
 void UAlchemicComposeWidget::SetItemList()
 {
-	TVItem->ClearListItems();
-
 	if (!OwnerCharacter) OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
-	TArray<FItem>& Items = OwnerCharacter->GetItems(CurrentCategory).Get();
-	for (int i = 0; i < Items.Num(); i++)
 	{
-		FItem& item = Items[i];
+		TVElement->ClearListItems();
 
-		UItemData* Data = NewObject<UItemData>();
-		Data->SetItem(item);
-		Data->SetIndex(i);
-		Data->SetParentRef(this);
+		TArray<FItem>& Items = OwnerCharacter->GetItems(EItemCategory::E_Element).Get();
+		for (int i = 0; i < Items.Num(); i++)
+		{
+			FItem& item = Items[i];
 
-		TVItem->AddItem(Data);
+			UItemData* Data = NewObject<UItemData>();
+			Data->SetItem(item);
+			Data->SetIndex(i);
+			Data->SetParentRef(this);
+
+			TVElement->AddItem(Data);
+		}
 	}
 
-	SetActiveCategory();
+	{
+		TVTool->ClearListItems();
+
+		TArray<FItem>& Items = OwnerCharacter->GetItems(EItemCategory::E_Tool).Get();
+		for (int i = 0; i < Items.Num(); i++)
+		{
+			FItem& item = Items[i];
+
+			UItemData* Data = NewObject<UItemData>();
+			Data->SetItem(item);
+			Data->SetIndex(i);
+			Data->SetParentRef(this);
+
+			TVTool->AddItem(Data);
+		}
+	}
+
+	{
+		TVMaterial->ClearListItems();
+
+		TArray<FItem>& Items = OwnerCharacter->GetItems(EItemCategory::E_Material).Get();
+		for (int i = 0; i < Items.Num(); i++)
+		{
+			FItem& item = Items[i];
+
+			UItemData* Data = NewObject<UItemData>();
+			Data->SetItem(item);
+			Data->SetIndex(i);
+			Data->SetParentRef(this);
+
+			TVMaterial->AddItem(Data);
+		}
+	}
 }
 
 void UAlchemicComposeWidget::SetActiveCategory()
@@ -226,17 +246,8 @@ void UAlchemicComposeWidget::SetActiveCategory()
 	case EItemCategory::E_Element:
 		ActiveCategoryImg = ImgElement;
 		break;
-	case EItemCategory::E_Equipment:
-		ActiveCategoryImg = ImgEquipment;
-		break;
 	case EItemCategory::E_Tool:
 		ActiveCategoryImg = ImgTool;
-		break;
-	case EItemCategory::E_Potion:
-		ActiveCategoryImg = ImgPotion;
-		break;
-	case EItemCategory::E_Food:
-		ActiveCategoryImg = ImgFood;
 		break;
 	case EItemCategory::E_Material:
 		ActiveCategoryImg = ImgMaterial;
@@ -260,6 +271,21 @@ void UAlchemicComposeWidget::OnClickedOK()
 	BorderAlert->SetVisibility(ESlateVisibility::Hidden);
 }
 
+UTileView* UAlchemicComposeWidget::GetCurrentCategory()
+{
+	switch (CurrentCategory)
+	{
+	case EItemCategory::E_Element:
+		return TVElement;
+	case EItemCategory::E_Tool:
+		return TVTool;
+	case EItemCategory::E_Material:
+		return TVMaterial;
+	}
+
+	return TVElement;
+}
+
 bool UAlchemicComposeWidget::AddToSlot(int idx)
 {
 	if (LeftSlotIdx == idx || RightSlotIdx == idx) return false;
@@ -267,7 +293,7 @@ bool UAlchemicComposeWidget::AddToSlot(int idx)
 	if (LeftSlot->IsEmpty())
 	{
 		//Add
-		UItemData* Data = Cast<UItemData>(TVItem->GetItemAt(idx));
+		UItemData* Data = Cast<UItemData>(GetCurrentCategory()->GetItemAt(idx));
 		FItem info = Data->GetItemInfo();
 
 		LeftSlot->SetSlot(info);
@@ -277,7 +303,7 @@ bool UAlchemicComposeWidget::AddToSlot(int idx)
 	}
 	else if(RightSlot->IsEmpty())
 	{
-		UItemData* Data = Cast<UItemData>(TVItem->GetItemAt(idx));
+		UItemData* Data = Cast<UItemData>(GetCurrentCategory()->GetItemAt(idx));
 		FItem info = Data->GetItemInfo();
 
 		RightSlot->SetSlot(info);
