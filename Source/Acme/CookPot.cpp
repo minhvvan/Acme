@@ -34,6 +34,7 @@ void ACookPot::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* Other
 	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		OverlappedCharacter = Cast<AAcmeCharacter>(OtherActor);
+		if (!OverlappedCharacter) return;
 		Mesh->SetRenderCustomDepth(true);
 		SetVisibleIndicator(true);
 	}

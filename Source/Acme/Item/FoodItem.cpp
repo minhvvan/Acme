@@ -4,6 +4,7 @@
 #include "Acme/Item/FoodItem.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/AcmeGameInstance.h"
 
 void AFoodItem::BeginPlay()
 {
@@ -17,4 +18,15 @@ void AFoodItem::Active()
 
 	Player->ConsumeItemQuick();
 	Player->AddSatiety(Satiety);
+}
+
+void AFoodItem::AttachBack()
+{
+	AAcmeCharacter* Character = Cast<AAcmeCharacter>(GetOwner());
+	if (!Character) return;
+
+	if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
+
+	Mesh->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameInstance->GetSocketName(ESocketName::E_BackSocket).SocketName);
+	Mesh->SetVisibility(false);
 }

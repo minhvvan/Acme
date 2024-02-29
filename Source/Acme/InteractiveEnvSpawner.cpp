@@ -22,8 +22,10 @@ void AInteractiveEnvSpawner::Respawn()
 
 	FVector Loc = GetActorLocation();
 	FVector Extand = Area->GetScaledBoxExtent();
+
+	int TryNum = 0;
 	
-	while (Enves.Num() != MaxPopulation)
+	while (Enves.Num() != MaxPopulation && TryNum <= MaxPopulation * 2)
 	{
 		FVector Pos = UKismetMathLibrary::RandomPointInBoundingBox(Loc, Extand);
 		Pos.Z += 100;
@@ -38,12 +40,13 @@ void AInteractiveEnvSpawner::Respawn()
 			SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 			AInteractiveItem* Env = GetWorld()->SpawnActor<AInteractiveItem>(EnvClass, FTransform(FRotator::ZeroRotator, newPos), SpawnParam);
 
-			UAcmeGameInstance* GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+			if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
 			FItem item = GameInstance->GetItemInfo(ItemName);
 
 			Env->Init(item);
 			Enves.Add(Env);
 		}
+		TryNum++;
 	}
 }
 

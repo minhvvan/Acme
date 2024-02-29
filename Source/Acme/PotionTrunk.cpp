@@ -50,6 +50,7 @@ void APotionTrunk::OnBeginOverlap(UPrimitiveComponent* OVerlappedComp, AActor* O
 	if (OtherActor != nullptr && OtherComp != nullptr)
 	{
 		OverlappedCharacter = Cast<AAcmeCharacter>(OtherActor);
+		if (!OverlappedCharacter) return;
 		Mesh->SetRenderCustomDepth(true);
 		SetVisibleIndicator(true);
 	}

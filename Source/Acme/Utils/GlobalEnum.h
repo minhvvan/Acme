@@ -82,6 +82,9 @@ enum class EItemName : uint8
 
 	E_Life UMETA(DisplayName = "Life"),
 	E_Bone UMETA(DisplayName = "Bone"),
+	E_Machine UMETA(DisplayName = "Machine"),
+	E_Turret UMETA(DisplayName = "Turret"),
+	E_Totem UMETA(DisplayName = "Totem"),
 
 	E_Empty UMETA(DisplayName = "Empty"),
 };

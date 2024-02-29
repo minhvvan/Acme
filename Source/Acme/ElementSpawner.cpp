@@ -19,7 +19,9 @@ void AElementSpawner::Respawn()
 	if (!Area) return;
 	if (!ElementClass) return;
 
-	while (Elements.Num() != MaxPopulation)
+	int TryNum = 0;
+
+	while (Elements.Num() != MaxPopulation && TryNum <= MaxPopulation*2)
 	{
 		//Spawn
 		FVector Loc = GetActorLocation();
@@ -60,6 +62,8 @@ void AElementSpawner::Respawn()
 
 		Element->Init(item);
 		Elements.Add(Element);
+
+		TryNum++;
 	}
 }
 

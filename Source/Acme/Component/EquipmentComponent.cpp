@@ -44,24 +44,18 @@ void UEquipmentComponent::SetCurrentHand(int idx)
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
 	CurrentIdx = idx;
+	Player->SetAnimState(EAnimState::E_Unarmed);
 
 	if (QuickSlotItems[idx] && !QuickSlotItems[idx]->IsPendingKill())
 	{
-		if (QuickSlotItems[idx]->GetItem().Category == EItemCategory::E_Equipment)
+		if (QuickSlotItems[idx]->GetItem().Name == EItemName::E_Sword)
 		{
 			Player->SetAnimState(EAnimState::E_Equiped);
-		}
-		else
-		{
-			Player->SetAnimState(EAnimState::E_Unarmed);
 		}
 
 		CurrentHand = QuickSlotItems[idx];
 		CurrentHand->AttachToSocket(EEquipmentPart::E_Hand);
-	}
-	else
-	{
-		Player->SetAnimState(EAnimState::E_Unarmed);
+		CurrentHand->GetMesh()->SetVisibility(true);
 	}
 }
 

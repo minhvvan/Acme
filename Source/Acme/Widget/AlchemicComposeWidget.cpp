@@ -169,6 +169,7 @@ void UAlchemicComposeWidget::OnTextChanged(const FText& newText)
 {
 	//숫자가 아니면 걸러야 함
 	int num = UKismetStringLibrary::Conv_StringToInt(EdtNum->GetText().ToString());
+	if (num == 0) return;
 
 	SetNumTxt(newText);
 }

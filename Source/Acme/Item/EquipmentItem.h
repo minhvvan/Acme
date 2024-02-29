@@ -36,7 +36,7 @@ public:
 	void AttachToSocket(EEquipmentPart ItemPart);
 
 	UFUNCTION()
-	void AttachBack();
+	virtual void AttachBack();
 
 	UFUNCTION()
 	void SetPart(EEquipmentPart newPart);

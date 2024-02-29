@@ -23,7 +23,9 @@ void AMonsterSpawner::Respawn()
 	if (!Area) return;
 	if (!MonsterClass.Get()) return;
 
-	while (Monsters.Num() != MaxPopulation)
+	int TryNum = 0;
+
+	while (Monsters.Num() != MaxPopulation && TryNum <= MaxPopulation * 2)
 	{
 		//Spawn
 		FVector Loc = GetActorLocation();
@@ -47,6 +49,8 @@ void AMonsterSpawner::Respawn()
 			Monster->OnDied.AddLambda([this, Monster]() { Monsters.Remove(Monster); });
 			Monsters.Add(Monster);
 		}
+
+		TryNum++;
 	}
 }
 

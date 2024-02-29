@@ -17,6 +17,9 @@ class ACME_API AFoodItem : public AActiveItem
 protected:
 	virtual void BeginPlay();
 
+public:
+	virtual void AttachBack() override;
+
 	virtual void Active();
 
 private:

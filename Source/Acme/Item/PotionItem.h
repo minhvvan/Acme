@@ -17,4 +17,6 @@ class ACME_API APotionItem : public AActiveItem
 
 public:
 	virtual void Active();
+
+	virtual void AttachBack() override;
 };

@@ -22,10 +22,11 @@ bool UBTDCanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp
 {
 	bool Result = Super::CalculateRawConditionValue(OwnerComp, NodeMemory);
 
-	ACharacterMonster* Monster = Cast<ACharacterMonster>(OwnerComp.GetAIOwner()->GetPawn());
+	//ACharacterMonster* Monster = Cast<ACharacterMonster>(OwnerComp.GetAIOwner()->GetPawn());
+	APawn* Monster = OwnerComp.GetAIOwner()->GetPawn();
 	if (!Monster) return false;
 
-	AAcmeCharacter* Player = Cast<AAcmeCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
+	APawn* Player = Cast<APawn>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
 	if (!Player) return false;
 
 	return Result && Player->GetDistanceTo(Monster) <= AttackDistance;

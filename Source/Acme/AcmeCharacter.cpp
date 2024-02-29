@@ -145,12 +145,23 @@ void AAcmeCharacter::BeginPlay()
 
 	{
 		FItem temp1;
+		temp1.Name = EItemName::E_Turret;
+		temp1.Num = 1;
+		temp1.Category = EItemCategory::E_Equipment;
+		temp1.bCanAddQuick = true;
+
+		InventoryComponent->AddItem(temp1);
+	}
+
+
+	{
+		FItem temp1;
 		temp1.Name = EItemName::E_Sword;
 		temp1.Num = 1;
 		temp1.Category = EItemCategory::E_Equipment;
 		temp1.bCanAddQuick = true;
 
-		InventoryComponent->AddToInven(temp1, 2);
+		InventoryComponent->AddItem(temp1);
 	}
 
 	{
@@ -161,7 +172,7 @@ void AAcmeCharacter::BeginPlay()
 		temp1.Category = EItemCategory::E_Equipment;
 		temp1.bCanAddQuick = false;
 
-		InventoryComponent->AddToInven(temp1, 1);
+		InventoryComponent->AddItem(temp1);
 	}
 
 	{
@@ -172,7 +183,7 @@ void AAcmeCharacter::BeginPlay()
 		temp1.Category = EItemCategory::E_Equipment;
 		temp1.bCanAddQuick = false;
 
-		InventoryComponent->AddToInven(temp1, 0);
+		InventoryComponent->AddItem(temp1);
 	}
 
 	{
