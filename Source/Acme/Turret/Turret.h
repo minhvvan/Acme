@@ -19,6 +19,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Default)
 	class UStaticMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere, Category = Default)
+	class UAudioComponent* AudioComp;
+
+	UPROPERTY(EditAnywhere, Category = Default)
+	class USoundBase* FireSFX;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,4 +36,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION()
+	void PlayFireSFX();
 };

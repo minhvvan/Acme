@@ -105,6 +105,9 @@ public:
 	UFUNCTION()
 	float GetSearchRadius();
 
+	UFUNCTION()
+	void TakeDamage(int damage);
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	bool IsCombat;
@@ -135,9 +138,6 @@ protected:
 
 	FTimerHandle CombatTimer;
 	FTimerHandle ElementTimer;
-
-	UFUNCTION()
-	void TakeDamage(int damage);
 
 	//! --------------------- CC
 	UFUNCTION()

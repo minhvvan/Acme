@@ -3,6 +3,8 @@
 
 #include "Acme/Turret/Turret.h"
 #include "Acme/Utils/Util.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundBase.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -12,6 +14,9 @@ ATurret::ATurret()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SetRootComponent(Mesh);
+
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
+	AudioComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -33,5 +38,16 @@ void ATurret::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ATurret::PlayFireSFX()
+{
+	if (FireSFX)
+	{
+		AudioComp->SetSound(FireSFX);
+
+		if (AudioComp->IsPlaying()) AudioComp->Stop();
+		AudioComp->Play();
+	}
 }
 
