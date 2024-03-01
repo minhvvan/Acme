@@ -5,6 +5,8 @@
 #include "Acme/Utils/Util.h"
 #include "Components/AudioComponent.h"
 #include "Sound/SoundBase.h"
+#include "Acme/Monster/CharacterMonster.h"
+#include "Acme/AcmeCharacter.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -49,5 +51,29 @@ void ATurret::PlayFireSFX()
 		if (AudioComp->IsPlaying()) AudioComp->Stop();
 		AudioComp->Play();
 	}
+}
+
+void ATurret::Fire()
+{
+	if (!Target) return;
+	AAcmeCharacter* Player = GetInstigator<AAcmeCharacter>();
+	if (!Player) return;
+
+	FVector CenterPos = GetActorLocation();
+	FRotator Rot = (Target->GetActorLocation() - CenterPos).Rotation();
+	Rot.Pitch = 0;
+	Rot.Roll = 0;
+
+	FQuat quat = Rot.Quaternion();
+	SetActorRotation(quat);
+
+	Target->SetTarget(Player);
+	Target->OnAttacked(Damage, EElement::E_End);
+	PlayFireSFX();
+}
+
+void ATurret::SetTarget(ACharacterMonster* newTarget)
+{
+	Target = newTarget;
 }
 

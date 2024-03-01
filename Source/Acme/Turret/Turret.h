@@ -38,4 +38,17 @@ public:
 
 	UFUNCTION()
 	void PlayFireSFX();
+
+	UFUNCTION()
+	void Fire();
+
+	UFUNCTION()
+	void SetTarget(class ACharacterMonster* newTarget);
+
+protected:
+	UPROPERTY(VisibleAnywhere)
+	ACharacterMonster* Target;
+
+	UPROPERTY(EditAnywhere)
+	int Damage;
 };

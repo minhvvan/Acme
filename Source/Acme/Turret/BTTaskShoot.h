@@ -19,7 +19,4 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int ShootNum;	
-	
-	UPROPERTY(EditAnywhere)
-	int Damage;
 };

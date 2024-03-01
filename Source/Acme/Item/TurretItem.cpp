@@ -14,8 +14,9 @@ void ATurretItem::Active()
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = Player;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	SpawnParams.Instigator = Player;
+	//SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	FVector  Loc = Player->GetActorLocation();
 	Loc += Player->GetActorForwardVector() * 100;
 

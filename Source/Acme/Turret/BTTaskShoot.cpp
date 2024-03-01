@@ -9,7 +9,9 @@
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Acme/Monster/MonsterAIController.h"
+#include "Acme/AcmeCharacter.h"
 #include "Sound/SoundBase.h"
+#include "DrawDebugHelpers.h"
 
 EBTNodeResult::Type UBTTaskShoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -17,25 +19,17 @@ EBTNodeResult::Type UBTTaskShoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 
 	ATurret* Turret = Cast<ATurret>(OwnerComp.GetAIOwner()->GetPawn());
 	if(!Turret) return EBTNodeResult::Failed;
-	FVector CenterPos = Turret->GetActorLocation();
 
 	ACharacterMonster* Target = Cast<ACharacterMonster>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
 	if (!Target) return EBTNodeResult::Failed;
 
+	Turret->SetTarget(Target);
 	for (int i = 0; i < ShootNum; i++)
 	{
-		Turret->PlayFireSFX();
-
-		FRotator Rot = (Target->GetActorLocation() - CenterPos).Rotation();
-		Rot.Pitch = 0;
-		Rot.Roll = 0;
-
-		FQuat quat = Rot.Quaternion();
-		Turret->SetActorRotation(quat);
-
-		Target->TakeDamage(Damage);
+		Turret->Fire();
 	}
 
+	DrawDebugSphere(GetWorld(), Turret->GetActorLocation(), 1000, 10, FColor::Blue);
 
 	return result;
 }
