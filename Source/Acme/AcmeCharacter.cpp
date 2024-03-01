@@ -153,6 +153,16 @@ void AAcmeCharacter::BeginPlay()
 		InventoryComponent->AddItem(temp1);
 	}
 
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Totem;
+		temp1.Num = 1;
+		temp1.Category = EItemCategory::E_Equipment;
+		temp1.bCanAddQuick = true;
+
+		InventoryComponent->AddItem(temp1);
+	}
+
 
 	{
 		FItem temp1;

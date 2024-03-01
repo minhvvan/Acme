@@ -56,5 +56,5 @@ protected:
 	float Time;
 
 	//UPROPERTY()
-	FTimerHandle SustainTimer;
+	FTimerHandle DestroyTimer;
 };

@@ -1,22 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Acme/Item/TurretItem.h"
+#include "Acme/Item/TotemItem.h"
 #include "Acme/Turret/Turret.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
+#include "Acme/Totem/Totem.h"
+#include "DrawDebugHelpers.h"
 
-void ATurretItem::Active()
+
+void ATotemItem::Active()
 {
 	//Turret Spawn
-	if (!TurretClass) return;
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Instigator = Player;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	FVector Loc = Player->GetActorLocation();
+	FVector  Loc = Player->GetActorLocation();
 	Loc += Player->GetActorForwardVector() * 50;
 	Loc.Z += 100;
 
@@ -27,13 +26,18 @@ void ATurretItem::Active()
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, Loc, EndLoc, ECollisionChannel::ECC_Visibility))
 	{
 		FVector SpawnLocation = HitResult.ImpactPoint;
-		GetWorld()->SpawnActor<ATurret>(TurretClass, SpawnLocation, Player->GetActorForwardVector().Rotation(), SpawnParams);
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		GetWorld()->SpawnActor<ATotem>(SpawnParams);
+		GetWorld()->SpawnActor<ATotem>(ATotem::StaticClass(), SpawnLocation, Player->GetActorForwardVector().Rotation(), SpawnParams);
 
 		Player->ConsumeItemQuick();
 	}
 }
 
-void ATurretItem::AttachBack()
+void ATotemItem::AttachBack()
 {
 	AAcmeCharacter* Character = Cast<AAcmeCharacter>(GetOwner());
 	if (!Character) return;

@@ -26,7 +26,7 @@ void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	GetWorldTimerManager().SetTimer(SustainTimer, FTimerDelegate::CreateLambda(
+	GetWorldTimerManager().SetTimer(DestroyTimer, FTimerDelegate::CreateLambda(
 		[this]() { Destroy(); }
 	), Time, false);
 }
