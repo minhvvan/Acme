@@ -51,4 +51,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	int Damage;
+
+	UPROPERTY(EditAnywhere)
+	float Time;
+
+	//UPROPERTY()
+	FTimerHandle SustainTimer;
 };

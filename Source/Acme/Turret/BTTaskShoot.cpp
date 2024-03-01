@@ -29,7 +29,5 @@ EBTNodeResult::Type UBTTaskShoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 		Turret->Fire();
 	}
 
-	DrawDebugSphere(GetWorld(), Turret->GetActorLocation(), 1000, 10, FColor::Blue);
-
 	return result;
 }
