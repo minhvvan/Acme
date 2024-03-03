@@ -145,6 +145,7 @@ void UEquipmentComponent::Equip(EEquipmentPart part, FItem item)
 			break;
 		}
 
+		CurrentItem->Init(item);
 		CurrentItem->AttachToSocket(part);
 		Player->SetShowInvenCam(CurrentItem->GetMesh());
 	}
@@ -181,4 +182,26 @@ void UEquipmentComponent::ConsumeCurrentHand()
 	{
 		CurrentHand->Destroy();
 	}
+}
+
+int UEquipmentComponent::GetArmorDecrease()
+{
+	int result = 0;
+
+	if (EquipmentHead)
+	{
+		result += EquipmentHead->GetArmorPower();
+	}
+
+	if (EquipmentBody)
+	{
+		result += EquipmentBody->GetArmorPower();
+	}
+
+	if (EquipmentAcc)
+	{
+		result += EquipmentAcc->GetArmorPower();
+	}
+
+	return result;
 }

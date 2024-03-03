@@ -46,4 +46,7 @@ public:
 
 	UFUNCTION()
 	FItem& GetItem();
+
+	UFUNCTION()
+	int GetArmorPower();
 };

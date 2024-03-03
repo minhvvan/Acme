@@ -117,8 +117,8 @@ UENUM(BlueprintType)
 enum class EItemCategory : uint8
 {
 	E_Element UMETA(DisplayName = "Element"),
-	E_Equipment UMETA(DisplayName = "Weapon"),
-	E_Tool UMETA(DisplayName = "Armor"),
+	E_Equipment UMETA(DisplayName = "Equipment"),
+	E_Tool UMETA(DisplayName = "Tool"),
 	E_Potion UMETA(DisplayName = "Potion"),
 	E_Food UMETA(DisplayName = "Food"),
 	E_Material UMETA(DisplayName = "Material"),

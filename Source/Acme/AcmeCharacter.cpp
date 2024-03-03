@@ -181,6 +181,19 @@ void AAcmeCharacter::BeginPlay()
 		InventoryComponent->AddItem(temp1);
 	}
 
+	{
+		if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
+		FItem temp = GameInstance->GetItemInfo(EItemName::E_Helmet);
+
+		InventoryComponent->AddItem(temp);
+	}
+
+	{
+		if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
+		FItem temp = GameInstance->GetItemInfo(EItemName::E_Sword);
+
+		InventoryComponent->AddItem(temp);
+	}
 
 	{
 		FRecipe recipe;
@@ -852,7 +865,15 @@ void AAcmeCharacter::OnAttacked(int damage)
 void AAcmeCharacter::TakeDamage(int damage)
 {
 	if (!StatCompoenent) return;
-	StatCompoenent->OnAttakced(damage);
+	if (!EquipmentComponent) return;
+
+	//방어구 체크
+	int decrease = EquipmentComponent->GetArmorDecrease();
+
+	int finalDamage = damage - decrease;
+	if (finalDamage < 0) finalDamage = 0;
+
+	StatCompoenent->OnAttakced(finalDamage);
 }
 
 void AAcmeCharacter::SetAnimState(EAnimState newAnimState)

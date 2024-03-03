@@ -56,3 +56,8 @@ FItem& AEquipmentItem::GetItem()
 {
 	return ItemInfo;
 }
+
+int AEquipmentItem::GetArmorPower()
+{
+	return ItemInfo.ItemStat.Defence;
+}

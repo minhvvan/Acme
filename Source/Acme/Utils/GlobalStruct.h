@@ -8,6 +8,22 @@
 #include "GlobalStruct.generated.h"
 
 USTRUCT(Atomic, BlueprintType)
+struct FItemStat
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Attack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Defence;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Health;
+};
+
+
+USTRUCT(Atomic, BlueprintType)
 struct FItem : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
@@ -30,7 +46,10 @@ public:
 	EItemCategory Category;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bCanAddQuick;
+	bool bCanAddQuick;	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FItemStat ItemStat;
 
 	void Clear();
 };

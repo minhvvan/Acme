@@ -86,7 +86,7 @@ void ASwordActor::EndSeinsing()
 		if (!Monster) continue;
 
 		Monster->SetTarget(Player);
-		Monster->OnAttacked(10, Element);
+		Monster->OnAttacked(ItemInfo.ItemStat.Attack, Element);
 	}
 
 	VictimSet.Empty();

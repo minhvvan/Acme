@@ -76,6 +76,9 @@ public:
 	UFUNCTION()
 	void ConsumeCurrentHand();
 
+	UFUNCTION()
+	int GetArmorDecrease();
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	TArray<class AActiveItem*> QuickSlotItems;
