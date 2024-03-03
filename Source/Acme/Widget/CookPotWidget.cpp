@@ -17,7 +17,7 @@
 void UCookPotWidget::Init()
 {
 	if(!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());
-	TArray<FRecipe> Recipes = Player->GetRecipes();
+	TArray<FRecipe> Recipes = Player->GetFoodRecipes();
 
 	for (auto mat : Recipes)
 	{

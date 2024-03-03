@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Acme/Widget/PotionCraftWidget.h"
+#include "Acme/Widget/CraftTableWidget.h"
 #include "Acme/Widget/RecipeEntryWidget.h"
 #include "Acme/Widget/MaterialEntryWidget.h"
 #include "Acme/AcmeCharacter.h"
@@ -14,10 +14,10 @@
 #include "Acme/Data/RecipeData.h"
 #include "Acme/Data/ItemData.h"
 
-void UPotionCraftWidget::Init()
+void UCraftTableWidget::Init()
 {
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());
-	TArray<FRecipe> Recipes = Player->GetPotionRecipes();
+	TArray<FRecipe> Recipes = Player->GetCraftRecipes();
 
 	for (auto mat : Recipes)
 	{
@@ -32,7 +32,7 @@ void UPotionCraftWidget::Init()
 	Amount = 0;
 }
 
-void UPotionCraftWidget::SetRecipeInfo(FRecipe recipe)
+void UCraftTableWidget::SetRecipeInfo(FRecipe recipe)
 {
 	CurrentRecipe = recipe;
 	TVMaterial->ClearListItems();
@@ -54,22 +54,23 @@ void UPotionCraftWidget::SetRecipeInfo(FRecipe recipe)
 	TxtName->SetText(FText::FromString(GameInstance->GetItemString(recipe.Result.Name).Name));
 }
 
-void UPotionCraftWidget::SetSelectedRecipe(URecipeEntryWidget* recipe)
+void UCraftTableWidget::SetSelectedRecipe(URecipeEntryWidget* recipe)
 {
 	SelectedRecipe = recipe;
+
 }
 
-void UPotionCraftWidget::NativeConstruct()
+void UCraftTableWidget::NativeConstruct()
 {
 	bIsFocusable = true;
 	Init();
 
-	BtnCraft->OnClicked.AddDynamic(this, &UPotionCraftWidget::OnClickedCraft);
-	BtnMinus->OnClicked.AddDynamic(this, &UPotionCraftWidget::OnClickedMinus);
-	BtnPlus->OnClicked.AddDynamic(this, &UPotionCraftWidget::OnClickedPlus);
+	BtnCraft->OnClicked.AddDynamic(this, &UCraftTableWidget::OnClickedCraft);
+	BtnMinus->OnClicked.AddDynamic(this, &UCraftTableWidget::OnClickedMinus);
+	BtnPlus->OnClicked.AddDynamic(this, &UCraftTableWidget::OnClickedPlus);
 }
 
-FReply UPotionCraftWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+FReply UCraftTableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
 	FReply reply = Super::NativeOnKeyDown(InGeometry, InKeyEvent);
 
@@ -86,7 +87,7 @@ FReply UPotionCraftWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FK
 	return reply;
 }
 
-void UPotionCraftWidget::OnClickedCraft()
+void UCraftTableWidget::OnClickedCraft()
 {
 	for (auto item : TVMaterial->GetListItems())
 	{
@@ -122,7 +123,7 @@ void UPotionCraftWidget::OnClickedCraft()
 	EdtNum->SetText(FText::AsNumber(Amount));
 }
 
-void UPotionCraftWidget::OnClickedMinus()
+void UCraftTableWidget::OnClickedMinus()
 {
 	if (!SelectedRecipe) return;
 
@@ -132,7 +133,7 @@ void UPotionCraftWidget::OnClickedMinus()
 	EdtNum->SetText(FText::AsNumber(Amount));
 }
 
-void UPotionCraftWidget::OnClickedPlus()
+void UCraftTableWidget::OnClickedPlus()
 {
 	if (!SelectedRecipe) return;
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());

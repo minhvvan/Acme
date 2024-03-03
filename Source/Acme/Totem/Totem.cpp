@@ -67,6 +67,14 @@ void ATotem::Heal()
 		ECollisionChannel::ECC_EngineTraceChannel2,
 		FCollisionShape::MakeSphere(Range));
 
+	if (HealSFX)
+	{
+		AudioComp->SetSound(HealSFX);
+
+		if (AudioComp->IsPlaying()) AudioComp->Stop();
+		AudioComp->Play();
+	}
+
 	if (bResult)
 	{
 		for (auto Result : OverlapResults)
@@ -75,15 +83,6 @@ void ATotem::Heal()
 			if (!Player) continue;
 
 			Player->Heal(5);
-
-			if (HealSFX)
-			{
-				AudioComp->SetSound(HealSFX);
-
-				if (AudioComp->IsPlaying()) AudioComp->Stop();
-				AudioComp->Play();
-			}
-
 			return;
 		}
 	}

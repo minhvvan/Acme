@@ -247,10 +247,13 @@ protected:
 	int CurrentQuickSlotIdx;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Recipe, meta = (AllowPrivateAccess = "true"))
-	TArray<struct FRecipe> OwnRecipes;
+	TArray<struct FRecipe> OwnFoodRecipes;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Recipe, meta = (AllowPrivateAccess = "true"))
 	TArray<struct FRecipe> OwnPotionRecipes;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Recipe, meta = (AllowPrivateAccess = "true"))
+	TArray<struct FRecipe> OwnCraftRecipes;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Swim, meta = (AllowPrivateAccess = "true"))
 	bool IsSwimming;
@@ -399,10 +402,13 @@ public:
 	void AddQuest(FQuest quest);
 
 	UFUNCTION()
-	TArray<FRecipe> GetRecipes();
+	TArray<FRecipe> GetFoodRecipes();
 
 	UFUNCTION()
-	TArray<FRecipe> GetPorionRecipes();
+	TArray<FRecipe> GetPotionRecipes();
+
+	UFUNCTION()
+	TArray<FRecipe> GetCraftRecipes();
 
 	UFUNCTION()
 	void AddRecipe(FRecipe newRecipe);

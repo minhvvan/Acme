@@ -145,59 +145,6 @@ void AAcmeCharacter::BeginPlay()
 
 	{
 		FItem temp1;
-		temp1.Name = EItemName::E_Turret;
-		temp1.Num = 1;
-		temp1.Category = EItemCategory::E_Equipment;
-		temp1.bCanAddQuick = true;
-
-		InventoryComponent->AddItem(temp1);
-	}
-
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Totem;
-		temp1.Num = 1;
-		temp1.Category = EItemCategory::E_Equipment;
-		temp1.bCanAddQuick = true;
-
-		InventoryComponent->AddItem(temp1);
-	}
-
-
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Sword;
-		temp1.Num = 1;
-		temp1.Category = EItemCategory::E_Equipment;
-		temp1.bCanAddQuick = true;
-
-		InventoryComponent->AddItem(temp1);
-	}
-
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Helmet;
-		temp1.Num = 1;
-		temp1.Part = EEquipmentPart::E_Head;
-		temp1.Category = EItemCategory::E_Equipment;
-		temp1.bCanAddQuick = false;
-
-		InventoryComponent->AddItem(temp1);
-	}
-
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_LetherArmor;
-		temp1.Num = 1;
-		temp1.Part = EEquipmentPart::E_Body;
-		temp1.Category = EItemCategory::E_Equipment;
-		temp1.bCanAddQuick = false;
-
-		InventoryComponent->AddItem(temp1);
-	}
-
-	{
-		FItem temp1;
 		temp1.Name = EItemName::E_Fire;
 		temp1.Num = 100;
 		temp1.Category = EItemCategory::E_Element;
@@ -266,7 +213,7 @@ void AAcmeCharacter::BeginPlay()
 			recipe.Result = temp;
 		}
 
-		OwnRecipes.Add(recipe);
+		OwnFoodRecipes.Add(recipe);
 	}
 
 
@@ -302,6 +249,41 @@ void AAcmeCharacter::BeginPlay()
 		}
 
 		OwnPotionRecipes.Add(recipe);
+	}
+
+
+	{
+		FRecipe recipe;
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Metal;
+			temp.Num = 2;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Wood;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Sword;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Equipment;
+			temp.bCanAddQuick = true;
+
+			recipe.Result = temp;
+		}
+
+		OwnCraftRecipes.Add(recipe);
 	}
 }
 
@@ -686,19 +668,24 @@ void AAcmeCharacter::AddQuest(FQuest quest)
 	OnAcceptQuest.Broadcast(quest.QusetID);
 }
 
-TArray<FRecipe> AAcmeCharacter::GetRecipes()
+TArray<FRecipe> AAcmeCharacter::GetFoodRecipes()
 {
-	return OwnRecipes;
+	return OwnFoodRecipes;
 }
 
-TArray<FRecipe> AAcmeCharacter::GetPorionRecipes()
+TArray<FRecipe> AAcmeCharacter::GetPotionRecipes()
 {
 	return OwnPotionRecipes;
 }
 
+TArray<FRecipe> AAcmeCharacter::GetCraftRecipes()
+{
+	return OwnCraftRecipes;
+}
+
 void AAcmeCharacter::AddRecipe(FRecipe newRecipe)
 {
-	OwnRecipes.Add(newRecipe);
+	OwnFoodRecipes.Add(newRecipe);
 }
 
 int AAcmeCharacter::GetItemNums(FItem item)
