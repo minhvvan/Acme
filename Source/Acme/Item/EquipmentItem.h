@@ -25,7 +25,7 @@ protected:
 	UPROPERTY()
 	EEquipmentPart Part;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	FItem ItemInfo;
 
 public:

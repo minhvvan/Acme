@@ -28,14 +28,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UWidgetComponent> HPBar;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
-	class UAI_Monster* AnimInstance;
-
 	UPROPERTY(VisibleAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class AAcmeCharacter> TargetCharacter;
-
-	UPROPERTY()
-	class AMonsterAIController* AIController;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sound, meta = (AllowPrivateAccess = "true"))
 	class UAudioComponent* AudioComp;
@@ -45,6 +39,13 @@ protected:
 
 	UPROPERTY()
 	class UAcmeGameInstance* GameInstance;
+
+private:
+	UPROPERTY()
+	class AMonsterAIController* AIController;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Anim, meta = (AllowPrivateAccess = "true"))
+	class UAI_Monster* AnimInstance;
 
 protected:
 	// Called when the game starts or when spawned
@@ -64,7 +65,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
-	void OnAttacked(int damage, EElement ElementType);
+	virtual void OnAttacked(int damage);
 
 	UFUNCTION()
 	void Attack();

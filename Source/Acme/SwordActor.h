@@ -38,9 +38,6 @@ protected:
 	UPROPERTY()
 	TSet<AActor*> VictimSet;
 	
-	UPROPERTY()
-	EElement Element;
-
 protected:
 	UFUNCTION()
 	void FlushQueue();

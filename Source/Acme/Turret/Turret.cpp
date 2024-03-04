@@ -71,7 +71,7 @@ void ATurret::Fire()
 	SetActorRotation(quat);
 
 	Target->SetTarget(Player);
-	Target->OnAttacked(Damage, EElement::E_End);
+	Target->OnAttacked(Damage);
 	PlayFireSFX();
 }
 

@@ -79,14 +79,17 @@ void ASwordActor::EndSeinsing()
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 	GetWorldTimerManager().ClearTimer(AttackTimer);
 
+	
+	//Map nullptr 
 	for (AActor* Victim : VictimSet)
 	{
-		//Damage 계산(Victim쪽에서)
-		auto Monster = Cast<ACharacterMonster>(Victim);
+		ACharacterMonster* Monster = Cast<ACharacterMonster>(Victim);
 		if (!Monster) continue;
 
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *Monster->GetName()));
+
 		Monster->SetTarget(Player);
-		Monster->OnAttacked(ItemInfo.ItemStat.Attack, Element);
+		Monster->OnAttacked(ItemInfo.ItemStat.Attack);
 	}
 
 	VictimSet.Empty();
@@ -94,10 +97,13 @@ void ASwordActor::EndSeinsing()
 
 void ASwordActor::DamageToVictim()
 {
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
+
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Query;
 
 	Query.AddIgnoredActor(this);
+	Query.AddIgnoredActor(Player);
 
 	FVector StartPos = GetWeponTopPos();
 	FVector EndPos = GetWeponEndPos();

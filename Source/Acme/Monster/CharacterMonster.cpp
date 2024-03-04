@@ -67,7 +67,7 @@ void ACharacterMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 }
 
-void ACharacterMonster::OnAttacked(int damage, EElement ElementType)
+void ACharacterMonster::OnAttacked(int damage)
 {
 	if (!HPBar) return;
 	if (!AnimInstance) return;
