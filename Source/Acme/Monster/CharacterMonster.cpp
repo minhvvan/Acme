@@ -117,7 +117,7 @@ void ACharacterMonster::InitState()
 {
 	auto HpBar = Cast<UWidget_HPBar>(HPBar->GetWidget());
 	HpBar->BindDelegate(StatCompoenent);
-	HpBar->SetHPPercent(100, 100);
+	HpBar->SetHPPercent(StatCompoenent->GetCurrentHP(), StatCompoenent->GetMaxHP());
 
 	HPBar->SetVisibility(false);
 

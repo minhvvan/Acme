@@ -27,11 +27,15 @@ private:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void FinishCombat();
+
+	virtual void Tick(float DeltaSeconds);
+
 public:
 	virtual void OnAttacked(int damage) override;
 
 	UFUNCTION()
-	void Fire();
+	void Fire(); 
 
 	UFUNCTION()
 	void Bite();
@@ -41,4 +45,7 @@ public:
 
 	UFUNCTION()
 	void FlyFire();
+
+	UFUNCTION()
+	void BiteAttackCheck();
 };

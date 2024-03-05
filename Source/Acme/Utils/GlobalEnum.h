@@ -146,6 +146,16 @@ enum class EQuestState : uint8
 	E_End UMETA(DisplayName = "End"),
 };
 
+UENUM(BlueprintType)
+enum class EAttackType : uint8
+{
+	E_Bite UMETA(DisplayName = "Bite"),
+	E_Fire UMETA(DisplayName = "Fire"),
+	E_FlyFire UMETA(DisplayName = "FlyFire"),
+	E_Tail UMETA(DisplayName = "Tail"),
+	E_End UMETA(DisplayName = "End"),
+};
+
 
 class ACME_API GlobalEnum
 {

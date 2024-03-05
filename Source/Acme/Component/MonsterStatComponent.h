@@ -43,6 +43,12 @@ public:
 	int GetCurrentHP();
 
 	UFUNCTION()
+	void SetMaxHP(int HP);
+
+	UFUNCTION()
+	int GetMaxHP();
+
+	UFUNCTION()
 	void SetCurrentHP(int HP);
 
 	UFUNCTION()
@@ -50,6 +56,9 @@ public:
 
 	UFUNCTION()
 	float GetWalkSpeed();
+
+	UFUNCTION()
+	void SetStrength(int power);
 
 public:
 	FChangeHP OnChangedHP;

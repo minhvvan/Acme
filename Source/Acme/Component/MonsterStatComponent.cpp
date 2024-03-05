@@ -41,6 +41,16 @@ int UMonsterStatComponent::GetCurrentHP()
 	return CurrentHP;
 }
 
+void UMonsterStatComponent::SetMaxHP(int HP)
+{
+	MaxHP = HP;
+}
+
+int UMonsterStatComponent::GetMaxHP()
+{
+	return MaxHP;
+}
+
 void UMonsterStatComponent::SetCurrentHP(int HP)
 {
 	CurrentHP = HP;
@@ -55,5 +65,10 @@ int UMonsterStatComponent::GetStrength()
 float UMonsterStatComponent::GetWalkSpeed()
 {
 	return WalkSpeed;
+}
+
+void UMonsterStatComponent::SetStrength(int power)
+{
+	Strength = power;
 }
 

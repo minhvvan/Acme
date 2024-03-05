@@ -23,17 +23,43 @@ ABossMonster::ABossMonster()
 {
 	AIControllerClass = ABossAIController::StaticClass();
 
+	CombatSustainTime = 100.f;
 }
 
 void ABossMonster::BeginPlay()
 {
 	ACharacter::BeginPlay();
 
+	StatCompoenent->SetMaxHP(1000);
+	StatCompoenent->SetCurrentHP(1000);
+	StatCompoenent->SetStrength(30);
 	InitState();
 
 	BossAnimInstance = Cast<UBossAnimInstance>(GetMesh()->GetAnimInstance());
+	BossAnimInstance->OnBite.AddUObject(this, &ABossMonster::BiteAttackCheck);
 	//BossAnimInstance->OnMontageEnded.AddDynamic(this, &ABossMonster::OnMontageEnd);
-	//BossAnimInstance->OnAttack.AddUObject(this, &ACharacterMonster::AttackCheck);
+}
+
+void ABossMonster::FinishCombat()
+{
+	IsCombat = false;
+	HPBar->SetVisibility(false);
+	TargetCharacter = nullptr;
+	BossAIController->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
+	CombatTimer.Invalidate();
+}
+
+void ABossMonster::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if (!TargetCharacter) return;
+
+	FVector Dir = TargetCharacter->GetActorLocation() - GetActorLocation();
+	FRotator Rot = Dir.Rotation();
+	Rot.Pitch = 0;
+	Rot.Roll = 0;
+
+	SetActorRotation(Rot);
 }
 
 void ABossMonster::OnAttacked(int damage)
@@ -49,7 +75,7 @@ void ABossMonster::OnAttacked(int damage)
 	BossAIController->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), TargetCharacter);
 
 	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
-	GetWorldTimerManager().SetTimer(CombatTimer, this, &ACharacterMonster::FinishCombat, CombatSustainTime, false);
+	GetWorldTimerManager().SetTimer(CombatTimer, this, &ABossMonster::FinishCombat, CombatSustainTime, false);
 
 	if (AudioComp)
 	{
@@ -57,28 +83,67 @@ void ABossMonster::OnAttacked(int damage)
 		AudioComp->Play();
 	}
 
-	UUtil::DebugPrint("Attacked");
-
 	TakeDamage(damage);
 }
 
 void ABossMonster::Fire()
 {
-	//È­¿°±¸
-	UUtil::DebugPrint("Fire");
+	if (!BossAnimInstance) return;
+	BossAnimInstance->PlayFire();
+
+	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
+	GetWorldTimerManager().SetTimer(CombatTimer, this, &ABossMonster::FinishCombat, CombatSustainTime, false);
 }
 
 void ABossMonster::Bite()
 {
-	UUtil::DebugPrint("Bite");
+	if (!BossAnimInstance) return;
+	BossAnimInstance->PlayBite();
+
+	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
+	GetWorldTimerManager().SetTimer(CombatTimer, this, &ABossMonster::FinishCombat, CombatSustainTime, false);
 }
 
 void ABossMonster::TailAttack()
 {
-	UUtil::DebugPrint("TailAttack");
+	if (!BossAnimInstance) return;
+	BossAnimInstance->PlayTailAttack();
+
+	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
+	GetWorldTimerManager().SetTimer(CombatTimer, this, &ABossMonster::FinishCombat, CombatSustainTime, false);
 }
 
 void ABossMonster::FlyFire()
 {
-	UUtil::DebugPrint("FlyFire");
+	if (!BossAnimInstance) return;
+	BossAnimInstance->PlayFlyFire();
+
+	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
+	GetWorldTimerManager().SetTimer(CombatTimer, this, &ABossMonster::FinishCombat, CombatSustainTime, false);
+}
+
+void ABossMonster::BiteAttackCheck()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Query;
+
+	Query.AddIgnoredActor(this);
+
+	FVector Center = GetActorLocation();
+	FVector End = Center + GetActorForwardVector() * 1200;
+	End.Z -= 500;
+
+	bool bHit = GetWorld()->SweepMultiByChannel(OUT HitResults, Center, End, FQuat::Identity, ECollisionChannel::ECC_EngineTraceChannel2, FCollisionShape::MakeSphere(300), Query);
+
+	if (bHit)
+	{
+		for (auto Result : HitResults)
+		{
+			AAcmeCharacter* Player = Cast<AAcmeCharacter>(Result.GetActor());
+			if (!Player) continue;
+
+			Player->OnAttacked(StatCompoenent->GetStrength());
+			return;
+		}
+	}
 }

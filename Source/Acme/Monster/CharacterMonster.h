@@ -89,7 +89,7 @@ public:
 	void SetIsMoving(bool bIsMoving);
 
 	UFUNCTION()
-	void FinishCombat();
+	virtual void FinishCombat();
 
 	UFUNCTION()
 	AAcmeCharacter* GetTarget();

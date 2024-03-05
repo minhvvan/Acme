@@ -86,8 +86,6 @@ void ASwordActor::EndSeinsing()
 		ACharacterMonster* Monster = Cast<ACharacterMonster>(Victim);
 		if (!Monster) continue;
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *Monster->GetName()));
-
 		Monster->SetTarget(Player);
 		Monster->OnAttacked(ItemInfo.ItemStat.Attack);
 	}
