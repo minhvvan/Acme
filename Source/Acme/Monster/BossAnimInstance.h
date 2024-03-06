@@ -29,7 +29,7 @@ protected:
 	class UAnimMontage* AMTailAttack;
 
 public:
-	FOnAttack OnAttack;
+	FOnAttack OnFire;
 	FOnAttack OnBite;
 
 	UFUNCTION()
@@ -46,4 +46,7 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_BiteAttack();
+
+	UFUNCTION()
+	void AnimNotify_FireAttack();
 };

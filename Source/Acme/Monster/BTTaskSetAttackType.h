@@ -19,4 +19,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Near;
+
+	UPROPERTY(EditAnywhere)
+	float Far;
 };

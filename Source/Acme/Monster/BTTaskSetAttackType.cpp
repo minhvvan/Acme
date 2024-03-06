@@ -18,20 +18,26 @@ EBTNodeResult::Type UBTTaskSetAttackType::ExecuteTask(UBehaviorTreeComponent& Ow
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	AAcmeCharacter* Target = Cast<AAcmeCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
+	bool bSecondPhase = OwnerComp.GetBlackboardComponent()->GetValueAsBool(FName(TEXT("bUnderHalf")));
 	ABossMonster* Boss = Cast<ABossMonster>(OwnerComp.GetAIOwner()->GetPawn());
 
 	float dist = Boss->GetDistanceTo(Target);
+	int rand = (FMath::Rand() % 2) * bSecondPhase;
 
 	if (dist <= Near)
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsEnum(FName(TEXT("AttackType")), 0);
+		OwnerComp.GetBlackboardComponent()->SetValueAsEnum(FName(TEXT("AttackType")), 0 + rand);
+	}
+	else if (dist <= Far)
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsEnum(FName(TEXT("AttackType")), 2 + rand);
 	}
 	else
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsEnum(FName(TEXT("AttackType")), 1);
+		OwnerComp.GetBlackboardComponent()->SetValueAsEnum(FName(TEXT("AttackType")), 4);
 	}
 
-	DrawDebugSphere(GetWorld(), Boss->GetActorLocation(), Near, 32, FColor::Blue, false, 5.f, 0, 1.f);
+	//DrawDebugSphere(GetWorld(), Boss->GetActorLocation(), Far, 32, FColor::Blue, false, 5.f, 0, 1.f);
 
 	return Result;
 }

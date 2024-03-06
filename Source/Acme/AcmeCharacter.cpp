@@ -774,6 +774,25 @@ void AAcmeCharacter::SwimDown()
 	AddMovementInput(-1*GetActorUpVector());
 }
 
+void AAcmeCharacter::Burn()
+{
+	ClearBurnTimer();
+
+	GetWorldTimerManager().SetTimer(BurnTimer, FTimerDelegate::CreateLambda([this]() {
+		TakeDamage(2);
+		}), 1.f, true);
+
+	GetWorldTimerManager().SetTimer(BurnEndTimer, FTimerDelegate::CreateLambda([this]() {
+		ClearBurnTimer();
+		}), 5.f, false);
+}
+
+void AAcmeCharacter::ClearBurnTimer()
+{
+	GetWorldTimerManager().ClearTimer(BurnTimer);
+	GetWorldTimerManager().ClearTimer(BurnEndTimer);
+}
+
 void AAcmeCharacter::StaminaCheck(int Stamina)
 {
 	if (Stamina == 0)
@@ -860,7 +879,6 @@ void AAcmeCharacter::OnAttacked(int damage)
 	if (IsDodgeRoll) return;
 
 	AnimInstance->PlayAttacked();
-
 	TakeDamage(damage);
 }
 

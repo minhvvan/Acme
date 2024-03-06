@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Acme/Monster/CharacterMonster.h"
+#include "Acme/FireBallProjectile.h"
 #include "BossMonster.generated.h"
 
 /**
  * 
  */
+
 UCLASS()
 class ACME_API ABossMonster : public ACharacterMonster
 {
@@ -31,6 +33,21 @@ protected:
 
 	virtual void Tick(float DeltaSeconds);
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AFireBallProjectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector MouthOffset;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bShouldMove;
+
+	UPROPERTY(VisibleAnywhere)
+	FVector TargetPos;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float Dist;
+
 public:
 	virtual void OnAttacked(int damage) override;
 
@@ -41,6 +58,9 @@ public:
 	void Bite();
 
 	UFUNCTION()
+	void Move();
+
+	UFUNCTION()
 	void TailAttack();
 
 	UFUNCTION()
@@ -48,4 +68,7 @@ public:
 
 	UFUNCTION()
 	void BiteAttackCheck();
+
+	UFUNCTION()
+	void FireBall();
 };

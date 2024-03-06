@@ -27,3 +27,8 @@ void UBossAnimInstance::AnimNotify_BiteAttack()
 {
 	OnBite.Broadcast();
 }
+
+void UBossAnimInstance::AnimNotify_FireAttack()
+{
+	OnFire.Broadcast();
+}

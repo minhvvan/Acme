@@ -24,20 +24,23 @@ ABossMonster::ABossMonster()
 	AIControllerClass = ABossAIController::StaticClass();
 
 	CombatSustainTime = 100.f;
+	MouthOffset.Set(100.f, 100.f, 0.f);
+
+	bShouldMove = false;
 }
 
 void ABossMonster::BeginPlay()
 {
 	ACharacter::BeginPlay();
 
-	StatCompoenent->SetMaxHP(1000);
-	StatCompoenent->SetCurrentHP(1000);
+	//StatCompoenent->SetMaxHP(1000);
+	//StatCompoenent->SetCurrentHP(1000);
 	StatCompoenent->SetStrength(30);
 	InitState();
 
 	BossAnimInstance = Cast<UBossAnimInstance>(GetMesh()->GetAnimInstance());
 	BossAnimInstance->OnBite.AddUObject(this, &ABossMonster::BiteAttackCheck);
-	//BossAnimInstance->OnMontageEnded.AddDynamic(this, &ABossMonster::OnMontageEnd);
+	BossAnimInstance->OnFire.AddUObject(this, &ABossMonster::FireBall);
 }
 
 void ABossMonster::FinishCombat()
@@ -60,6 +63,18 @@ void ABossMonster::Tick(float DeltaSeconds)
 	Rot.Roll = 0;
 
 	SetActorRotation(Rot);
+
+	if (!bShouldMove) return;
+	if (Dist <= 400.f)
+	{
+		bShouldMove = false;
+		return;
+	}
+
+	FVector NewPos = FMath::Lerp(GetActorLocation(), TargetPos, .05f);
+	Dist = FVector::Dist(TargetPos, GetActorLocation());
+
+	SetActorLocation(NewPos);
 }
 
 void ABossMonster::OnAttacked(int damage)
@@ -67,12 +82,17 @@ void ABossMonster::OnAttacked(int damage)
 	if (!HPBar) return;
 	if (!BossAnimInstance) return;
 	if (!TargetCharacter) return;
+	if (!StatCompoenent) return;
 
 	IsCombat = true;
 	HPBar->SetVisibility(true);
 
 	if (!BossAIController) BossAIController = Cast<ABossAIController>(GetController());
 	BossAIController->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), TargetCharacter);
+
+	StatCompoenent->GetCurrentHP();
+	bool bUnderHalf = (StatCompoenent->GetCurrentHP() / StatCompoenent->GetMaxHP()) <= .5f;
+	BossAIController->GetBlackboardComponent()->SetValueAsBool(FName(TEXT("bUnderHalf")), bUnderHalf);
 
 	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
 	GetWorldTimerManager().SetTimer(CombatTimer, this, &ABossMonster::FinishCombat, CombatSustainTime, false);
@@ -104,6 +124,14 @@ void ABossMonster::Bite()
 	GetWorldTimerManager().SetTimer(CombatTimer, this, &ABossMonster::FinishCombat, CombatSustainTime, false);
 }
 
+void ABossMonster::Move()
+{
+	bShouldMove = true;
+	TargetPos = TargetCharacter->GetActorLocation();
+
+	Dist = FVector::Dist(TargetPos, GetActorLocation());
+}
+
 void ABossMonster::TailAttack()
 {
 	if (!BossAnimInstance) return;
@@ -117,6 +145,8 @@ void ABossMonster::FlyFire()
 {
 	if (!BossAnimInstance) return;
 	BossAnimInstance->PlayFlyFire();
+
+	Move();
 
 	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
 	GetWorldTimerManager().SetTimer(CombatTimer, this, &ABossMonster::FinishCombat, CombatSustainTime, false);
@@ -146,4 +176,18 @@ void ABossMonster::BiteAttackCheck()
 			return;
 		}
 	}
+}
+
+void ABossMonster::FireBall()
+{
+	FActorSpawnParameters param;
+	param.Instigator = this;
+	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	AFireBallProjectile* FireBall = GetWorld()->SpawnActor<AFireBallProjectile>(ProjectileClass, GetActorLocation(), GetActorRotation(), param);
+
+	FVector Dir = (TargetCharacter->GetActorLocation() - GetActorLocation());
+	Dir.Normalize();
+
+	FireBall->FireInDirection(Dir);
 }

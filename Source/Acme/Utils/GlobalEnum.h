@@ -150,12 +150,21 @@ UENUM(BlueprintType)
 enum class EAttackType : uint8
 {
 	E_Bite UMETA(DisplayName = "Bite"),
+	E_Tail UMETA(DisplayName = "Tail"),
 	E_Fire UMETA(DisplayName = "Fire"),
 	E_FlyFire UMETA(DisplayName = "FlyFire"),
-	E_Tail UMETA(DisplayName = "Tail"),
+	E_Move UMETA(DisplayName = "Move"),
 	E_End UMETA(DisplayName = "End"),
 };
 
+
+UENUM(BlueprintType)
+enum class EBossMoveState : uint8
+{
+	E_Run UMETA(DisplayName = "Run"),
+	E_Fly UMETA(DisplayName = "Fly"),
+	E_End UMETA(DisplayName = "End"),
+};
 
 class ACME_API GlobalEnum
 {

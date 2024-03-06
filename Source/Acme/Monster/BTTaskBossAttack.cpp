@@ -27,6 +27,9 @@ EBTNodeResult::Type UBTTaskBossAttack::ExecuteTask(UBehaviorTreeComponent& Owner
 	case EAttackType::E_Fire:
 		Cast<ABossMonster>(OwnerComp.GetAIOwner()->GetPawn())->Fire();
 		break;
+	case EAttackType::E_Move:
+		Cast<ABossMonster>(OwnerComp.GetAIOwner()->GetPawn())->Move();
+		break;
 	case EAttackType::E_FlyFire:
 		Cast<ABossMonster>(OwnerComp.GetAIOwner()->GetPawn())->FlyFire();
 		break;

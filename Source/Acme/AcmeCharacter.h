@@ -444,10 +444,20 @@ public:
 	UFUNCTION()
 	void SwimDown();
 
+	UFUNCTION()
+	void Burn();
+
+	UFUNCTION()
+	void ClearBurnTimer();
+
 public:
 	FOnAcceptQuest OnAcceptQuest;
 	FOnRewardQuest OnRewardQuest;
 
+protected:
+	FTimerHandle BurnTimer;
+	FTimerHandle BurnEndTimer;
+	
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -457,4 +467,3 @@ protected:
 
 	virtual void PostInitializeComponents();
 };
-
