@@ -159,11 +159,14 @@ void ABossMonster::BiteAttackCheck()
 
 	Query.AddIgnoredActor(this);
 
-	FVector Center = GetActorLocation();
-	FVector End = Center + GetActorForwardVector() * 1200;
-	End.Z -= 500;
+	FVector Center = GetMesh()->GetBoneLocation(FName(TEXT("Jaw")));
+	FVector End = Center + GetActorForwardVector() * 200;
+	End.Z -= 200;
 
-	bool bHit = GetWorld()->SweepMultiByChannel(OUT HitResults, Center, End, FQuat::Identity, ECollisionChannel::ECC_EngineTraceChannel2, FCollisionShape::MakeSphere(300), Query);
+	bool bHit = GetWorld()->SweepMultiByChannel(OUT HitResults, Center, End, FQuat::Identity, ECollisionChannel::ECC_EngineTraceChannel2, FCollisionShape::MakeCapsule(FVector(100,50,100)), Query);
+
+	//DrawDebugCapsule(GetWorld(), Center, 50, 25, FQuat::Identity, FColor::Red, false, 60.f, 0, 2.f);
+	//DrawDebugCapsule(GetWorld(), End, 50, 25, FQuat::Identity, FColor::Blue, false, 60.f, 0, 2.f);
 
 	if (bHit)
 	{
@@ -184,9 +187,11 @@ void ABossMonster::FireBall()
 	param.Instigator = this;
 	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	AFireBallProjectile* FireBall = GetWorld()->SpawnActor<AFireBallProjectile>(ProjectileClass, GetActorLocation(), GetActorRotation(), param);
+	FVector SpawnLoc = GetMesh()->GetBoneLocation(FName(TEXT("Jaw")));
 
-	FVector Dir = (TargetCharacter->GetActorLocation() - GetActorLocation());
+	AFireBallProjectile* FireBall = GetWorld()->SpawnActor<AFireBallProjectile>(ProjectileClass, SpawnLoc, GetActorRotation(), param);
+
+	FVector Dir = (TargetCharacter->GetActorLocation() - SpawnLoc);
 	Dir.Normalize();
 
 	FireBall->FireInDirection(Dir);
