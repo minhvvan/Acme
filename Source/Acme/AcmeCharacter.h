@@ -314,10 +314,10 @@ public:
 	void ChangeWalkSpeed(float amount);
 
 	UFUNCTION()
-	void OnAttacked(int damage);
+	void OnAttacked(int damage, class ACharacterMonster* causer);
 
 	UFUNCTION()
-	void TakeDamage(int damage);
+	void TakeDamage(int damage, ACharacterMonster* causer);
 
 	UFUNCTION()
 	void SetAnimState(EAnimState newAnimState);
@@ -453,13 +453,13 @@ public:
 	void SwimDown();
 
 	UFUNCTION()
-	void Burn();
+	void Burn(ACharacterMonster* causer);
 
 	UFUNCTION()
 	void ClearBurnTimer();
 
 	UFUNCTION()
-	void DieAnimStart();
+	void DeathAnimStart();
 
 	UFUNCTION()
 	void Die();

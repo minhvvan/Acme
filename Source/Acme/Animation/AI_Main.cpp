@@ -7,22 +7,26 @@
 
 void UAI_Main::PlayAttack(int idx)
 {
+	if (Montage_IsPlaying(AMDeath)) return;
 	if (!Montage_IsPlaying(AMAttack)) Montage_Play(AMAttack);
 	Montage_JumpToSection(GetAttackMontageName(idx), AMAttack);
 }
 
 void UAI_Main::PlayAttacked()
 {
+	if (Montage_IsPlaying(AMDeath)) return;
 	if (!Montage_IsPlaying(AMAttacked)) Montage_Play(AMAttacked);
 }
 
 void UAI_Main::PlayJumpDashAttack()
 {
+	if (Montage_IsPlaying(AMDeath)) return;
 	if (!Montage_IsPlaying(AMJDAttack)) Montage_Play(AMJDAttack);
 }
 
 void UAI_Main::PlayEquip()
 {
+	if (Montage_IsPlaying(AMDeath)) return;
 	if (!Montage_IsPlaying(AMEquip))
 	{
 		Montage_Play(AMEquip);
@@ -31,6 +35,7 @@ void UAI_Main::PlayEquip()
 
 void UAI_Main::PlayExhaust()
 {
+	if (Montage_IsPlaying(AMDeath)) return;
 	if (!Montage_IsPlaying(AMExhaust))
 	{
 		Montage_Play(AMExhaust);
@@ -39,6 +44,7 @@ void UAI_Main::PlayExhaust()
 
 void UAI_Main::PlayInteract()
 {
+	if (Montage_IsPlaying(AMDeath)) return;
 	if (!Montage_IsPlaying(AMInteract))
 	{
 		Montage_Play(AMInteract);
@@ -47,6 +53,7 @@ void UAI_Main::PlayInteract()
 
 void UAI_Main::PlayDodgeRoll()
 {
+	if (Montage_IsPlaying(AMDeath)) return;
 	if (!Montage_IsPlaying(AMDodgeRoll))
 	{
 		Montage_Play(AMDodgeRoll);
@@ -55,10 +62,8 @@ void UAI_Main::PlayDodgeRoll()
 
 void UAI_Main::PlayDeath()
 {
-	if (!Montage_IsPlaying(AMDeath))
-	{
-		Montage_Play(AMDeath);
-	}
+	StopAllMontages(.5);
+	Montage_Play(AMDeath);
 }
 
 FName UAI_Main::GetAttackMontageName(int idx)

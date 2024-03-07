@@ -27,12 +27,11 @@ void UGamePausedWidget::OnReplayClicked()
 
 	if (PlayerStart)
 	{
-		GetWorld()->GetAuthGameMode()->RestartPlayerAtTransform(PC, PlayerStart->GetTransform());
-
 		FVector Pos = PlayerStart->GetActorLocation();
 		Pos.Z += 50;
 
 		PC->GetPawn()->SetActorLocation(Pos);
+		GetWorld()->GetAuthGameMode()->RestartPlayerAtTransform(PC, PlayerStart->GetTransform());
 	}
 
 	PC->SetInputMode(FInputModeGameOnly());

@@ -771,12 +771,12 @@ void AAcmeCharacter::SwimDown()
 	AddMovementInput(-1*GetActorUpVector());
 }
 
-void AAcmeCharacter::Burn()
+void AAcmeCharacter::Burn(ACharacterMonster* causer)
 {
 	ClearBurnTimer();
 
-	GetWorldTimerManager().SetTimer(BurnTimer, FTimerDelegate::CreateLambda([this]() {
-		TakeDamage(2);
+	GetWorldTimerManager().SetTimer(BurnTimer, FTimerDelegate::CreateLambda([this, causer]() {
+		TakeDamage(2, causer);
 		}), 1.f, true);
 
 	GetWorldTimerManager().SetTimer(BurnEndTimer, FTimerDelegate::CreateLambda([this]() {
@@ -790,7 +790,7 @@ void AAcmeCharacter::ClearBurnTimer()
 	GetWorldTimerManager().ClearTimer(BurnEndTimer);
 }
 
-void AAcmeCharacter::DieAnimStart()
+void AAcmeCharacter::DeathAnimStart()
 {
 	if(!AnimInstance) AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
 	AnimInstance->PlayDeath();
@@ -889,6 +889,8 @@ void AAcmeCharacter::Restart()
 
 	if (!StatCompoenent) return;
 	StatCompoenent->Init();
+
+	StopCrouch();
 }
 
 void AAcmeCharacter::ChangeWalkSpeed(float amount)
@@ -899,16 +901,16 @@ void AAcmeCharacter::ChangeWalkSpeed(float amount)
 	Movement->MaxWalkSpeed += amount;
 }
 
-void AAcmeCharacter::OnAttacked(int damage)
+void AAcmeCharacter::OnAttacked(int damage, ACharacterMonster* causer)
 {
 	if (!AnimInstance) return;
 	if (IsDodgeRoll) return;
 
 	AnimInstance->PlayAttacked();
-	TakeDamage(damage);
+	TakeDamage(damage, causer);
 }
 
-void AAcmeCharacter::TakeDamage(int damage)
+void AAcmeCharacter::TakeDamage(int damage, ACharacterMonster* causer)
 {
 	if (!StatCompoenent) return;
 	if (!EquipmentComponent) return;
@@ -919,7 +921,7 @@ void AAcmeCharacter::TakeDamage(int damage)
 	int finalDamage = damage - decrease;
 	if (finalDamage < 0) finalDamage = 0;
 
-	StatCompoenent->OnAttakced(finalDamage);
+	StatCompoenent->OnAttakced(finalDamage, causer);
 }
 
 void AAcmeCharacter::SetAnimState(EAnimState newAnimState)

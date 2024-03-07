@@ -4,6 +4,7 @@
 #include "StatComponent.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/Monster/CharacterMonster.h"
 
 // Sets default values for this component's properties
 UStatComponent::UStatComponent()
@@ -89,15 +90,18 @@ void UStatComponent::SetCurrentStamina(int Stamina)
 	OnChangedStamina.Broadcast(CurrentStamina);
 }
 
-void UStatComponent::OnAttakced(int damage)
+void UStatComponent::OnAttakced(int damage, ACharacterMonster* causer)
 {
 	int newHP = CurrentHP - damage;
 	if (newHP < 0)
 	{
 		newHP = 0;
 		AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwner());
-		Player->DieAnimStart();
+		Player->DeathAnimStart();
+
+		causer->FinishCombat();
 	}
+
 	SetCurrentHP(newHP);
 }
 

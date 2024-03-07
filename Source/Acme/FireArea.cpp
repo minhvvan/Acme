@@ -4,6 +4,7 @@
 #include "FireArea.h"
 #include "Components/BoxComponent.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/Monster/CharacterMonster.h"
 #include "Acme/Utils/Util.h"
 
 
@@ -39,7 +40,11 @@ void AFireArea::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		AAcmeCharacter* Player = Cast<AAcmeCharacter>(OtherActor);
 		if (!Player) return;
 
-		Player->Burn();
+		if (GetInstigator())
+		{
+			ACharacterMonster* Monster = Cast<ACharacterMonster>(GetInstigator());
+			Player->Burn(Monster);
+		}
 	}
 }
 

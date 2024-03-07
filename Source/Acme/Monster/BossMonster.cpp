@@ -177,7 +177,7 @@ void ABossMonster::BiteAttackCheck()
 			AAcmeCharacter* Player = Cast<AAcmeCharacter>(Result.GetActor());
 			if (!Player) continue;
 
-			Player->OnAttacked(StatCompoenent->GetStrength());
+			Player->OnAttacked(StatCompoenent->GetStrength(), this);
 			return;
 		}
 	}
@@ -224,7 +224,7 @@ void ABossMonster::TailAttackCheck()
 			AAcmeCharacter* Player = Cast<AAcmeCharacter>(Result.GetActor());
 			if (!Player) continue;
 
-			Player->TakeDamage(StatCompoenent->GetStrength() * .3);
+			Player->TakeDamage(StatCompoenent->GetStrength() * .3, this);
 			Player->LaunchCharacter(LuanchDir * 15, true, true);
 			return;
 		}

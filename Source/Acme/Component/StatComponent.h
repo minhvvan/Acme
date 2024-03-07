@@ -54,7 +54,7 @@ public:
 	void SetCurrentStamina(int Stamina);
 
 	UFUNCTION()
-	void OnAttakced(int damage);
+	void OnAttakced(int damage, class ACharacterMonster* causer);
 
 	UFUNCTION()
 	void OnConsumeSatiety(int amount);

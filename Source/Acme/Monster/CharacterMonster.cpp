@@ -181,7 +181,7 @@ void ACharacterMonster::AttackCheck()
 			AAcmeCharacter* Player = Cast<AAcmeCharacter>(Result.GetActor());
 			if (!Player) continue;
 
-			Player->OnAttacked(StatCompoenent->GetStrength());
+			Player->OnAttacked(StatCompoenent->GetStrength(), this);
 		}
 
 		//DrawDebugCapsule(GetWorld(), (StartPos + EndPos) / 2, AttackRange / 2, 10, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), FColor::Red, false, 10.f);
