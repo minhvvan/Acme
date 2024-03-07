@@ -33,8 +33,8 @@ void ABossMonster::BeginPlay()
 {
 	ACharacter::BeginPlay();
 
-	//StatCompoenent->SetMaxHP(1000);
-	//StatCompoenent->SetCurrentHP(1000);
+	StatCompoenent->SetMaxHP(1000);
+	StatCompoenent->SetCurrentHP(1000);
 	StatCompoenent->SetStrength(30);
 	InitState();
 
@@ -42,6 +42,7 @@ void ABossMonster::BeginPlay()
 	BossAnimInstance->OnBite.AddUObject(this, &ABossMonster::BiteAttackCheck);
 	BossAnimInstance->OnFire.AddUObject(this, &ABossMonster::FireBall);
 	BossAnimInstance->OnTail.AddUObject(this, &ABossMonster::TailAttackCheck);
+	BossAnimInstance->OnMontageEnded.AddDynamic(this, &ABossMonster::OnMontageEnded);
 }
 
 void ABossMonster::FinishCombat()
@@ -92,7 +93,7 @@ void ABossMonster::OnAttacked(int damage)
 	BossAIController->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), TargetCharacter);
 
 	StatCompoenent->GetCurrentHP();
-	bool bUnderHalf = (StatCompoenent->GetCurrentHP() / StatCompoenent->GetMaxHP()) <= .5f;
+	bool bUnderHalf = ((float)StatCompoenent->GetCurrentHP() / StatCompoenent->GetMaxHP()) <= .5f;
 	BossAIController->GetBlackboardComponent()->SetValueAsBool(FName(TEXT("bUnderHalf")), bUnderHalf);
 
 	if (CombatTimer.IsValid()) GetWorldTimerManager().ClearTimer(CombatTimer);
@@ -210,8 +211,8 @@ void ABossMonster::TailAttackCheck()
 
 	bool bHit = GetWorld()->SweepMultiByChannel(OUT HitResults, Start, End, FQuat::Identity, ECollisionChannel::ECC_EngineTraceChannel2, FCollisionShape::MakeCapsule(FVector(100, 50, 100)), Query);
 
-	DrawDebugCapsule(GetWorld(), Start, 50, 25, FQuat::Identity, FColor::Red, false, 60.f, 0, 2.f);
-	DrawDebugCapsule(GetWorld(), End, 50, 25, FQuat::Identity, FColor::Blue, false, 60.f, 0, 2.f);
+	//DrawDebugCapsule(GetWorld(), Start, 50, 25, FQuat::Identity, FColor::Red, false, 60.f, 0, 2.f);
+	//DrawDebugCapsule(GetWorld(), End, 50, 25, FQuat::Identity, FColor::Blue, false, 60.f, 0, 2.f);
 
 	FVector LuanchDir = End - Start;
 	LuanchDir.Z += 30;
@@ -227,5 +228,37 @@ void ABossMonster::TailAttackCheck()
 			Player->LaunchCharacter(LuanchDir * 15, true, true);
 			return;
 		}
+	}
+}
+
+void ABossMonster::Die()
+{
+	BossAnimInstance->PlayDeathAnim();
+}
+
+void ABossMonster::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	FString MontageName = Montage->GetName();
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *MontageName));
+
+	if (MontageName == TEXT("AM_Death"))
+	{
+		Destroy();
+		OnDied.Broadcast();
+
+		FVector SpawnPos = GetActorLocation();
+		SpawnPos.Z += 10;
+
+		FActorSpawnParameters SpawnParam;
+		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		if (DropItems.IsEmpty()) return;
+		int idx = FMath::RandRange(0, DropItems.Num() - 1);
+		if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
+
+		FItem temp = GameInstance->GetItemInfo(DropItems[idx]);
+
+		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+		DropItem->Init(temp);
 	}
 }

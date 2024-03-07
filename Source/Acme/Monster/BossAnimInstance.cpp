@@ -23,6 +23,11 @@ void UBossAnimInstance::PlayTailAttack()
 	if (!Montage_IsPlaying(AMTailAttack)) Montage_Play(AMTailAttack);
 }
 
+void UBossAnimInstance::PlayDeathAnim()
+{
+	if (!Montage_IsPlaying(AMDeath)) Montage_Play(AMDeath);
+}
+
 void UBossAnimInstance::AnimNotify_BiteAttack()
 {
 	OnBite.Broadcast();

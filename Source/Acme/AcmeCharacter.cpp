@@ -182,20 +182,6 @@ void AAcmeCharacter::BeginPlay()
 	}
 
 	{
-		if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
-		FItem temp = GameInstance->GetItemInfo(EItemName::E_Helmet);
-
-		InventoryComponent->AddItem(temp);
-	}
-
-	{
-		if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
-		FItem temp = GameInstance->GetItemInfo(EItemName::E_Sword);
-
-		InventoryComponent->AddItem(temp);
-	}
-
-	{
 		FRecipe recipe;
 
 		{

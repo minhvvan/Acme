@@ -46,6 +46,9 @@ public:
 	void PlayTailAttack();
 
 	UFUNCTION()
+	void PlayDeathAnim();
+
+	UFUNCTION()
 	void AnimNotify_BiteAttack();
 
 	UFUNCTION()

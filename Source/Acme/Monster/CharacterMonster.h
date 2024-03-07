@@ -55,7 +55,7 @@ protected:
 	void InitState();
 
 	UFUNCTION()
-	void Die();
+	virtual void Die();
 
 public:	
 	// Called every frame

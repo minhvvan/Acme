@@ -74,4 +74,9 @@ public:
 
 	UFUNCTION()
 	void TailAttackCheck();
+
+	virtual void Die();
+
+	UFUNCTION()
+	void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 };
