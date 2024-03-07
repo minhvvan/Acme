@@ -31,6 +31,7 @@ protected:
 public:
 	FOnAttack OnFire;
 	FOnAttack OnBite;
+	FOnAttack OnTail;
 
 	UFUNCTION()
 	void PlayBite();
@@ -49,4 +50,7 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_FireAttack();
+
+	UFUNCTION()
+	void AnimNotify_TailAttack();
 };

@@ -32,3 +32,8 @@ void UBossAnimInstance::AnimNotify_FireAttack()
 {
 	OnFire.Broadcast();
 }
+
+void UBossAnimInstance::AnimNotify_TailAttack()
+{
+	OnTail.Broadcast();
+}

@@ -41,6 +41,7 @@ void ABossMonster::BeginPlay()
 	BossAnimInstance = Cast<UBossAnimInstance>(GetMesh()->GetAnimInstance());
 	BossAnimInstance->OnBite.AddUObject(this, &ABossMonster::BiteAttackCheck);
 	BossAnimInstance->OnFire.AddUObject(this, &ABossMonster::FireBall);
+	BossAnimInstance->OnTail.AddUObject(this, &ABossMonster::TailAttackCheck);
 }
 
 void ABossMonster::FinishCombat()
@@ -195,4 +196,36 @@ void ABossMonster::FireBall()
 	Dir.Normalize();
 
 	FireBall->FireInDirection(Dir);
+}
+
+void ABossMonster::TailAttackCheck()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Query;
+
+	Query.AddIgnoredActor(this);
+
+	FVector Start = GetMesh()->GetBoneLocation(FName(TEXT("TailEnd")));
+	FVector End = Start + GetActorRightVector() * 200;
+
+	bool bHit = GetWorld()->SweepMultiByChannel(OUT HitResults, Start, End, FQuat::Identity, ECollisionChannel::ECC_EngineTraceChannel2, FCollisionShape::MakeCapsule(FVector(100, 50, 100)), Query);
+
+	DrawDebugCapsule(GetWorld(), Start, 50, 25, FQuat::Identity, FColor::Red, false, 60.f, 0, 2.f);
+	DrawDebugCapsule(GetWorld(), End, 50, 25, FQuat::Identity, FColor::Blue, false, 60.f, 0, 2.f);
+
+	FVector LuanchDir = End - Start;
+	LuanchDir.Z += 30;
+
+	if (bHit)
+	{
+		for (auto Result : HitResults)
+		{
+			AAcmeCharacter* Player = Cast<AAcmeCharacter>(Result.GetActor());
+			if (!Player) continue;
+
+			Player->TakeDamage(StatCompoenent->GetStrength() * .3);
+			Player->LaunchCharacter(LuanchDir * 15, true, true);
+			return;
+		}
+	}
 }

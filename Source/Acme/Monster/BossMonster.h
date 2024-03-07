@@ -71,4 +71,7 @@ public:
 
 	UFUNCTION()
 	void FireBall();
+
+	UFUNCTION()
+	void TailAttackCheck();
 };
