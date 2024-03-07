@@ -161,7 +161,6 @@ void AAcmeCharacter::BeginPlay()
 
 		InventoryComponent->AddItem(temp1);
 	}
-
 	{
 		FItem temp1;
 		temp1.Name = EItemName::E_Earth;
@@ -180,6 +179,16 @@ void AAcmeCharacter::BeginPlay()
 
 		InventoryComponent->AddItem(temp1);
 	}
+	{
+		FItem temp1;
+		temp1.Name = EItemName::E_Lava;
+		temp1.Num = 100;
+		temp1.bCanAddQuick = false;
+		temp1.Category = EItemCategory::E_Material;
+
+		InventoryComponent->AddItem(temp1);
+	}
+
 
 	{
 		FRecipe recipe;

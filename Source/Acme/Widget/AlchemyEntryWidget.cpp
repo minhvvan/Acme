@@ -44,7 +44,7 @@ void UAlchemyEntryWidget::SetIndex(int idx)
 
 void UAlchemyEntryWidget::SetSelected()
 {
-	BorderSelected->SetBrushColor(FLinearColor(0.f, .2f, 1.f));
+	BorderSelected->SetBrushColor(FLinearColor(0.f, .2f, 1.f, .3f));
 }
 
 void UAlchemyEntryWidget::SetUnSelected()

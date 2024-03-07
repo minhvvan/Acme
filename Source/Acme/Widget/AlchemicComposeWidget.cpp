@@ -5,6 +5,7 @@
 #include "Kismet/KismetStringLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/TileView.h"
+#include "Components/ListView.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
@@ -134,21 +135,21 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	OwnerCharacter->UseItem(RightItem.Category, RightSlotIdx, Amount);
 
 	//Add
-	TVResult->ClearListItems();
+	LVResult->ClearListItems();
 	for (FItem result : ComposeResults)
 	{
 		//Set TVResult
 		UItemData* Data = NewObject<UItemData>();
+		Data->ItemInfo.Num = Amount;
 		Data->SetItem(result);
 
-		TVResult->AddItem(Data);
+		LVResult->AddItem(Data);
 
 		for (int i = 0; i < Amount; i++)
 		{
 			if (!OwnerCharacter->AddItem(result))
 			{
 				FActorSpawnParameters SpawnParams;
-				//SpawnParams.Owner = Player;
 				FRotator rotator;
 				FVector  SpawnLocation = OwnerCharacter->GetActorLocation();
 				SpawnLocation.Z += 10;
@@ -289,25 +290,21 @@ UTileView* UAlchemicComposeWidget::GetCurrentCategory()
 
 bool UAlchemicComposeWidget::AddToSlot(int idx)
 {
-	if (LeftSlotIdx == idx || RightSlotIdx == idx) return false;
+	UItemData* Data = Cast<UItemData>(GetCurrentCategory()->GetItemAt(idx));
+	FItem item = Data->GetItemInfo();
+
+	if (LeftSlot->IsSame(item, idx) || RightSlot->IsSame(item, idx)) return false;
 
 	if (LeftSlot->IsEmpty())
 	{
-		//Add
-		UItemData* Data = Cast<UItemData>(GetCurrentCategory()->GetItemAt(idx));
-		FItem info = Data->GetItemInfo();
-
-		LeftSlot->SetSlot(info);
+		LeftSlot->SetSlot(item, idx);
 		LeftSlotIdx = idx;
 
 		return true;
 	}
 	else if(RightSlot->IsEmpty())
 	{
-		UItemData* Data = Cast<UItemData>(GetCurrentCategory()->GetItemAt(idx));
-		FItem info = Data->GetItemInfo();
-
-		RightSlot->SetSlot(info);
+		RightSlot->SetSlot(item, idx);
 		RightSlotIdx = idx;
 
 		return true;
@@ -318,14 +315,17 @@ bool UAlchemicComposeWidget::AddToSlot(int idx)
 
 bool UAlchemicComposeWidget::RemoveFromSlot(int idx)
 {
-	if (LeftSlotIdx == idx)
+	UItemData* Data = Cast<UItemData>(GetCurrentCategory()->GetItemAt(idx));
+	FItem item = Data->GetItemInfo();
+
+	if (LeftSlot->IsSame(item, idx))
 	{
 		LeftSlot->SetEmpty();
 		LeftSlotIdx = -1;
 
 		return true;
 	}
-	else if (RightSlotIdx == idx)
+	else if (RightSlot->IsSame(item, idx))
 	{
 		RightSlot->SetEmpty();
 		RightSlotIdx = -1;

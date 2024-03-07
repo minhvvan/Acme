@@ -29,6 +29,9 @@ protected:
 	FItem ItemInfo;
 
 	UPROPERTY(VisibleAnywhere)
+	int ItemIndex;
+
+	UPROPERTY(VisibleAnywhere)
 	class AAcmeCharacter* Player;
 
 	UPROPERTY(VisibleAnywhere)
@@ -40,7 +43,7 @@ protected:
 
 public:
 	UFUNCTION()
-	void SetSlot(FItem info);
+	void SetSlot(FItem info, int idx);
 
 	UFUNCTION()
 	void Compose();
@@ -53,6 +56,9 @@ public:
 
 	UFUNCTION()
 	void SetEmpty();
+
+	UFUNCTION()
+	bool IsSame(FItem item, int idx);
 
 protected:
 };

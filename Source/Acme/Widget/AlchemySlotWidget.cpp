@@ -25,16 +25,23 @@ void UAlchemySlotWidget::SetImage()
 	ImgItem->SetBrushFromTexture(Image);
 }
 
-void UAlchemySlotWidget::SetSlot(FItem info)
+void UAlchemySlotWidget::SetSlot(FItem info, int idx)
 {
 	ItemInfo = info;
+	ItemIndex = idx;
 	SetImage();
 }
 
 void UAlchemySlotWidget::SetEmpty()
 {
 	ItemInfo.Clear();
+	ItemIndex = -1;
 	SetImage();
+}
+
+bool UAlchemySlotWidget::IsSame(FItem item, int idx)
+{
+	return ItemInfo.Name == item.Name && ItemIndex == idx;
 }
 
 void UAlchemySlotWidget::Compose()

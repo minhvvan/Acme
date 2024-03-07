@@ -20,7 +20,7 @@ protected:
 	class UWidgetSwitcher* WSInven;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	class UTileView* TVResult;
+	class UListView* LVResult;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UTileView* TVElement;
