@@ -203,6 +203,8 @@ protected:
 	UFUNCTION()
 	void QuickSlot8Start();
 
+	virtual void Restart() override;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -297,6 +299,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Widget")
 	UQuestNotCompleteWidget* NotCompleteWidget;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<class UGamePausedWidget> GamePausedWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "Widget")
+	UGamePausedWidget* GamePausedWidget;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -449,6 +457,12 @@ public:
 
 	UFUNCTION()
 	void ClearBurnTimer();
+
+	UFUNCTION()
+	void DieAnimStart();
+
+	UFUNCTION()
+	void Die();
 
 public:
 	FOnAcceptQuest OnAcceptQuest;

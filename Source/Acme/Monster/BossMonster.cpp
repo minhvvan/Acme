@@ -239,7 +239,6 @@ void ABossMonster::Die()
 void ABossMonster::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	FString MontageName = Montage->GetName();
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *MontageName));
 
 	if (MontageName == TEXT("AM_Death"))
 	{

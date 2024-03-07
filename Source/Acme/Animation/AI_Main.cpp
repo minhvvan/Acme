@@ -53,6 +53,14 @@ void UAI_Main::PlayDodgeRoll()
 	}
 }
 
+void UAI_Main::PlayDeath()
+{
+	if (!Montage_IsPlaying(AMDeath))
+	{
+		Montage_Play(AMDeath);
+	}
+}
+
 FName UAI_Main::GetAttackMontageName(int idx)
 {
 	return FName(FString::Printf(TEXT("Attack%d"), idx));
@@ -76,4 +84,9 @@ void UAI_Main::AnimNotify_Interact()
 void UAI_Main::AnimNotify_DodgeRoll()
 {
 	OnDodgeRoll.Broadcast();
+}
+
+void UAI_Main::AnimNotify_Death()
+{
+	OnDeath.Broadcast();
 }

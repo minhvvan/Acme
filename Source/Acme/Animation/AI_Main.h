@@ -6,10 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "AI_Main.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnAttackStart);
-DECLARE_MULTICAST_DELEGATE(FOnAttackEnd);
-DECLARE_MULTICAST_DELEGATE(FOnInteract);
-DECLARE_MULTICAST_DELEGATE(FOnDodgeRoll);
+DECLARE_MULTICAST_DELEGATE(FOnAnimNotify);
 
 
 UCLASS()
@@ -39,6 +36,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Move", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AMDodgeRoll;
 
+	UPROPERTY(EditAnywhere, Category = "Default", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AMDeath;
+
 public:
 	UFUNCTION()
 	void PlayAttack(int idx);
@@ -62,12 +62,16 @@ public:
 	void PlayDodgeRoll();
 
 	UFUNCTION()
+	void PlayDeath();
+
+	UFUNCTION()
 	FName GetAttackMontageName(int idx);
 
-	FOnAttackStart OnAttackStart;
-	FOnAttackEnd OnAttackEnd;
-	FOnInteract OnInteract;
-	FOnDodgeRoll OnDodgeRoll;
+	FOnAnimNotify OnAttackStart;
+	FOnAnimNotify OnAttackEnd;
+	FOnAnimNotify OnInteract;
+	FOnAnimNotify OnDodgeRoll;
+	FOnAnimNotify OnDeath;
 
 private:
 	UFUNCTION()
@@ -81,4 +85,7 @@ private:
 
 	UFUNCTION()
 	void AnimNotify_DodgeRoll();
+
+	UFUNCTION()
+	void AnimNotify_Death();
 };

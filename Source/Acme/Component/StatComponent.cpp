@@ -3,6 +3,7 @@
 
 #include "StatComponent.h"
 #include "Acme/Utils/Util.h"
+#include "Acme/AcmeCharacter.h"
 
 // Sets default values for this component's properties
 UStatComponent::UStatComponent()
@@ -23,7 +24,6 @@ UStatComponent::UStatComponent()
 	Dexterity = 10;
 	Intelligence = 10;
 
-	CoolTimedash = 2.f;
 	ConsumeTimeSatiety = 30.f;
 	ConsumeAmountSatiety = 1;
 
@@ -36,7 +36,7 @@ void UStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//¹è°íÇÄ ¼Òºñ
+	GetWorld()->GetTimerManager().ClearTimer(TimerSatiety);
 	GetWorld()->GetTimerManager().SetTimer(TimerSatiety,
 		FTimerDelegate::CreateLambda([this]() {
 			SetCurrentST(GetCurrentST() - ConsumeAmountSatiety);
@@ -49,6 +49,26 @@ void UStatComponent::BeginPlay()
 void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
+
+void UStatComponent::Init()
+{
+	MaxHP = 100;
+	SetCurrentHP(100);
+
+	MaxStamina = 100;
+	SetCurrentStamina(100);
+
+	SetCurrentST(100);
+
+	Strength = 10;
+	Dexterity = 10;
+	Intelligence = 10;
+
+	ConsumeTimeSatiety = 30.f;
+	ConsumeAmountSatiety = 1;
+
+	RecoveryTime = 3.f;
 }
 
 void UStatComponent::SetCurrentHP(int HP)
@@ -72,7 +92,12 @@ void UStatComponent::SetCurrentStamina(int Stamina)
 void UStatComponent::OnAttakced(int damage)
 {
 	int newHP = CurrentHP - damage;
-	if (newHP < 0) newHP = 0;
+	if (newHP < 0)
+	{
+		newHP = 0;
+		AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwner());
+		Player->DieAnimStart();
+	}
 	SetCurrentHP(newHP);
 }
 

@@ -32,6 +32,7 @@
 #include "Widget/QuestNotCompleteWidget.h"
 #include "GameFramework/PhysicsVolume.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Acme/Widget/GamePausedWidget.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -142,6 +143,7 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::EndSwordAttack);
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
 	AnimInstance->OnDodgeRoll.AddUObject(this, &AAcmeCharacter::StopDodgeRoll);
+	AnimInstance->OnDeath.AddUObject(this, &AAcmeCharacter::Die);
 
 	{
 		FItem temp1;
@@ -181,14 +183,14 @@ void AAcmeCharacter::BeginPlay()
 	}
 	{
 		FItem temp1;
-		temp1.Name = EItemName::E_Lava;
-		temp1.Num = 100;
-		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Material;
+		temp1.Name = EItemName::E_Sword;
+		temp1.Num = 1;
+		temp1.bCanAddQuick = true;
+		temp1.Category = EItemCategory::E_Equipment;
+		temp1.ItemStat.Attack = 10;
 
 		InventoryComponent->AddItem(temp1);
 	}
-
 
 	{
 		FRecipe recipe;
@@ -788,10 +790,31 @@ void AAcmeCharacter::ClearBurnTimer()
 	GetWorldTimerManager().ClearTimer(BurnEndTimer);
 }
 
+void AAcmeCharacter::DieAnimStart()
+{
+	if(!AnimInstance) AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
+	AnimInstance->PlayDeath();
+}
+
+void AAcmeCharacter::Die()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+	GamePausedWidget = Cast<UGamePausedWidget>(CreateWidget(GetWorld(), GamePausedWidgetClass));
+	GamePausedWidget->AddToViewport();
+
+	auto PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeUIOnly());
+	PC->bShowMouseCursor = true;
+}
+
 void AAcmeCharacter::StaminaCheck(int Stamina)
 {
 	if (Stamina == 0)
 	{
+		if (!AnimInstance) AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
 		AnimInstance->PlayExhaust();
 
 		CanActive = false;
@@ -858,6 +881,14 @@ void AAcmeCharacter::QuickSlot7Start()
 void AAcmeCharacter::QuickSlot8Start()
 {
 	ChangeQuickSlotIdx(7);
+}
+
+void AAcmeCharacter::Restart()
+{
+	Super::Restart();
+
+	if (!StatCompoenent) return;
+	StatCompoenent->Init();
 }
 
 void AAcmeCharacter::ChangeWalkSpeed(float amount)

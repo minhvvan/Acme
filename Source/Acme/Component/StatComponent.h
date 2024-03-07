@@ -30,6 +30,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION()
+	void Init();
+
+	UFUNCTION()
 	int GetCurrentHP() { return CurrentHP; };
 
 	UFUNCTION()
@@ -124,9 +127,6 @@ private:
 	int CurrentSatiety;
 
 	//Others
-	UPROPERTY(EditAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
-	float CoolTimedash;
-
 	UPROPERTY(EditAnywhere, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	float ConsumeTimeSatiety;
 
