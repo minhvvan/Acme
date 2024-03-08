@@ -6,6 +6,7 @@
 #include "Acme/Utils/GlobalEnum.h"
 #include "Acme/Item/InteractiveItem.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/AcmeGameInstance.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -28,6 +29,12 @@ UInventoryComponent::UInventoryComponent()
 	{
 		FItem item = FItem();
 		QuickSlots.Add(item);
+	}
+
+	ConstructorHelpers::FClassFinder<AInteractiveItem> DI(TEXT("/Script/Engine.Blueprint'/Game/Acme/BluePrint/BP_DropItem.BP_DropItem_C'"));
+	if (DI.Succeeded())
+	{
+		DropItemClass = DI.Class;
 	}
 }
 
@@ -89,17 +96,23 @@ void UInventoryComponent::Dump(EItemCategory Category, int idx)
 
 	FItem& Item = ItemList[idx];
 
-	TSubclassOf<AInteractiveItem> SpawnClass = ItemClass[Item.Name];
 	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	SpawnParams.Owner = Player;
 	FRotator rotator;
 	FVector  SpawnLocation = Player->GetActorLocation() + Player->GetActorForwardVector() * 100;
 
-	if (!SpawnClass) return;
-	auto DropItem = GetWorld()->SpawnActor<AInteractiveItem>(SpawnClass, SpawnLocation, rotator, SpawnParams);
-	DropItem->GetMesh()->SetSimulatePhysics(true);
-	DropItem->Init(Item);
+	if (!GameInstance) GameInstance = GetWorld()->GetGameInstance<UAcmeGameInstance>();
+	FItem temp = GameInstance->GetItemInfo(Item.Name);
 
+	AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, SpawnLocation, rotator, SpawnParams);
+	if (!DropItemClass)
+	{
+		UUtil::DebugPrint("nnulll");
+		return;
+	}
+	
+	DropItem->Init(temp);
 	SetEmpty(Item);
 }
 

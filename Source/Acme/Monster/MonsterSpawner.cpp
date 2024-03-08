@@ -10,11 +10,16 @@
 // Sets default values
 AMonsterSpawner::AMonsterSpawner()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	MaxPopulation = 10;
 	RespawnInterval = 30.f;
+
+	//ConstructorHelpers::FClassFinder<ACharacterMonster> MON(TEXT("/Script/Engine.Blueprint'/Game/Acme/BluePrint/BP_Monster.BP_Monster_C'"));
+	//if (MON.Succeeded())
+	//{
+	//	MonsterClass = MON.Class;
+	//}
 }
 
 void AMonsterSpawner::Respawn()
@@ -23,9 +28,8 @@ void AMonsterSpawner::Respawn()
 	if (!Area) return;
 	if (!MonsterClass.Get()) return;
 
-	int TryNum = 0;
-
-	while (Monsters.Num() != MaxPopulation && TryNum <= MaxPopulation * 2)
+	//while (Monsters.Num() != MaxPopulation && TryNum <= MaxPopulation * 2)
+	for(int i = 0; i < MaxPopulation; i++)
 	{
 		//Spawn
 		FVector Loc = GetActorLocation();
@@ -33,24 +37,23 @@ void AMonsterSpawner::Respawn()
 
 		FVector Pos = UKismetMathLibrary::RandomPointInBoundingBox(Loc, Extand);
 
-		Pos.Z += 100;
-
 		FHitResult Result;
-		if (GetWorld()->LineTraceSingleByChannel(Result, Pos, Pos - (0, 0, 1000), ECollisionChannel::ECC_Visibility))
-		{
-			FVector SpawnPos = Result.Location;
+		//if (GetWorld()->LineTraceSingleByChannel(Result, Pos, Pos - (0, 0, 100), ECollisionChannel::ECC_Visibility))
+		//{
+			//FVector SpawnPos = Result.Location;
 
+		if (MonsterClass)
+		{
 			FActorSpawnParameters SpawnParam;
 			SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-			ACharacterMonster* Monster = GetWorld()->SpawnActor<ACharacterMonster>(MonsterClass, FTransform(FRotator::ZeroRotator, Pos), SpawnParam);
-			
-			Monster->SetCenterPos(CenterPos);
-			Monster->OnDied.AddLambda([this, Monster]() { Monsters.Remove(Monster); });
-			Monsters.Add(Monster);
+			ACharacterMonster* Monster = GetWorld()->SpawnActor<ACharacterMonster>(MonsterClass, Pos, FRotator::ZeroRotator, SpawnParam);
+			//Monster->SetCenterPos(CenterPos);
+			//Monster->OnDied.AddLambda([this, Monster]() { Monsters.Remove(Monster); });
+			//Monsters.Add(Monster);
 		}
 
-		TryNum++;
+		//}
 	}
 }
 

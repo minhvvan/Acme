@@ -20,7 +20,6 @@
 #include "Acme/Utils/Util.h"
 #include "Sound/SoundBase.h"
 #include "Acme/Monster/CharacterMonster.h"
-#include "Kismet/GameplayStatics.h"
 #include "Acme/Widget/InventoryWidget.h"
 #include "Acme/Widget/AlchemicComposeWidget.h"
 #include "Acme/Widget/DialogueWidget.h"
@@ -32,7 +31,8 @@
 #include "Widget/QuestNotCompleteWidget.h"
 #include "GameFramework/PhysicsVolume.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Acme/Widget/GamePausedWidget.h"
+#include "Acme/Widget/DeathWidget.h"
+#include "Acme/Widget/PauseWidget.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -148,49 +148,23 @@ void AAcmeCharacter::BeginPlay()
 	{
 		FItem temp1;
 		temp1.Name = EItemName::E_Fire;
-		temp1.Num = 100;
+		temp1.Num = 1;
 		temp1.Category = EItemCategory::E_Element;
 		temp1.bCanAddQuick = false;
 
 		InventoryComponent->AddItem(temp1);
 	}
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Water;
-		temp1.Num = 100;
-		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Element;
 
-		InventoryComponent->AddItem(temp1);
-	}
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Earth;
-		temp1.Num = 100;
-		temp1.Category = EItemCategory::E_Element;
-		temp1.bCanAddQuick = false;
-
-		InventoryComponent->AddItem(temp1);
-	}
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Air;
-		temp1.Num = 100;
-		temp1.bCanAddQuick = false;
-		temp1.Category = EItemCategory::E_Element;
-
-		InventoryComponent->AddItem(temp1);
-	}
 	{
 		FItem temp1;
 		temp1.Name = EItemName::E_Sword;
 		temp1.Num = 1;
-		temp1.bCanAddQuick = true;
 		temp1.Category = EItemCategory::E_Equipment;
-		temp1.ItemStat.Attack = 10;
+		temp1.bCanAddQuick = true;
 
 		InventoryComponent->AddItem(temp1);
 	}
+	
 
 	{
 		FRecipe recipe;
@@ -361,6 +335,9 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 		//Equip
 		EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::OpenInventory);
+	
+		//ESC
+		EnhancedInputComponent->BindAction(ESCAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::OpenPauseMenu);
 	}
 }
 
@@ -800,14 +777,23 @@ void AAcmeCharacter::Die()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 
-	GamePausedWidget = Cast<UGamePausedWidget>(CreateWidget(GetWorld(), GamePausedWidgetClass));
-	GamePausedWidget->AddToViewport();
+	DeathWidget = Cast<UDeathWidget>(CreateWidget(GetWorld(), DeathWidgetClass));
+	DeathWidget->AddToViewport();
 
 	auto PC = Cast<APlayerController>(GetController());
 	if (!PC) return;
 
 	PC->SetInputMode(FInputModeUIOnly());
 	PC->bShowMouseCursor = true;
+}
+
+void AAcmeCharacter::MoveToLobby()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("Lobby")));
+	if (Hud)
+	{
+		Hud->RemoveFromParent();
+	}
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)
@@ -891,6 +877,23 @@ void AAcmeCharacter::Restart()
 	StatCompoenent->Init();
 
 	StopCrouch();
+}
+
+void AAcmeCharacter::OpenPauseMenu()
+{
+	if (PauseMenuWidget == nullptr)
+	{
+		PauseMenuWidget = Cast<UPauseWidget>(CreateWidget(GetWorld(), PauseMenuWidgetClass));
+	}
+
+	PauseMenuWidget->AddToViewport();
+	auto PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+	PC->SetInputMode(FInputModeUIOnly());
+	PC->bShowMouseCursor = true;
 }
 
 void AAcmeCharacter::ChangeWalkSpeed(float amount)

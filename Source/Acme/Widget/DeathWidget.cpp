@@ -1,22 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Acme/Widget/GamePausedWidget.h"
+#include "Acme/Widget/DeathWidget.h"
 #include "Components/Button.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 
-void UGamePausedWidget::NativeOnInitialized()
+void UDeathWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	BtnReplay->OnClicked.AddDynamic(this, &UGamePausedWidget::OnReplayClicked);
-	BtnExit->OnClicked.AddDynamic(this, &UGamePausedWidget::OnExitClicked);
+	BtnReplay->OnClicked.AddDynamic(this, &UDeathWidget::OnReplayClicked);
+	BtnExit->OnClicked.AddDynamic(this, &UDeathWidget::OnExitClicked);
 }
 
-void UGamePausedWidget::OnReplayClicked()
+void UDeathWidget::OnReplayClicked()
 {
 	auto PC = GetOwningPlayer();
 	if (!PC) return;
@@ -41,7 +41,9 @@ void UGamePausedWidget::OnReplayClicked()
 	UGameplayStatics::SetGamePaused(GetWorld(), false);
 }
 
-void UGamePausedWidget::OnExitClicked()
+void UDeathWidget::OnExitClicked()
 {
+	//lobby·Î 
+	
 
 }

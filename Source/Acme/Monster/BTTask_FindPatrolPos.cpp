@@ -28,13 +28,12 @@ EBTNodeResult::Type UBTTask_FindPatrolPos::ExecuteTask(UBehaviorTreeComponent& O
 	if (!NavSystem) return EBTNodeResult::Failed;
 
 	FNavLocation RandLoc;
-	do {
-		if (NavSystem->GetRandomPointInNavigableRadius(Monster->GetActorLocation(), 500.f, RandLoc))
-		{
-			OwnerComp.GetBlackboardComponent()->SetValueAsVector(FName(TEXT("PatrolPos")), RandLoc.Location);
-			return EBTNodeResult::Succeeded;
-		}
-	} while (FVector::Dist(RandLoc.Location, Monster->GetCenterPos()) > Monster->GetSearchRadius());
+	if (NavSystem->GetRandomPointInNavigableRadius(Monster->GetActorLocation(), 500.f, RandLoc))
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(FName(TEXT("PatrolPos")), RandLoc.Location);
+		return EBTNodeResult::Succeeded;
+	}
+
 
 	return Result;
 }

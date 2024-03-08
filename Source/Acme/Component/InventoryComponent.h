@@ -90,6 +90,9 @@ private:
 	UPROPERTY()
 	class AAcmeCharacter* Player;
 
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TMap<EItemName, TSubclassOf<class AInteractiveItem>> ItemClass;
+	UPROPERTY(EditAnywhere, Category = Item, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AInteractiveItem> DropItemClass;
+
+	UPROPERTY()
+	class UAcmeGameInstance* GameInstance;
 };

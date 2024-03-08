@@ -39,6 +39,8 @@ ACharacterMonster::ACharacterMonster()
 
 	AttackRange = 200.f;
 	IsMoving = true;
+
+	SearchRadius = 500.f;
 }
 
 // Called when the game starts or when spawned

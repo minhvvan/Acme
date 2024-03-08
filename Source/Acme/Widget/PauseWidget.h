@@ -4,30 +4,34 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "GamePausedWidget.generated.h"
+#include "PauseWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACME_API UGamePausedWidget : public UUserWidget
+class ACME_API UPauseWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-protected:
-	virtual void NativeOnInitialized();
-
-
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BtnReplay;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* BtnSave;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* BtnExit;
 
 protected:
+	virtual void NativeOnInitialized();
+
 	UFUNCTION()
 	void OnReplayClicked();
+
+	UFUNCTION()
+	void OnSaveClicked();
 
 	UFUNCTION()
 	void OnExitClicked();

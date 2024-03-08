@@ -101,6 +101,9 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* TabAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ESCAction;
+
 	//stat comp
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	class UStatComponent* StatCompoenent;
@@ -205,6 +208,9 @@ protected:
 
 	virtual void Restart() override;
 
+	UFUNCTION()
+	void OpenPauseMenu();
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -301,10 +307,16 @@ protected:
 	UQuestNotCompleteWidget* NotCompleteWidget;
 
 	UPROPERTY(EditAnywhere, Category = "Widget")
-	TSubclassOf<class UGamePausedWidget> GamePausedWidgetClass;
+	TSubclassOf<class UDeathWidget> DeathWidgetClass;
 
 	UPROPERTY(VisibleAnywhere, Category = "Widget")
-	UGamePausedWidget* GamePausedWidget;
+	UDeathWidget* DeathWidget;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<class UPauseWidget> PauseMenuWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "Widget")
+	UPauseWidget* PauseMenuWidget;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -463,6 +475,9 @@ public:
 
 	UFUNCTION()
 	void Die();
+
+	UFUNCTION()
+	void MoveToLobby();
 
 public:
 	FOnAcceptQuest OnAcceptQuest;
