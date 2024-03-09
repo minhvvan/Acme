@@ -24,15 +24,10 @@ AInteractiveItem::AInteractiveItem()
 
 void AInteractiveItem::Init(FItem newItem)
 {
-	//Info Setting
 	if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
 	Mesh->SetStaticMesh(GameInstance->GetItemMesh(newItem.Name));
 
-	ItemInfo.Name = newItem.Name;
-	ItemInfo.Num = 1;
-	ItemInfo.Category = newItem.Category;
-	ItemInfo.Part = newItem.Part;
-	ItemInfo.bCanAddQuick = newItem.bCanAddQuick;
+	ItemInfo = newItem;
 }
 
 void AInteractiveItem::BeginPlay()
@@ -51,6 +46,7 @@ void AInteractiveItem::Interact()
 
 	if (OverlappedCharacter->AddItem(ItemInfo))
 	{
+		OnInteract.Broadcast(this);
 		Destroy();
 	}
 }

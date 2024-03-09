@@ -22,5 +22,4 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ATurret> TurretClass;
-
 };

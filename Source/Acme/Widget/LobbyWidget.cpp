@@ -25,6 +25,12 @@ void ULobbyWidget::OnNewGameClicked()
 {
 	//OpenLevel
 	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("Game")));
+
+	auto PC = Cast<APlayerController>(GetOwningPlayer());
+	if (!PC) return;
+
+	PC->SetInputMode(FInputModeGameOnly());
+	PC->bShowMouseCursor = false;
 }
 
 void ULobbyWidget::OnContinueClicked()

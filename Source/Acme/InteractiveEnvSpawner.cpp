@@ -9,9 +9,15 @@
 #include "Acme/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
 #include "Landscape.h"
+#include "DrawDebugHelpers.h"
 
 AInteractiveEnvSpawner::AInteractiveEnvSpawner()
 {
+	//ConstructorHelpers::FClassFinder<AInteractiveItem> ENV(TEXT("/Script/Engine.Blueprint'/Game/Acme/BluePrint/BP_StaticItem.BP_StaticItem_C'"));
+	//if (ENV.Succeeded())
+	//{
+	//	EnvClass = ENV.Class;
+	//}
 }
 
 void AInteractiveEnvSpawner::Respawn()
@@ -28,25 +34,50 @@ void AInteractiveEnvSpawner::Respawn()
 	while (Enves.Num() != MaxPopulation && TryNum <= MaxPopulation * 2)
 	{
 		FVector Pos = UKismetMathLibrary::RandomPointInBoundingBox(Loc, Extand);
-		Pos.Z += 100;
+		Pos.Z += 500;
 
-		FHitResult HitResult;
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, Pos, Pos + FVector(0, 0, -2000), ECollisionChannel::ECC_Visibility))
+		FVector EndPos = Pos;
+		EndPos.Z -= 1000;
+
+		TArray<FHitResult> HitResult;
+		if (GetWorld()->LineTraceMultiByChannel(HitResult, Pos, EndPos, ECollisionChannel::ECC_Visibility))
 		{
-			FVector newPos = HitResult.ImpactPoint;
-			newPos.Z += 10;
+			for (FHitResult result : HitResult)
+			{
+				if (result.GetActor()->ActorHasTag(FName(TEXT("Ground"))))
+				{
+					FVector newPos = result.ImpactPoint;
+					newPos.Z += 10;
 
-			FActorSpawnParameters SpawnParam;
-			SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-			AInteractiveItem* Env = GetWorld()->SpawnActor<AInteractiveItem>(EnvClass, FTransform(FRotator::ZeroRotator, newPos), SpawnParam);
+					FActorSpawnParameters SpawnParam;
+					SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+					AInteractiveItem* Env = GetWorld()->SpawnActor<AInteractiveItem>(EnvClass, newPos, FRotator::ZeroRotator, SpawnParam);
 
-			if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
-			FItem item = GameInstance->GetItemInfo(ItemName);
+					if (!GameInstance) GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
+					FItem item = GameInstance->GetItemInfo(ItemName);
 
-			Env->Init(item);
-			Enves.Add(Env);
+					Env->Init(item);
+					Env->OnInteract.AddUObject(this, &AInteractiveEnvSpawner::RemoveFromEnves);
+
+					Enves.Add(Env);
+
+					continue;
+				}
+			}
 		}
 		TryNum++;
+	}
+}
+
+void AInteractiveEnvSpawner::RemoveFromEnves(AInteractiveItem* Destroyed)
+{
+	for (auto env : Enves)
+	{
+		if (env == Destroyed)
+		{
+			Enves.Remove(env);
+			return;
+		}
 	}
 }
 

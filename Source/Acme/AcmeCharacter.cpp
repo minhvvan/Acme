@@ -144,26 +144,6 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
 	AnimInstance->OnDodgeRoll.AddUObject(this, &AAcmeCharacter::StopDodgeRoll);
 	AnimInstance->OnDeath.AddUObject(this, &AAcmeCharacter::Die);
-
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Fire;
-		temp1.Num = 1;
-		temp1.Category = EItemCategory::E_Element;
-		temp1.bCanAddQuick = false;
-
-		InventoryComponent->AddItem(temp1);
-	}
-
-	{
-		FItem temp1;
-		temp1.Name = EItemName::E_Sword;
-		temp1.Num = 1;
-		temp1.Category = EItemCategory::E_Equipment;
-		temp1.bCanAddQuick = true;
-
-		InventoryComponent->AddItem(temp1);
-	}
 	
 
 	{
@@ -263,6 +243,54 @@ void AAcmeCharacter::BeginPlay()
 			temp.Num = 1;
 			temp.Category = EItemCategory::E_Equipment;
 			temp.bCanAddQuick = true;
+
+			recipe.Result = temp;
+		}
+
+		OwnCraftRecipes.Add(recipe);
+	}
+
+	{
+		FRecipe recipe;
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Metal;
+			temp.Num = 5;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Helmet;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Equipment;
+
+			recipe.Result = temp;
+		}
+
+		OwnCraftRecipes.Add(recipe);
+	}
+
+	{
+		FRecipe recipe;
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_Metal;
+			temp.Num = 10;
+			temp.Category = EItemCategory::E_Material;
+
+			recipe.Material.Add(temp);
+		}
+
+		{
+			FItem temp;
+			temp.Name = EItemName::E_LetherArmor;
+			temp.Num = 1;
+			temp.Category = EItemCategory::E_Equipment;
 
 			recipe.Result = temp;
 		}
@@ -795,6 +823,7 @@ void AAcmeCharacter::MoveToLobby()
 		Hud->RemoveFromParent();
 	}
 }
+
 
 void AAcmeCharacter::StaminaCheck(int Stamina)
 {

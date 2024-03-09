@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "DefaultSpawner.h"
 #include "Acme/Utils/GlobalEnum.h"
+#include "Acme/Item/InteractiveItem.h"
 #include "InteractiveEnvSpawner.generated.h"
 
 /**
@@ -16,7 +17,7 @@ class ACME_API AInteractiveEnvSpawner : public ADefaultSpawner
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Default, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AInteractiveItem> EnvClass;
+	TSubclassOf<AInteractiveItem> EnvClass;
 
 	UPROPERTY(VisibleAnywhere, Category = Default)
 	TArray<AInteractiveItem*> Enves;
@@ -29,6 +30,9 @@ public:
 	AInteractiveEnvSpawner();
 
 	virtual void Respawn() override;
+
+	UFUNCTION()
+	void RemoveFromEnves(class AInteractiveItem* Destroyed);
 
 protected:
 	// Called when the game starts or when spawned

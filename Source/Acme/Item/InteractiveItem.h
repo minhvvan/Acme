@@ -7,9 +7,9 @@
 #include "Acme/Interface/InteractableActor.h"
 #include "InteractiveItem.generated.h"
 
-/**
- * 
- */
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnInteract, AInteractiveItem*);
+
 UCLASS()
 class ACME_API AInteractiveItem : public ABaseItem, public IInteractableActor
 {
@@ -22,9 +22,6 @@ public:
 	void Init(FItem newItem);
 
 protected:
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TMap<EItemName, UStaticMesh*> Meshes;
-
 	UPROPERTY(EditAnywhere, Category = Default)
 	class USphereComponent* OverlapComp;
 
@@ -61,4 +58,6 @@ protected:
 public:
 	UFUNCTION()
 	UStaticMeshComponent* GetMesh() { return Mesh; };
+
+	FOnInteract OnInteract;
 };
