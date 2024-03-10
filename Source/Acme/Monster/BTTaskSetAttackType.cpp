@@ -11,7 +11,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Acme/Utils/Util.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 
 EBTNodeResult::Type UBTTaskSetAttackType::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {

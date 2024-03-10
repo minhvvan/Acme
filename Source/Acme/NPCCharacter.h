@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Acme/Utils/GlobalEnum.h"
-#include "AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Interface/InteractableActor.h"
 #include "NPCCharacter.generated.h"
 

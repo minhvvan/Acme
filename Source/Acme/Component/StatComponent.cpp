@@ -22,8 +22,6 @@ UStatComponent::UStatComponent()
 	CurrentSatiety = 100;
 
 	Strength = 10;
-	Dexterity = 10;
-	Intelligence = 10;
 
 	ConsumeTimeSatiety = 30.f;
 	ConsumeAmountSatiety = 1;
@@ -63,8 +61,6 @@ void UStatComponent::Init()
 	SetCurrentST(100);
 
 	Strength = 10;
-	Dexterity = 10;
-	Intelligence = 10;
 
 	ConsumeTimeSatiety = 30.f;
 	ConsumeAmountSatiety = 1;

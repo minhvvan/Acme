@@ -14,7 +14,7 @@
 #include "MonsterAIController.h"
 #include "Debug/DebugDrawComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Components/AudioComponent.h"
 #include "Acme/Item/InteractiveItem.h"
 #include "Acme/Monster/BossAIController.h"

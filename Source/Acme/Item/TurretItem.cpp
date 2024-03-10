@@ -4,7 +4,7 @@
 #include "Acme/Item/TurretItem.h"
 #include "Acme/Turret/Turret.h"
 #include "Acme/AcmeCharacter.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
 
 void ATurretItem::Active()

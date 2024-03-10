@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "QuestComponent.generated.h"
 
 

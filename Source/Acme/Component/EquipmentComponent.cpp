@@ -3,7 +3,7 @@
 
 #include "Acme/Component/EquipmentComponent.h"
 #include "Acme/AcmeCharacter.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Item/BaseItem.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Interface/UsableInterface.h"

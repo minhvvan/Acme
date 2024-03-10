@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Blueprint/UserWidget.h"
 #include "QuestNotCompleteWidget.generated.h"
 

@@ -9,7 +9,7 @@
 #include "Acme/Widget/ItemDDOP.h"
 #include "ItemEntryWidget.h"
 #include "Acme/AcmeCharacter.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
 
 void UQuickSlotWidget::SetItemInfo(FItem info)

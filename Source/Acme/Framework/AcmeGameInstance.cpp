@@ -2,6 +2,11 @@
 
 
 #include "AcmeGameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "Acme/Framework/AcmeSaveGame.h"
+#include "Acme/Framework/MasterSaveGame.h"
+#include "Acme/AcmeCharacter.h"
+#include "Acme/Utils/Util.h"
 
 UAcmeGameInstance::UAcmeGameInstance()
 {
@@ -206,4 +211,47 @@ FQuest UAcmeGameInstance::GetQuest()
 	Result = *row;
 
 	return Result;
+}
+
+void UAcmeGameInstance::SaveGame(AAcmeCharacter* Player)
+{
+	UAcmeSaveGame* NewPlayerData = NewObject<UAcmeSaveGame>();
+	NewPlayerData->CurrentPos = Player->GetActorLocation();
+	NewPlayerData->CurrentHP = Player->GetCurrentHP();
+	NewPlayerData->CurrentSatiety = Player->GetCurrentSatiety();
+
+	FString slotName = FDateTime::Now().ToString();
+
+	if (UGameplayStatics::SaveGameToSlot(NewPlayerData, slotName, 0))
+	{
+		UMasterSaveGame* SaveGameList = Cast<UMasterSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("SaveGameList"), 0));
+		if (!SaveGameList)
+		{
+			SaveGameList = GetMutableDefault<UMasterSaveGame>();
+		}
+
+		//Update Master SaveGame
+		SaveGameList->SaveGames.Add(slotName);
+		if (UGameplayStatics::SaveGameToSlot(SaveGameList, TEXT("SaveGameList"), 0))
+		{
+			UUtil::DebugPrint("Save Complete");
+		}
+	}
+}
+
+void UAcmeGameInstance::LoadGame(FString SaveSlotName)
+{
+	UAcmeSaveGame* SaveGame = Cast<UAcmeSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, 0));
+	if (nullptr == SaveGame)
+	{
+		SaveGame = GetMutableDefault<UAcmeSaveGame>();
+	}
+
+	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetFirstLocalPlayerController(GetWorld())->GetPawn());
+	if (Player)
+	{
+		Player->SetActorLocation(SaveGame->CurrentPos);
+		Player->SetCurrentHP(SaveGame->CurrentHP);
+		Player->SetCurrentSatiety(SaveGame->CurrentSatiety);
+	}
 }

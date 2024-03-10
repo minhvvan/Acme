@@ -22,7 +22,10 @@ protected:
 	class UButton* BtnContinue;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* BtnExit;
+	class UButton* BtnExit;	
+	
+	UPROPERTY(meta = (BindWidget))
+	class UListView* LVSaveGame;
 
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	UWidgetAnimation* HoverNewGame;

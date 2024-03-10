@@ -35,4 +35,8 @@ protected:
 
 	UFUNCTION()
 	void OnExitClicked();
+
+protected:
+	UPROPERTY()
+	class UAcmeGameInstance* GameInstance;
 };

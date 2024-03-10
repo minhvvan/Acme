@@ -170,6 +170,12 @@ public:
 	UFUNCTION()
 	FQuest GetQuest();
 
+	UFUNCTION()
+	void SaveGame(class AAcmeCharacter* Player);
+
+	UFUNCTION()
+	void LoadGame(FString SaveSlotName);
+
 protected:
 	UPROPERTY()
 	class UDataTable* ComposeTable;

@@ -6,7 +6,7 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Acme/NPCCharacter.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 
 
 void UQuestNotCompleteWidget::SetQuestInfo(FQuest quest)

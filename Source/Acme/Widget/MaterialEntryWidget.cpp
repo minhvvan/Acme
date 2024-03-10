@@ -6,7 +6,7 @@
 #include "Components/TextBlock.h"
 #include "Components/Border.h"
 #include "Acme/Data/ItemData.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/AcmeCharacter.h"
 
 void UMaterialEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)

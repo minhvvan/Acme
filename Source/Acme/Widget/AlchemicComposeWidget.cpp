@@ -16,7 +16,7 @@
 #include "Acme/Widget/ItemEntryWidget.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Widget/AlchemySlotWidget.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Item/InteractiveItem.h"
 
 void UAlchemicComposeWidget::NativeConstruct()

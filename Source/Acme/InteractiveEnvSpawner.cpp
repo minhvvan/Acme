@@ -6,7 +6,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Acme/Item/InteractiveItem.h"
 #include "Acme/Utils/GlobalConst.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
 #include "Landscape.h"
 #include "DrawDebugHelpers.h"

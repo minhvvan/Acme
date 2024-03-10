@@ -477,7 +477,19 @@ public:
 	void Die();
 
 	UFUNCTION()
-	void MoveToLobby();
+	void MoveToLobby();	
+	
+	UFUNCTION()
+	int GetCurrentHP();	
+	
+	UFUNCTION()
+	int GetCurrentSatiety();	
+	
+	UFUNCTION()
+	void SetCurrentHP(int newHP);
+	
+	UFUNCTION()
+	void SetCurrentSatiety(int newST);
 
 public:
 	FOnAcceptQuest OnAcceptQuest;

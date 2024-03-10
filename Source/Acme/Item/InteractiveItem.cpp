@@ -4,7 +4,7 @@
 #include "InteractiveItem.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/Utils/Util.h"
 

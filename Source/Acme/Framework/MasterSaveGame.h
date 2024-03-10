@@ -3,19 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
-#include "Acme/Framework/AcmeGameInstance.h"
-#include "QuestData.generated.h"
+#include "GameFramework/SaveGame.h"
+#include "MasterSaveGame.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACME_API UQuestData : public UObject
+class ACME_API UMasterSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 	
 public:
+	UMasterSaveGame();
+
+public:
 	UPROPERTY()
-	FQuest Quest;
+	TArray<FString> SaveGames;
 };

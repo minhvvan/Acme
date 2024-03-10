@@ -13,7 +13,7 @@
 #include "Acme/Utils/Util.h"
 #include "QuickSlotWidget.h"
 #include "TileInventoryWidget.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Widget/EquipmentSlot.h"
 
 void UInventoryWidget::NativeConstruct()

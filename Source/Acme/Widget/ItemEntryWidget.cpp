@@ -16,7 +16,7 @@
 #include "InventoryInnerWidget.h"
 #include "DetailActionWidget.h"
 #include "DetailActionInnerWidget.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 
 void UItemEntryWidget::SetItemInfo(FItem& info)
 {

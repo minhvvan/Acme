@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "AcmeCharacter.h"
-#include "AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -28,7 +28,7 @@
 #include "Acme/SwordActor.h"
 #include "Acme/Interface/InteractableActor.h"
 #include "Acme/Widget/RewardDialogueWidget.h"
-#include "Widget/QuestNotCompleteWidget.h"
+#include "Acme/Widget/QuestNotCompleteWidget.h"
 #include "GameFramework/PhysicsVolume.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Acme/Widget/DeathWidget.h"
@@ -822,6 +822,30 @@ void AAcmeCharacter::MoveToLobby()
 	{
 		Hud->RemoveFromParent();
 	}
+}
+
+int AAcmeCharacter::GetCurrentHP()
+{
+	if (!StatCompoenent) return 100;
+	return StatCompoenent->GetCurrentHP();
+}
+
+int AAcmeCharacter::GetCurrentSatiety()
+{
+	if (!StatCompoenent) return 100;
+	return StatCompoenent->GetCurrentST();
+}
+
+void AAcmeCharacter::SetCurrentHP(int newHP)
+{
+	if (!StatCompoenent) return;
+	StatCompoenent->SetCurrentHP(newHP);
+}
+
+void AAcmeCharacter::SetCurrentSatiety(int newST)
+{
+	if (!StatCompoenent) return;
+	StatCompoenent->SetCurrentST(newST);
 }
 
 

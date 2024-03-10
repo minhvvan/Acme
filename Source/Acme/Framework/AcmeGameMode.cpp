@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "AcmeGameMode.h"
-#include "AcmeCharacter.h"
+#include "Acme/AcmeCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 AAcmeGameMode::AAcmeGameMode()

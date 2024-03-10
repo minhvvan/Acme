@@ -3,8 +3,12 @@
 
 #include "Acme/Widget/LobbyWidget.h"
 #include "Components/Button.h"
+#include "Components/ListView.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Acme/Framework/AcmeSaveGame.h"
+#include "Acme/Framework/MasterSaveGame.h"
 
 void ULobbyWidget::NativeOnInitialized()
 {
@@ -36,6 +40,22 @@ void ULobbyWidget::OnNewGameClicked()
 void ULobbyWidget::OnContinueClicked()
 {
 	//Show SaveGame
+	UMasterSaveGame* SaveGameList = Cast<UMasterSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("SaveGameList"), 0));
+	if (!SaveGameList)
+	{
+		//TODO: Alret: no games
+		return;
+	}
+
+	for (FString slotName : SaveGameList->SaveGames)
+	{
+		UAcmeSaveGame* SaveGame = Cast<UAcmeSaveGame>(UGameplayStatics::LoadGameFromSlot(slotName, 0));
+		if (!SaveGame) continue;
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *slotName));
+	}
+
+	//LVSaveGame
 }
 
 void ULobbyWidget::OnExitClicked()

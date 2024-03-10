@@ -11,7 +11,7 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Acme/Component/StatComponent.h"
 #include "Acme/Widget/QuickSlotWidget.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/AcmeCharacter.h"
 #include "Camera/CameraComponent.h"

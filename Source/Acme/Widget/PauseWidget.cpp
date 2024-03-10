@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 
 void UPauseWidget::NativeOnInitialized()
 {
@@ -28,6 +29,10 @@ void UPauseWidget::OnReplayClicked()
 void UPauseWidget::OnSaveClicked()
 {
 	//save
+	if(!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
+
+	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+	if (Player) GameInstance->SaveGame(Player);
 }
 
 void UPauseWidget::OnExitClicked()

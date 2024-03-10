@@ -5,7 +5,7 @@
 #include "Acme/Data/ItemData.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 
 
 void URewardEntryWidget::NativeOnInitialized()

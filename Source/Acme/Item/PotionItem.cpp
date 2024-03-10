@@ -3,7 +3,7 @@
 
 #include "Acme/Item/PotionItem.h"
 #include "Acme/AcmeCharacter.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Utils/Util.h"
 
 void APotionItem::Active()

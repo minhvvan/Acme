@@ -4,7 +4,7 @@
 #include "Acme/Item/FoodItem.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/AcmeCharacter.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 
 void AFoodItem::BeginPlay()
 {

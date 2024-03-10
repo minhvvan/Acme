@@ -6,7 +6,7 @@
 #include "Acme/Utils/GlobalEnum.h"
 #include "Acme/Item/InteractiveItem.h"
 #include "Acme/AcmeCharacter.h"
-#include "Acme/AcmeGameInstance.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
