@@ -234,7 +234,7 @@ void UAcmeGameInstance::SaveGame(AAcmeCharacter* Player)
 		SaveGameList->SaveGames.Add(slotName);
 		if (UGameplayStatics::SaveGameToSlot(SaveGameList, TEXT("SaveGameList"), 0))
 		{
-			UUtil::DebugPrint("Save Complete");
+			GEngine->GameViewport->Viewport->TakeHighResScreenShot();
 		}
 	}
 }

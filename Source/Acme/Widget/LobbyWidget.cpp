@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Acme/Framework/AcmeSaveGame.h"
 #include "Acme/Framework/MasterSaveGame.h"
+#include "Acme/Data/SaveGameData.h"
 
 void ULobbyWidget::NativeOnInitialized()
 {
@@ -51,6 +52,8 @@ void ULobbyWidget::OnContinueClicked()
 	{
 		UAcmeSaveGame* SaveGame = Cast<UAcmeSaveGame>(UGameplayStatics::LoadGameFromSlot(slotName, 0));
 		if (!SaveGame) continue;
+
+		USaveGame* Data = NewObject<USaveGame>();
 
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *slotName));
 	}
