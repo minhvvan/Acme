@@ -377,6 +377,9 @@ public:
 	void SetQuickSlot(FItem item, int idx);
 
 	UFUNCTION()
+	void SetQuickSlots(TArray<FItem> items);
+
+	UFUNCTION()
 	void RemoveQuickSlot(int idx);
 
 	UFUNCTION()
@@ -490,6 +493,21 @@ public:
 	
 	UFUNCTION()
 	void SetCurrentSatiety(int newST);
+
+	UFUNCTION()
+	void SetInventory(TMap<EItemCategory, FItemList> inven);
+
+	UFUNCTION()
+	TMap<EItemCategory, FItemList> GetInventory();
+
+	UFUNCTION()
+	FItem GetCurrentHead();
+
+	UFUNCTION()
+	FItem GetCurrentBody();
+
+	UFUNCTION()
+	FItem GetCurrentAcc();
 
 public:
 	FOnAcceptQuest OnAcceptQuest;

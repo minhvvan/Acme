@@ -74,6 +74,15 @@ public:
 	void UnEquip(EEquipmentPart part);
 
 	UFUNCTION()
+	FItem GetCurrentHead();
+
+	UFUNCTION()
+	FItem GetCurrentBody();
+
+	UFUNCTION()
+	FItem GetCurrentAcc();
+
+	UFUNCTION()
 	void ConsumeCurrentHand();
 
 	UFUNCTION()

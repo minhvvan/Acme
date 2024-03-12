@@ -17,6 +17,7 @@ void UTileInventoryWidget::UpdateInfo()
 	if (!OwnerCharacter) OwnerCharacter = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
 
 	TArray<FItem>& Items = OwnerCharacter->GetItems(Category).Get();
+
 	for (int i = 0; i < Items.Num(); i++)
 	{
 		FItem& item = Items[i];

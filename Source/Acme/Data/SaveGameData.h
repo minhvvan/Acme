@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Acme/Framework/AcmeSaveGame.h"
 #include "SaveGameData.generated.h"
 
 /**
@@ -14,8 +15,10 @@ class ACME_API USaveGameData : public UObject
 {
 	GENERATED_BODY()
 	
+public:
 	UPROPERTY()
 	FString SlotName;
 
-
+	UPROPERTY()
+	UAcmeSaveGame* SaveGame;
 };

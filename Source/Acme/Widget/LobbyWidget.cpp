@@ -13,6 +13,8 @@
 
 void ULobbyWidget::NativeOnInitialized()
 {
+	Super::NativeOnInitialized();
+
 	BtnNewGame->OnClicked.AddDynamic(this, &ULobbyWidget::OnNewGameClicked);
 	BtnContinue->OnClicked.AddDynamic(this, &ULobbyWidget::OnContinueClicked);
 	BtnExit->OnClicked.AddDynamic(this, &ULobbyWidget::OnExitClicked);
@@ -48,17 +50,18 @@ void ULobbyWidget::OnContinueClicked()
 		return;
 	}
 
+	LVSaveGame->ClearListItems();
 	for (FString slotName : SaveGameList->SaveGames)
 	{
 		UAcmeSaveGame* SaveGame = Cast<UAcmeSaveGame>(UGameplayStatics::LoadGameFromSlot(slotName, 0));
 		if (!SaveGame) continue;
 
-		USaveGame* Data = NewObject<USaveGame>();
+		USaveGameData* Data = NewObject<USaveGameData>();
+		Data->SlotName = slotName;
+		Data->SaveGame = SaveGame;
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *slotName));
+		LVSaveGame->AddItem(Data);
 	}
-
-	//LVSaveGame
 }
 
 void ULobbyWidget::OnExitClicked()

@@ -13,6 +13,7 @@ struct FItemList
 	GENERATED_USTRUCT_BODY()
 
 public:
+	UPROPERTY(SaveGame)
 	TArray<FItem> ImteList;
 
 	void SetNum(int n, EItemCategory category);

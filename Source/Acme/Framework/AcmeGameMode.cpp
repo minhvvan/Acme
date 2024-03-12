@@ -2,6 +2,7 @@
 
 #include "AcmeGameMode.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/AcmePC.h"
 #include "UObject/ConstructorHelpers.h"
 
 AAcmeGameMode::AAcmeGameMode()
@@ -13,4 +14,5 @@ AAcmeGameMode::AAcmeGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 
+	PlayerControllerClass = AAcmePC::StaticClass();
 }

@@ -145,6 +145,39 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnDodgeRoll.AddUObject(this, &AAcmeCharacter::StopDodgeRoll);
 	AnimInstance->OnDeath.AddUObject(this, &AAcmeCharacter::Die);
 	
+	//{
+	//	FItem item;
+	//	item.bCanAddQuick = true;
+	//	item.Category = EItemCategory::E_Equipment;
+	//	item.Name = EItemName::E_Sword;
+	//	item.Num = 1;
+	//	item.Part = EEquipmentPart::E_Hand;
+
+	//	AddItem(item);
+	//}
+
+	{
+		FItem item;
+		item.bCanAddQuick = true;
+		item.Category = EItemCategory::E_Equipment;
+		item.Name = EItemName::E_Helmet;
+		item.Num = 1;
+		item.Part = EEquipmentPart::E_Head;
+
+		AddItem(item);
+	}
+
+	{
+		FItem item;
+		item.bCanAddQuick = true;
+		item.Category = EItemCategory::E_Equipment;
+		item.Name = EItemName::E_LetherArmor;
+		item.Num = 1;
+		item.Part = EEquipmentPart::E_Body;
+
+		AddItem(item);
+	}
+
 
 	{
 		FRecipe recipe;
@@ -180,7 +213,6 @@ void AAcmeCharacter::BeginPlay()
 		OwnFoodRecipes.Add(recipe);
 	}
 
-
 	{
 		FRecipe recipe;
 
@@ -214,7 +246,6 @@ void AAcmeCharacter::BeginPlay()
 
 		OwnPotionRecipes.Add(recipe);
 	}
-
 
 	{
 		FRecipe recipe;
@@ -598,9 +629,11 @@ void AAcmeCharacter::PlaySwordAttack(int idx)
 void AAcmeCharacter::Equip(EEquipmentPart part, FItem item)
 {
 	if (!EquipmentComponent) return;
+	if (!InventoryWidget) InventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), InventoryClass);
 
 	EquipmentComponent->Equip(part, item);
 	UpdateInventoryWidget();
+	InventoryWidget->SetEquipSlot(part, item);
 }
 
 void AAcmeCharacter::UnEquip(EEquipmentPart part)
@@ -846,6 +879,36 @@ void AAcmeCharacter::SetCurrentSatiety(int newST)
 {
 	if (!StatCompoenent) return;
 	StatCompoenent->SetCurrentST(newST);
+}
+
+void AAcmeCharacter::SetInventory(TMap<EItemCategory, FItemList> inven)
+{
+	if (!InventoryComponent) return;
+	InventoryComponent->InitInventory(inven);
+}
+
+TMap<EItemCategory, FItemList> AAcmeCharacter::GetInventory()
+{
+	if (!InventoryComponent) return TMap<EItemCategory, FItemList>();
+	return InventoryComponent->GetAllInventory();
+}
+
+FItem AAcmeCharacter::GetCurrentHead()
+{
+	if (!EquipmentComponent) return FItem();
+	return EquipmentComponent->GetCurrentHead();
+}
+
+FItem AAcmeCharacter::GetCurrentBody()
+{
+	if (!EquipmentComponent) return FItem();
+	return EquipmentComponent->GetCurrentBody();
+}
+
+FItem AAcmeCharacter::GetCurrentAcc()
+{
+	if (!EquipmentComponent) return FItem();
+	return EquipmentComponent->GetCurrentAcc();
 }
 
 
@@ -1117,6 +1180,18 @@ void AAcmeCharacter::SetQuickSlot(FItem item, int idx)
 	if (!Hud) return;
 	Hud->SetQuickSlots(GetQuickSlots());
 	Hud->ChangeSelectedSlot(CurrentQuickSlotIdx);
+}
+
+void AAcmeCharacter::SetQuickSlots(TArray<FItem> items)
+{
+	if (!InventoryComponent) return;
+
+	CurrentQuickSlotIdx = 0;
+
+	for (int i = 0; i < items.Num(); i++)
+	{
+		SetQuickSlot(items[i], i);
+	}
 }
 
 void AAcmeCharacter::RemoveQuickSlot(int idx)

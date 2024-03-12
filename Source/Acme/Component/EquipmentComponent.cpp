@@ -18,6 +18,7 @@ UEquipmentComponent::UEquipmentComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	CurrentIdx = 0;
+	QuickSlotItems.SetNum(8);
 }
 
 
@@ -25,8 +26,6 @@ UEquipmentComponent::UEquipmentComponent()
 void UEquipmentComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	QuickSlotItems.SetNum(8);
-
 }
 
 
@@ -169,6 +168,24 @@ void UEquipmentComponent::UnEquip(EEquipmentPart part)
 
 	CurrentPart->Destroy();
 	CurrentPart = nullptr;
+}
+
+FItem UEquipmentComponent::GetCurrentHead()
+{
+	if (!EquipmentHead) return FItem();
+	return EquipmentHead.Get()->GetItem();
+}
+
+FItem UEquipmentComponent::GetCurrentBody()
+{
+	if (!EquipmentBody) return FItem();
+	return EquipmentBody.Get()->GetItem();
+}
+
+FItem UEquipmentComponent::GetCurrentAcc()
+{
+	if (!EquipmentAcc) return FItem();
+	return EquipmentAcc.Get()->GetItem();
 }
 
 void UEquipmentComponent::ConsumeCurrentHand()

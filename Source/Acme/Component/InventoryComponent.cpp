@@ -106,11 +106,7 @@ void UInventoryComponent::Dump(EItemCategory Category, int idx)
 	FItem temp = GameInstance->GetItemInfo(Item.Name);
 
 	AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, SpawnLocation, rotator, SpawnParams);
-	if (!DropItemClass)
-	{
-		UUtil::DebugPrint("nnulll");
-		return;
-	}
+	if (!DropItemClass) return;
 	
 	DropItem->Init(temp);
 	SetEmpty(Item);
@@ -268,4 +264,14 @@ void UInventoryComponent::ConsumeQuickSlot(int idx)
 	{
 		RemoveFromQuick(idx);
 	}
+}
+
+TMap<EItemCategory, FItemList> UInventoryComponent::GetAllInventory()
+{
+	return Items;
+}
+
+void UInventoryComponent::InitInventory(TMap<EItemCategory, FItemList> inven)
+{
+	Items = inven;
 }

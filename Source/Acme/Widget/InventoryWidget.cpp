@@ -168,7 +168,6 @@ void UInventoryWidget::SetItemInfoText(FItem item)
 
 	FItemString ItemString = GameInstance->GetItemString(item.Name);
 
-
 	TxtItemName->SetText(FText::FromString(ItemString.Name));
 	TxtItemInfo->SetText(FText::FromString(ItemString.Description));
 }
@@ -190,6 +189,28 @@ void UInventoryWidget::ClearEquip(EEquipmentPart part)
 	}
 
 	CurrentSlot->SetEmpty();
+}
+
+void UInventoryWidget::SetEquipSlot(EEquipmentPart part, FItem item)
+{
+	UEquipmentSlot* CurrentSlot = EquipSlotHead;
+	switch (part)
+	{
+	case EEquipmentPart::E_Head:
+		CurrentSlot = EquipSlotHead;
+		break;
+	case EEquipmentPart::E_Body:
+		CurrentSlot = EquipSlotBody;
+		break;
+	case EEquipmentPart::E_Accessory:
+		CurrentSlot = EquipSlotAcc;
+		break;
+	}
+
+	if (CurrentSlot)
+	{
+		CurrentSlot->SetItemInfo(item);
+	}
 }
 
 void UInventoryWidget::UpdateWidgetByCategory()

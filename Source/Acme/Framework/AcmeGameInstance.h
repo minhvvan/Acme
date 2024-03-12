@@ -176,6 +176,13 @@ public:
 	UFUNCTION()
 	void LoadGame(FString SaveSlotName);
 
+	UFUNCTION()
+	UAcmeSaveGame* GetCurrentSaveGame();
+
+protected:
+	UPROPERTY()
+	class UAcmeSaveGame* CurrentSaveGame;
+
 protected:
 	UPROPERTY()
 	class UDataTable* ComposeTable;

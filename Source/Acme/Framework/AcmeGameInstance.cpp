@@ -219,6 +219,12 @@ void UAcmeGameInstance::SaveGame(AAcmeCharacter* Player)
 	NewPlayerData->CurrentPos = Player->GetActorLocation();
 	NewPlayerData->CurrentHP = Player->GetCurrentHP();
 	NewPlayerData->CurrentSatiety = Player->GetCurrentSatiety();
+	NewPlayerData->Inventory = Player->GetInventory();
+	NewPlayerData->QuickSlot = Player->GetQuickSlots();
+
+	NewPlayerData->EquipmentHead = Player->GetCurrentHead();
+	NewPlayerData->EquipmentBody = Player->GetCurrentBody();
+	NewPlayerData->EquipmentAcc = Player->GetCurrentAcc();
 
 	FString slotName = FDateTime::Now().ToString();
 
@@ -234,7 +240,7 @@ void UAcmeGameInstance::SaveGame(AAcmeCharacter* Player)
 		SaveGameList->SaveGames.Add(slotName);
 		if (UGameplayStatics::SaveGameToSlot(SaveGameList, TEXT("SaveGameList"), 0))
 		{
-			GEngine->GameViewport->Viewport->TakeHighResScreenShot();
+			//GEngine->GameViewport->Viewport->TakeHighResScreenShot();
 		}
 	}
 }
@@ -247,11 +253,11 @@ void UAcmeGameInstance::LoadGame(FString SaveSlotName)
 		SaveGame = GetMutableDefault<UAcmeSaveGame>();
 	}
 
-	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetFirstLocalPlayerController(GetWorld())->GetPawn());
-	if (Player)
-	{
-		Player->SetActorLocation(SaveGame->CurrentPos);
-		Player->SetCurrentHP(SaveGame->CurrentHP);
-		Player->SetCurrentSatiety(SaveGame->CurrentSatiety);
-	}
+	CurrentSaveGame = SaveGame;
+	GetWorld()->SeamlessTravel(TEXT("Game"));
+}
+
+UAcmeSaveGame* UAcmeGameInstance::GetCurrentSaveGame()
+{
+	return CurrentSaveGame;
 }

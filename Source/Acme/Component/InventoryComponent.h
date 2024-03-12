@@ -77,6 +77,12 @@ public:
 	UFUNCTION()
 	void ConsumeQuickSlot(int idx);
 
+	UFUNCTION()
+	TMap<EItemCategory, FItemList> GetAllInventory();
+
+	UFUNCTION()
+	void InitInventory(TMap<EItemCategory, FItemList> inven);
+
 private:
 	UPROPERTY()
 	TMap<EItemCategory, FItemList> Items;
@@ -84,7 +90,7 @@ private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	int maxQuantity;
 
-	UPROPERTY()
+	UPROPERTY(SaveGame)
 	TArray<FItem> QuickSlots;
 
 	UPROPERTY()
