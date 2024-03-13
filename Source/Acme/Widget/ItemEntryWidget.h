@@ -36,6 +36,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> DetailWidgetClass;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* HoverSFX;
+
 public:
 	UFUNCTION()
 	void SetItemInfo(FItem& info);

@@ -176,8 +176,10 @@ void UItemEntryWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPo
 	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
 
 	if (!SelectBorderMat) return;
-
 	BorderItem->SetBrushFromMaterial(SelectBorderMat);
+
+	if (!HoverSFX) return;
+	PlaySound(HoverSFX);
 }
 
 void UItemEntryWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)

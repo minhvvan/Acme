@@ -33,8 +33,8 @@ void ABossMonster::BeginPlay()
 {
 	ACharacter::BeginPlay();
 
-	StatCompoenent->SetMaxHP(1000);
-	StatCompoenent->SetCurrentHP(1000);
+	StatCompoenent->SetMaxHP(100);
+	StatCompoenent->SetCurrentHP(100);
 	StatCompoenent->SetStrength(30);
 	InitState();
 

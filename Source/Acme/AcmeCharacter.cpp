@@ -148,38 +148,16 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnDodgeRoll.AddUObject(this, &AAcmeCharacter::StopDodgeRoll);
 	AnimInstance->OnDeath.AddUObject(this, &AAcmeCharacter::Die);
 	
-	//{
-	//	FItem item;
-	//	item.bCanAddQuick = true;
-	//	item.Category = EItemCategory::E_Equipment;
-	//	item.Name = EItemName::E_Sword;
-	//	item.Num = 1;
-	//	item.Part = EEquipmentPart::E_Hand;
-
-	//	AddItem(item);
-	//}
-
 	{
 		FItem item;
 		item.bCanAddQuick = true;
 		item.Category = EItemCategory::E_Equipment;
-		item.Name = EItemName::E_Helmet;
+		item.Name = EItemName::E_Sword;
 		item.Num = 1;
-		item.Part = EEquipmentPart::E_Head;
-
+		item.Part = EEquipmentPart::E_Hand;
 		AddItem(item);
 	}
 
-	{
-		FItem item;
-		item.bCanAddQuick = true;
-		item.Category = EItemCategory::E_Equipment;
-		item.Name = EItemName::E_LetherArmor;
-		item.Num = 1;
-		item.Part = EEquipmentPart::E_Body;
-
-		AddItem(item);
-	}
 
 
 	{
