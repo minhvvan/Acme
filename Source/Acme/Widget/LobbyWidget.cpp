@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/Framework/AcmeSaveGame.h"
 #include "Acme/Framework/MasterSaveGame.h"
 #include "Acme/Data/SaveGameData.h"
@@ -42,6 +43,8 @@ void ULobbyWidget::OnNewGameClicked()
 
 void ULobbyWidget::OnContinueClicked()
 {
+	UAcmeGameInstance* GameInstance = GetGameInstance<UAcmeGameInstance>();
+
 	//Show SaveGame
 	UMasterSaveGame* SaveGameList = Cast<UMasterSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("SaveGameList"), 0));
 	if (!SaveGameList)
@@ -54,11 +57,16 @@ void ULobbyWidget::OnContinueClicked()
 	for (FString slotName : SaveGameList->SaveGames)
 	{
 		UAcmeSaveGame* SaveGame = Cast<UAcmeSaveGame>(UGameplayStatics::LoadGameFromSlot(slotName, 0));
+		UTexture2D* thumbnail = GameInstance->ImportSaveThumbnail(slotName);
 		if (!SaveGame) continue;
 
 		USaveGameData* Data = NewObject<USaveGameData>();
 		Data->SlotName = slotName;
-		Data->SaveGame = SaveGame;
+
+		if (thumbnail)
+		{
+			Data->Thumbnail = thumbnail;
+		}
 
 		LVSaveGame->AddItem(Data);
 	}

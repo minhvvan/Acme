@@ -37,7 +37,6 @@ void UEquipmentSlot::SetThumbnailImg(EItemName name)
 
 void UEquipmentSlot::NativeConstruct()
 {
-	IsEmpty = true;
 }
 
 FReply UEquipmentSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -95,9 +94,7 @@ bool UEquipmentSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 		return Result;
 	}
 
-	SetItemInfo(DragWidget->ItemInfo);
 	Player->Equip(Part, DragWidget->ItemInfo);
-
 
 	return Result;
 }
@@ -106,5 +103,9 @@ void UEquipmentSlot::NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent
 {
 	Super::NativeOnDragCancelled(InDragDropEvent, InOperation);
 
-	//원상복구
+	UItemDDOP* DragWidget = Cast<UItemDDOP>(InOperation);
+	if (!IsValid(DragWidget))  return;
+	if (!Player) Player = Cast<AAcmeCharacter>(GetOwningPlayerPawn());
+
+	Player->Equip(Part, DragWidget->ItemInfo);
 }

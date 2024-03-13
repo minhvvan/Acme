@@ -126,4 +126,7 @@ public:
 
 	UFUNCTION()
 	void ClearEquip(EEquipmentPart part);
+
+	UFUNCTION()
+	void SetEquipSlot(EEquipmentPart part, FItem item);
 };

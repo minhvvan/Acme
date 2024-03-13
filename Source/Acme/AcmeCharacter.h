@@ -37,6 +37,9 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USceneCaptureComponent2D* MiniMapSceneCapture;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USceneCaptureComponent2D* ThumbnailSceneCapture;
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
@@ -508,6 +511,9 @@ public:
 
 	UFUNCTION()
 	FItem GetCurrentAcc();
+
+	UFUNCTION()
+	USceneCaptureComponent2D* GetThumbnailSceneCapture();
 
 public:
 	FOnAcceptQuest OnAcceptQuest;

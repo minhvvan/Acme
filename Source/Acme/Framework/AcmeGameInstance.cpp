@@ -7,6 +7,10 @@
 #include "Acme/Framework/MasterSaveGame.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/Utils/Util.h"
+#include "ImageUtils.h"
+#include "Engine/TextureRenderTarget2D.h"
+#include "Serialization/BufferArchive.h"
+#include "Components/SceneCaptureComponent2D.h"
 
 UAcmeGameInstance::UAcmeGameInstance()
 {
@@ -240,7 +244,14 @@ void UAcmeGameInstance::SaveGame(AAcmeCharacter* Player)
 		SaveGameList->SaveGames.Add(slotName);
 		if (UGameplayStatics::SaveGameToSlot(SaveGameList, TEXT("SaveGameList"), 0))
 		{
-			//GEngine->GameViewport->Viewport->TakeHighResScreenShot();
+			UTextureRenderTarget2D* renderTarget = NewObject<UTextureRenderTarget2D>();
+
+			renderTarget->InitCustomFormat(1920, 1080, PF_B8G8R8A8, false);
+			USceneCaptureComponent2D* SceneCapture = Player->GetThumbnailSceneCapture();
+			SceneCapture->TextureTarget = renderTarget;
+			SceneCapture->CaptureScene();
+
+			ExportSaveThumbnailRT(renderTarget, slotName);
 		}
 	}
 }
@@ -260,4 +271,48 @@ void UAcmeGameInstance::LoadGame(FString SaveSlotName)
 UAcmeSaveGame* UAcmeGameInstance::GetCurrentSaveGame()
 {
 	return CurrentSaveGame;
+}
+
+FString UAcmeGameInstance::SaveGameDir(const FString& SaveGameName)
+{
+	return FPaths::ProjectSavedDir() + TEXT("SaveGames/") + SaveGameName + TEXT(".png");
+}
+
+
+UTexture2D* UAcmeGameInstance::ImportSaveThumbnail(const FString& SaveGameName)
+{
+	FString SaveFile = SaveGameDir(SaveGameName);
+
+	//Suppress warning messages when we dont have a thumb yet.
+	if (FPaths::FileExists(SaveFile))
+	{
+		return FImageUtils::ImportFileAsTexture2D(SaveFile);
+	}
+
+	return nullptr;
+}
+
+void UAcmeGameInstance::ExportSaveThumbnailRT(UTextureRenderTarget2D* TextureRenderTarget, const FString& SaveGameName)
+{
+	FString SaveFile = SaveGameDir(SaveGameName);
+	FText PathError;
+	FPaths::ValidatePath(SaveFile, &PathError);
+
+	FTextureRenderTargetResource* resource = TextureRenderTarget->GameThread_GetRenderTargetResource();
+	FReadSurfaceDataFlags readPixelFlags(RCM_UNorm);
+
+	TArray<FColor> outBMP;
+	outBMP.AddUninitialized(TextureRenderTarget->GetSurfaceWidth() * TextureRenderTarget->GetSurfaceHeight());
+	resource->ReadPixels(outBMP, readPixelFlags);
+
+	for (FColor& color : outBMP)
+	{
+		color.A = 255;
+	}
+
+	FIntPoint destSize(TextureRenderTarget->GetSurfaceWidth(), TextureRenderTarget->GetSurfaceHeight());
+	TArray<uint8> compressedBitmap;
+	FImageUtils::CompressImageArray(destSize.X, destSize.Y, outBMP, compressedBitmap);
+
+	bool imageSavedOK = FFileHelper::SaveArrayToFile(compressedBitmap, *SaveFile);
 }

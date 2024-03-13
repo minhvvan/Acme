@@ -35,7 +35,7 @@ protected:
 	class UAcmeGameInstance* GameInstance;
 
 	UPROPERTY()
-	bool IsEmpty;
+	bool IsEmpty = true;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> DragWidgetClass;

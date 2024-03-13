@@ -22,12 +22,18 @@ void USaveGameEntryWidget::SetSlotName(FString name)
 	TxtSlotName->SetText(FText::FromString(name));
 }
 
+void USaveGameEntryWidget::SetThumbnail(UTexture2D* thumbnail)
+{
+	ImgTumbnail->SetBrushFromTexture(thumbnail);
+}
+
 void USaveGameEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
 	USaveGameData* Data = Cast<USaveGameData>(ListItemObject);
 	SlotName = Data->SlotName;
 
 	SetSlotName(SlotName);
+	SetThumbnail(Data->Thumbnail);
 }
 
 void USaveGameEntryWidget::OnClicked()

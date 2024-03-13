@@ -179,6 +179,16 @@ public:
 	UFUNCTION()
 	UAcmeSaveGame* GetCurrentSaveGame();
 
+	UFUNCTION()
+	FString SaveGameDir(const FString& SaveGameName);
+
+	UFUNCTION()
+	UTexture2D* ImportSaveThumbnail(const FString& SaveGameName);
+
+	UFUNCTION()
+	void ExportSaveThumbnailRT(UTextureRenderTarget2D* TextureRenderTarget, const FString& SaveGameName);
+
+
 protected:
 	UPROPERTY()
 	class UAcmeSaveGame* CurrentSaveGame;

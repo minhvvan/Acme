@@ -20,5 +20,5 @@ public:
 	FString SlotName;
 
 	UPROPERTY()
-	UAcmeSaveGame* SaveGame;
+	UTexture2D* Thumbnail;
 };

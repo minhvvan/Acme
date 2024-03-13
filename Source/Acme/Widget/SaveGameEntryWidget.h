@@ -31,6 +31,9 @@ public:
 	UFUNCTION()
 	void SetSlotName(FString name);
 
+	UFUNCTION()
+	void SetThumbnail(UTexture2D* thumbnail);
+
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 
 	UFUNCTION()
