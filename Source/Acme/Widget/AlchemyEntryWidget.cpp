@@ -77,6 +77,12 @@ FReply UAlchemyEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry,
 	return Result;
 }
 
+void UAlchemyEntryWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
+	if (HoverSFX) PlaySound(HoverSFX);
+}
+
 void UAlchemyEntryWidget::SetThumbnailImg(EItemName name)
 {
 	if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();

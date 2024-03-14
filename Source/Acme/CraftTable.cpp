@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "AcmeCharacter.h"
 #include "Acme/Widget/CraftTableWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "Acme/Utils/Util.h"
 
 ACraftTable::ACraftTable()
@@ -31,6 +32,8 @@ void ACraftTable::Interact()
 
 	InteractWidget = CreateWidget<UCraftTableWidget>(GetWorld(), WidgetClass);
 	if (!InteractWidget) return;
+
+	if (InteractSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), InteractSFX, GetActorLocation());
 
 	InteractWidget->AddToViewport();
 }

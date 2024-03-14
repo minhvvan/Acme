@@ -8,6 +8,7 @@
 
 void APotionItem::Active()
 {
+	Super::Active();
 	Player->ConsumeItemQuick();
 
 	Player->Heal(10);

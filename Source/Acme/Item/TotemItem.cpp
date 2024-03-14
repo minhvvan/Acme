@@ -12,6 +12,8 @@
 
 void ATotemItem::Active()
 {
+	Super::Active();
+
 	//Turret Spawn
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
 
@@ -31,7 +33,7 @@ void ATotemItem::Active()
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		GetWorld()->SpawnActor<ATotem>(SpawnParams);
-		GetWorld()->SpawnActor<ATotem>(ATotem::StaticClass(), SpawnLocation, Player->GetActorForwardVector().Rotation(), SpawnParams);
+		GetWorld()->SpawnActor<ATotem>(TotemClass, SpawnLocation, Player->GetActorForwardVector().Rotation(), SpawnParams);
 
 		Player->ConsumeItemQuick();
 	}

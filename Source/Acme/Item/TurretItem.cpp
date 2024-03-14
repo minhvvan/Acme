@@ -9,6 +9,8 @@
 
 void ATurretItem::Active()
 {
+	Super::Active();
+
 	//Turret Spawn
 	if (!TurretClass) return;
 	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());

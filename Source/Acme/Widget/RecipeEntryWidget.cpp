@@ -39,6 +39,12 @@ FReply URecipeEntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, 
 	return reply;
 }
 
+void URecipeEntryWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
+	if (HoverSFX) PlaySound(HoverSFX);
+}
+
 void URecipeEntryWidget::SetSelectedColor(bool bSelected)
 {
 	if (bSelected)

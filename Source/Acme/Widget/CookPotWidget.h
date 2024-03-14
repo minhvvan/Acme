@@ -45,6 +45,9 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UEditableTextBox* EdtNum;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* SuccessSFX;
+
 public:
 	UFUNCTION()
 	void Init();

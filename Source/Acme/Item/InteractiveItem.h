@@ -26,7 +26,10 @@ protected:
 	class USphereComponent* OverlapComp;
 
 	UPROPERTY(EditAnywhere, Category = Default)
-	class UWidgetComponent* Indicator;
+	class UWidgetComponent* Indicator;	
+	
+	UPROPERTY(EditAnywhere, Category = Default)
+	USoundBase* InteractSound;
 
 protected:
 	virtual void BeginPlay() override;

@@ -21,6 +21,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Default)
 	class USoundBase* HealSFX;
 
+	UPROPERTY(EditAnywhere, Category = Default)
+	class UNiagaraComponent* Niagara;
+
 public:	
 	// Sets default values for this actor's properties
 	ATotem();

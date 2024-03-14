@@ -22,10 +22,15 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UBorder* BorderSelected;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* HoverSFX;
+
 public:
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+
+	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 	UFUNCTION()
 	void SetSelectedColor(bool bSelected);

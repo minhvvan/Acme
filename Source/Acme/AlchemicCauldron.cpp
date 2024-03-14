@@ -7,6 +7,7 @@
 #include "AcmeCharacter.h"
 #include "Acme/Utils/Util.h"
 #include "Acme/Widget/AlchemicComposeWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "Acme/Data/ElementData.h"
 
 AAlchemicCauldron::AAlchemicCauldron()
@@ -79,6 +80,8 @@ void AAlchemicCauldron::Interact()
 	PC->SetInputMode(FInputModeUIOnly());
 	//PC->SetPause(true);
 	PC->bShowMouseCursor = true;
+
+	if (InteractSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), InteractSFX, GetActorLocation());
 
 	InteractWidget->AddToViewport();
 }

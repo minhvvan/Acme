@@ -7,6 +7,7 @@
 #include "Acme/Framework/AcmeGameInstance.h"
 #include "Acme/AcmeCharacter.h"
 #include "Acme/Utils/Util.h"
+#include "Kismet/GameplayStatics.h"
 
 AInteractiveItem::AInteractiveItem()
 {
@@ -46,6 +47,12 @@ void AInteractiveItem::Interact()
 
 	if (OverlappedCharacter->AddItem(ItemInfo))
 	{
+		//SFX
+		if (InteractSound)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), InteractSound, GetActorLocation());
+		}
+
 		OnInteract.Broadcast(this);
 		Destroy();
 	}

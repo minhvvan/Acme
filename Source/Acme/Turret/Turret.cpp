@@ -7,6 +7,8 @@
 #include "Sound/SoundBase.h"
 #include "Acme/Monster/CharacterMonster.h"
 #include "Acme/AcmeCharacter.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -16,6 +18,9 @@ ATurret::ATurret()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SetRootComponent(Mesh);
+
+	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
+	Niagara->SetupAttachment(RootComponent);
 
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
 	AudioComp->SetupAttachment(RootComponent);
@@ -56,6 +61,23 @@ void ATurret::PlayFireSFX()
 	}
 }
 
+void ATurret::PlayFindEnermySFX()
+{
+	if (FireSFX)
+	{
+		AudioComp->SetSound(FindEmermySFX);
+
+		if (AudioComp->IsPlaying()) AudioComp->Stop();
+		AudioComp->Play();
+	}
+}
+
+void ATurret::PlayFireFX(bool bOnTarget)
+{
+	if(bOnTarget) Niagara->SetActive(bOnTarget);
+	else Niagara->Deactivate();
+}
+
 void ATurret::Fire()
 {
 	if (!Target) return;
@@ -72,11 +94,13 @@ void ATurret::Fire()
 
 	Target->SetTarget(Player);
 	Target->OnAttacked(Damage);
+
+	PlayFireFX(true);
 	PlayFireSFX();
 }
 
 void ATurret::SetTarget(ACharacterMonster* newTarget)
 {
+	if (newTarget == nullptr) PlayFireFX(false);
 	Target = newTarget;
 }
-

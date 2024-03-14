@@ -65,6 +65,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetOptional))
 	class UEquipmentSlot* EquipSlotAcc;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* OpenSFX;
 	
 protected:
 	virtual void NativeConstruct();

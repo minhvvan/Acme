@@ -20,5 +20,6 @@ public:
 	virtual void AttachBack() override;
 
 protected:
-
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ATotem> TotemClass;
 };

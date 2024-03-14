@@ -24,6 +24,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Default)
 	class UWidgetComponent* Indicator;
+	
+	UPROPERTY(EditAnywhere, Category = Default)
+	USoundBase* InteractSFX;
 
 protected:
 	virtual void BeginPlay() override;

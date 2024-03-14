@@ -15,8 +15,14 @@
 void UBTServiceSearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
+	ATurret* Turret = Cast<ATurret>(OwnerComp.GetAIOwner()->GetPawn());
 
-	APawn* Turret = OwnerComp.GetAIOwner()->GetPawn();
+	if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))) != nullptr)
+	{
+		Turret->PlayFireFX(false);
+		return;
+	}
+
 	FVector CenterPos = Turret->GetActorLocation();
 	FCollisionQueryParams Query;
 
@@ -36,12 +42,22 @@ void UBTServiceSearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 		{
 			ACharacterMonster* Monster = Cast<ACharacterMonster>(Result.GetActor());
 			if (!Monster) continue;
+
+			if (Monster->IsPendingKill())
+			{
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
+				Turret->PlayFireFX(false);
+				return;
+			}
+
 			OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), Monster);
+			Turret->PlayFindEnermySFX();
 			return;
 		}
 	}
 	else
 	{
+		Turret->PlayFireFX(false);
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
 	}
 }

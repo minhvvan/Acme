@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "AcmeCharacter.h"
 #include "Acme/Widget/PotionCraftWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "Acme/Utils/Util.h"
 
 APotionTrunk::APotionTrunk()
@@ -31,6 +32,8 @@ void APotionTrunk::Interact()
 
 	InteractWidget = CreateWidget<UPotionCraftWidget>(GetWorld(), WidgetClass);
 	if (!InteractWidget) return;
+
+	if (InteractSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), InteractSFX, GetActorLocation());
 
 	InteractWidget->AddToViewport();
 }

@@ -15,6 +15,10 @@ class ACME_API AActiveItem : public AEquipmentItem, public IUsableInterface
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(EditAnywhere)
+	USoundBase* ActiveSFX;
+	
 public:
 	virtual void Active();
 

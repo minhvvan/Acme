@@ -14,7 +14,7 @@ void AFoodItem::BeginPlay()
 
 void AFoodItem::Active()
 {
-	//TODO:Play Anim
+	Super::Active();
 
 	Player->ConsumeItemQuick();
 	Player->AddSatiety(Satiety);

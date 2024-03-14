@@ -48,6 +48,9 @@ protected:
 	UPROPERTY()
 	class UAlchemicComposeWidget* ParentWidget;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* HoverSFX;
+
 public:
 	virtual void NativeConstruct();
 
@@ -67,6 +70,9 @@ public:
 
 protected:
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+
+	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+
 
 	UFUNCTION()
 	void SetThumbnailImg(EItemName name);

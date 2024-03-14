@@ -134,6 +134,8 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	OwnerCharacter->UseItem(LeftItem.Category, LeftSlotIdx, Amount);
 	OwnerCharacter->UseItem(RightItem.Category, RightSlotIdx, Amount);
 
+	if (SuccessSFX) PlaySound(SuccessSFX);
+
 	//Add
 	LVResult->ClearListItems();
 	for (FItem result : ComposeResults)
@@ -264,7 +266,7 @@ void UAlchemicComposeWidget::SetActiveCategory()
 
 void UAlchemicComposeWidget::ShowAlert()
 {
-	//TODO: SFX
+	if (FailSFX) PlaySound(FailSFX);
 	BorderAlert->SetVisibility(ESlateVisibility::Visible);
 }
 

@@ -111,6 +111,8 @@ void UCookPotWidget::OnClickedCraft()
 		TVMaterial->AddItem(Data);
 	}
 
+	if (SuccessSFX) PlaySound(SuccessSFX);
+
 	//Add
 	for (int i = 0; i < Amount; i++)
 	{

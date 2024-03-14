@@ -158,7 +158,50 @@ void AAcmeCharacter::BeginPlay()
 		AddItem(item);
 	}
 
+	{
+		FItem item;
+		item.bCanAddQuick = true;
+		item.Category = EItemCategory::E_Food;
+		item.Name = EItemName::E_Meat;
+		item.Num = 3;
+		AddItem(item);
+	}
 
+	{
+		FItem item;
+		item.bCanAddQuick = true;
+		item.Category = EItemCategory::E_Food;
+		item.Name = EItemName::E_Fruit;
+		item.Num = 3;
+		AddItem(item);
+	}
+
+	{
+		FItem item;
+		item.bCanAddQuick = true;
+		item.Category = EItemCategory::E_Potion;
+		item.Name = EItemName::E_HealthPotion;
+		item.Num = 3;
+		AddItem(item);
+	}
+
+	{
+		FItem item;
+		item.bCanAddQuick = true;
+		item.Category = EItemCategory::E_Tool;
+		item.Name = EItemName::E_Totem;
+		item.Num = 3;
+		AddItem(item);
+	}
+
+	{
+		FItem item;
+		item.bCanAddQuick = true;
+		item.Category = EItemCategory::E_Tool;
+		item.Name = EItemName::E_Turret;
+		item.Num = 3;
+		AddItem(item);
+	}
 
 	{
 		FRecipe recipe;

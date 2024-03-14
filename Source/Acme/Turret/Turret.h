@@ -23,7 +23,13 @@ protected:
 	class UAudioComponent* AudioComp;
 
 	UPROPERTY(EditAnywhere, Category = Default)
-	class USoundBase* FireSFX;
+	class UNiagaraComponent* Niagara;
+
+	UPROPERTY(EditAnywhere, Category = Default)
+	class USoundBase* FireSFX;	
+	
+	UPROPERTY(EditAnywhere, Category = Default)
+	class USoundBase* FindEmermySFX;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,7 +43,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
-	void PlayFireSFX();
+	void PlayFireSFX();	
+	
+	UFUNCTION()
+	void PlayFindEnermySFX();
+
+	UFUNCTION()
+	void PlayFireFX(bool bOnTarget);
 
 	UFUNCTION()
 	void Fire();

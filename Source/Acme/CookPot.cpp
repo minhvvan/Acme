@@ -7,6 +7,7 @@
 #include "AcmeCharacter.h"
 #include "Acme/Widget/CookPotWidget.h"
 #include "Acme/Utils/Util.h"
+#include "Kismet/GameplayStatics.h"
 
 
 ACookPot::ACookPot()
@@ -69,6 +70,8 @@ void ACookPot::Interact()
 
 	InteractWidget = CreateWidget<UCookPotWidget>(GetWorld(), WidgetClass);
 	if (!InteractWidget) return;
+
+	if (InteractSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), InteractSFX, GetActorLocation());
 
 	InteractWidget->AddToViewport();
 }

@@ -73,6 +73,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	class UButton* BtnOk;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* SuccessSFX;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* FailSFX;
+
 protected:
 	virtual void NativeConstruct();
 

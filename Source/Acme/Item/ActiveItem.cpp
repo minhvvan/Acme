@@ -2,7 +2,9 @@
 
 
 #include "Acme/Item/ActiveItem.h"
+#include "Kismet/GameplayStatics.h"
 
 void AActiveItem::Active()
 {
+	if (ActiveSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ActiveSFX, GetActorLocation());
 }

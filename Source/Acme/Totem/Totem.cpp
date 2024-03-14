@@ -8,6 +8,8 @@
 #include "Acme/Monster/CharacterMonster.h"
 #include "Acme/AcmeCharacter.h"
 #include "DrawDebugHelpers.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 ATotem::ATotem()
@@ -17,6 +19,9 @@ ATotem::ATotem()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SetRootComponent(Mesh);
+
+	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
+	Niagara->SetupAttachment(RootComponent);
 
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	AudioComp->SetupAttachment(RootComponent);
@@ -33,9 +38,11 @@ ATotem::ATotem()
 		HealSFX = SFX.Object;
 	}
 
-	Interval = 3.f;
+	Interval = 6.f;
 	Range = 500;
 	Time = 60.f;
+
+	HealSFX->MaxDistance = Range * 1.5;
 }
 
 // Called when the game starts or when spawned
@@ -56,8 +63,6 @@ void ATotem::BeginPlay()
 
 void ATotem::Heal()
 {
-	DrawDebugSphere(GetWorld(), GetActorLocation(), Range, 10, FColor::Red, false, 2.f, 0.f, 1.f);
-
 	TArray<FOverlapResult> OverlapResults;
 	
 	bool bResult = GetWorld()->OverlapMultiByChannel(
@@ -73,6 +78,8 @@ void ATotem::Heal()
 
 		if (AudioComp->IsPlaying()) AudioComp->Stop();
 		AudioComp->Play();
+
+		Niagara->SetActive(true);
 	}
 
 	if (bResult)

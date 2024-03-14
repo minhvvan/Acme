@@ -20,6 +20,8 @@ void UInventoryWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	if (OpenSFX) PlaySound(OpenSFX);
+
 	bIsFocusable = true;
 	SetKeyboardFocus();
 
