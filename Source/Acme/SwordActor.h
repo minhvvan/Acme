@@ -46,20 +46,5 @@ public:
 	virtual void Active() override;
 
 	UFUNCTION()
-	FVector GetWeponTopPos();
-
-	UFUNCTION()
-	FVector GetWeponEndPos();
-
-	UFUNCTION()
 	void PlayCombo();
-
-	UFUNCTION()
-	void BeginSeinsing();	
-	
-	UFUNCTION()
-	void EndSeinsing();
-
-	UFUNCTION()
-	void DamageToVictim();
 };

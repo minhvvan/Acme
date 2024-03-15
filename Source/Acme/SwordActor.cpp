@@ -46,16 +46,6 @@ void ASwordActor::FlushQueue()
 	}
 }
 
-FVector ASwordActor::GetWeponTopPos()
-{
-	return Mesh->GetSocketLocation(WeaponTopName);
-}
-
-FVector ASwordActor::GetWeponEndPos()
-{
-	return Mesh->GetSocketLocation(WeaponEndName);
-}
-
 void ASwordActor::PlayCombo()
 {
 	if (!AttackQueue.IsEmpty())
@@ -66,53 +56,5 @@ void ASwordActor::PlayCombo()
 	{
 		IsCombo = false;
 		ComboIdx = 0;
-	}
-}
-
-void ASwordActor::BeginSeinsing()
-{
-	GetWorldTimerManager().SetTimer(OUT AttackTimer, this, &ASwordActor::DamageToVictim, .01f, true);
-}
-
-void ASwordActor::EndSeinsing()
-{
-	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
-	GetWorldTimerManager().ClearTimer(AttackTimer);
-
-	
-	//Map nullptr 
-	for (AActor* Victim : VictimSet)
-	{
-		ACharacterMonster* Monster = Cast<ACharacterMonster>(Victim);
-		if (!Monster) continue;
-
-		Monster->SetTarget(Player);
-		Monster->OnAttacked(ItemInfo.ItemStat.Attack);
-	}
-
-	VictimSet.Empty();
-}
-
-void ASwordActor::DamageToVictim()
-{
-	if (!Player) Player = Cast<AAcmeCharacter>(GetOwner());
-
-	TArray<FHitResult> HitResults;
-	FCollisionQueryParams Query;
-
-	Query.AddIgnoredActor(this);
-	Query.AddIgnoredActor(Player);
-
-	FVector StartPos = GetWeponTopPos();
-	FVector EndPos = GetWeponEndPos();
-
-	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, FQuat::Identity, ECC_Pawn, FCollisionShape::MakeSphere(12), Query))
-	{
-		for (auto Result : HitResults)
-		{
-			AActor* Victim = Result.GetActor();
-
-			VictimSet.Add(Victim);
-		}
 	}
 }

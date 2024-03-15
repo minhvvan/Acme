@@ -33,9 +33,8 @@ void ABossMonster::BeginPlay()
 {
 	ACharacter::BeginPlay();
 
-	StatCompoenent->SetMaxHP(100);
-	StatCompoenent->SetCurrentHP(100);
-	StatCompoenent->SetStrength(30);
+	StatCompoenent->SetMaxHP(1000);
+	StatCompoenent->SetCurrentHP(1000);
 	InitState();
 
 	BossAnimInstance = Cast<UBossAnimInstance>(GetMesh()->GetAnimInstance());
@@ -92,7 +91,6 @@ void ABossMonster::OnAttacked(int damage)
 	if (!BossAIController) BossAIController = Cast<ABossAIController>(GetController());
 	BossAIController->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), TargetCharacter);
 
-	StatCompoenent->GetCurrentHP();
 	bool bUnderHalf = ((float)StatCompoenent->GetCurrentHP() / StatCompoenent->GetMaxHP()) <= .5f;
 	BossAIController->GetBlackboardComponent()->SetValueAsBool(FName(TEXT("bUnderHalf")), bUnderHalf);
 

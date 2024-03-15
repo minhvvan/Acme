@@ -36,6 +36,18 @@ class AAcmeCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USceneCaptureComponent2D* MiniMapSceneCapture;
+
+	UPROPERTY(VisibleAnywhere)
+	class UAudioComponent* BurnAudio;
+
+	UPROPERTY(EditAnywhere, Category = Default)
+	class UNiagaraComponent* Niagara;
+
+	UPROPERTY(EditAnywhere, Category = Default)
+	USoundBase* BurnSFX;
+
+	UPROPERTY(EditAnywhere, Category = DefaultStartSwordAttack)
+	USoundBase* JumpSFX;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USceneCaptureComponent2D* ThumbnailSceneCapture;
@@ -167,9 +179,6 @@ protected:
 	UFUNCTION()
 	void StartSwordAttack();
 	
-	UFUNCTION()
-	void EndSwordAttack();
-
 	UFUNCTION()
 	void StartSprint();
 

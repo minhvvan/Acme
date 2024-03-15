@@ -38,7 +38,7 @@ ACharacterMonster::ACharacterMonster()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	AttackRange = 200.f;
-	IsMoving = true;
+	IsMoving = false;
 
 	SearchRadius = 500.f;
 }
@@ -111,6 +111,9 @@ void ACharacterMonster::Attack()
 
 	SetActorRotation(Forward.Rotation());
 
+	if (!AIController) AIController = Cast<AMonsterAIController>(GetController());
+	AIController->GetBlackboardComponent()->SetValueAsBool(FName(TEXT("IsAttacking")), true);
+
 	if (!AnimInstance) return;
 	AnimInstance->PlayAttack();
 }
@@ -141,6 +144,9 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 	{
 		OnAttackEnd.Broadcast();
 		IsAttacking = false;
+
+		if (!AIController) AIController = Cast<AMonsterAIController>(GetController());
+		AIController->GetBlackboardComponent()->SetValueAsBool(FName(TEXT("IsAttacking")), false);
 	}
 	else if (MontageName == TEXT("AM_Attacked"))
 	{
@@ -160,10 +166,17 @@ void ACharacterMonster::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 		int idx = FMath::RandRange(0, DropItems.Num() - 1);
 		if (!GameInstance) GameInstance = GetGameInstance<UAcmeGameInstance>();
 
-		FItem temp = GameInstance->GetItemInfo(DropItems[idx]);
+		{
+			FItem temp = GameInstance->GetItemInfo(DropItems[4]);
+			AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+			DropItem->Init(temp);
+		}
 
-		AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
-		DropItem->Init(temp);
+		{
+			FItem temp = GameInstance->GetItemInfo(DropItems[idx]);
+			AInteractiveItem* DropItem = GetWorld()->SpawnActor<AInteractiveItem>(DropItemClass, FTransform(FRotator::ZeroRotator, SpawnPos), SpawnParam);
+			DropItem->Init(temp);
+		}
 	}
 }
 
@@ -210,6 +223,8 @@ void ACharacterMonster::FinishCombat()
 	IsCombat = false;
 	HPBar->SetVisibility(false);
 	TargetCharacter = nullptr;
+
+	if (!AIController) AIController = Cast<AMonsterAIController>(GetController());
 	AIController->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
 	CombatTimer.Invalidate();
 }

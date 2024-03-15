@@ -33,6 +33,9 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Acme/Widget/DeathWidget.h"
 #include "Acme/Widget/PauseWidget.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Components/AudioComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -86,6 +89,9 @@ AAcmeCharacter::AAcmeCharacter()
 
 	MiniMapSceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MiniMapSceneCapture"));
 	MiniMapSceneCapture->SetupAttachment(MiniMapCameraBoom);
+
+	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
+	Niagara->SetupAttachment(GetMesh());
 
 	StatCompoenent = CreateDefaultSubobject<UStatComponent>(TEXT("StatCompoenent"));
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryCompoenent"));
@@ -143,7 +149,6 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
 	AnimInstance->OnMontageBlendingOut.AddDynamic(this, &AAcmeCharacter::AnimEnd);
 	AnimInstance->OnAttackStart.AddUObject(this, &AAcmeCharacter::StartSwordAttack);
-	AnimInstance->OnAttackEnd.AddUObject(this, &AAcmeCharacter::EndSwordAttack);
 	AnimInstance->OnInteract.AddUObject(this, &AAcmeCharacter::Interact);
 	AnimInstance->OnDodgeRoll.AddUObject(this, &AAcmeCharacter::StopDodgeRoll);
 	AnimInstance->OnDeath.AddUObject(this, &AAcmeCharacter::Die);
@@ -155,6 +160,8 @@ void AAcmeCharacter::BeginPlay()
 		item.Name = EItemName::E_Sword;
 		item.Num = 1;
 		item.Part = EEquipmentPart::E_Hand;
+
+		item.ItemStat.Attack = 10;
 		AddItem(item);
 	}
 
@@ -476,6 +483,7 @@ void AAcmeCharacter::Jump()
 	if (!IsSwimming)
 	{
 		Super::Jump();
+		if (JumpSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), JumpSFX, GetActorLocation());
 	}
 	else
 	{
@@ -597,21 +605,29 @@ void AAcmeCharacter::StartSwordAttack()
 {
 	if (!EquipmentComponent) return;
 
-	ASwordActor* Sword = Cast<ASwordActor>(EquipmentComponent->GetCurrentHand());
-	if (!Sword) return;
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Query;
 
-	Sword->BeginSeinsing();
+	Query.AddIgnoredActor(this);
+	ASwordActor* Sword = Cast<ASwordActor>(EquipmentComponent->GetCurrentHand());
+	if(Sword) Query.AddIgnoredActor(Sword);
+
+	FVector StartPos = GetMesh()->GetSocketLocation(FName(TEXT("AttackStartPos")));
+	FVector EndPos = GetMesh()->GetSocketLocation(FName(TEXT("AttackEndPos")));
+	
+	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, GetActorQuat(), ECC_Pawn, FCollisionShape::MakeSphere(60), Query))
+	{
+		for (auto Result : HitResults)
+		{
+			ACharacterMonster* Monster = Cast<ACharacterMonster>(Result.GetActor());
+			if (!Monster) continue;
+
+			Monster->SetTarget(this);
+			Monster->OnAttacked(Sword->GetItem().ItemStat.Attack);
+		}
+	}
 }
 
-void AAcmeCharacter::EndSwordAttack()
-{
-	if (!EquipmentComponent) return;
-
-	ASwordActor* Sword = Cast<ASwordActor>(EquipmentComponent->GetCurrentHand());
-	if (!Sword) return;
-
-	Sword->EndSeinsing();
-}
 
 void AAcmeCharacter::StartSprint()
 {
@@ -837,17 +853,30 @@ void AAcmeCharacter::Burn(ACharacterMonster* causer)
 {
 	ClearBurnTimer();
 
+	Niagara->SetActive(true);
+	if (BurnSFX) 
+	{
+		BurnAudio = UGameplayStatics::SpawnSoundAtLocation(GetWorld(), BurnSFX, GetActorLocation());
+	}
+
 	GetWorldTimerManager().SetTimer(BurnTimer, FTimerDelegate::CreateLambda([this, causer]() {
 		TakeDamage(2, causer);
 		}), 1.f, true);
 
 	GetWorldTimerManager().SetTimer(BurnEndTimer, FTimerDelegate::CreateLambda([this]() {
 		ClearBurnTimer();
+		Niagara->Deactivate();
 		}), 5.f, false);
 }
 
 void AAcmeCharacter::ClearBurnTimer()
 {
+	if (BurnAudio)
+	{
+		BurnAudio->Stop();
+		BurnAudio = nullptr;
+	}
+
 	GetWorldTimerManager().ClearTimer(BurnTimer);
 	GetWorldTimerManager().ClearTimer(BurnEndTimer);
 }

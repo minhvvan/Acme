@@ -36,6 +36,9 @@ public:
 	UFUNCTION()
 	void AnimNotify_AttackCheck();
 
+	UFUNCTION()
+	FName GetAttackMontageName(int idx);
+
 public:
 	FOnAttack OnAttack;
 };
