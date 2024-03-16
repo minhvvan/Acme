@@ -2,6 +2,7 @@
 
 
 #include "Acme/Widget/DeathWidget.h"
+#include "Acme/AcmeCharacter.h"
 #include "Components/Button.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/PlayerStart.h"
@@ -28,10 +29,13 @@ void UDeathWidget::OnReplayClicked()
 	if (PlayerStart)
 	{
 		FVector Pos = PlayerStart->GetActorLocation();
-		Pos.Z += 50;
+		Pos.Z += 500;
 
-		PC->GetPawn()->SetActorLocation(Pos);
-		GetWorld()->GetAuthGameMode()->RestartPlayerAtTransform(PC, PlayerStart->GetTransform());
+		//PC->GetPawn()->SetActorLocation(Pos);
+		PC->UnPossess();
+
+		AAcmeCharacter* Character = GetWorld()->SpawnActor<AAcmeCharacter>(CharacterClass, Pos, FRotator::ZeroRotator);
+		PC->Possess(Character);
 	}
 
 	PC->SetInputMode(FInputModeGameOnly());

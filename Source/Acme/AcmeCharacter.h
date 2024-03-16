@@ -537,6 +537,8 @@ protected:
 
 	virtual void BeginPlay();
 
+	virtual void PossessedBy(AController* NewController) override;
+
 	virtual void Tick(float DeltaSeconds);
 
 	virtual void PostInitializeComponents();

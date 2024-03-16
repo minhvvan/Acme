@@ -36,6 +36,7 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/AudioComponent.h"
+#include "Landscape/Classes/Landscape.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -113,6 +114,39 @@ void AAcmeCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	bool bLoadedGround = false;
+	UUtil::DebugPrint("BeginPlay");
+
+	int cnt = 0;
+	while (!bLoadedGround && cnt <= 1000)
+	{
+		TArray<FHitResult> Results;
+
+		FVector StartPos = GetActorLocation();
+		FVector EndPos = StartPos;
+		EndPos.Z -= 1000;
+
+		FCollisionQueryParams param;
+		param.AddIgnoredActor(this);
+
+		GetWorld()->LineTraceMultiByChannel(Results, StartPos, EndPos, ECollisionChannel::ECC_WorldStatic, param);
+		
+		for (FHitResult result : Results)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *result.GetActor()->GetName()));
+
+			ALandscapeProxy* Ground = Cast<ALandscapeProxy>(result.GetActor());
+			if (!Ground) continue;
+
+			UUtil::DebugPrint("Load");
+			bLoadedGround = true;
+			break;
+		}
+
+		cnt++;
+	}
+
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -361,6 +395,11 @@ void AAcmeCharacter::BeginPlay()
 	}
 }
 
+void AAcmeCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+}
+
 void AAcmeCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -482,8 +521,12 @@ void AAcmeCharacter::Jump()
 {
 	if (!IsSwimming)
 	{
+		if (JumpSFX && GetCharacterMovement()->MovementMode != EMovementMode::MOVE_Falling)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), JumpSFX, GetActorLocation());
+		}
+
 		Super::Jump();
-		if (JumpSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), JumpSFX, GetActorLocation());
 	}
 	else
 	{
