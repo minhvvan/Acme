@@ -37,6 +37,8 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Landscape/Classes/Landscape.h"
+#include "GameFramework/PlayerStart.h"
+#include "Acme/AcmePC.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAcmeCharacter
@@ -116,37 +118,6 @@ void AAcmeCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	bool bLoadedGround = false;
-	UUtil::DebugPrint("BeginPlay");
-
-	int cnt = 0;
-	while (!bLoadedGround && cnt <= 1000)
-	{
-		TArray<FHitResult> Results;
-
-		FVector StartPos = GetActorLocation();
-		FVector EndPos = StartPos;
-		EndPos.Z -= 1000;
-
-		FCollisionQueryParams param;
-		param.AddIgnoredActor(this);
-
-		GetWorld()->LineTraceMultiByChannel(Results, StartPos, EndPos, ECollisionChannel::ECC_WorldStatic, param);
-		
-		for (FHitResult result : Results)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%s"), *result.GetActor()->GetName()));
-
-			ALandscapeProxy* Ground = Cast<ALandscapeProxy>(result.GetActor());
-			if (!Ground) continue;
-
-			UUtil::DebugPrint("Load");
-			bLoadedGround = true;
-			break;
-		}
-
-		cnt++;
-	}
-
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -1010,6 +981,33 @@ FItem AAcmeCharacter::GetCurrentAcc()
 USceneCaptureComponent2D* AAcmeCharacter::GetThumbnailSceneCapture()
 {
 	return ThumbnailSceneCapture;
+}
+
+void AAcmeCharacter::RespawnCharacter()
+{
+	if (Hud) Hud->RemoveFromParent();
+	//Transfer Inventory
+
+	AAcmePC* PC = Cast<AAcmePC>(GetController());
+	PC->UnPossess();
+
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
+	auto PlayerStart = Cast<APlayerStart>(FoundActors[0]);
+
+	if (PlayerStart)
+	{
+		FVector Pos = PlayerStart->GetActorLocation();
+		Pos.Z += 500;
+
+		AAcmeCharacter* Character = GetWorld()->SpawnActor<AAcmeCharacter>(CharacterClass, Pos, FRotator::ZeroRotator);
+		Character->SetInventory(GetInventory());
+		Character->SetQuickSlots(GetQuickSlots());
+
+		PC->Possess(Character);
+	}
+
+	Destroy();
 }
 
 

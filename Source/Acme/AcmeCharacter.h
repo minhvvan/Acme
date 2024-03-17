@@ -524,6 +524,9 @@ public:
 	UFUNCTION()
 	USceneCaptureComponent2D* GetThumbnailSceneCapture();
 
+	UFUNCTION()
+	void RespawnCharacter();
+
 public:
 	FOnAcceptQuest OnAcceptQuest;
 	FOnRewardQuest OnRewardQuest;
@@ -532,6 +535,8 @@ protected:
 	FTimerHandle BurnTimer;
 	FTimerHandle BurnEndTimer;
 	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AAcmeCharacter> CharacterClass;
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

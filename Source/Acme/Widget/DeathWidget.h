@@ -25,9 +25,6 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BtnExit;
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AAcmeCharacter> CharacterClass;
-
 protected:
 	UFUNCTION()
 	void OnReplayClicked();

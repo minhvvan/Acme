@@ -5,7 +5,6 @@
 #include "Acme/AcmeCharacter.h"
 #include "Components/Button.h"
 #include "GameFramework/GameModeBase.h"
-#include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 
@@ -21,22 +20,7 @@ void UDeathWidget::OnReplayClicked()
 {
 	auto PC = GetOwningPlayer();
 	if (!PC) return;
-
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
-	auto PlayerStart = Cast<APlayerStart>(FoundActors[0]);
-
-	if (PlayerStart)
-	{
-		FVector Pos = PlayerStart->GetActorLocation();
-		Pos.Z += 500;
-
-		//PC->GetPawn()->SetActorLocation(Pos);
-		PC->UnPossess();
-
-		AAcmeCharacter* Character = GetWorld()->SpawnActor<AAcmeCharacter>(CharacterClass, Pos, FRotator::ZeroRotator);
-		PC->Possess(Character);
-	}
+	Cast<AAcmeCharacter>(GetOwningPlayerPawn())->RespawnCharacter();
 
 	PC->SetInputMode(FInputModeGameOnly());
 	PC->bShowMouseCursor = false;
