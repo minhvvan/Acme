@@ -62,6 +62,7 @@ void UPotionCraftWidget::SetSelectedRecipe(URecipeEntryWidget* recipe)
 void UPotionCraftWidget::NativeConstruct()
 {
 	bIsFocusable = true;
+	SetKeyboardFocus();
 	Init();
 
 	BtnCraft->OnClicked.AddDynamic(this, &UPotionCraftWidget::OnClickedCraft);
@@ -83,7 +84,7 @@ FReply UPotionCraftWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FK
 		RemoveFromParent();
 	}
 
-	return reply;
+	return FReply::Handled();
 }
 
 void UPotionCraftWidget::OnClickedCraft()

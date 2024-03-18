@@ -77,6 +77,10 @@ void UStatComponent::SetCurrentHP(int HP)
 void UStatComponent::SetCurrentST(int ST)
 {
 	CurrentSatiety = ST;
+
+	if (CurrentSatiety < 50.f) Strength = 5;
+	else Strength = 10;
+
 	OnChangedST.Broadcast(CurrentSatiety);
 }
 
@@ -161,4 +165,9 @@ void UStatComponent::Heal(int amount)
 	if (newHP > MaxHP) newHP = MaxHP;
 
 	SetCurrentHP(newHP);
+}
+
+int UStatComponent::GetStrength()
+{
+	return Strength;
 }

@@ -77,6 +77,9 @@ public:
 	UFUNCTION()
 	void Heal(int amount);
 
+	UFUNCTION()
+	int GetStrength();
+
 	FCoolDown CDSkill;
 
 	FChangeHP OnChangedHP;

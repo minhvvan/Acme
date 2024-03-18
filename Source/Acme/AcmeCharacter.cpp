@@ -23,6 +23,7 @@
 #include "Acme/Widget/InventoryWidget.h"
 #include "Acme/Widget/AlchemicComposeWidget.h"
 #include "Acme/Widget/DialogueWidget.h"
+#include "Acme/Widget/GuideWidget.h"
 #include "Acme/Component/EquipmentComponent.h"
 #include "Acme/Component/QuestComponent.h"
 #include "Acme/SwordActor.h"
@@ -110,14 +111,13 @@ AAcmeCharacter::AAcmeCharacter()
 	CurrentQuickSlotIdx = 0;
 
 	IsSwimming = false;
+	bOpenGuide = true;
 }
 
 void AAcmeCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-
-	bool bLoadedGround = false;
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -129,7 +129,6 @@ void AAcmeCharacter::BeginPlay()
 	}
 
 	UISceneCapture->ShowOnlyComponent(GetMesh());
-
 	AnimState = EAnimState::E_Unarmed;
 
 	if (HudClass.Get() != nullptr)
@@ -158,63 +157,7 @@ void AAcmeCharacter::BeginPlay()
 	AnimInstance->OnDodgeRoll.AddUObject(this, &AAcmeCharacter::StopDodgeRoll);
 	AnimInstance->OnDeath.AddUObject(this, &AAcmeCharacter::Die);
 	
-	{
-		FItem item;
-		item.bCanAddQuick = true;
-		item.Category = EItemCategory::E_Equipment;
-		item.Name = EItemName::E_Sword;
-		item.Num = 1;
-		item.Part = EEquipmentPart::E_Hand;
-
-		item.ItemStat.Attack = 10;
-		AddItem(item);
-	}
-
-	{
-		FItem item;
-		item.bCanAddQuick = true;
-		item.Category = EItemCategory::E_Food;
-		item.Name = EItemName::E_Meat;
-		item.Num = 3;
-		AddItem(item);
-	}
-
-	{
-		FItem item;
-		item.bCanAddQuick = true;
-		item.Category = EItemCategory::E_Food;
-		item.Name = EItemName::E_Fruit;
-		item.Num = 3;
-		AddItem(item);
-	}
-
-	{
-		FItem item;
-		item.bCanAddQuick = true;
-		item.Category = EItemCategory::E_Potion;
-		item.Name = EItemName::E_HealthPotion;
-		item.Num = 3;
-		AddItem(item);
-	}
-
-	{
-		FItem item;
-		item.bCanAddQuick = true;
-		item.Category = EItemCategory::E_Tool;
-		item.Name = EItemName::E_Totem;
-		item.Num = 3;
-		AddItem(item);
-	}
-
-	{
-		FItem item;
-		item.bCanAddQuick = true;
-		item.Category = EItemCategory::E_Tool;
-		item.Name = EItemName::E_Turret;
-		item.Num = 3;
-		AddItem(item);
-	}
-
+	//Recipe
 	{
 		FRecipe recipe;
 
@@ -438,6 +381,8 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	
 		//ESC
 		EnhancedInputComponent->BindAction(ESCAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::OpenPauseMenu);
+		
+		EnhancedInputComponent->BindAction(ScreenShotAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::TakeScreenshot);
 	}
 }
 
@@ -629,7 +574,7 @@ void AAcmeCharacter::StartSwordAttack()
 	FVector StartPos = GetMesh()->GetSocketLocation(FName(TEXT("AttackStartPos")));
 	FVector EndPos = GetMesh()->GetSocketLocation(FName(TEXT("AttackEndPos")));
 	
-	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, GetActorQuat(), ECC_Pawn, FCollisionShape::MakeSphere(60), Query))
+	if (GetWorld()->SweepMultiByChannel(HitResults, StartPos, EndPos, GetActorQuat(), ECC_Pawn, FCollisionShape::MakeSphere(100), Query))
 	{
 		for (auto Result : HitResults)
 		{
@@ -637,7 +582,7 @@ void AAcmeCharacter::StartSwordAttack()
 			if (!Monster) continue;
 
 			Monster->SetTarget(this);
-			Monster->OnAttacked(Sword->GetItem().ItemStat.Attack);
+			Monster->OnAttacked(StatCompoenent->GetStrength());
 		}
 	}
 }
@@ -1012,6 +957,20 @@ void AAcmeCharacter::RespawnCharacter()
 	Destroy();
 }
 
+void AAcmeCharacter::SetbOpenGuide(bool open)
+{
+	bOpenGuide = open;
+}
+
+bool AAcmeCharacter::GetbOpenGuide()
+{
+	return bOpenGuide;
+}
+
+void AAcmeCharacter::TakeScreenshot()
+{
+	GEngine->GameViewport->Viewport->TakeHighResScreenShot();
+}
 
 void AAcmeCharacter::StaminaCheck(int Stamina)
 {

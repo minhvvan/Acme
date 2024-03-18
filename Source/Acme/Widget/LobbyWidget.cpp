@@ -32,8 +32,7 @@ void ULobbyWidget::NativeOnInitialized()
 void ULobbyWidget::OnNewGameClicked()
 {
 	//OpenLevel
-	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("Game")));
-
+	GetWorld()->SeamlessTravel(TEXT("Game"));
 	auto PC = Cast<APlayerController>(GetOwningPlayer());
 	if (!PC) return;
 

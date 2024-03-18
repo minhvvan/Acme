@@ -230,6 +230,8 @@ void UAcmeGameInstance::SaveGame(AAcmeCharacter* Player)
 	NewPlayerData->EquipmentBody = Player->GetCurrentBody();
 	NewPlayerData->EquipmentAcc = Player->GetCurrentAcc();
 
+	NewPlayerData->bOpenGuide = Player->GetbOpenGuide();
+
 	FString slotName = FDateTime::Now().ToString();
 
 	if (UGameplayStatics::SaveGameToSlot(NewPlayerData, slotName, 0))

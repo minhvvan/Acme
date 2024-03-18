@@ -14,6 +14,9 @@ class ACME_API AAcmePC : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	AAcmePC();
+
 protected:
 	virtual void PostSeamlessTravel();
 
@@ -21,4 +24,10 @@ protected:
 
 	UPROPERTY()
 	class UAcmeGameInstance* GameInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UGuideWidget> GuideClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	UGuideWidget* GuideWidget;
 };

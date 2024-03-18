@@ -117,7 +117,10 @@ class AAcmeCharacter : public ACharacter
 	class UInputAction* TabAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* ESCAction;
+	class UInputAction* ESCAction;	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ScreenShotAction;
 
 	//stat comp
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
@@ -277,6 +280,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Swim, meta = (AllowPrivateAccess = "true"))
 	bool IsSwimming;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bOpenGuide;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
@@ -526,6 +532,15 @@ public:
 
 	UFUNCTION()
 	void RespawnCharacter();
+
+	UFUNCTION()
+	void SetbOpenGuide(bool open);	
+	
+	UFUNCTION()
+	bool GetbOpenGuide();	
+	
+	UFUNCTION()
+	void TakeScreenshot();
 
 public:
 	FOnAcceptQuest OnAcceptQuest;

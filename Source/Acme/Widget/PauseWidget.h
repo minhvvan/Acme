@@ -24,6 +24,15 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BtnExit;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* BtnOk;	
+	
+	UPROPERTY(meta = (BindWidget))
+	class UBorder* BorderAlert;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* SaveSFX;
+
 protected:
 	virtual void NativeOnInitialized();
 
@@ -39,6 +48,9 @@ protected:
 
 	UFUNCTION()
 	void OnExitClicked();
+
+	UFUNCTION()
+	void OnOkClicked();
 
 protected:
 	UPROPERTY()

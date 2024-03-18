@@ -63,6 +63,7 @@ void UCraftTableWidget::SetSelectedRecipe(URecipeEntryWidget* recipe)
 void UCraftTableWidget::NativeConstruct()
 {
 	bIsFocusable = true;
+	SetKeyboardFocus();
 	Init();
 
 	BtnCraft->OnClicked.AddDynamic(this, &UCraftTableWidget::OnClickedCraft);
@@ -84,7 +85,7 @@ FReply UCraftTableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKe
 		RemoveFromParent();
 	}
 
-	return reply;
+	return FReply::Handled();
 }
 
 void UCraftTableWidget::OnClickedCraft()

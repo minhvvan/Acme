@@ -62,6 +62,7 @@ void UCookPotWidget::SetSelectedRecipe(URecipeEntryWidget* recipe)
 void UCookPotWidget::NativeConstruct()
 {
 	bIsFocusable = true;
+	SetKeyboardFocus();
 	Init();
 
 	BtnCraft->OnClicked.AddDynamic(this, &UCookPotWidget::OnClickedCraft);
@@ -83,7 +84,7 @@ FReply UCookPotWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEv
 		RemoveFromParent();
 	}
 
-	return reply;
+	return FReply::Handled();
 }
 
 void UCookPotWidget::OnClickedCraft()

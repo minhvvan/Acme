@@ -31,6 +31,9 @@ public:
 	int CurrentSatiety;
 
 	UPROPERTY()
+	bool bOpenGuide;
+
+	UPROPERTY()
 	TMap<EItemCategory, FItemList> Inventory;
 
 	UPROPERTY()

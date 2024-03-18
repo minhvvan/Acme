@@ -60,7 +60,7 @@ FReply UAlchemicComposeWidget::NativeOnKeyDown(const FGeometry& InGeometry, cons
 		Character->CloseInteractWidget();
 	}
 
-	return Result;
+	return FReply::Handled();
 }
 
 void UAlchemicComposeWidget::OnElementClicked()
