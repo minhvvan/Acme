@@ -27,6 +27,10 @@ protected:
 protected:
 	virtual void NativeOnInitialized();
 
+	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent);
+
+	virtual void NativeConstruct();
+
 	UFUNCTION()
 	void OnReplayClicked();
 

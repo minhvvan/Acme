@@ -5,13 +5,41 @@
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 #include "Acme/AcmeCharacter.h"
+#include "Acme/Utils/Util.h"
 #include "Acme/Framework/AcmeGameInstance.h"
 
 void UPauseWidget::NativeOnInitialized()
 {
+	Super::NativeOnInitialized();
+
 	BtnReplay->OnClicked.AddDynamic(this, &UPauseWidget::OnReplayClicked);
 	BtnSave->OnClicked.AddDynamic(this, &UPauseWidget::OnSaveClicked);
 	BtnExit->OnClicked.AddDynamic(this, &UPauseWidget::OnExitClicked);
+}
+
+FReply UPauseWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+{
+	FReply Result = Super::NativeOnKeyDown(InGeometry, InKeyEvent);
+
+	if (InKeyEvent.GetKey() == EKeys::Escape)
+	{
+		auto PC = Cast<APlayerController>(GetOwningPlayer());
+
+		PC->bShowMouseCursor = false;
+		PC->SetInputMode(FInputModeGameOnly());
+
+		RemoveFromParent();
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
+	}
+
+	return FReply::Handled();
+}
+
+void UPauseWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	SetKeyboardFocus();
 }
 
 void UPauseWidget::OnReplayClicked()

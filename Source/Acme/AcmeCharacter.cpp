@@ -898,6 +898,8 @@ void AAcmeCharacter::ClearBurnTimer()
 void AAcmeCharacter::DeathAnimStart()
 {
 	if(!AnimInstance) AnimInstance = Cast<UAI_Main>(GetMesh()->GetAnimInstance());
+	CanActive = false;
+
 	AnimInstance->PlayDeath();
 }
 
