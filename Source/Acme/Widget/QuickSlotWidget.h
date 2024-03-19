@@ -33,6 +33,9 @@ protected:
 	UPROPERTY()
 	int Index;
 
+	UPROPERTY()
+	bool bClickable = true;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> DragWidgetClass;
 
@@ -69,6 +72,9 @@ public:
 
 	UFUNCTION()
 	void SetUnSelectBorder();
+
+	UFUNCTION()
+	void SetClickable(bool bClick);
 
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 

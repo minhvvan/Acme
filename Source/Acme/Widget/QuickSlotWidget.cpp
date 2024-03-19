@@ -51,7 +51,6 @@ void UQuickSlotWidget::SetIndex(int idx)
 
 void UQuickSlotWidget::SetEmpty()
 {
-	//TODO:이렇게 해도 되는지 확인 필요
 	ItemInfo.Category = EItemCategory::E_End;
 	ItemInfo.Name = EItemName::E_Empty;
 
@@ -73,11 +72,16 @@ void UQuickSlotWidget::SetUnSelectBorder()
 	BorderItem->SetBrushFromMaterial(NormalBorderMat);
 }
 
+void UQuickSlotWidget::SetClickable(bool bClick)
+{
+	bClickable = bClick;
+}
+
 FReply UQuickSlotWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply reply;
 
-	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
+	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton) && bClickable)
 	{
 		reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 		reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);

@@ -103,6 +103,15 @@ void UWidget_Hud::SetQuickSlots(TArray<FItem> QuickSlots)
 {
 	if (QuickSlots.Num() != 8) return;
 
+	WBP_QuickSlot1->SetClickable(false);
+	WBP_QuickSlot2->SetClickable(false);
+	WBP_QuickSlot3->SetClickable(false);
+	WBP_QuickSlot4->SetClickable(false);
+	WBP_QuickSlot5->SetClickable(false);
+	WBP_QuickSlot6->SetClickable(false);
+	WBP_QuickSlot7->SetClickable(false);
+	WBP_QuickSlot8->SetClickable(false);
+
 	WBP_QuickSlot1->SetItemInfo(QuickSlots[0]);
 	WBP_QuickSlot2->SetItemInfo(QuickSlots[1]);
 	WBP_QuickSlot3->SetItemInfo(QuickSlots[2]);
