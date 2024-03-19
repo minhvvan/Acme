@@ -47,7 +47,7 @@ class AAcmeCharacter : public ACharacter
 	USoundBase* BurnSFX;
 
 	UPROPERTY(EditAnywhere, Category = DefaultStartSwordAttack)
-	USoundBase* JumpSFX;
+	USoundBase* JumpSFX;	
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USceneCaptureComponent2D* ThumbnailSceneCapture;

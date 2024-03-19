@@ -977,7 +977,7 @@ void AAcmeCharacter::StaminaCheck(int Stamina)
 		AnimInstance->PlayExhaust();
 
 		CanActive = false;
-		ChangeWalkSpeed(-100 /*TODO: Var*/);
+		ChangeWalkSpeed(-200 /*TODO: Var*/);
 	}
 }
 
