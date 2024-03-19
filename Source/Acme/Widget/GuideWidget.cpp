@@ -45,7 +45,7 @@ void UGuideWidget::OnLeftClicked()
 void UGuideWidget::OnRightClicked()
 {
 	CurrentIdx++;
-	if (CurrentIdx >= 3) CurrentIdx = 2;
+	if (CurrentIdx >= SwitchGuide->GetNumWidgets()) CurrentIdx = SwitchGuide->GetNumWidgets()-1;
 
 	SwitchGuide->SetActiveWidgetIndex(CurrentIdx);
 }

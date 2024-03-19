@@ -4,6 +4,7 @@
 #include "Acme/Widget/LobbyWidget.h"
 #include "Components/Button.h"
 #include "Components/ListView.h"
+#include "Components/Border.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -15,6 +16,8 @@
 void ULobbyWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
+
+	BtnOk->OnClicked.AddDynamic(this, &ULobbyWidget::OnOkClicked);
 
 	BtnNewGame->OnClicked.AddDynamic(this, &ULobbyWidget::OnNewGameClicked);
 	BtnContinue->OnClicked.AddDynamic(this, &ULobbyWidget::OnContinueClicked);
@@ -48,7 +51,8 @@ void ULobbyWidget::OnContinueClicked()
 	UMasterSaveGame* SaveGameList = Cast<UMasterSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("SaveGameList"), 0));
 	if (!SaveGameList)
 	{
-		//TODO: Alret: no games
+		BorderAlert->SetVisibility(ESlateVisibility::Visible);
+		if(FailFoundSFX) PlaySound(FailFoundSFX);
 		return;
 	}
 
@@ -123,4 +127,9 @@ void ULobbyWidget::OnExitLeaved()
 	{
 		PlayAnimationReverse(HoverExit);
 	}
+}
+
+void ULobbyWidget::OnOkClicked()
+{
+	BorderAlert->SetVisibility(ESlateVisibility::Hidden);
 }

@@ -39,8 +39,11 @@ void AInteractiveEnvSpawner::Respawn()
 		FVector EndPos = Pos;
 		EndPos.Z -= 1000;
 
+		FCollisionQueryParams param;
+		param.AddIgnoredActor(this);
+
 		TArray<FHitResult> HitResult;
-		if (GetWorld()->LineTraceMultiByChannel(HitResult, Pos, EndPos, ECollisionChannel::ECC_Visibility))
+		if (GetWorld()->LineTraceMultiByChannel(HitResult, Pos, EndPos, ECollisionChannel::ECC_Visibility, param))
 		{
 			for (FHitResult result : HitResult)
 			{

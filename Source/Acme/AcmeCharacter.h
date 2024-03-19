@@ -119,9 +119,6 @@ class AAcmeCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ESCAction;	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* ScreenShotAction;
-
 	//stat comp
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	class UStatComponent* StatCompoenent;
@@ -539,9 +536,6 @@ public:
 	UFUNCTION()
 	bool GetbOpenGuide();	
 	
-	UFUNCTION()
-	void TakeScreenshot();
-
 public:
 	FOnAcceptQuest OnAcceptQuest;
 	FOnRewardQuest OnRewardQuest;

@@ -60,6 +60,7 @@ void AAcmePC::OnPossess(APawn* aPawn)
 	CurrentPawn->SetCurrentSatiety(SaveGame->CurrentSatiety);
 	CurrentPawn->SetInventory(SaveGame->Inventory);
 	CurrentPawn->SetQuickSlots(SaveGame->QuickSlot);
+	CurrentPawn->SetbOpenGuide(SaveGame->bOpenGuide);
 
 	CurrentPawn->Equip(EEquipmentPart::E_Head, SaveGame->EquipmentHead);
 	CurrentPawn->Equip(EEquipmentPart::E_Body, SaveGame->EquipmentBody);

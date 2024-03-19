@@ -381,8 +381,6 @@ void AAcmeCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	
 		//ESC
 		EnhancedInputComponent->BindAction(ESCAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::OpenPauseMenu);
-		
-		EnhancedInputComponent->BindAction(ScreenShotAction, ETriggerEvent::Triggered, this, &AAcmeCharacter::TakeScreenshot);
 	}
 }
 
@@ -965,11 +963,6 @@ void AAcmeCharacter::SetbOpenGuide(bool open)
 bool AAcmeCharacter::GetbOpenGuide()
 {
 	return bOpenGuide;
-}
-
-void AAcmeCharacter::TakeScreenshot()
-{
-	GEngine->GameViewport->Viewport->TakeHighResScreenShot();
 }
 
 void AAcmeCharacter::StaminaCheck(int Stamina)

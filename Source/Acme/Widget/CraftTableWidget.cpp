@@ -142,7 +142,7 @@ void UCraftTableWidget::OnClickedPlus()
 	int minNum = 99;
 	for (FItem item : CurrentRecipe.Material)
 	{
-		minNum = FMath::Min(minNum, Player->GetItemNums(item));
+		minNum = FMath::Min(minNum, Player->GetItemNums(item)/ item.Num);
 	}
 
 	if (Amount >= minNum)

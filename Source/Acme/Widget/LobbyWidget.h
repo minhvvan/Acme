@@ -25,7 +25,16 @@ protected:
 	class UButton* BtnExit;	
 	
 	UPROPERTY(meta = (BindWidget))
-	class UListView* LVSaveGame;
+	class UListView* LVSaveGame;	
+	
+	UPROPERTY(meta = (BindWidget))
+	class UBorder* BorderAlert;	
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* BtnOk;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* FailFoundSFX;
 
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	UWidgetAnimation* HoverNewGame;
@@ -65,4 +74,7 @@ protected:
 
 	UFUNCTION()
 	void OnExitLeaved();
+
+	UFUNCTION()
+	void OnOkClicked();
 };
