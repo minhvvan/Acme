@@ -949,6 +949,10 @@ void AAcmeCharacter::RespawnCharacter()
 		Character->SetInventory(GetInventory());
 		Character->SetQuickSlots(GetQuickSlots());
 
+		Character->Equip(EEquipmentPart::E_Head, GetCurrentHead());
+		Character->Equip(EEquipmentPart::E_Body, GetCurrentBody());
+		Character->Equip(EEquipmentPart::E_Accessory, GetCurrentAcc());
+
 		PC->Possess(Character);
 	}
 

@@ -93,7 +93,7 @@ void UStatComponent::SetCurrentStamina(int Stamina)
 void UStatComponent::OnAttakced(int damage, ACharacterMonster* causer)
 {
 	int newHP = CurrentHP - damage;
-	if (newHP < 0)
+	if (newHP <= 0)
 	{
 		newHP = 0;
 		AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwner());
