@@ -51,4 +51,7 @@ protected:
 
 	UPROPERTY()
 	class AAcmeCharacter* Player;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* RewardSFX;
 };

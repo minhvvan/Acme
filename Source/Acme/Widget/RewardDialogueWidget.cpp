@@ -36,6 +36,8 @@ void URewardDialogueWidget::OnClicked()
 	GetOwningPlayer()->bShowMouseCursor = false;
 	GetOwningPlayer()->SetInputMode(FInputModeGameOnly());
 
+
+	if (RewardSFX) PlaySound(RewardSFX);
 	RemoveFromParent();
 }
 

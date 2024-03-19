@@ -142,8 +142,8 @@ void UAlchemicComposeWidget::OnComposeClicked()
 	{
 		//Set TVResult
 		UItemData* Data = NewObject<UItemData>();
-		Data->ItemInfo.Num = Amount;
 		Data->SetItem(result);
+		Data->ItemInfo.Num = Amount;
 
 		LVResult->AddItem(Data);
 

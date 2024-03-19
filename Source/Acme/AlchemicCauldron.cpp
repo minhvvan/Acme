@@ -24,11 +24,6 @@ void AAlchemicCauldron::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (WidgetClass)
-	{
-		InteractWidget = Cast<UAlchemicComposeWidget>(CreateWidget(GetWorld(), WidgetClass));
-	}
-
 	SetVisibleIndicator(false);
 
 	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &AAlchemicCauldron::OnBeginOverlap);
@@ -68,8 +63,12 @@ void AAlchemicCauldron::SetVisibleIndicator(bool bVisible)
 
 void AAlchemicCauldron::Interact()
 {
-	if (!InteractWidget) return;
 	if (!OverlappedCharacter) return;
+
+	if (WidgetClass)
+	{
+		InteractWidget = Cast<UAlchemicComposeWidget>(CreateWidget(GetWorld(), WidgetClass));
+	}
 
 	OverlappedCharacter->SetIsOpenWidget(true);
 	OverlappedCharacter->SetInteractWidget(InteractWidget);
@@ -78,7 +77,6 @@ void AAlchemicCauldron::Interact()
 	if (!PC) return;
 
 	PC->SetInputMode(FInputModeUIOnly());
-	//PC->SetPause(true);
 	PC->bShowMouseCursor = true;
 
 	if (InteractSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), InteractSFX, GetActorLocation());

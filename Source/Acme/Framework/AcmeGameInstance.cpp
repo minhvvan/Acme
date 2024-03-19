@@ -209,9 +209,13 @@ FQuest UAcmeGameInstance::GetQuest()
 {
 	FQuest Result;
 
-	FName QuestID = FName("0");
-	FQuest* row = QuestTable->FindRow<FQuest>(QuestID, TEXT(""));
+	TArray<FQuest*> AllRows;
+	QuestTable->GetAllRows(TEXT("GetAllRows"), AllRows);
 
+	int idx = FMath::Rand() % AllRows.Num();
+	FName QuestID = FName(FString::FromInt(idx));
+
+	FQuest* row = QuestTable->FindRow<FQuest>(QuestID, TEXT(""));
 	Result = *row;
 
 	return Result;
