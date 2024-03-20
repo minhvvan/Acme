@@ -18,6 +18,7 @@
 
 
 # Architecture
+![Acme](https://github.com/minhvvan/Acme/assets/59609086/cefd1dcb-74a0-4a6f-b0fb-40e947a27873)
 
 
 
@@ -77,6 +78,40 @@
 
 </br>
 </br>
+
+### HUD
+![HUD](https://github.com/minhvvan/Acme/assets/59609086/7c57f911-e67a-48ef-bcc7-baa42f5521c4)
+
+- 배고픔과 HP를 표시하는 UI를통해 캐릭터의 상태를 확인할 수 있습니다. 캐릭터에 있는 StatComponent에 Deleagate를 Binding하여 변경됩니다.
+- Quest를 나타내는 창이 있습니다. 받은 Quest를 짧게 요약하여 표시합니다.
+- Stamina를 원형으로 표시합니다.Stamina가 0이되면 탈진하는 애니메이션이 동작하며 이동속도가 느려집니다. StatComponent의 Deleagate를 Binding하여 변경됩니다.
+- Compass를 통해 현재 캐릭터가 바라보고 있는 방향을 알 수 있습니다.
+- MiniMap을 통해 캐릭터의 현재 위치와 주변을 확인할 수 있습니다.
+- QuickSlot을 통해 아이템을 확인하고 캐릭터에 장착할 수 있습니다. 키보드의 1~8 숫자키를 이용하여 현재 장착한 Slot을 변경할 수 있습니다. 
+
+
+</br>
+</br>
+
+### Pause
+![스크린샷 2024-03-20 140138](https://github.com/minhvvan/Acme/assets/59609086/3cb1450c-d121-466e-bcd3-60c1f76f37ed)
+
+- 계속하기: PauseWidget을 제거하고 게임으로 돌아갑니다.
+- 저장하기: 현재 게임을 저장합니다.
+- 나가기: 게임을 종료하고 Lobby로 이동합니다.
+
+</br>
+</br>
+
+### Death
+![스크린샷 2024-03-20 152205](https://github.com/minhvvan/Acme/assets/59609086/9f0448c3-d422-475f-bc3f-8c27c845e66c)
+
+- 다시하기: 처음 위치로 돌아가 다시 게임을 시작합니다.
+- 나가기: Lobby화면으로 되돌가 갑니다. 저장하지 않았다면 데이터는 초기화됩니다.
+
+</br>
+</br>
+
 
 ### Inventory
 ![image](https://github.com/minhvvan/Acme/assets/59609086/8f3a6581-3d59-47bd-a4d4-7f66e68b8d24)
@@ -159,9 +194,10 @@
 ### Element
 |Fire|Water|
 |-|-|
-| | |
+|![스크린샷 2024-03-20 140251](https://github.com/minhvvan/Acme/assets/59609086/f1517743-b18e-4224-b71d-4bcff3188f17)|![스크린샷 2024-03-20 140408](https://github.com/minhvvan/Acme/assets/59609086/04425928-737f-41b4-8582-b352f06b97fa)|
 |Earth|Air|
-| | |
+|![스크린샷 2024-03-20 140342](https://github.com/minhvvan/Acme/assets/59609086/6f0c2ed2-532a-4b72-a78f-31dadb031bf1)|![스크린샷 2024-03-20 140316](https://github.com/minhvvan/Acme/assets/59609086/51155c20-4d24-41c7-8b34-9822b81f141d)|
+
 
 
 </br>
@@ -172,6 +208,19 @@
 |--|--|
 |![image](https://github.com/minhvvan/Acme/assets/59609086/2678ed24-2ea5-4397-8243-909182d75a5b)|![image](https://github.com/minhvvan/Acme/assets/59609086/2a7b71fe-9b49-46b3-8104-d35868b560c4)|
 |특정 지역에 생성되는 과일입니다. </br> 음식의 재료로 사용됩니다.|특정 지역에 생성되는 약초입니다. </br> 포션의 재료로 사용됩니다.|
+
+
+</br>
+</br>
+
+### Turret
+
+
+
+</br>
+</br>
+
+### Totem
 
 
 </br>
@@ -198,13 +247,17 @@
 ![Attack](https://github.com/minhvvan/Acme/assets/59609086/c773eb0d-6210-43ad-9ee1-95654d51b46c)
 
 ### Attacked
+![Attacked](https://github.com/minhvvan/Acme/assets/59609086/64f9d949-e899-44d6-a5c8-b16e7c8d7a0b)
 
 ### DodgeRoll
 ![DodgeRoll](https://github.com/minhvvan/Acme/assets/59609086/e5eeb380-634a-40d8-87db-9a3489774f01)
 
 ### Swim
+![Swim](https://github.com/minhvvan/Acme/assets/59609086/bc50b4b4-f007-4f5a-9778-33b7a3e5af45)
 
 ### Death
+![Death](https://github.com/minhvvan/Acme/assets/59609086/74428047-bc81-4e59-ba61-ae0a62b67187)
+
 
 </br>
 </br>
@@ -213,7 +266,19 @@
 </br>
 
 ## System
-(hp, 배고픔, 스테미나)
+![System](https://github.com/minhvvan/Acme/assets/59609086/61fd8a62-3aed-4d6b-a09d-d08c4f98187a)
+
+포만감이 50이하로 떨어지면 적에게 주는 데미지가 반감됩니다.
+
+음식을 만들어 포만감을 채울 수 있습니다.
+
+체력이 0이 되면 캐릭터가 사망합니다.
+
+포션을 통해 체력을 채울 수 있습니다.
+
+스테미너가 0이 되면 캐릭터가 지쳐 탈진 애니메이션이 실행되며 이동속도가 줄어듭니다.
+
+애니메이션이 종료되면 스테미너가 회복됩니다. 
 
 
 </br>
@@ -223,6 +288,24 @@
 </br>
 
 ## NPC
+|퀘스트 수령|퀘스트 완료|
+|--|--|
+|![NPC](https://github.com/minhvvan/Acme/assets/59609086/c7e24b45-abe9-4461-a1c6-fccfbec021b9)|![NPC2](https://github.com/minhvvan/Acme/assets/59609086/72f382d5-fa46-49fd-966f-b892c667dea6)|
+
+
+</br>
+'!'가 있는 NPC에게 대화하면 퀘스트를 받을 수 있습니다
+퀘스트를 완료하면 보상을 받을 수 있습니다.
+
+대화를 걸면 캐릭터의 위치를 계산하여 NPC가 회전합니다.
+
+퀘스트 완료 조건을 달성하면 퀘스트를 준 NPC의 머리위에 '?'가 표시되며 대화시 보상을 받을 수 있습니다.
+
+퀘스트 완료 조건은 퀘스트를 받을 때 확인하며, Item을 획득할 때 확인합니다. 
+
+캐릭터가 Item을 획득하면 Invetory를 검사하여 완료한 퀘스트를 확인하며 만약 완료했다면 해당 NPC에게 퀘스트 완료표시를 띄우도록 명령합니다.
+
+이는 Invetory의 수 * Quest의 수 만큼의 연산이 필요합니다.
 
 </br>
 </br>
@@ -231,15 +314,63 @@
 </br>
 
 ## Monster
+
 ### Goblin
+![Goblin](https://github.com/minhvvan/Acme/assets/59609086/90d72d79-f5a7-44c9-8fe3-79a111d32976)
+
+특정 지역에 스폰됩니다.
+
+Behavior Tree를 이용해 AI를 구현했으며, 체력이 0이하로 내려가면 사망과 동시에 랜덤한 아이템을 Drop합니다.
+</br>
+
+#### AI
+![image](https://github.com/minhvvan/Acme/assets/59609086/ed28c77e-0036-44e1-bbd1-b5aa5b27c6cf)
+
+Target이 설정되지 않으면 1~5초간 대기하였다가 무작위 위치로 이동합니다.
+
+공격을 받으면 Target이 설정됩니다.
+
+Target이 설정되면 공격가능한 거리까지 다가가 공격합니다.
+
+만약, 캐릭터가 멀어져 5초간 공격받거나 공격하지 않았다면 전투가 종료됩니다.(Timer)
+
 
 </br>
 </br>
 
 ### Dragon
+|Bite|Fire|
+|----|----|
+|![BossBite](https://github.com/minhvvan/Acme/assets/59609086/52a056ab-8721-4259-9082-6c819a8d6cb8)|![BossFire](https://github.com/minhvvan/Acme/assets/59609086/6b8970a3-ac1b-4109-a34d-34846f3501c1)|
+
+숲 가운데 스폰되는 Boss입니다.
+
+특정한 규칙에 의해 공격 패턴이 결정됩니다.
+
+체력이 50% 밑으로 떨어지면 공격 패턴이 추가됩니다.
+
+원소를 조합하여 얻을 수 없는 아이템을 Drop합니다.
+
+</br>
+
+#### AI
+![image](https://github.com/minhvvan/Acme/assets/59609086/9b35aa0c-29a1-4517-b5da-7e2da4f61962)
+
+공격을 받으면 Target이 설정됩니다.
+
+Target과의 거리를 계산하여 공격 패턴을 결정합니다.
+
+특정 거리보다 가까이 있다면 깨물기, 멀리 있다면 FireBall을 발사합니다.
+
+체력이 50% 밑으로 떨어진다면 패턴이 추가됩니다.
 
 
-
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
 
 
 ## 23.12.22
