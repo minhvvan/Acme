@@ -13,6 +13,60 @@
 ![image](https://github.com/minhvvan/Acme/assets/59609086/cf3d1fd9-1f68-4ee1-aa7d-71bfbb697640)
 
 
+## Lobby
+
+|기본 화면|기존 게임|
+|------|---|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/bc3b8b99-55ea-4e5b-bd53-9df7745cd4dc)|![image](https://github.com/minhvvan/Acme/assets/59609086/20a26789-69e5-4227-9cec-132efa8ea003)|
+
+- 기존 게임을 눌러 저장한 게임을 불러올 수 있습니다.
+
+
+## Game
+
+### Guide
+| | |
+|------|---|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/f9932618-4367-4252-be6a-3f8e9c75bdc1)|![image](https://github.com/minhvvan/Acme/assets/59609086/ed394c42-7435-40e1-851a-aeac6447ec3b)|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/50f8ef8b-4e93-463e-827e-ef74ae93730b)|![image](https://github.com/minhvvan/Acme/assets/59609086/212aae9d-b2b8-48c2-bbe1-7a0b23589117)|
+
+### Inventory
+![image](https://github.com/minhvvan/Acme/assets/59609086/8f3a6581-3d59-47bd-a4d4-7f66e68b8d24)
+
+
+### Alchemy
+|Alchemy Cauldron|Widget|
+|--|--|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/75ecb51c-631d-45f8-b346-eeba82cb6af3)|![image](https://github.com/minhvvan/Acme/assets/59609086/50152eb0-6d10-4caa-a7e5-3f9a7b73f004)|
+
+
+### Cook Pot
+|Cook Pot|Widget|
+|--|--|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/6a2fc1fd-cfbc-42ba-9b32-8540d4b358cb)|![image](https://github.com/minhvvan/Acme/assets/59609086/3de81d96-356a-4022-9e34-d621c742b44a)|
+
+
+### Potion
+|Potion|Widget|
+|--|--|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/dab7a5cc-89a5-43ef-b0e8-7b6e263d1514)|![image](https://github.com/minhvvan/Acme/assets/59609086/ee7fc160-8c3a-49f2-a58a-69f16dba0525)|
+
+
+### Workbench
+|Workbench|Widget|
+|--|--|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/1dab7cee-7629-4aa4-994e-4effa54152b2)|![image](https://github.com/minhvvan/Acme/assets/59609086/0987d386-e937-4799-b806-c59c210ee76a)|
+
+
+---
+### Env
+|Fruit|Herb|
+|--|--|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/2678ed24-2ea5-4397-8243-909182d75a5b)|![image](https://github.com/minhvvan/Acme/assets/59609086/2a7b71fe-9b49-46b3-8104-d35868b560c4)|
+
+
+
+
 ## Anim
 
 ### Retargeting
@@ -87,5 +141,4 @@ Inventory와 Equipment 등 필수 컴포넌트 작업을 마쳤다.
 |------|---|---|------|
 |아이템 획득|애니메이션 종료 후 획득 가능 여부 체크|애니메이션을 제거하고 사용자 입력에 의해 가능 여부 체크|빠르게 움직이는 아이템을 획득할 수 없음, 아이템 획득 시 답답함이 있음|
 |아이템 획득 판단|오버랩이 발생하면 아이템과 캐릭터끼리 서로를 기억하고 획득 로직을 처리|사용자 입력에 의해 캐릭터에서 가장 가까운 아이템을 체크한 뒤 획득 가능하면 획득|서로 기억하니 순환문제가 있을 수 있고 한쪽이라도 해제되면 동작하지 않는 경우가 있음, 여러 개의 아이템이 오버랩하면 오버랩이 끝나지 않은 아이템을 다시 감지하지 못함|
-
 
