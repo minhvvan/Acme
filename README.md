@@ -213,14 +213,44 @@
 </br>
 </br>
 
+## Others
+
 ### Turret
+![Turret](https://github.com/minhvvan/Acme/assets/59609086/ee07da9e-2afc-4f40-acc7-8ad37b3f0016)
+
+- 설치하면 자동으로 적을 찾아 공격합니다.
+- 가장 가까운 적이 Target이 됩니다.
+- 사용시간이 지나면 자동으로 소멸됩니다.
 
 
+#### AI
+![image](https://github.com/minhvvan/Acme/assets/59609086/3d83a73f-10f4-4780-af4e-4d37ce31fbfe)
+
+- Service를 이용하여 0.4~0.6초 간격으로 적을 찾습니다.
+- 적을 찾는 방법은 공격 가능 범위내에 적이 존재하면 Target으로 설정합니다. ( Overlap )
+- Target이 설정되면 0~1초 사이의 대기시간을 가지며 계속하여 Target을 공격합니다.
 
 </br>
 </br>
 
 ### Totem
+![Totem](https://github.com/minhvvan/Acme/assets/59609086/ebfdd6cb-6d15-46b3-9448-c0fe47c438d4)
+
+- Timer를 이용하여 일정 시간마다 범위 내에 있는 캐릭터의 HP를 5만큼 회복시켜줍니다.
+- 일정 시간이 지나면 자동으로 소멸합니다.
+
+
+</br>
+</br>
+
+
+### Equipment
+|Equip|Attacked|
+|--|--|
+|![Equip](https://github.com/minhvvan/Acme/assets/59609086/54402f79-4859-4917-95e5-c4b3bd2ac54f)|![Attacked](https://github.com/minhvvan/Acme/assets/59609086/0c8e701d-6c5e-4761-bb48-4af1a8790e4d)|
+
+- Inventory에 있는 장비 아이템을 알맞는 Slot에 드래그하여 장비를 장착할 수 있습니다. (DragDetect)
+- 장착한 장비의 방어도에 의해 감소된 Damage를 받습니다. 
 
 
 </br>
