@@ -31,6 +31,8 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* TxtOwnNum;
 
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* TxtName;
 
 public:
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;

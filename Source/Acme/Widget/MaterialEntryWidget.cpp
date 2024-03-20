@@ -16,6 +16,7 @@ void UMaterialEntryWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 	UAcmeGameInstance* GameInstance = Cast<UAcmeGameInstance>(GetGameInstance());
 	ImgItem->SetBrushFromTexture(GameInstance->GetItemImage(Data->ItemInfo.Name));
 	TxtNum->SetText(FText::AsNumber(Data->ItemInfo.Num));
+	TxtName->SetText(FText::FromString(GameInstance->GetItemString(Data->ItemInfo.Name).Name));
 
 	AAcmeCharacter* Player = Cast<AAcmeCharacter>(GetOwningPlayer()->GetPawn());
 	if (!Player) return;

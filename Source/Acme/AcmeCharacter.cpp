@@ -783,6 +783,7 @@ void AAcmeCharacter::StartSwim()
 	FVector Dir = UKismetMathLibrary::GetUpVector(GetControlRotation()) * 20;
 	Dir += UKismetMathLibrary::GetForwardVector(GetControlRotation()) * 20;
 
+	if (JumpWaterSFX) UGameplayStatics::SpawnSoundAtLocation(GetWorld(), JumpWaterSFX, GetActorLocation());
 	LaunchCharacter(Dir, false, false);
 	
 	IsSwimming = true;
