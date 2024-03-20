@@ -1,7 +1,48 @@
 # Acme
+<img src="https://github.com/minhvvan/Acme/assets/59609086/a0316d79-ab51-4210-919b-be6cef12af10" width="1000" height="500">
 
-## Level
+본 프로젝트는 '두들 갓'이라는 게임을 모티브로 제작한 게임입니다.
 
+4가지의 원소를 기반으로 다양한 아이템을 제작하며 생존하는 게임입니다.
+
+- Engine: UE5.3
+- Env: Visual Studio
+- 제작기간: 2023.12 ~ 2024.03
+- 인원: 1명
+
+</br>
+</br>
+</br>
+</br>
+</br>
+
+
+# Architecture
+
+
+
+</br>
+</br>
+</br>
+</br>
+</br>
+
+
+# Level
+## Lobby
+
+|기본 화면|기존 게임|
+|------|---|
+|![image](https://github.com/minhvvan/Acme/assets/59609086/bc3b8b99-55ea-4e5b-bd53-9df7745cd4dc)|![image](https://github.com/minhvvan/Acme/assets/59609086/20a26789-69e5-4227-9cec-132efa8ea003)|
+
+- 기존 게임을 눌러 저장한 게임을 불러올 수 있습니다.
+
+</br>
+</br>
+
+## Game
+
+### Landscape
 <img width="741" alt="image" src="https://github.com/minhvvan/Acme/assets/59609086/37ab653b-bd70-4593-9e7e-b4b34eddfbca">
 
 ### Start Village
@@ -12,17 +53,15 @@
 
 ![image](https://github.com/minhvvan/Acme/assets/59609086/cf3d1fd9-1f68-4ee1-aa7d-71bfbb697640)
 
-
-## Lobby
-
-|기본 화면|기존 게임|
-|------|---|
-|![image](https://github.com/minhvvan/Acme/assets/59609086/bc3b8b99-55ea-4e5b-bd53-9df7745cd4dc)|![image](https://github.com/minhvvan/Acme/assets/59609086/20a26789-69e5-4227-9cec-132efa8ea003)|
-
-- 기존 게임을 눌러 저장한 게임을 불러올 수 있습니다.
+</br>
+</br>
+</br>
+</br>
+</br>
 
 
-## Game
+
+# Widget
 
 ### Guide
 | | |
@@ -30,8 +69,26 @@
 |![image](https://github.com/minhvvan/Acme/assets/59609086/f9932618-4367-4252-be6a-3f8e9c75bdc1)|![image](https://github.com/minhvvan/Acme/assets/59609086/ed394c42-7435-40e1-851a-aeac6447ec3b)|
 |![image](https://github.com/minhvvan/Acme/assets/59609086/50f8ef8b-4e93-463e-827e-ef74ae93730b)|![image](https://github.com/minhvvan/Acme/assets/59609086/212aae9d-b2b8-48c2-bbe1-7a0b23589117)|
 
+</br>
+
+- 게임에 처음 접속했을 때, 게임에 대한 정보를 볼 수 있는 가이드 위젯입니다.
+- 조작법과 시스템에 대한 설명이 있습니다.
+- 하단에 체크박스를 통해 다음에 다시 볼것인지 설정할 수 있습니다.
+
+</br>
+</br>
+
 ### Inventory
 ![image](https://github.com/minhvvan/Acme/assets/59609086/8f3a6581-3d59-47bd-a4d4-7f66e68b8d24)
+
+</br>
+
+- 'Tab'키를 통해 열 수 있는 인벤토리 위젯입니다.
+- 플레이어가 소지한 아이템을 카테고리별로 볼 수 있으며 장비를 장착할 수 있습니다.
+- 퀵슬롯에 아이템을 등록하여 사용할 수 있습니다.
+
+</br>
+</br>
 
 
 ### Alchemy
@@ -39,17 +96,44 @@
 |--|--|
 |![image](https://github.com/minhvvan/Acme/assets/59609086/75ecb51c-631d-45f8-b346-eeba82cb6af3)|![image](https://github.com/minhvvan/Acme/assets/59609086/50152eb0-6d10-4caa-a7e5-3f9a7b73f004)|
 
+</br>
+
+- 소유한 원소나 아이템을 합성할 수 있는 위젯입니다.
+- 좌클릭을 통해 합성할 아이템을 등록할 수 있고, 우클릭을 통해 등록한 아이템을 해제할 수 있습니다.
+- 합성버튼을 클릭하면 합성에 소모한 아이템은 사라지고 결과로 나온 아이템을 획득합니다.
+- 만약, 합성이 불가능한 조합이라면 경고 위젯이 팝업됩니다.
+
+</br>
+</br>
+
 
 ### Cook Pot
 |Cook Pot|Widget|
 |--|--|
 |![image](https://github.com/minhvvan/Acme/assets/59609086/6a2fc1fd-cfbc-42ba-9b32-8540d4b358cb)|![image](https://github.com/minhvvan/Acme/assets/59609086/3de81d96-356a-4022-9e34-d621c742b44a)|
 
+</br>
+
+- 등록된 레시피를 통해 음식을 제작할 수 있는 위젯입니다.
+- 레시피를 클릭하면 재료를 볼 수 있으며, 소유 여부를 보여줍니다.
+- 제작버튼을 통해 음식을 제작할 수 있습니다.
+
+</br>
+</br>
 
 ### Potion
 |Potion|Widget|
 |--|--|
 |![image](https://github.com/minhvvan/Acme/assets/59609086/dab7a5cc-89a5-43ef-b0e8-7b6e263d1514)|![image](https://github.com/minhvvan/Acme/assets/59609086/ee7fc160-8c3a-49f2-a58a-69f16dba0525)|
+
+</br>
+
+- 등록된 레시피를 통해 포션을 제작할 수 있는 위젯입니다.
+- 레시피를 클릭하면 재료를 볼 수 있으며, 소유 여부를 보여줍니다.
+- 제작버튼을 통해 포션을 제작할 수 있습니다.
+
+</br>
+</br>
 
 
 ### Workbench
@@ -57,15 +141,44 @@
 |--|--|
 |![image](https://github.com/minhvvan/Acme/assets/59609086/1dab7cee-7629-4aa4-994e-4effa54152b2)|![image](https://github.com/minhvvan/Acme/assets/59609086/0987d386-e937-4799-b806-c59c210ee76a)|
 
+</br>
 
----
+- 등록된 레시피를 통해 장비나 도구를 제작할 수 있는 위젯입니다.
+- 레시피를 클릭하면 재료를 볼 수 있으며, 소유 여부를 보여줍니다.
+- 제작버튼을 통해 장비와 도구를 제작할 수 있습니다.
+
+</br>
+</br>
+
+
+
+# Item
+
+## Spawned Item
+
+### Element
+|Fire|Water|
+|-|-|
+| | |
+|Earth|Air|
+| | |
+
+
+</br>
+</br>
+
 ### Env
 |Fruit|Herb|
 |--|--|
 |![image](https://github.com/minhvvan/Acme/assets/59609086/2678ed24-2ea5-4397-8243-909182d75a5b)|![image](https://github.com/minhvvan/Acme/assets/59609086/2a7b71fe-9b49-46b3-8104-d35868b560c4)|
+|특정 지역에 생성되는 과일입니다. </br> 음식의 재료로 사용됩니다.|특정 지역에 생성되는 약초입니다. </br> 포션의 재료로 사용됩니다.|
 
 
-
+</br>
+</br>
+</br>
+</br>
+</br>
 
 ## Anim
 
@@ -75,15 +188,58 @@
 ### Move
 ![Move](https://github.com/minhvvan/Acme/assets/59609086/d9a63d06-8e48-4176-8f39-3dc850788c60)
 
-### Dash
+### ~~Dash~~(deprecated)
 ![Dash](https://github.com/minhvvan/Acme/assets/59609086/99ce44cf-75e2-4c33-bab2-1bc2f2d7ef58)
-
 
 ### Equip
 ![Attach](https://github.com/minhvvan/Acme/assets/59609086/fce66afb-0f72-4010-8db9-f6d72db21a31)
 
 ### Attack
 ![Attack](https://github.com/minhvvan/Acme/assets/59609086/c773eb0d-6210-43ad-9ee1-95654d51b46c)
+
+### Attacked
+
+### DodgeRoll
+![DodgeRoll](https://github.com/minhvvan/Acme/assets/59609086/e5eeb380-634a-40d8-87db-9a3489774f01)
+
+### Swim
+
+### Death
+
+</br>
+</br>
+</br>
+</br>
+</br>
+
+## System
+(hp, 배고픔, 스테미나)
+
+
+</br>
+</br>
+</br>
+</br>
+</br>
+
+## NPC
+
+</br>
+</br>
+</br>
+</br>
+</br>
+
+## Monster
+### Goblin
+
+</br>
+</br>
+
+### Dragon
+
+
+
 
 
 ## 23.12.22
